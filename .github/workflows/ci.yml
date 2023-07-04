@@ -37,9 +37,7 @@ jobs:
         pip install -r requirements/app-requirements.txt
         pip install -r requirements/dev-requirements.txt
     - name: Run mypy on application code
-      run: |
-        cd reciply
-        mypy .
+      run: mypy ./reciply
     - name: Run black
       if: success() || failure()
       run: black .
