@@ -5,7 +5,7 @@ repos:
     hooks:
     -   id: mypy
         args: [ --ignore-missing-imports, --disallow-untyped-defs ]
-        exclude: (tests)|(migrations)
+        exclude: (tests)|(migrations)|(settings)
         additional_dependencies: [django-stubs]
 
     # black code formatter
