@@ -34,5 +34,5 @@ class AuthToken(factory.django.DjangoModelFactory):
 
     @classmethod
     def create(cls, **kwargs: object) -> tuple[knox_models.AuthToken, str]:
-        user = User() or kwargs.get("user")
+        user = kwargs.get("user") or User()
         return knox_models.AuthToken.objects.create(user=user)
