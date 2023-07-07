@@ -45,8 +45,10 @@ MIDDLEWARE = [
 ROOT_URLCONF = "config.urls"
 
 # ----------
-# DRF settings
+# API settings
 # ----------
+CORS_ALLOW_ALL_ORIGINS = True
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["knox.auth.TokenAuthentication"],
 }
