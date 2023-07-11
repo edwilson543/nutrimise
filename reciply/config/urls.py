@@ -20,4 +20,5 @@ from django.contrib import admin
 
 urlpatterns = [
     urls.path("admin/", admin.site.urls),
+    urls.path("api/", urls.include("interfaces.rest_api.urls")),
 ]

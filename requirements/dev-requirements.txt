@@ -1,6 +1,7 @@
 # Requirements for local development
 black==23.1.0
-django-stubs==4.2.0
+django-stubs==4.2.2
+djangorestframework-stubs==3.14.2
 flake8==6.0.0
 isort==5.12.0
 mypy==1.3.0

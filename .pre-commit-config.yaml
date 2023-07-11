@@ -4,9 +4,9 @@ repos:
     rev: 'v1.3.0'
     hooks:
     -   id: mypy
-        args: [ --ignore-missing-imports, --disallow-untyped-defs ]
-        exclude: (tests)|(migrations)
-        additional_dependencies: [django-stubs]
+        args: [ --config-file=mypy.ini ]
+        exclude: (tests)|(migrations)|(settings)
+        additional_dependencies: [django-stubs, djangorestframework==3.14.0, django-rest-knox==4.2.0]
 
     # black code formatter
 -   repo: https://github.com/psf/black
