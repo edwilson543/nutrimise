@@ -32,7 +32,7 @@ class TestLogin:
         response = rest_api_client.post(login_url, **auth_headers)
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.data == {"expiry": mock.ANY, "token": mock.ANY}
+        assert response.data == {"expiry": None, "token": mock.ANY}
 
         assert user.auth_token_set.exists()
 
