@@ -14,3 +14,11 @@ class Recipe(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.Recipe
+
+
+class RecipeImage(factory.django.DjangoModelFactory):
+    recipe = factory.SubFactory(Recipe)
+    is_hero = False
+
+    class Meta:
+        model = recipe_models.RecipeImage
