@@ -54,6 +54,13 @@ REST_FRAMEWORK = {
 
 REST_KNOX = {"TOKEN_TTL": None}
 
+# ----------
+# Media settings
+# ----------
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

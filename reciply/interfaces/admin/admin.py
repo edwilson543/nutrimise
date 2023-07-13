@@ -4,6 +4,8 @@ from django.contrib import admin
 # Local application imports
 from data.recipes import models as recipe_models
 
+admin.site.site_header = "Reciply admin"
+
 
 @admin.register(recipe_models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
