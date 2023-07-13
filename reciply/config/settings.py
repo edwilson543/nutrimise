@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Local
-    "data.apps.DataConfig",
+    "data.recipes",
     "interfaces.admin.apps.AdminConfig",
 ]
 
