@@ -10,6 +10,9 @@ urlpatterns = [
         name="my-recipe-list",
     ),
     django_urls.path(
+        "recipe/create/", views.RecipeCreate.as_view(), name="recipe-create"
+    ),
+    django_urls.path(
         "recipe/<int:id>/", views.RecipeDetail.as_view(), name="recipe-detail"
     ),
 ]

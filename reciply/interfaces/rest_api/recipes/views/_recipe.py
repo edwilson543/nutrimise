@@ -7,6 +7,7 @@ from rest_framework import views
 from django import shortcuts
 
 # Local application imports
+from app import recipes
 from data.recipes import models as recipe_models
 from domain.recipes import queries
 from interfaces.rest_api import types
@@ -43,3 +44,33 @@ class RecipeDetail(views.APIView):
         )
         serialized_recipes = serializers.Recipe(instance=recipe).data
         return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
+
+
+class RecipeCreate(views.APIView):
+    """
+    Create a new recipe.
+    """
+
+    http_method_names = ["post"]
+
+    def post(
+        self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
+    ) -> response.Response:
+        serializer = serializers.Recipe(data=request.data)
+        if serializer.is_valid():
+            try:
+                recipe = recipes.create_recipe(
+                    author=request.user,
+                    name=serializer.validated_data["name"],
+                    description=serializer.validated_data["description"],
+                )
+            except recipes.RecipeNameNotUniqueForAuthor:
+                errors = {"name": "You already have a recipe with this name!"}
+                return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
+
+            response_data = serializers.Recipe(instance=recipe).data
+            return response.Response(response_data, status=drf_status.HTTP_201_CREATED)
+
+        return response.Response(
+            serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST
+        )

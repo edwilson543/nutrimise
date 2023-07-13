@@ -19,6 +19,7 @@ class TestRecipeDetail:
         response = rest_api_client.get(url)
 
         assert response.data["id"] == recipe.id
+        assert response.status_code == drf_status.HTTP_200_OK
 
     def test_not_found_when_user_is_not_author(self, rest_api_client):
         user = factories.User()
