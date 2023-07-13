@@ -18,6 +18,10 @@ class Recipe(django_models.Model):
 
     description = django_models.TextField()
 
+    created_at = django_models.DateTimeField(auto_now_add=True)
+
+    updated_at = django_models.DateTimeField(auto_now=True)
+
     class Meta:
         constraints = [
             django_models.UniqueConstraint(
