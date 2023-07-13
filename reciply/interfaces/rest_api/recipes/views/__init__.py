@@ -1,1 +1,1 @@
-from ._recipe import MyRecipeList
+from ._recipe import MyRecipeList, RecipeDetail
