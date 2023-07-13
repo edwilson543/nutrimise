@@ -1,9 +1,8 @@
+from __future__ import annotations
+
 # Django imports
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
-
-# Local application imports
-from data import constants
 
 
 class Recipe(django_models.Model):
@@ -19,6 +18,27 @@ class Recipe(django_models.Model):
 
     description = django_models.TextField()
 
-    image = django_models.ImageField(
-        null=True, upload_to=constants.MediaNamespace.RECIPES
-    )
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                "author", "name", name="users_can_only_have_one_recipe_per_name"
+            )
+        ]
+
+    # ----------
+    # Factories
+    # ----------
+
+    @classmethod
+    def new(
+        cls,
+        *,
+        author: auth_models.User,
+        name: str,
+        description: str,
+    ) -> Recipe:
+        return cls.objects.create(
+            author=author,
+            name=name,
+            description=description,
+        )
