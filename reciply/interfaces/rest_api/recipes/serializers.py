@@ -6,6 +6,7 @@ from django.conf import settings
 
 # Local application imports
 from data.recipes import models as recipe_models
+from domain.recipes import queries
 
 
 class Recipe(serializers.Serializer):
@@ -14,6 +15,15 @@ class Recipe(serializers.Serializer):
     description = serializers.CharField()
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
+
+
+class RecipeList(Recipe):
+    preview_image_source = serializers.SerializerMethodField(read_only=True)
+
+    def get_preview_image_source(self, recipe: recipe_models.Recipe) -> str | None:
+        if image := queries.get_hero_image(recipe):
+            return settings.MEDIA_BASE_URL + image.image.url
+        return None
 
 
 class RecipeImage(serializers.Serializer):

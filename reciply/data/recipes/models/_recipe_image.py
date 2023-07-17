@@ -14,7 +14,9 @@ class RecipeImage(django_models.Model):
 
     id = django_models.AutoField(primary_key=True)
 
-    recipe = django_models.ForeignKey("Recipe", on_delete=django_models.CASCADE)
+    recipe = django_models.ForeignKey(
+        "Recipe", on_delete=django_models.CASCADE, related_name="images"
+    )
 
     image = django_models.ImageField(upload_to=constants.MediaNamespace.RECIPES)
 

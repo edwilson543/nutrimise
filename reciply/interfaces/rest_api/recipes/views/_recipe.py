@@ -24,8 +24,10 @@ class MyRecipeList(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        recipes = queries.get_recipes_authored_by_user(author=request.user)
-        serialized_recipes = serializers.Recipe(instance=recipes, many=True).data
+        recipes = queries.get_recipes_authored_by_user(
+            author=request.user
+        ).prefetch_related("images")
+        serialized_recipes = serializers.RecipeList(instance=recipes, many=True).data
         return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
 
 

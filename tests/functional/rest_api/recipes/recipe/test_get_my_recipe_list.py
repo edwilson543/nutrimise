@@ -11,6 +11,7 @@ class TestMyRecipeList:
         rest_api_client.authorize_user(user)
 
         recipe = factories.Recipe(author=user)
+        factories.RecipeImage(recipe=recipe, is_hero=True)
         other_recipe = factories.Recipe(author=user)
 
         # Make a user whose recipe we don't expect in the returned payload
@@ -24,3 +25,9 @@ class TestMyRecipeList:
             recipe.id,
             other_recipe.id,
         }
+
+        for serialized_recipe in response.data:
+            if serialized_recipe["id"] == recipe.id:
+                assert serialized_recipe["preview_image_source"] is not None
+            else:
+                assert serialized_recipe["preview_image_source"] is None
