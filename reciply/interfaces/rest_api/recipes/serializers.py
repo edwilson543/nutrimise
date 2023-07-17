@@ -9,7 +9,7 @@ from data.recipes import models as recipe_models
 from domain.recipes import queries
 
 
-class Recipe(serializers.Serializer):
+class Recipe(serializers.Serializer):  # TODO -> rename recipe base
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=128)
     description = serializers.CharField()
@@ -18,12 +18,20 @@ class Recipe(serializers.Serializer):
 
 
 class RecipeList(Recipe):
-    preview_image_source = serializers.SerializerMethodField(read_only=True)
+    hero_image_source = serializers.SerializerMethodField(read_only=True)
 
-    def get_preview_image_source(self, recipe: recipe_models.Recipe) -> str | None:
+    def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
         if image := queries.get_hero_image(recipe):
             return settings.MEDIA_BASE_URL + image.image.url
         return None
+
+
+class RecipeDetails(Recipe):  # TODO
+    pass
+
+
+class RecipeCreate(Recipe):  # TODO
+    pass
 
 
 class RecipeImage(serializers.Serializer):

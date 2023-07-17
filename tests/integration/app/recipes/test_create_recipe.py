@@ -18,11 +18,10 @@ class TestCreateRecipe:
         assert recipe.name == "Beef"
         assert recipe.description == "Beef beef"
 
-    def test_raises_if_user_already_has_recipe_with_name(self):
+    @pytest.mark.parametrize("name", ["new recipe", "NEW Recipe"])
+    def test_raises_if_user_already_has_recipe_with_name(self, name: str):
         author = factories.User()
-        recipe = factories.Recipe(author=author)
+        factories.Recipe(author=author, name="new recipe")
 
         with pytest.raises(_create_recipe.RecipeNameNotUniqueForAuthor):
-            _create_recipe.create_recipe(
-                author=author, name=recipe.name, description=""
-            )
+            _create_recipe.create_recipe(author=author, name=name, description="")

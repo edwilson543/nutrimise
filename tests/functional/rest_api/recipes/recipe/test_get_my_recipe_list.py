@@ -28,6 +28,6 @@ class TestMyRecipeList:
 
         for serialized_recipe in response.data:
             if serialized_recipe["id"] == recipe.id:
-                assert serialized_recipe["preview_image_source"] is not None
+                assert serialized_recipe["hero_image_source"] is not None
             else:
-                assert serialized_recipe["preview_image_source"] is None
+                assert serialized_recipe["hero_image_source"] is None

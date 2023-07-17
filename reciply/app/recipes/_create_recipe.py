@@ -13,9 +13,6 @@ class RecipeNameNotUniqueForAuthor(django_db.IntegrityError):
 def create_recipe(
     author: auth_models.User, name: str, description: str
 ) -> recipe_models.Recipe:
-    try:
-        return recipe_models.Recipe.new(
-            author=author, name=name, description=description
-        )
-    except django_db.IntegrityError:
+    if recipe_models.Recipe.objects.filter(name__iexact=name):
         raise RecipeNameNotUniqueForAuthor
+    return recipe_models.Recipe.new(author=author, name=name, description=description)
