@@ -67,7 +67,7 @@ class RecipeCreate(views.APIView):
                     description=serializer.validated_data["description"],
                 )
             except recipes.RecipeNameNotUniqueForAuthor:
-                errors = {"name": "You already have a recipe with this name!"}
+                errors = {"name": ["You already have a recipe with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
             response_data = serializers.RecipeCreate(instance=recipe).data
