@@ -44,7 +44,7 @@ class RecipeDetail(views.APIView):
         recipe = shortcuts.get_object_or_404(
             klass=recipe_models.Recipe, id=kwargs["id"], author=request.user
         )
-        serialized_recipes = serializers.Recipe(instance=recipe).data
+        serialized_recipes = serializers.RecipeDetail(instance=recipe).data
         return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
 
 
@@ -58,7 +58,7 @@ class RecipeCreate(views.APIView):
     def post(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        serializer = serializers.Recipe(data=request.data)
+        serializer = serializers.RecipeCreate(data=request.data)
         if serializer.is_valid():
             try:
                 recipe = recipes.create_recipe(
@@ -70,7 +70,7 @@ class RecipeCreate(views.APIView):
                 errors = {"name": "You already have a recipe with this name!"}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
-            response_data = serializers.Recipe(instance=recipe).data
+            response_data = serializers.RecipeCreate(instance=recipe).data
             return response.Response(response_data, status=drf_status.HTTP_201_CREATED)
 
         return response.Response(
