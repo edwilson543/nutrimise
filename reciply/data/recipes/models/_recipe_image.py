@@ -1,10 +1,17 @@
 from __future__ import annotations
 
+# Standard library imports
+from typing import TYPE_CHECKING
+
 # Django imports
+from django.core import files
 from django.db import models as django_models
 
 # Local application imports
 from data import constants
+
+if TYPE_CHECKING:
+    from . import _recipe
 
 
 class RecipeImage(django_models.Model):
@@ -30,3 +37,13 @@ class RecipeImage(django_models.Model):
                 "recipe", "is_hero", name="recipe_can_only_have_one_hero_image"
             )
         ]
+
+    # ----------
+    # Factories
+    # ----------
+
+    @classmethod
+    def new(
+        cls, *, recipe: _recipe.Recipe, image: files.File, is_hero: bool
+    ) -> RecipeImage:
+        return cls.objects.create(recipe=recipe, image=image, is_hero=is_hero)
