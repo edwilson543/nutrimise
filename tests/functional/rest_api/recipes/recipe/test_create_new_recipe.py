@@ -48,7 +48,7 @@ class TestRecipeCreate:
         response = rest_api_client.post(url, data=recipe_data)
 
         assert response.status_code == drf_status.HTTP_400_BAD_REQUEST
-        assert response.data["name"] == "You already have a recipe with this name!"
+        assert response.data["name"] == ["You already have a recipe with this name!"]
 
         # Ensure no new recipe was created
         assert recipe_models.Recipe.objects.count() == 1
