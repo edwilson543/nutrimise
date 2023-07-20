@@ -65,7 +65,7 @@ class RecipeCreate(views.APIView):
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data["description"],
-                    hero_image=None,
+                    hero_image=serializer.validated_data.get("hero_image"),
                 )
             except recipes.RecipeNameNotUniqueForAuthor:
                 errors = {"name": ["You already have a recipe with this name!"]}

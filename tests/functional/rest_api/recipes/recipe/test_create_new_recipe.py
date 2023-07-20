@@ -18,16 +18,20 @@ class TestRecipeCreate:
         recipe_data = {
             "name": "sausage",
             "description": "sausage",
+            "hero_image": factories.image(),
         }
 
         url = django_urls.reverse("recipe-create")
-        response = rest_api_client.post(url, data=recipe_data)
+        response = rest_api_client.post(url, data=recipe_data, format="multipart")
 
         # Ensure a recipe has been created in the db
         recipe = recipe_models.Recipe.objects.get()
         assert recipe.author == user
         assert recipe.name == "sausage"
         assert recipe.description == "sausage"
+
+        image = recipe.images.get()
+        assert image.is_hero
 
         assert response.status_code == drf_status.HTTP_201_CREATED
         assert response.data["id"] == recipe.id

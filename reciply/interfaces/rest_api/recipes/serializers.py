@@ -38,4 +38,4 @@ class RecipeDetail(RecipeList):
 
 
 class RecipeCreate(_RecipeBase):
-    pass
+    hero_image = serializers.ImageField(required=False)
