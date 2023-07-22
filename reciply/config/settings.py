@@ -10,7 +10,7 @@ SECRET_KEY = "django-insecure-h&!9=4=^-4lce7g*$!w9d@9!6wy!0_k*cj2fg_kwzt2!i4lfbv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Local
-    "data.apps.DataConfig",
+    "data.recipes",
     "interfaces.admin.apps.AdminConfig",
 ]
 
@@ -53,6 +53,14 @@ REST_FRAMEWORK = {
 }
 
 REST_KNOX = {"TOKEN_TTL": None}
+
+# ----------
+# Media settings
+# ----------
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+MEDIA_BASE_URL = "http://localhost:8000"
 
 TEMPLATES = [
     {
