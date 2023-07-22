@@ -1,5 +1,9 @@
+# Standard library imports
+import typing
+
 # Third party imports
 from rest_framework import serializers
+from rest_framework.utils import serializer_helpers
 
 # Django imports
 from django.conf import settings
@@ -38,9 +42,14 @@ class RecipeDetail(RecipeList):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
-    def get_images(self, recipe: recipe_models.Recipe) -> list[dict]:
+    def get_images(
+        self, recipe: recipe_models.Recipe
+    ) -> list[serializer_helpers.ReturnDict]:
         images = recipe.images.order_by("-is_hero")  # Put the hero image first
-        return _RecipeImage(instance=images, many=True).data
+        return typing.cast(
+            list[serializer_helpers.ReturnDict],
+            _RecipeImage(instance=images, many=True).data,
+        )
 
 
 class RecipeCreate(_RecipeBase):
