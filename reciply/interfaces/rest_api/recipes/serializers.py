@@ -15,14 +15,6 @@ class _RecipeBase(serializers.Serializer):
     description = serializers.CharField()
 
 
-class RecipeImage(serializers.Serializer):
-    image_source = serializers.SerializerMethodField()
-    is_hero = serializers.BooleanField()
-
-    def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
-        return settings.MEDIA_BASE_URL + recipe_image.image.url
-
-
 class RecipeList(_RecipeBase):
     hero_image_source = serializers.SerializerMethodField(read_only=True)
 
@@ -32,9 +24,23 @@ class RecipeList(_RecipeBase):
         return None
 
 
+class _RecipeImage(serializers.Serializer):
+    id = serializers.IntegerField()
+    image_source = serializers.SerializerMethodField()
+    is_hero = serializers.BooleanField()
+
+    def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
+        return settings.MEDIA_BASE_URL + recipe_image.image.url
+
+
 class RecipeDetail(RecipeList):
+    images = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
+
+    def get_images(self, recipe: recipe_models.Recipe) -> list[dict]:
+        images = recipe.images.order_by("-is_hero")  # Put the hero image first
+        return _RecipeImage(instance=images, many=True).data
 
 
 class RecipeCreate(_RecipeBase):
