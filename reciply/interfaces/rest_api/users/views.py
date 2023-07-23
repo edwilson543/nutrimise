@@ -25,7 +25,7 @@ class Register(views.APIView):
     """
 
     def post(
-        self, request: drf_request, *args: object, **kwargs: object
+        self, request: drf_request.Request, *args: object, **kwargs: object
     ) -> drf_response.Response:
         serializer = serializers.RegisterUser(data=request.data)
         if serializer.is_valid():
@@ -43,4 +43,6 @@ class Register(views.APIView):
 
             return drf_response.Response(token_data, status=drf_status.HTTP_200_OK)
 
-        return drf_response.Response(status=drf_status.HTTP_400_BAD_REQUEST)
+        return drf_response.Response(
+            serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST
+        )
