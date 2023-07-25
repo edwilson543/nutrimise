@@ -8,7 +8,7 @@ from django import db as django_db
 from tests import factories
 
 
-class TestRecipeImage:
+class TestRecipeImageConstraints:
     def test_cannot_create_two_hero_images_for_one_recipe(self):
         image = factories.RecipeImage(is_hero=True)
 
