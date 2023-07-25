@@ -17,17 +17,19 @@ class MenuItem(django_models.Model):
 
     id = django_models.AutoField(primary_key=True)
 
-    menu = django_models.ForeignKey(_menu.Menu, on_delete=django_models.CASCADE, related_name="items")
+    menu = django_models.ForeignKey(
+        _menu.Menu, on_delete=django_models.CASCADE, related_name="items"
+    )
 
     recipe = django_models.ForeignKey(
         recipe_models.Recipe, on_delete=django_models.CASCADE, related_name="recipes"
     )
 
+    day = django_models.PositiveSmallIntegerField(choices=constants.Day.choices)
+
     meal_time = django_models.CharField(
         max_length=16, choices=constants.MealTime.choices
     )
-
-    day = django_models.CharField(max_length=10, choices=constants.Day.choices)
 
     created_at = django_models.DateTimeField(auto_now_add=True)
 

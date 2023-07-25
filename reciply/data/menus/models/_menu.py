@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+# Standard library imports
+from typing import TYPE_CHECKING
+
 # Django imports
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
+
+if TYPE_CHECKING:
+    from . import _menu_item
 
 
 class Menu(django_models.Model):
@@ -12,7 +18,9 @@ class Menu(django_models.Model):
 
     id = django_models.AutoField(primary_key=True)
 
-    author = django_models.ForeignKey(auth_models.User, on_delete=django_models.CASCADE, related_name="menus")
+    author = django_models.ForeignKey(
+        auth_models.User, on_delete=django_models.CASCADE, related_name="menus"
+    )
 
     name = django_models.CharField(max_length=128)
 
@@ -50,16 +58,12 @@ class Menu(django_models.Model):
             description=description,
         )
 
-    @classmethod
     def add_items(
-            cls,
-            *,
-            author: auth_models.User,
-            name: str,
-            description: str,
-    ) -> Menu:
-        return cls.objects.bulk_create(
-            author=author,
-            name=name,
-            description=description,
-        )
+        self,
+        *,
+        items: list[_menu_item.MenuItem],
+    ) -> list[_menu_item.MenuItem]:
+        """
+        Persist a list of menu items in the db.
+        """
+        return self.items.bulk_create(items)
