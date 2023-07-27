@@ -21,7 +21,7 @@ class TestMenuCreate:
         }
 
         url = django_urls.reverse("menu-create")
-        response = rest_api_client.post(url, data=menu_data, format="multipart")
+        response = rest_api_client.post(url, data=menu_data)
 
         # Ensure a menu has been created in the db
         menu = menu_models.Menu.objects.get()

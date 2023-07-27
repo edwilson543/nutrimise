@@ -75,3 +75,17 @@ class TestAddItemsToMenu:
 
         with pytest.raises(_add_items_to_menu.MealTimesAreNotUnique):
             _add_items_to_menu.add_items_to_menu(menu=menu, items=items_to_add)
+
+    def test_raises_when_adding_item_referencing_non_existent_recipe_id(self):
+        menu = factories.Menu()
+
+        items_to_add = [
+            {
+                "recipe_id": 1000,  # Does not exist
+                "day": constants.Day.MONDAY,
+                "meal_time": constants.MealTime.LUNCH,
+            },
+        ]
+
+        with pytest.raises(_add_items_to_menu.InvalidRecipeIds):
+            _add_items_to_menu.add_items_to_menu(menu=menu, items=items_to_add)

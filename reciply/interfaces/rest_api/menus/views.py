@@ -72,8 +72,45 @@ class MenuCreate(views.APIView):
                 errors = {"name": ["You already have a menu with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
-            response_data = serializers.MenuCreate(instance=menu).data
-            return response.Response(response_data, status=drf_status.HTTP_201_CREATED)
+            response_data = serializers.MenuCreate(instance=menu)
+            return response.Response(
+                response_data.data, status=drf_status.HTTP_201_CREATED
+            )
+
+        return response.Response(
+            serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST
+        )
+
+
+class AddItemsToMenu(views.APIView):
+    """
+    Add some recipes to a menu at a specific day and meal time.
+    """
+
+    http_method_names = ["post"]
+
+    def post(
+        self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
+    ) -> response.Response:
+        menu = shortcuts.get_object_or_404(
+            klass=menu_models.Menu, id=kwargs["id"], author=request.user
+        )
+        serializer = serializers.AddItemsToMenu(data=request.data, many=True)
+        if serializer.is_valid():
+            try:
+                menu_items = menus.add_items_to_menu(
+                    menu=menu, items=serializer.validated_data
+                )
+            except menus.MealTimesAreNotUnique:
+                errors = {
+                    "items": ["You cannot select more than one recipe per meal time!"]
+                }
+                return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
+
+            response_data = serializers.AddItemsToMenu(instance=menu_items, many=True)
+            return response.Response(
+                response_data.data, status=drf_status.HTTP_201_CREATED
+            )
 
         return response.Response(
             serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST

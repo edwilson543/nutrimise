@@ -48,8 +48,8 @@ class MenuCreate(_MenuBase):
     pass
 
 
-class AddItemToMenu(_MenuItem):
-    menu_id = serializers.IntegerField(min_value=1)
+class AddItemsToMenu(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     recipe_id = serializers.IntegerField(min_value=1)
     day = serializers.ChoiceField(choices=constants.Day.choices)
     meal_time = serializers.ChoiceField(choices=constants.MealTime.choices)
