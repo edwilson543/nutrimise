@@ -25,9 +25,9 @@ class _MenuItem(serializers.Serializer):
 
 
 class MenuList(_MenuBase):
-    number_of_meals = serializers.SerializerMethodField()
+    number_of_items = serializers.SerializerMethodField()
 
-    def get_number_of_meals(self, menu: menu_models.Menu) -> int:
+    def get_number_of_items(self, menu: menu_models.Menu) -> int:
         return menu.items.count()
 
 

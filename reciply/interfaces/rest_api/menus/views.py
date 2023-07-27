@@ -7,16 +7,16 @@ from rest_framework import views
 from django import shortcuts
 
 # Local application imports
-from app import recipes
-from data.recipes import models as recipe_models
-from domain.recipes import queries
+from app import menus
+from data.menus import models as menu_models
+from domain.menus import queries
 from interfaces.rest_api import types
-from interfaces.rest_api.recipes import serializers
+from interfaces.rest_api.menus import serializers
 
 
-class MyRecipeList(views.APIView):
+class MyMenuList(views.APIView):
     """
-    Get all the recipes that the user has written.
+    Get all the menus that the user has written.
     """
 
     http_method_names = ["get"]
@@ -24,18 +24,18 @@ class MyRecipeList(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        recipes = (
-            queries.get_recipes_authored_by_user(author=request.user)
-            .prefetch_related("images")
+        menus = (
+            queries.get_menus_authored_by_user(author=request.user)
+            .prefetch_related("items")
             .order_by("name")
         )
-        serialized_recipes = serializers.RecipeList(instance=recipes, many=True).data
-        return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
+        serialized_menus = serializers.MenuList(instance=menus, many=True).data
+        return response.Response(serialized_menus, status=drf_status.HTTP_200_OK)
 
 
-class RecipeDetail(views.APIView):
+class MenuDetail(views.APIView):
     """
-    Get the details for a single recipe.
+    Get the details for a single menu.
     """
 
     http_method_names = ["get"]
@@ -43,16 +43,16 @@ class RecipeDetail(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        recipe = shortcuts.get_object_or_404(
-            klass=recipe_models.Recipe, id=kwargs["id"], author=request.user
+        menu = shortcuts.get_object_or_404(
+            klass=menu_models.Menu, id=kwargs["id"], author=request.user
         )
-        serialized_recipes = serializers.RecipeDetail(instance=recipe).data
-        return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
+        serialized_menus = serializers.MenuDetail(instance=menu).data
+        return response.Response(serialized_menus, status=drf_status.HTTP_200_OK)
 
 
-class RecipeCreate(views.APIView):
+class MenuCreate(views.APIView):
     """
-    Create a new recipe.
+    Create a new menu.
     """
 
     http_method_names = ["post"]
@@ -60,20 +60,19 @@ class RecipeCreate(views.APIView):
     def post(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        serializer = serializers.RecipeCreate(data=request.data)
+        serializer = serializers.MenuCreate(data=request.data)
         if serializer.is_valid():
             try:
-                recipe = recipes.create_recipe(
+                menu = menus.create_menu(
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data["description"],
-                    hero_image=serializer.validated_data.get("hero_image"),
                 )
-            except recipes.RecipeNameNotUniqueForAuthor:
-                errors = {"name": ["You already have a recipe with this name!"]}
+            except menus.MenuNameNotUniqueForAuthor:
+                errors = {"name": ["You already have a menu with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
-            response_data = serializers.RecipeCreate(instance=recipe).data
+            response_data = serializers.MenuCreate(instance=menu).data
             return response.Response(response_data, status=drf_status.HTTP_201_CREATED)
 
         return response.Response(
