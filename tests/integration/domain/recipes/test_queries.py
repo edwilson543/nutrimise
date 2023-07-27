@@ -4,7 +4,7 @@ from tests import factories
 
 
 class TestGetRecipesAuthoredByUser:
-    def test_gets_recipe_written_by_author(self):
+    def test_gets_recipe_authored_by_user(self):
         user = factories.User()
         recipe = factories.Recipe(author=user)
 
