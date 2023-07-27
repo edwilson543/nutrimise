@@ -115,3 +115,20 @@ class AddItemsToMenu(views.APIView):
         return response.Response(
             serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST
         )
+
+
+class MenuItem(views.APIView):
+    """
+    Remove an item from a menu.
+    """
+
+    http_method_names = ["delete"]
+
+    def delete(
+        self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
+    ) -> response.Response:
+        menu_item = shortcuts.get_object_or_404(
+            klass=menu_models.MenuItem, id=kwargs["id"], menu__author=request.user
+        )
+        menus.delete_menu_item(item=menu_item)
+        return response.Response(status=drf_status.HTTP_200_OK)

@@ -4,6 +4,9 @@ from django import urls as django_urls
 from . import views
 
 urlpatterns = [
+    # ----------
+    # Menus
+    # ----------
     django_urls.path(
         "menu/list/",
         views.MyMenuList.as_view(),
@@ -15,5 +18,13 @@ urlpatterns = [
         "menu/<int:id>/add-items/",
         views.AddItemsToMenu.as_view(),
         name="menu-add-items",
+    ),
+    # ----------
+    # Menu items
+    # ----------
+    django_urls.path(
+        "menu-item/<int:id>/",
+        views.MenuItem.as_view(),
+        name="menu-item",
     ),
 ]
