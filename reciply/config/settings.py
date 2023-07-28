@@ -51,6 +51,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["knox.auth.TokenAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 REST_KNOX = {"TOKEN_TTL": None}

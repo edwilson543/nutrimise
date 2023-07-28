@@ -1,6 +1,6 @@
 # Third party imports
 from knox import views as knox_views
-from rest_framework import authentication
+from rest_framework import authentication, permissions
 from rest_framework import request as drf_request
 from rest_framework import response as drf_response
 from rest_framework import status as drf_status
@@ -23,6 +23,8 @@ class Register(views.APIView):
     """
     Register a new user.
     """
+
+    permission_classes = [permissions.AllowAny]
 
     def post(
         self, request: drf_request.Request, *args: object, **kwargs: object
