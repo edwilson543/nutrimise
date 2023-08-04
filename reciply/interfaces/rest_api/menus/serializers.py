@@ -17,7 +17,7 @@ class _MenuBase(serializers.Serializer):
     description = serializers.CharField()
 
 
-class _MenuItem(serializers.Serializer):
+class MenuItem(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     recipe = recipe_serializers.RecipeList()
     day = serializers.ChoiceField(choices=constants.Day.choices)
@@ -40,7 +40,7 @@ class MenuDetail(MenuList):
         items = menu.items.select_related("recipe").order_by("day")
         return typing.cast(
             list[serializer_helpers.ReturnDict],
-            _MenuItem(instance=items, many=True).data,
+            MenuItem(instance=items, many=True).data,
         )
 
 
@@ -48,7 +48,7 @@ class MenuCreate(_MenuBase):
     pass
 
 
-class AddItemsToMenu(serializers.Serializer):
+class AddItemToMenu(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     recipe_id = serializers.IntegerField(min_value=1)
     day = serializers.ChoiceField(choices=constants.Day.choices)

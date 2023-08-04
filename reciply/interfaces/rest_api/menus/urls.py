@@ -15,6 +15,9 @@ urlpatterns = [
     django_urls.path("menu/create/", views.MenuCreate.as_view(), name="menu-create"),
     django_urls.path("menu/<int:id>/", views.MenuDetail.as_view(), name="menu-detail"),
     django_urls.path(
+        "menu/<int:id>/add-item/", views.AddItemToMenu.as_view(), name="menu-add-item"
+    ),
+    django_urls.path(
         "menu/<int:id>/add-items/",
         views.AddItemsToMenu.as_view(),
         name="menu-add-items",

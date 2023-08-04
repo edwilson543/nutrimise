@@ -82,9 +82,9 @@ class MenuCreate(views.APIView):
         )
 
 
-class AddItemsToMenu(views.APIView):
+class AddItemToMenu(views.APIView):
     """
-    Add some recipes to a menu at a specific day and meal time.
+    Add a recipe to a menu for a specific meal time and day.
     """
 
     http_method_names = ["post"]
@@ -95,7 +95,38 @@ class AddItemsToMenu(views.APIView):
         menu = shortcuts.get_object_or_404(
             klass=menu_models.Menu, id=kwargs["id"], author=request.user
         )
-        serializer = serializers.AddItemsToMenu(data=request.data, many=True)
+        serializer = serializers.AddItemToMenu(data=request.data)
+        if serializer.is_valid():
+            menu_item = menus.add_item_to_menu(
+                menu=menu,
+                recipe_id=serializer.validated_data["recipe_id"],
+                day=serializer.validated_data["day"],
+                meal_time=serializer.validated_data["meal_time"],
+            )
+            response_data = serializers.MenuItem(instance=menu_item)
+            return response.Response(
+                response_data.data, status=drf_status.HTTP_201_CREATED
+            )
+
+        return response.Response(
+            serializer.errors, status=drf_status.HTTP_400_BAD_REQUEST
+        )
+
+
+class AddItemsToMenu(views.APIView):
+    """
+    Add some recipes to a menu for some specific days and meal times.
+    """
+
+    http_method_names = ["post"]
+
+    def post(
+        self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
+    ) -> response.Response:
+        menu = shortcuts.get_object_or_404(
+            klass=menu_models.Menu, id=kwargs["id"], author=request.user
+        )
+        serializer = serializers.AddItemToMenu(data=request.data, many=True)
         if serializer.is_valid():
             try:
                 menu_items = menus.add_items_to_menu(
@@ -107,7 +138,7 @@ class AddItemsToMenu(views.APIView):
                 }
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
-            response_data = serializers.AddItemsToMenu(instance=menu_items, many=True)
+            response_data = serializers.AddItemToMenu(instance=menu_items, many=True)
             return response.Response(
                 response_data.data, status=drf_status.HTTP_201_CREATED
             )
