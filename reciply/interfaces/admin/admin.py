@@ -2,6 +2,7 @@
 from django.contrib import admin
 
 # Local application imports
+from data import constants
 from data.menus import models as menu_models
 from data.recipes import models as recipe_models
 
@@ -42,6 +43,10 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(menu_models.MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ["id", "menu", "recipe", "day", "meal_time"]
+    list_display = ["id", "menu", "recipe", "format_day", "meal_time"]
     ordering = ["menu", "day", "meal_time"]
     search_fields = ["menu"]
+
+    @admin.display()
+    def format_day(self, menu_item: menu_models.MenuItem) -> str:
+        return constants.Day(int(menu_item.day)).label.title()
