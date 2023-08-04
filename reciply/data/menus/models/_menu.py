@@ -7,7 +7,13 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
 
+# Local application imports
+from data import constants
+
 if TYPE_CHECKING:
+    # Local application imports
+    from data.recipes import models as recipe_models
+
     from . import _menu_item
 
 
@@ -57,6 +63,18 @@ class Menu(django_models.Model):
             name=name,
             description=description,
         )
+
+    def add_item(
+        self,
+        *,
+        recipe: recipe_models.Recipe,
+        day: constants.Day,
+        meal_time: constants.MealTime,
+    ) -> _menu_item.MenuItem:
+        """
+        Persist a list of menu items in the db.
+        """
+        return self.items.create(recipe=recipe, day=day, meal_time=meal_time)
 
     def add_items(
         self,
