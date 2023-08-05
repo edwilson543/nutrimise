@@ -72,7 +72,7 @@ class MenuCreate(views.APIView):
                 errors = {"name": ["You already have a menu with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
-            response_data = serializers.MenuCreate(instance=menu)
+            response_data = serializers.MenuDetail(instance=menu)
             return response.Response(
                 response_data.data, status=drf_status.HTTP_201_CREATED
             )
