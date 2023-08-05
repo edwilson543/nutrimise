@@ -10,9 +10,10 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 # Standard library imports
 import os
 
-# Django imports
-from django.core.wsgi import get_wsgi_application
+# Third party imports
+from configurations import wsgi
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+os.environ.setdefault("DJANGO_CONFIGURATION", "Settings")
 
-application = get_wsgi_application()
+application = wsgi.get_wsgi_application()
