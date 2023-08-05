@@ -14,7 +14,7 @@ from interfaces.rest_api.recipes import serializers as recipe_serializers
 class _MenuBase(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=128)
-    description = serializers.CharField()
+    description = serializers.CharField(required=False)
 
 
 class MenuItem(serializers.Serializer):

@@ -66,7 +66,7 @@ class RecipeCreate(views.APIView):
                 recipe = recipes.create_recipe(
                     author=request.user,
                     name=serializer.validated_data["name"],
-                    description=serializer.validated_data["description"],
+                    description=serializer.validated_data.get("description", ""),
                     hero_image=serializer.validated_data.get("hero_image"),
                 )
             except recipes.RecipeNameNotUniqueForAuthor:

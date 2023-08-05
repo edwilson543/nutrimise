@@ -66,7 +66,7 @@ class MenuCreate(views.APIView):
                 menu = menus.create_menu(
                     author=request.user,
                     name=serializer.validated_data["name"],
-                    description=serializer.validated_data["description"],
+                    description=serializer.validated_data.get("description", ""),
                 )
             except menus.MenuNameNotUniqueForAuthor:
                 errors = {"name": ["You already have a menu with this name!"]}

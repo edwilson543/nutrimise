@@ -16,7 +16,7 @@ from domain.recipes import queries
 class _RecipeBase(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=128)
-    description = serializers.CharField()
+    description = serializers.CharField(required=False)
 
 
 class RecipeList(_RecipeBase):
