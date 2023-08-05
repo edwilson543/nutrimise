@@ -4,7 +4,6 @@ import pytest
 # Local application imports
 from app.menus import _add_item_to_menu
 from data import constants
-from data.menus import models as menu_models
 from data.recipes import models as recipe_models
 from tests import factories
 
@@ -26,7 +25,7 @@ class TestAddItemToMenu:
         assert menu_item.day == constants.Day.MONDAY
         assert menu_item.meal_time == constants.MealTime.LUNCH
 
-    def test_create_menu_and_deletes_existing_menu_item_at_day_and_meal_time(self):
+    def test_updates_existing_menu_item_at_day_and_meal_time(self):
         menu = factories.Menu()
         menu_item = factories.MenuItem(
             menu=menu, day=constants.Day.MONDAY, meal_time=constants.MealTime.LUNCH
@@ -40,13 +39,11 @@ class TestAddItemToMenu:
             meal_time=menu_item.meal_time,
         )
 
-        new_menu_item = menu.items.get()
-        assert new_menu_item.recipe == recipe
-        assert new_menu_item.day == constants.Day.MONDAY
-        assert new_menu_item.meal_time == constants.MealTime.LUNCH
-
-        with pytest.raises(menu_models.MenuItem.DoesNotExist):
-            menu_item.refresh_from_db()
+        updated_menu_item = menu.items.get()
+        assert updated_menu_item.id == menu_item.id
+        assert updated_menu_item.recipe == recipe
+        assert updated_menu_item.day == constants.Day.MONDAY
+        assert updated_menu_item.meal_time == constants.MealTime.LUNCH
 
     def test_raises_does_not_exist_if_recipe_id_is_invalid(self):
         menu = factories.Menu()

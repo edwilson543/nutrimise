@@ -21,5 +21,10 @@ def add_item_to_menu(
     meal_time: constants.MealTime
 ) -> menu_models.MenuItem:
     recipe = recipe_models.Recipe.objects.get(id=recipe_id)
-    menu.items.filter(day=day, meal_time=meal_time).delete()
-    return menu.add_item(recipe=recipe, day=day, meal_time=meal_time)
+    try:
+        menu_item = menu.items.get(meal_time=meal_time, day=day)
+    except menu_models.MenuItem.DoesNotExist:
+        return menu.add_item(recipe=recipe, day=day, meal_time=meal_time)
+    if menu_item.recipe.id != recipe_id:
+        menu_item.update_recipe(recipe)
+    return menu_item

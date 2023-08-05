@@ -47,3 +47,11 @@ class MenuItem(django_models.Model):
 
     def __str__(self) -> str:
         return f"{self.meal_time} ({self.day}) for {self.menu}"
+
+    # ----------
+    # Mutators
+    # ----------
+    def update_recipe(self, recipe: recipe_models.Recipe) -> MenuItem:
+        self.recipe = recipe
+        self.save(update_fields=["recipe", "updated_at"])
+        return self
