@@ -15,7 +15,8 @@ urlpatterns = [
     urls.path("logout-all/", knox_views.LogoutAllView.as_view(), name="logout-all"),
     urls.path("register/", user_views.Register.as_view(), name="register"),
     # ----------
-    # Recipes
+    # Everything else
     # ----------
     urls.path("recipes/", urls.include("interfaces.rest_api.recipes.urls")),
+    urls.path("menus/", urls.include("interfaces.rest_api.menus.urls")),
 ]

@@ -16,7 +16,7 @@ from domain.recipes import queries
 class _RecipeBase(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=128)
-    description = serializers.CharField()
+    description = serializers.CharField(required=False)
 
 
 class RecipeList(_RecipeBase):
@@ -24,7 +24,7 @@ class RecipeList(_RecipeBase):
 
     def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
         if image := queries.get_hero_image(recipe):
-            return settings.MEDIA_BASE_URL + image.image.url
+            return settings.MEDIA_BASE_URL + image.image.url  # type: ignore[misc]
         return None
 
 
@@ -34,7 +34,7 @@ class _RecipeImage(serializers.Serializer):
     is_hero = serializers.BooleanField()
 
     def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
-        return settings.MEDIA_BASE_URL + recipe_image.image.url
+        return settings.MEDIA_BASE_URL + recipe_image.image.url  # type: ignore[misc]
 
 
 class RecipeDetail(RecipeList):

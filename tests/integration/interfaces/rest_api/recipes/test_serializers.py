@@ -10,7 +10,7 @@ class TestRecipeDetail:
     @override_settings(
         MEDIA_BASE_URL="http://somewhere.org", MEDIA_URL="/my-media-files/"
     )
-    def test_serializes_recipe_with_images_image(self):
+    def test_serializes_recipe_with_images(self):
         recipe = factories.Recipe()
         hero_image = factories.RecipeImage(recipe=recipe, is_hero=True)
         extra_image = factories.RecipeImage(recipe=recipe, is_hero=False)

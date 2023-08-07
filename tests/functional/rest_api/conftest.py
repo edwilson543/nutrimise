@@ -1,6 +1,10 @@
+# Standard library imports
+from typing import Any
+
 # Third party imports
 import pytest
 from knox import models as knox_models
+from rest_framework import response as drf_response
 from rest_framework import test as drf_test
 
 # Django imports
@@ -19,6 +23,11 @@ class APIClient(drf_test.APIClient):
         auth_headers = {"HTTP_AUTHORIZATION": f"Token {token}"}
         super().credentials(**auth_headers)
         return token_instance
+
+    def post(self, *args: Any, **kwargs: Any) -> drf_response.Response:
+        # Use 'json' rather than 'multipart' as the default format
+        format = kwargs.pop("format", None) or "json"
+        return super().post(format=format, *args, **kwargs)
 
 
 @pytest.fixture

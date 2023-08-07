@@ -24,9 +24,11 @@ class MyRecipeList(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        recipes = queries.get_recipes_authored_by_user(
-            author=request.user
-        ).prefetch_related("images")
+        recipes = (
+            queries.get_recipes_authored_by_user(author=request.user)
+            .prefetch_related("images")
+            .order_by("name")
+        )
         serialized_recipes = serializers.RecipeList(instance=recipes, many=True).data
         return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
 
@@ -64,7 +66,7 @@ class RecipeCreate(views.APIView):
                 recipe = recipes.create_recipe(
                     author=request.user,
                     name=serializer.validated_data["name"],
-                    description=serializer.validated_data["description"],
+                    description=serializer.validated_data.get("description", ""),
                     hero_image=serializer.validated_data.get("hero_image"),
                 )
             except recipes.RecipeNameNotUniqueForAuthor:
