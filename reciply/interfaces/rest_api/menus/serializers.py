@@ -45,7 +45,7 @@ class MenuDetail(MenuList):
 
 
 class MenuCreate(_MenuBase):
-    pass
+    add_suggestions = serializers.BooleanField(default=False)
 
 
 class AddItemToMenu(serializers.Serializer):

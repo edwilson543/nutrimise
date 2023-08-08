@@ -11,7 +11,7 @@ from tests import factories
 
 
 class TestMenuCreate:
-    def test_creates_valid_new_menu(self, rest_api_client):
+    def test_creates_valid_new_menu_without_suggestions(self, rest_api_client):
         user = factories.User()
         rest_api_client.authorize_user(user)
 
@@ -28,6 +28,33 @@ class TestMenuCreate:
         assert menu.author == user
         assert menu.name == "my menu for this week"
         assert menu.description == "some description"
+
+        assert response.status_code == drf_status.HTTP_201_CREATED
+        assert response.data["id"] == menu.id
+
+    def test_creates_valid_new_menu_with_suggestions(self, rest_api_client):
+        user = factories.User()
+        rest_api_client.authorize_user(user)
+
+        recipe = factories.Recipe(author=user)
+
+        menu_data = {
+            "name": "my menu for this week",
+            "description": "some description",
+            "add_suggestions": True,
+        }
+
+        url = django_urls.reverse("menu-create")
+        response = rest_api_client.post(url, data=menu_data)
+
+        # Ensure a menu has been created in the db
+        menu = menu_models.Menu.objects.get()
+        assert menu.author == user
+        assert menu.name == "my menu for this week"
+        assert menu.description == "some description"
+
+        # Ensure suggestions have been added to the menu
+        assert menu.items.get().recipe == recipe
 
         assert response.status_code == drf_status.HTTP_201_CREATED
         assert response.data["id"] == menu.id
