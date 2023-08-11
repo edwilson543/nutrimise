@@ -101,7 +101,7 @@ class Settings(configurations.Configuration):
             "USER": env.as_str("DB_USER"),
             "PASSWORD": env.as_str("DB_PASSWORD"),
             "HOST": env.as_str("DB_HOST"),
-            "PORT": env.as_int("DB_PORT"),
+            "PORT": env.as_int("DB_PORT", default=5432),
         }
     }
 
