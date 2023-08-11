@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  # Path to the env file from root
-  ENV_FILE: './.github/.env.ci'
+  # .env file is created by parsing a github secret at runtime
+  ENV_FILE: .env
 
 jobs:
   test:
@@ -18,6 +18,7 @@ jobs:
       postgres:
         image: postgres:14
         env:
+          # Credentials required by postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
@@ -44,6 +45,10 @@ jobs:
           pip install -r requirements/dev-requirements.txt
           pip install -r requirements/test-requirements.txt
         if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Run test suite with pytest
         run: pytest .
