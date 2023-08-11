@@ -3,3 +3,5 @@ django-configurations==2.4.1
 djangorestframework==3.14.0
 django-rest-knox==4.2.0
 pillow==10.0.0
+psycopg==3.1.10
+python-decouple==3.8

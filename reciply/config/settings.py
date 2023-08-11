@@ -4,6 +4,8 @@ import pathlib
 # Third party imports
 import configurations
 
+from . import env
+
 
 class Settings(configurations.Configuration):
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -94,8 +96,12 @@ class Settings(configurations.Configuration):
 
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env.as_str("DB_NAME"),
+            "USER": env.as_str("DB_USER"),
+            "PASSWORD": env.as_str("DB_PASSWORD"),
+            "HOST": env.as_str("DB_HOST"),
+            "PORT": env.as_int("DB_PORT"),
         }
     }
 
