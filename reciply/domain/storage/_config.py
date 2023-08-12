@@ -49,7 +49,9 @@ class StorageContext(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def from_recipe_image(cls, recipe: recipe_models.RecipeImage) -> StorageContext:
+    def from_recipe_image(
+        cls, recipe_image: recipe_models.RecipeImage
+    ) -> StorageContext:
         """
         Get the storage context for some existing recipe image.
         """

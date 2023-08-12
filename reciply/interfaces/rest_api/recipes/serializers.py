@@ -5,9 +5,6 @@ import typing
 from rest_framework import serializers
 from rest_framework.utils import serializer_helpers
 
-# Django imports
-from django.conf import settings
-
 # Local application imports
 from data.recipes import models as recipe_models
 from domain.recipes import queries
@@ -24,7 +21,9 @@ class RecipeList(_RecipeBase):
 
     def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
         if image := queries.get_hero_image(recipe):
-            return settings.MEDIA_BASE_URL + image.image.url  # type: ignore[misc]
+            source = queries.get_image_source(recipe_image=image)
+            print("SOURCE: ", source)
+            return source
         return None
 
 
@@ -34,7 +33,7 @@ class _RecipeImage(serializers.Serializer):
     is_hero = serializers.BooleanField()
 
     def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
-        return settings.MEDIA_BASE_URL + recipe_image.image.url  # type: ignore[misc]
+        return queries.get_image_source(recipe_image=recipe_image)
 
 
 class RecipeDetail(RecipeList):

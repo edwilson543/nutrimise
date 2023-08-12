@@ -75,7 +75,7 @@ class Settings(configurations.Configuration):
 
     MEDIA_ROOT: pathlib.Path = BASE_DIR / "media"
     MEDIA_URL: str = "/media/"
-    MEDIA_BASE_URL: str = "http://localhost:8000"
+    MEDIA_BASE_URL: str = "http://localhost:8000/media"
 
     TEMPLATES = [
         {
