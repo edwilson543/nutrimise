@@ -6,9 +6,11 @@ from django import urls as django_urls
 
 # Local application imports
 from tests import factories
+from tests.helpers import storage as storage_helpers
 
 
 class TestRecipeDetail:
+    @storage_helpers.install_test_file_storage
     def test_returns_serialized_recipe(self, rest_api_client):
         user = factories.User()
         rest_api_client.authorize_user(user)
@@ -24,6 +26,7 @@ class TestRecipeDetail:
         images = response.data["images"]
         assert len(images) == 1
         assert images[0]["id"] == image.id
+        assert images[0]["image_source"] == storage_helpers.PUBLIC_IMAGE_SOURCE
 
     def test_not_found_when_user_is_not_author(self, rest_api_client):
         user = factories.User()

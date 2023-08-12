@@ -18,7 +18,6 @@ class Recipe(factory.django.DjangoModelFactory):
 
 class RecipeImage(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
-    image = factory.django.ImageField()
     is_hero = False
 
     class Meta:
