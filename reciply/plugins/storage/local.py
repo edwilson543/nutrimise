@@ -67,7 +67,7 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
             new_file.write(file.getbuffer())
 
     def get_public_source(self, *, storage_context: StorageContext) -> str:
-        return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"
+        return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"  # type: ignore[misc]
 
     def delete(self, *, storage_context: StorageContext) -> None:
         raise NotImplementedError

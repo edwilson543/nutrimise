@@ -24,8 +24,8 @@ def create_recipe(
         recipe = recipe_models.Recipe.new(
             author=author, name=name, description=description
         )
-        if hero_image:
+        if hero_image and hero_image.file:
             _create_recipe_image.create_recipe_image(
-                recipe=recipe, is_hero=True, file=hero_image.file
+                recipe=recipe, is_hero=True, file=hero_image.file  # type: ignore[arg-type]
             )
     return recipe
