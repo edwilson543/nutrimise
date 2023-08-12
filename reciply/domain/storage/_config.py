@@ -94,5 +94,5 @@ def get_file_storage() -> FileStorage:
     """
     Return a concrete instance of the FileStorage class.
     """
-    klass = module_loading.import_string(settings.FILE_STORAGE_CLASS)  # type: ignore[misc]
+    klass = module_loading.import_string(settings.FILE_STORAGE_CLASS)
     return klass()

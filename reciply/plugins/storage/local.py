@@ -69,7 +69,7 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
             / storage_context.namespace
             / storage_context.filename
         ).is_file():
-            return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"  # type: ignore[misc]
+            return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"
         raise storage_config.UnableToLocateFile
 
     def delete(self, *, storage_context: StorageContext) -> None:
