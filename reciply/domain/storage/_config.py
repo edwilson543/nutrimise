@@ -2,14 +2,12 @@ from __future__ import annotations
 
 # Standard library imports
 import abc
+import dataclasses
+import io
 from typing import Generic, TypeVar
-
-# Third party imports
-import attrs
 
 # Django imports
 from django.conf import settings
-from django.core import files
 from django.utils import module_loading
 
 # Local application imports
@@ -32,13 +30,14 @@ class UnableToDeleteFile(_StorageError):
     pass
 
 
-class StorageContext:
+@dataclasses.dataclass(frozen=True)
+class StorageContext(abc.ABC):
     """
     Store and generate the context for some file storage operation.
     """
 
     def serialize(self) -> dict[str, str]:
-        return attrs.asdict(self)
+        return dataclasses.asdict(self)
 
     @classmethod
     @abc.abstractmethod
@@ -65,35 +64,33 @@ class FileStorage(abc.ABC, Generic[StorageContextType]):
     Interact with a file persistence system to perform CRUD operations.
     """
 
-    context_class: StorageContextType
-
-    def __init__(self, storage_context: StorageContextType) -> None:
-        self.storage_context = storage_context
+    context_class: type[StorageContextType]
 
     @abc.abstractmethod
-    def upload(self, file: files.File) -> None:
+    def upload(self, *, file: io.BytesIO, storage_context: StorageContextType) -> None:
         """
         Persist some new file in storage.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_public_source(self) -> str:
+    def get_public_source(self, *, storage_context: StorageContextType) -> str:
         """
         Get the URL from which some file can be publicly accessed.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
-    def delete(self) -> None:
+    def delete(self, *, storage_context: StorageContextType) -> None:
         """
         Delete the file from persisted storage.
         """
         raise NotImplementedError
 
 
-def get_file_storage_class() -> type[FileStorage]:
+def get_file_storage() -> FileStorage:
     """
     Return a concrete instance of the FileStorage class.
     """
-    return module_loading.import_string(settings.FILE_STORAGE_CLASS)  # type: ignore[misc]
+    klass = module_loading.import_string(settings.FILE_STORAGE_CLASS)  # type: ignore[misc]
+    return klass()

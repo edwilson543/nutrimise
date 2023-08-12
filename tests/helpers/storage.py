@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# Standard library imports
+import uuid
+
 # Third party imports
 import attrs
 
@@ -17,7 +20,7 @@ class StorageContext(storage_config.StorageContext):
 
     @classmethod
     def for_recipe(cls, recipe: recipe_models.Recipe) -> StorageContext:
-        return cls(key=f"key-recipe-{recipe.id}")
+        return cls(key=f"recipe-{recipe.id}-{uuid.uuid4()}")
 
     @classmethod
     def from_recipe_image(
@@ -36,16 +39,16 @@ class TestFileStorage(storage_config.FileStorage[StorageContext]):
     # Create an in memory upload store
     uploaded_files: dict[str, files.File] = {}
 
-    def upload(self, file: files.File) -> None:
-        self.uploaded_files[self.storage_context.key] = file
+    def upload(self, *, file: files.File, storage_context: StorageContext) -> None:
+        self.uploaded_files[storage_context.key] = file
 
-    def get_public_source(self) -> str:
-        if self.storage_context.key in self.uploaded_files:
+    def get_public_source(self, *, storage_context: StorageContext) -> str:
+        if storage_context.key in self.uploaded_files:
             return f"some-url/{self.uploaded_files['key'].file}"
         raise storage_config.UnableToUploadFile
 
-    def delete(self) -> None:
-        if self.storage_context.key in self.uploaded_files:
-            self.uploaded_files.pop(self.storage_context.key)
+    def delete(self, *, storage_context: StorageContext) -> None:
+        if storage_context.key in self.uploaded_files:
+            self.uploaded_files.pop(storage_context.key)
         else:
             raise storage_config.UnableToDeleteFile
