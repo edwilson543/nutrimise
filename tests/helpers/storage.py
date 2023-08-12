@@ -56,9 +56,7 @@ class TestFileStorage(storage_config.FileStorage[StorageContext]):
     def upload(self, *, file: files.File, storage_context: StorageContext) -> None:
         self.uploaded_files[storage_context.key] = file
 
-    def get_public_source(
-        self, *, storage_context: StorageContext, raise_if_not_found: bool = False
-    ) -> str:
+    def get_public_source(self, *, storage_context: StorageContext) -> str:
         return PUBLIC_IMAGE_SOURCE
 
     def delete(self, *, storage_context: StorageContext) -> None:

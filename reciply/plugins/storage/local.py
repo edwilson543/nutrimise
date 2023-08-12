@@ -63,18 +63,14 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
         with open(storage_context.filepath, mode="wb") as new_file:
             new_file.write(file.getbuffer())
 
-    def get_public_source(
-        self, *, storage_context: StorageContext, raise_if_not_found: bool = False
-    ) -> str:
+    def get_public_source(self, *, storage_context: StorageContext) -> str:
         if (
             typing.cast(pathlib.Path, settings.MEDIA_ROOT)
             / storage_context.namespace
             / storage_context.filename
         ).is_file():
             return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"  # type: ignore[misc]
-        elif raise_if_not_found:
-            raise storage_config.UnableToLocateFile
-        return ""
+        raise storage_config.UnableToLocateFile
 
     def delete(self, *, storage_context: StorageContext) -> None:
         raise NotImplementedError
