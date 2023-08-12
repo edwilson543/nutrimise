@@ -3,7 +3,6 @@ import io
 
 # Django imports
 from django import db as django_db
-from django.db import transaction
 
 # Local application imports
 from data.recipes import models as recipe_models
@@ -27,8 +26,6 @@ def create_recipe_image(
     except django_db.IntegrityError:
         raise RecipeAlreadyHasHeroImage
 
-    transaction.on_commit(
-        lambda: store.upload(file=file, storage_context=storage_context)
-    )
+    store.upload(file=file, storage_context=storage_context)
 
     return recipe_image
