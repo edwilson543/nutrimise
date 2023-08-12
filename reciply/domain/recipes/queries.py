@@ -24,6 +24,8 @@ def get_image_source(recipe_image: recipe_models.RecipeImage) -> str:
     store = storage.get_file_storage()
     storage_context = store.context_class.from_recipe_image(recipe_image=recipe_image)
     try:
-        return store.get_public_source(storage_context=storage_context)
+        return store.get_public_source(
+            storage_context=storage_context, raise_if_not_found=True
+        )
     except storage.UnableToUploadFile:
         return ""
