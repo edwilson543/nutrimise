@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+# Standard library imports
+from typing import TYPE_CHECKING
+
 # Django imports
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
+
+if TYPE_CHECKING:
+    from . import _recipe_image
 
 
 class Recipe(django_models.Model):
@@ -49,3 +55,8 @@ class Recipe(django_models.Model):
             name=name,
             description=description,
         )
+
+    def new_image(
+        self, is_hero: bool, storage_context: dict[str, str]
+    ) -> _recipe_image.RecipeImage:
+        return self.images.create(is_hero=is_hero, storage_context=storage_context)

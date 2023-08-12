@@ -22,15 +22,14 @@ class Namespace(enum.StrEnum):
 
 @dataclasses.dataclass(frozen=True)
 class StorageContext(storage_config.StorageContext):
-    directory: pathlib.Path
+    namespace: Namespace
     filename: str
 
     @classmethod
     def for_recipe(cls, recipe: recipe_models.Recipe) -> StorageContext:
-        base = typing.cast(pathlib.Path, settings.MEDIA_ROOT)
         return cls(
-            directory=base / Namespace.RECIPES,
-            filename=f"recipe-{recipe.id}-{uuid.uuid4()}",
+            namespace=Namespace.RECIPES,
+            filename=f"recipe-{recipe.id}-{uuid.uuid4()}.jpg",
         )
 
     @classmethod
@@ -38,6 +37,10 @@ class StorageContext(storage_config.StorageContext):
         cls, recipe_image: recipe_models.RecipeImage
     ) -> StorageContext:
         raise NotImplementedError
+
+    @property
+    def directory(self) -> pathlib.Path:
+        return typing.cast(pathlib.Path, settings.MEDIA_ROOT) / self.namespace
 
     @property
     def filepath(self) -> pathlib.Path:

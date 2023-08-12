@@ -1,6 +1,9 @@
 # Third party imports
 import pytest
 
+# Django imports
+from django.test import override_settings
+
 # Local application imports
 from app.recipes import _create_recipe
 from tests import factories
@@ -18,6 +21,7 @@ class TestCreateRecipe:
         assert recipe.name == "Beef"
         assert recipe.description == "Beef beef"
 
+    @override_settings(FILE_STORAGE_CLASS="tests.helpers.storage.TestFileStorage")
     def test_creates_valid_recipe_for_user_with_hero_image(self):
         author = factories.User()
         hero_image = factories.image()

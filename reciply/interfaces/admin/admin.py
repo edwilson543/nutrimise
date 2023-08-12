@@ -22,7 +22,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(recipe_models.RecipeImage)
 class RecipeImageAdmin(admin.ModelAdmin):
-    list_display = ["id", "recipe", "image"]
+    list_display = ["id", "recipe"]
     ordering = ["recipe__name"]
 
 

@@ -19,7 +19,7 @@ class TestLocalFileStorage:
     def test_uploads_file_to_filesystem(self):
         file = factories.image().file
         storage_context = local_storage.StorageContext(
-            directory=TEST_MEDIA_ROOT, filename="test.jpeg"
+            namespace=local_storage.Namespace.RECIPES, filename="test.jpeg"
         )
 
         store = local_storage.LocalFileStorage()
