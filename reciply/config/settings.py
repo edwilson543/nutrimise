@@ -19,7 +19,9 @@ class Settings(configurations.Configuration):
 
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
+    # ----------
     # Application definition
+    # ----------
 
     INSTALLED_APPS = [
         # Third party
@@ -50,6 +52,8 @@ class Settings(configurations.Configuration):
     ]
 
     ROOT_URLCONF = "config.urls"
+
+    WSGI_APPLICATION = "config.wsgi.application"
 
     # ----------
     # API settings
@@ -89,10 +93,9 @@ class Settings(configurations.Configuration):
         },
     ]
 
-    WSGI_APPLICATION = "config.wsgi.application"
-
+    # ----------
     # Database
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+    # ----------
 
     DATABASES = {
         "default": {
@@ -105,8 +108,12 @@ class Settings(configurations.Configuration):
         }
     }
 
+    # Default primary key field type
+    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+    # ----------
     # Password validation
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+    # ----------
 
     AUTH_PASSWORD_VALIDATORS = [
         {
@@ -123,8 +130,9 @@ class Settings(configurations.Configuration):
         },
     ]
 
+    # ----------
     # Internationalization
-    # https://docs.djangoproject.com/en/4.2/topics/i18n/
+    # ----------
 
     LANGUAGE_CODE = "en-us"
 
@@ -134,12 +142,14 @@ class Settings(configurations.Configuration):
 
     USE_TZ = False
 
+    # ----------
     # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/4.2/howto/static-files/
+    # ----------
 
     STATIC_URL = "static/"
 
-    # Default primary key field type
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+    # ----------
+    # Plugins
+    # ----------
 
-    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+    FILE_STORAGE_CLASS = "plugins.storage.local.LocalFileStorage"
