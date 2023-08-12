@@ -36,13 +36,10 @@ class StorageContext(storage_config.StorageContext):
     def from_recipe_image(
         cls, recipe_image: recipe_models.RecipeImage
     ) -> StorageContext:
-        try:
-            return cls(
-                namespace=recipe_image.storage_context["namespace"],
-                filename=recipe_image.storage_context["filename"],
-            )
-        except KeyError:
-            raise storage_config.UnableToLocateFile
+        return cls(
+            namespace=recipe_image.storage_context.get("namespace", ""),
+            filename=recipe_image.storage_context.get("filename", ""),
+        )
 
     @property
     def directory(self) -> pathlib.Path:
@@ -66,8 +63,18 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
         with open(storage_context.filepath, mode="wb") as new_file:
             new_file.write(file.getbuffer())
 
-    def get_public_source(self, *, storage_context: StorageContext) -> str:
-        return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"  # type: ignore[misc]
+    def get_public_source(
+        self, *, storage_context: StorageContext, raise_if_not_found: bool = False
+    ) -> str:
+        if (
+            typing.cast(pathlib.Path, settings.MEDIA_ROOT)
+            / storage_context.namespace
+            / storage_context.filename
+        ).is_file():
+            return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"  # type: ignore[misc]
+        elif raise_if_not_found:
+            raise storage_config.UnableToLocateFile
+        return ""
 
     def delete(self, *, storage_context: StorageContext) -> None:
         raise NotImplementedError

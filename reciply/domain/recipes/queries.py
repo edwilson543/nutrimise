@@ -23,4 +23,7 @@ def get_hero_image(recipe: recipe_models.Recipe) -> recipe_models.RecipeImage | 
 def get_image_source(recipe_image: recipe_models.RecipeImage) -> str:
     store = storage.get_file_storage()
     storage_context = store.context_class.from_recipe_image(recipe_image=recipe_image)
-    return store.get_public_source(storage_context=storage_context)
+    try:
+        return store.get_public_source(storage_context=storage_context)
+    except storage.UnableToUploadFile:
+        return ""

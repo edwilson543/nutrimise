@@ -22,7 +22,6 @@ class RecipeList(_RecipeBase):
     def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
         if image := queries.get_hero_image(recipe):
             source = queries.get_image_source(recipe_image=image)
-            print("SOURCE: ", source)
             return source
         return None
 

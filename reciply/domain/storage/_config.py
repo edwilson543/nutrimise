@@ -76,7 +76,9 @@ class FileStorage(abc.ABC, Generic[StorageContextType]):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_public_source(self, *, storage_context: StorageContextType) -> str:
+    def get_public_source(
+        self, *, storage_context: StorageContextType, raise_if_not_found: bool = False
+    ) -> str:
         """
         Get the URL from which some file can be publicly accessed.
         """
