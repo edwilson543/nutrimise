@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-# Third party imports
-import attrs
+# Standard library imports
+import dataclasses
 
 # Django imports
 from django.core import files
@@ -18,7 +18,7 @@ install_test_file_storage = override_settings(
 )
 
 
-@attrs.frozen
+@dataclasses.dataclass(frozen=True)
 class StorageContext(storage_config.StorageContext):
     key: str
 
