@@ -2,7 +2,7 @@
 import pathlib
 
 # Third party imports
-from plugins.storage import local as local_storage
+from plugins.storage import _local as local_storage
 
 # Django imports
 from django.conf import settings
