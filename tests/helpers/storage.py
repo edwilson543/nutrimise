@@ -25,7 +25,7 @@ def assert_recipe_has_stored_images(recipe: recipe_models, n_images: int) -> Non
     ]
     assert (
         len(all_keys) == n_images
-    ), f"Expected {n_images} to be stored, found: {len(all_keys)}"
+    ), f"Expected recipe {recipe.id} to have {n_images} images stored, found: {len(all_keys)}."
 
 
 @dataclasses.dataclass(frozen=True)

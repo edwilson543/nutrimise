@@ -34,6 +34,7 @@ class TestCreateRecipe:
 
         image = recipe.images.get()
         assert image.is_hero
+        storage_helpers.assert_recipe_has_stored_images(recipe, n_images=1)
 
     @pytest.mark.parametrize("name", ["new recipe", "NEW Recipe"])
     def test_raises_if_user_already_has_recipe_with_name(self, name: str):
