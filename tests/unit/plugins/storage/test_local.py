@@ -1,5 +1,6 @@
 # Standard library imports
 import pathlib
+import shutil
 
 # Third party imports
 from plugins.storage import _local as local_storage
@@ -27,4 +28,9 @@ class TestLocalFileStorage:
         store.upload(file=file, storage_context=storage_context)
 
         assert pathlib.Path.is_file(storage_context.filepath)
-        pathlib.Path.unlink(storage_context.filepath)
+
+        self._remove_tmp_files(filepath=storage_context.filepath)
+
+    def _remove_tmp_files(self, filepath: pathlib.Path):
+        pathlib.Path.unlink(filepath)
+        shutil.rmtree(TEST_MEDIA_ROOT)
