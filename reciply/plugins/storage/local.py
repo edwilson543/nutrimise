@@ -12,7 +12,7 @@ from django.conf import settings
 
 # Local application imports
 from data.recipes import models as recipe_models
-from domain.storage import _config as storage_config
+from domain import storage
 
 
 class Namespace(enum.StrEnum):
@@ -20,7 +20,7 @@ class Namespace(enum.StrEnum):
 
 
 @dataclasses.dataclass(frozen=True)
-class StorageContext(storage_config.StorageContext):
+class StorageContext(storage.StorageContext):
     namespace: Namespace
     filename: str
 
@@ -49,7 +49,7 @@ class StorageContext(storage_config.StorageContext):
         return self.directory / self.filename
 
 
-class LocalFileStorage(storage_config.FileStorage[StorageContext]):
+class LocalFileStorage(storage.FileStorage[StorageContext]):
     """
     Implementation of file storage for testing purposes.
     """
@@ -69,7 +69,7 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
             / storage_context.filename
         ).is_file():
             return f"{settings.MEDIA_BASE_URL}/{storage_context.namespace}/{storage_context.filename}"
-        raise storage_config.UnableToLocateFile
+        raise storage.UnableToLocateFile
 
     def delete(self, *, storage_context: StorageContext) -> None:
         raise NotImplementedError

@@ -1,4 +1,6 @@
 from ._config import (
+    FileStorage,
+    StorageContext,
     UnableToDeleteFile,
     UnableToLocateFile,
     UnableToUploadFile,
