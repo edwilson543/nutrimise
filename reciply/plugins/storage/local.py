@@ -5,7 +5,6 @@ import dataclasses
 import enum
 import io
 import pathlib
-import typing
 import uuid
 
 # Django imports
@@ -43,7 +42,7 @@ class StorageContext(storage_config.StorageContext):
 
     @property
     def directory(self) -> pathlib.Path:
-        return typing.cast(pathlib.Path, settings.MEDIA_ROOT) / self.namespace
+        return pathlib.Path(settings.MEDIA_ROOT) / self.namespace
 
     @property
     def filepath(self) -> pathlib.Path:
@@ -65,7 +64,7 @@ class LocalFileStorage(storage_config.FileStorage[StorageContext]):
 
     def get_public_source(self, *, storage_context: StorageContext) -> str:
         if (
-            typing.cast(pathlib.Path, settings.MEDIA_ROOT)
+            pathlib.Path(settings.MEDIA_ROOT)
             / storage_context.namespace
             / storage_context.filename
         ).is_file():
