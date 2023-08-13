@@ -27,6 +27,7 @@ class Settings(configurations.Configuration):
         # Third party
         "rest_framework",
         "knox",
+        "django_extensions",  # TODO -> remove from prod
         # Django
         "django.contrib.admin",
         "django.contrib.auth",

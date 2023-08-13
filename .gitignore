@@ -1,6 +1,10 @@
 # Specific files
 *TODO*.txt
 
+# Certification
+cert.pem
+key.pem
+
 # MacOS
 *.DS_STORE
 
