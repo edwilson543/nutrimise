@@ -36,6 +36,7 @@ class Settings(configurations.Configuration):
         "django.contrib.messages",
         "django.contrib.staticfiles",
         # Local
+        "data.ingredients",
         "data.menus",
         "data.recipes",
         "interfaces.admin.apps.AdminConfig",

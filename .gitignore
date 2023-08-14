@@ -1,5 +1,6 @@
 # Specific files
 *TODO*.txt
+data/data.json
 
 # Certification
 cert.pem
@@ -171,9 +172,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-data/
-.env.dev
-.env.prod
+.env*
 env/
 /venv
 ENV/
