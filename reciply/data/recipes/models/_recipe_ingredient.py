@@ -22,7 +22,7 @@ class RecipeIngredient(django_models.Model):
         related_name="recipe_ingredients",
     )
 
-    quantity = django_models.FloatField()
+    quantity = django_models.FloatField()  # Maybe should be per serving
 
     def __str__(self) -> str:
         return f"{self.ingredient.name_singular} for {self.recipe.name}"

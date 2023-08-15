@@ -7,23 +7,17 @@ class Ingredient(django_models.Model):
     Some ingredient and its nutritional information.
     """
 
-    name_singular = django_models.CharField(max_length=128)
+    name_singular = django_models.CharField(max_length=128, unique=True)
 
-    name_plural = django_models.CharField(max_length=128)
+    name_plural = django_models.CharField(max_length=128, unique=True)
 
     category = django_models.CharField(max_length=128)
 
-    displayed_units_singular = django_models.CharField(
-        max_length=64, null=True, blank=True
-    )
-
-    displayed_units_plural = django_models.CharField(
-        max_length=64, null=True, blank=True
-    )
+    units = django_models.CharField(max_length=64, null=True, blank=True)
 
     # Conversion factor (e.g. for calculating nutritional information per apple)
 
-    grams_per_displayed_unit = django_models.FloatField()
+    grams_per_unit = django_models.FloatField()
 
     # Nutritional information
 
