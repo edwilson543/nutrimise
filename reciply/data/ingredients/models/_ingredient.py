@@ -13,9 +13,13 @@ class Ingredient(django_models.Model):
 
     category = django_models.CharField(max_length=128)
 
-    displayed_units_singular = django_models.CharField(max_length=64, null=True)
+    displayed_units_singular = django_models.CharField(
+        max_length=64, null=True, blank=True
+    )
 
-    displayed_units_plural = django_models.CharField(max_length=64, null=True)
+    displayed_units_plural = django_models.CharField(
+        max_length=64, null=True, blank=True
+    )
 
     # Conversion factor (e.g. for calculating nutritional information per apple)
 

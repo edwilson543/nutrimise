@@ -27,9 +27,12 @@ class Migration(migrations.Migration):
                 ("category", models.CharField(max_length=128)),
                 (
                     "displayed_units_singular",
-                    models.CharField(max_length=64, null=True),
+                    models.CharField(max_length=64, null=True, blank=True),
                 ),
-                ("displayed_units_plural", models.CharField(max_length=64, null=True)),
+                (
+                    "displayed_units_plural",
+                    models.CharField(max_length=64, null=True, blank=True),
+                ),
                 ("grams_per_displayed_unit", models.FloatField()),
                 ("protein_per_gram", models.FloatField()),
                 ("carbohydrates_per_gram", models.FloatField()),
