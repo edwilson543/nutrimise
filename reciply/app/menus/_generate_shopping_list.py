@@ -7,7 +7,7 @@ from data.menus import models as menu_models
 from domain.ingredients import queries as ingredient_queries
 
 
-def generate_shopping_list_for_menu(menu: menu_models.Menu) -> dict[str, list[str]]:
+def generate_shopping_list(menu: menu_models.Menu) -> dict[str, list[str]]:
     aggregated_ingredients: dict[int, float] = defaultdict(lambda: 0)
     ingredient_lookup: dict[int, ingredient_models.Ingredient] = {}
 

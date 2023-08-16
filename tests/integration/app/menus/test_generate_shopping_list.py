@@ -1,6 +1,6 @@
 # Local application imports
+from app.menus import _generate_shopping_list
 from data import constants
-from domain.menus import shopping_list
 from tests import factories
 
 
@@ -19,7 +19,7 @@ class TestGenerateShoppingList:
         factories.RecipeIngredient(recipe=recipe_b, ingredient=apple, quantity=1)
         factories.MenuItem(recipe=recipe_b, menu=menu, day=constants.Day.TUESDAY)
 
-        list_ = shopping_list.generate_shopping_list_for_menu(menu=menu)
+        list_ = _generate_shopping_list.generate_shopping_list(menu=menu)
 
         assert len(list_.keys()) == 1
 
@@ -46,7 +46,7 @@ class TestGenerateShoppingList:
         )
         factories.MenuItem(recipe=chicken_recipe, menu=menu, day=constants.Day.TUESDAY)
 
-        list_ = shopping_list.generate_shopping_list_for_menu(menu=menu)
+        list_ = _generate_shopping_list.generate_shopping_list(menu=menu)
 
         assert len(list_.keys()) == 2
 
