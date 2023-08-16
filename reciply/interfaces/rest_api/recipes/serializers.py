@@ -7,6 +7,7 @@ from rest_framework.utils import serializer_helpers
 
 # Local application imports
 from data.recipes import models as recipe_models
+from domain.ingredients import queries as ingredient_queries
 from domain.recipes import queries
 
 
@@ -37,6 +38,7 @@ class _RecipeImage(serializers.Serializer):
 
 class RecipeDetail(RecipeList):
     images = serializers.SerializerMethodField(read_only=True)
+    ingredients = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
@@ -48,6 +50,18 @@ class RecipeDetail(RecipeList):
             list[serializer_helpers.ReturnDict],
             _RecipeImage(instance=images, many=True).data,
         )
+
+    def get_ingredients(self, recipe: recipe_models.Recipe) -> list[str]:
+        ingredients = recipe.ingredients.prefetch_related("ingredient").order_by(
+            "ingredient__category", "ingredient__name_singular"
+        )
+        return [
+            ingredient_queries.get_ingredient_display_name(
+                ingredient=recipe_ingredient.ingredient,
+                quantity=recipe_ingredient.quantity,
+            )
+            for recipe_ingredient in ingredients
+        ]
 
 
 class RecipeCreate(_RecipeBase):

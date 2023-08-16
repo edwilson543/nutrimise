@@ -17,16 +17,21 @@ class TestRecipeDetail:
 
         recipe = factories.Recipe(author=user)
         image = factories.RecipeImage(recipe=recipe, is_hero=True)
+        factories.RecipeIngredient(recipe=recipe)
 
         url = django_urls.reverse("recipe-detail", kwargs={"id": recipe.id})
         response = rest_api_client.get(url)
 
         assert response.status_code == drf_status.HTTP_200_OK
         assert response.data["id"] == recipe.id
+
         images = response.data["images"]
         assert len(images) == 1
         assert images[0]["id"] == image.id
         assert images[0]["image_source"] == storage_helpers.PUBLIC_IMAGE_SOURCE
+
+        ingredients = response.data["ingredients"]
+        assert len(ingredients) == 1
 
     def test_not_found_when_user_is_not_author(self, rest_api_client):
         user = factories.User()
