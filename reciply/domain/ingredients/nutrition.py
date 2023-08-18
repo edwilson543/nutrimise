@@ -19,6 +19,9 @@ class NutritionalInformation:
     protein_grams: float
     carbohydrates_grams: float
 
+    def serialize(self) -> dict[str, float]:
+        return dataclasses.asdict(self)
+
     # ----------
     # Factories
     # ----------

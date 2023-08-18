@@ -7,6 +7,7 @@ from rest_framework.utils import serializer_helpers
 
 # Local application imports
 from data.recipes import models as recipe_models
+from domain.ingredients import nutrition
 from domain.ingredients import queries as ingredient_queries
 from domain.recipes import queries
 
@@ -39,6 +40,7 @@ class _RecipeImage(serializers.Serializer):
 class RecipeDetail(RecipeList):
     images = serializers.SerializerMethodField(read_only=True)
     ingredients = serializers.SerializerMethodField(read_only=True)
+    nutritional_information = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
@@ -62,6 +64,11 @@ class RecipeDetail(RecipeList):
             )
             for recipe_ingredient in ingredients
         ]
+
+    def get_nutritional_information(
+        self, recipe: recipe_models.Recipe
+    ) -> dict[str, float]:
+        return nutrition.NutritionalInformation.for_recipe(recipe=recipe).serialize()
 
 
 class RecipeCreate(_RecipeBase):
