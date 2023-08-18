@@ -83,4 +83,4 @@ class IngredientAdmin(admin.ModelAdmin):
 
     @admin.display(description="Units")
     def units(self, ingredient: ingredient_models.Ingredient) -> str:
-        return ingredient.displayed_units_plural or "-"
+        return ingredient.units or "-"
