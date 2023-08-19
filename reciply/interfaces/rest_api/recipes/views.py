@@ -46,8 +46,8 @@ class RecipeDetail(views.APIView):
         recipe = shortcuts.get_object_or_404(
             klass=recipe_models.Recipe, id=kwargs["id"], author=request.user
         )
-        serialized_recipes = serializers.RecipeDetail(instance=recipe).data
-        return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
+        serialized_recipe = serializers.RecipeDetail(instance=recipe).data
+        return response.Response(serialized_recipe, status=drf_status.HTTP_200_OK)
 
 
 class RecipeCreate(views.APIView):

@@ -67,6 +67,7 @@ class MenuCreate(views.APIView):
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data.get("description", ""),
+                    add_suggestions=serializer.validated_data["add_suggestions"],
                 )
             except menus.MenuNameNotUniqueForAuthor:
                 errors = {"name": ["You already have a menu with this name!"]}
@@ -163,3 +164,20 @@ class MenuItem(views.APIView):
         )
         menus.delete_menu_item(item=menu_item)
         return response.Response(status=drf_status.HTTP_200_OK)
+
+
+class GenerateShoppingList(views.APIView):
+    """
+    Generate a shopping list for a menu.
+    """
+
+    http_method_names = ["get"]
+
+    def get(
+        self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
+    ) -> response.Response:
+        menu = shortcuts.get_object_or_404(
+            klass=menu_models.Menu, id=kwargs["id"], author=request.user
+        )
+        shopping_list = menus.generate_shopping_list(menu=menu)
+        return response.Response(shopping_list, status=drf_status.HTTP_200_OK)

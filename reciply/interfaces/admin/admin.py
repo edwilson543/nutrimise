@@ -3,6 +3,7 @@ from django.contrib import admin
 
 # Local application imports
 from data import constants
+from data.ingredients import models as ingredient_models
 from data.menus import models as menu_models
 from data.recipes import models as recipe_models
 
@@ -22,8 +23,22 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(recipe_models.RecipeImage)
 class RecipeImageAdmin(admin.ModelAdmin):
-    list_display = ["id", "recipe", "image"]
+    list_display = ["id", "recipe"]
     ordering = ["recipe__name"]
+
+
+@admin.register(recipe_models.RecipeIngredient)
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    list_display = ["id", "recipe_name", "ingredient_name"]
+    ordering = ["recipe__name", "ingredient__name_singular"]
+
+    @admin.display(description="Recipe name")
+    def recipe_name(self, ingredient: recipe_models.RecipeIngredient) -> str:
+        return ingredient.recipe.name
+
+    @admin.display(description="Ingredient name")
+    def ingredient_name(self, ingredient: recipe_models.RecipeIngredient) -> str:
+        return ingredient.ingredient.name_singular
 
 
 # ----------
@@ -50,3 +65,22 @@ class MenuItemAdmin(admin.ModelAdmin):
     @admin.display()
     def format_day(self, menu_item: menu_models.MenuItem) -> str:
         return constants.Day(int(menu_item.day)).label.title()
+
+
+# ----------
+# Ingredients
+# ----------
+
+
+@admin.register(ingredient_models.Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "units"]
+    ordering = ["name_singular"]
+
+    @admin.display(description="Name")
+    def name(self, ingredient: ingredient_models.Ingredient) -> str:
+        return ingredient.name_singular
+
+    @admin.display(description="Units")
+    def units(self, ingredient: ingredient_models.Ingredient) -> str:
+        return ingredient.units or "-"

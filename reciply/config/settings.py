@@ -4,6 +4,8 @@ import pathlib
 # Third party imports
 import configurations
 
+from . import env
+
 
 class Settings(configurations.Configuration):
     # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,12 +19,15 @@ class Settings(configurations.Configuration):
 
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
+    # ----------
     # Application definition
+    # ----------
 
     INSTALLED_APPS = [
         # Third party
         "rest_framework",
         "knox",
+        "django_extensions",  # TODO -> remove from prod
         # Django
         "django.contrib.admin",
         "django.contrib.auth",
@@ -31,6 +36,7 @@ class Settings(configurations.Configuration):
         "django.contrib.messages",
         "django.contrib.staticfiles",
         # Local
+        "data.ingredients",
         "data.menus",
         "data.recipes",
         "interfaces.admin.apps.AdminConfig",
@@ -48,6 +54,8 @@ class Settings(configurations.Configuration):
     ]
 
     ROOT_URLCONF = "config.urls"
+
+    WSGI_APPLICATION = "config.wsgi.application"
 
     # ----------
     # API settings
@@ -69,7 +77,7 @@ class Settings(configurations.Configuration):
 
     MEDIA_ROOT: pathlib.Path = BASE_DIR / "media"
     MEDIA_URL: str = "/media/"
-    MEDIA_BASE_URL: str = "http://localhost:8000"
+    MEDIA_BASE_URL: str = "http://localhost:8000/media"
 
     TEMPLATES = [
         {
@@ -87,20 +95,27 @@ class Settings(configurations.Configuration):
         },
     ]
 
-    WSGI_APPLICATION = "config.wsgi.application"
-
+    # ----------
     # Database
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+    # ----------
 
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env.as_str("DB_NAME"),
+            "USER": env.as_str("DB_USER"),
+            "PASSWORD": env.as_str("DB_PASSWORD"),
+            "HOST": env.as_str("DB_HOST"),
+            "PORT": env.as_int("DB_PORT", default=5432),
         }
     }
 
+    # Default primary key field type
+    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+    # ----------
     # Password validation
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+    # ----------
 
     AUTH_PASSWORD_VALIDATORS = [
         {
@@ -117,8 +132,9 @@ class Settings(configurations.Configuration):
         },
     ]
 
+    # ----------
     # Internationalization
-    # https://docs.djangoproject.com/en/4.2/topics/i18n/
+    # ----------
 
     LANGUAGE_CODE = "en-us"
 
@@ -128,12 +144,23 @@ class Settings(configurations.Configuration):
 
     USE_TZ = False
 
+    # ----------
     # Static files (CSS, JavaScript, Images)
-    # https://docs.djangoproject.com/en/4.2/howto/static-files/
+    # ----------
 
     STATIC_URL = "static/"
 
-    # Default primary key field type
-    # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+    # ----------
+    # Plugins
+    # ----------
 
-    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+    FILE_STORAGE_CLASS = env.as_str("FILE_STORAGE_CLASS")
+
+    # ----------
+    # AWS credentials
+    # ----------
+
+    AWS_ACCESS_KEY_ID = env.as_str("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.as_str("AWS_SECRET_ACCESS_KEY")
+    AWS_REGION_NAME = env.as_str("AWS_REGION_NAME")
+    AWS_BUCKET_NAME = env.as_str("AWS_BUCKET_NAME")

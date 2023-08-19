@@ -1,5 +1,10 @@
 # Specific files
 *TODO*.txt
+data/data.json
+
+# Certification
+cert.pem
+key.pem
 
 # MacOS
 *.DS_STORE
@@ -167,8 +172,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
-.env.prod
+.env*
 env/
 /venv
 ENV/

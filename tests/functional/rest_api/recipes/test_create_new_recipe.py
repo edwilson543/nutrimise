@@ -8,9 +8,11 @@ from django import urls as django_urls
 # Local application imports
 from data.recipes import models as recipe_models
 from tests import factories
+from tests.helpers import storage as storage_helpers
 
 
 class TestRecipeCreate:
+    @storage_helpers.install_test_file_storage
     def test_creates_valid_new_recipe(self, rest_api_client):
         user = factories.User()
         rest_api_client.authorize_user(user)
@@ -32,6 +34,7 @@ class TestRecipeCreate:
 
         image = recipe.images.get()
         assert image.is_hero
+        storage_helpers.assert_recipe_has_stored_images(recipe, n_images=1)
 
         assert response.status_code == drf_status.HTTP_201_CREATED
         assert response.data["id"] == recipe.id

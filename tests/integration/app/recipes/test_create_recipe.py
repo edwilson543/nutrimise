@@ -4,6 +4,7 @@ import pytest
 # Local application imports
 from app.recipes import _create_recipe
 from tests import factories
+from tests.helpers import storage as storage_helpers
 
 
 class TestCreateRecipe:
@@ -18,6 +19,7 @@ class TestCreateRecipe:
         assert recipe.name == "Beef"
         assert recipe.description == "Beef beef"
 
+    @storage_helpers.install_test_file_storage
     def test_creates_valid_recipe_for_user_with_hero_image(self):
         author = factories.User()
         hero_image = factories.image()
@@ -32,6 +34,7 @@ class TestCreateRecipe:
 
         image = recipe.images.get()
         assert image.is_hero
+        storage_helpers.assert_recipe_has_stored_images(recipe, n_images=1)
 
     @pytest.mark.parametrize("name", ["new recipe", "NEW Recipe"])
     def test_raises_if_user_already_has_recipe_with_name(self, name: str):

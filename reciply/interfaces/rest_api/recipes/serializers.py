@@ -5,11 +5,10 @@ import typing
 from rest_framework import serializers
 from rest_framework.utils import serializer_helpers
 
-# Django imports
-from django.conf import settings
-
 # Local application imports
 from data.recipes import models as recipe_models
+from domain.ingredients import nutrition
+from domain.ingredients import queries as ingredient_queries
 from domain.recipes import queries
 
 
@@ -24,7 +23,8 @@ class RecipeList(_RecipeBase):
 
     def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
         if image := queries.get_hero_image(recipe):
-            return settings.MEDIA_BASE_URL + image.image.url  # type: ignore[misc]
+            source = queries.get_image_source(recipe_image=image)
+            return source
         return None
 
 
@@ -34,11 +34,13 @@ class _RecipeImage(serializers.Serializer):
     is_hero = serializers.BooleanField()
 
     def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
-        return settings.MEDIA_BASE_URL + recipe_image.image.url  # type: ignore[misc]
+        return queries.get_image_source(recipe_image=recipe_image)
 
 
 class RecipeDetail(RecipeList):
     images = serializers.SerializerMethodField(read_only=True)
+    ingredients = serializers.SerializerMethodField(read_only=True)
+    nutritional_information = serializers.SerializerMethodField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
@@ -50,6 +52,23 @@ class RecipeDetail(RecipeList):
             list[serializer_helpers.ReturnDict],
             _RecipeImage(instance=images, many=True).data,
         )
+
+    def get_ingredients(self, recipe: recipe_models.Recipe) -> list[str]:
+        ingredients = recipe.ingredients.prefetch_related("ingredient").order_by(
+            "ingredient__category", "ingredient__name_singular"
+        )
+        return [
+            ingredient_queries.get_ingredient_display_name(
+                ingredient=recipe_ingredient.ingredient,
+                quantity=recipe_ingredient.quantity,
+            )
+            for recipe_ingredient in ingredients
+        ]
+
+    def get_nutritional_information(
+        self, recipe: recipe_models.Recipe
+    ) -> dict[str, float]:
+        return nutrition.NutritionalInformation.for_recipe(recipe=recipe).serialize()
 
 
 class RecipeCreate(_RecipeBase):
