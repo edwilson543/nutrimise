@@ -96,4 +96,12 @@ class Migration(migrations.Migration):
                 name="users_can_only_have_one_recipe_per_name",
             ),
         ),
+        migrations.AddConstraint(
+            model_name="recipeingredient",
+            constraint=models.UniqueConstraint(
+                models.F("recipe"),
+                models.F("ingredient"),
+                name="ingredient_features_max_once_per_recipe",
+            ),
+        ),
     ]

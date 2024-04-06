@@ -24,5 +24,12 @@ class RecipeIngredient(django_models.Model):
 
     quantity = django_models.FloatField()  # Maybe should be per serving
 
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                "recipe", "ingredient", name="ingredient_features_max_once_per_recipe"
+            )
+        ]
+
     def __str__(self) -> str:
         return f"{self.ingredient.name_singular} for {self.recipe.name}"
