@@ -29,6 +29,11 @@ cd reciply
 python manage.py migrate
 ```
 
+#### Create env file
+```bash
+cp data/.env.example data/.env.dev
+```
+
 ### Run the development server with HTTP:
 ```bash
 cd reciply
