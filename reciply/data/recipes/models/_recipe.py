@@ -22,7 +22,7 @@ class Recipe(django_models.Model):
 
     name = django_models.CharField(max_length=128)
 
-    description = django_models.TextField()
+    description = django_models.TextField(blank=True)
 
     created_at = django_models.DateTimeField(auto_now_add=True)
 
