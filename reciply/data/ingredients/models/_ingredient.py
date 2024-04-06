@@ -26,4 +26,7 @@ class Ingredient(django_models.Model):
     carbohydrates_per_gram = django_models.FloatField()
 
     def __str__(self) -> str:
-        return self.name_singular
+        name = self.name_singular
+        if self.units:
+            name += f" ({self.units.lower()})"
+        return name
