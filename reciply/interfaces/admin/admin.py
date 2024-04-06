@@ -29,7 +29,7 @@ class RecipeImageAdmin(admin.ModelAdmin):
 
 @admin.register(recipe_models.RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ["id", "recipe_name", "ingredient_name"]
+    list_display = ["id", "recipe_name", "ingredient_name", "quantity", "units"]
     ordering = ["recipe__name", "ingredient__name_singular"]
 
     @admin.display(description="Recipe name")
@@ -39,6 +39,10 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     @admin.display(description="Ingredient name")
     def ingredient_name(self, ingredient: recipe_models.RecipeIngredient) -> str:
         return ingredient.ingredient.name_singular
+
+    @admin.display(description="Units")
+    def units(self, ingredient: recipe_models.RecipeIngredient) -> str:
+        return ingredient.ingredient.units or "No units"
 
 
 # ----------
@@ -84,3 +88,27 @@ class IngredientAdmin(admin.ModelAdmin):
     @admin.display(description="Units")
     def units(self, ingredient: ingredient_models.Ingredient) -> str:
         return ingredient.units or "-"
+
+
+@admin.register(ingredient_models.Nutrient)
+class NutrientAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+    ordering = ["name"]
+
+
+@admin.register(ingredient_models.IngredientNutritionalInformation)
+class IngredientNutritionalInformationAdmin(admin.ModelAdmin):
+    list_display = ["id", "ingredient_name", "nutrient_name", "quantity_per_gram"]
+    ordering = ["ingredient__name_singular"]
+
+    @admin.display(description="Ingredient")
+    def ingredient_name(
+        self, nutritional_information: ingredient_models.IngredientNutritionalInformation
+    ) -> str:
+        return nutritional_information.ingredient.name_singular
+
+    @admin.display(description="Nutrient")
+    def nutrient_name(
+        self, nutritional_information: ingredient_models.IngredientNutritionalInformation
+    ) -> str:
+        return nutritional_information.nutrient.name
