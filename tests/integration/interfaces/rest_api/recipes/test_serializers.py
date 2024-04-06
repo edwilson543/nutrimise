@@ -37,5 +37,5 @@ class TestRecipeDetail:
         assert recipe_ingredient.ingredient.name_singular in ingredients[0]
 
         nutritional_information = serialized_recipe["nutritional_information"]
-        assert nutritional_information["protein_grams"] > 0
-        assert nutritional_information["carbohydrates_grams"] > 0
+        assert nutritional_information["protein"] > 0
+        assert nutritional_information["carbohydrates"] > 0

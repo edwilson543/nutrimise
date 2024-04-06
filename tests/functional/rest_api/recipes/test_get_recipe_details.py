@@ -34,8 +34,8 @@ class TestRecipeDetail:
         assert len(ingredients) == 1
 
         nutritional_information = response.data["nutritional_information"]
-        assert nutritional_information["protein_grams"] > 0
-        assert nutritional_information["carbohydrates_grams"] > 0
+        assert nutritional_information["protein"] > 0
+        assert nutritional_information["carbohydrates"] > 0
 
     def test_not_found_when_user_is_not_author(self, rest_api_client):
         user = factories.User()
