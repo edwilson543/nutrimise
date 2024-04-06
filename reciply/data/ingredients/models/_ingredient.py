@@ -19,12 +19,6 @@ class Ingredient(django_models.Model):
 
     grams_per_unit = django_models.FloatField()
 
-    # Nutritional information
-
-    protein_per_gram = django_models.FloatField()
-
-    carbohydrates_per_gram = django_models.FloatField()
-
     def __str__(self) -> str:
         name = self.name_singular
         if self.units:

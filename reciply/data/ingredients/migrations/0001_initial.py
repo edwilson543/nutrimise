@@ -30,8 +30,6 @@ class Migration(migrations.Migration):
                     models.CharField(max_length=64, null=True, blank=True),
                 ),
                 ("grams_per_unit", models.FloatField()),
-                ("protein_per_gram", models.FloatField()),
-                ("carbohydrates_per_gram", models.FloatField()),
             ],
         ),
         migrations.CreateModel(
