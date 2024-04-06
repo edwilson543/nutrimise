@@ -34,3 +34,10 @@ class RecipeIngredient(django_models.Model):
 
     def __str__(self) -> str:
         return f"{self.ingredient.name_singular} for {self.recipe.name}"
+
+    # ----------
+    # Queries
+    # ----------
+
+    def grams(self) -> float:
+        return self.quantity * self.ingredient.grams_per_unit
