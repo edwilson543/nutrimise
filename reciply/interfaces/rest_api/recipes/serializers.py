@@ -15,6 +15,7 @@ class _RecipeBase(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=128)
     description = serializers.CharField(required=False)
+    number_of_servings = serializers.IntegerField(min_value=1)
 
 
 class RecipeList(_RecipeBase):

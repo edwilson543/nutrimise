@@ -11,6 +11,7 @@ class Recipe(factory.django.DjangoModelFactory):
     author = factory.SubFactory(_auth.User)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = "Some description"
+    number_of_servings = 2
 
     class Meta:
         model = recipe_models.Recipe

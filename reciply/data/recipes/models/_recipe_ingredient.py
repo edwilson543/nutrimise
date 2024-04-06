@@ -22,7 +22,8 @@ class RecipeIngredient(django_models.Model):
         related_name="recipe_ingredients",
     )
 
-    quantity = django_models.FloatField()  # Maybe should be per serving
+    # Total to meet `number_of_portions` on the recipe.
+    quantity = django_models.FloatField()
 
     class Meta:
         constraints = [

@@ -21,6 +21,7 @@ class TestRecipeCreate:
             "name": "sausage",
             "description": "sausage",
             "hero_image": factories.image(),
+            "number_of_servings": 3,
         }
 
         url = django_urls.reverse("recipe-create")
@@ -31,6 +32,7 @@ class TestRecipeCreate:
         assert recipe.author == user
         assert recipe.name == "sausage"
         assert recipe.description == "sausage"
+        assert recipe.number_of_servings == 3
 
         image = recipe.images.get()
         assert image.is_hero
@@ -49,6 +51,7 @@ class TestRecipeCreate:
         recipe_data = {
             "name": recipe.name,
             "description": "something",
+            "number_of_servings": 1,
         }
 
         url = django_urls.reverse("recipe-create")
@@ -66,6 +69,7 @@ class TestRecipeCreate:
 
         recipe_data = {
             "description": "something",
+            "number_of_servings": 2,
         }
 
         url = django_urls.reverse("recipe-create")

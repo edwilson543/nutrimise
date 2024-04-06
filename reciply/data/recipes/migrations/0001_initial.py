@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
+                ("number_of_servings", models.PositiveSmallIntegerField()),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (

@@ -24,6 +24,8 @@ class Recipe(django_models.Model):
 
     description = django_models.TextField(blank=True)
 
+    number_of_servings = django_models.PositiveSmallIntegerField()
+
     created_at = django_models.DateTimeField(auto_now_add=True)
 
     updated_at = django_models.DateTimeField(auto_now=True)
@@ -49,11 +51,13 @@ class Recipe(django_models.Model):
         author: auth_models.User,
         name: str,
         description: str,
+        number_of_servings: int,
     ) -> Recipe:
         return cls.objects.create(
             author=author,
             name=name,
             description=description,
+            number_of_servings=number_of_servings,
         )
 
     def new_image(
