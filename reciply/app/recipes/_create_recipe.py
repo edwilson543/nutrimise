@@ -15,17 +15,27 @@ class RecipeNameNotUniqueForAuthor(django_db.IntegrityError):
 
 
 def create_recipe(
-    author: auth_models.User, name: str, description: str, hero_image: files.File | None
+    *,
+    author: auth_models.User,
+    name: str,
+    description: str,
+    number_of_servings: int,
+    hero_image: files.File | None,
 ) -> recipe_models.Recipe:
     if recipe_models.Recipe.objects.filter(name__iexact=name):
         raise RecipeNameNotUniqueForAuthor
 
     with transaction.atomic():
         recipe = recipe_models.Recipe.new(
-            author=author, name=name, description=description
+            author=author,
+            name=name,
+            description=description,
+            number_of_servings=number_of_servings,
         )
         if hero_image and hero_image.file:
             _create_recipe_image.create_recipe_image(
-                recipe=recipe, is_hero=True, file=hero_image.file  # type: ignore[arg-type]
+                recipe=recipe,
+                is_hero=True,
+                file=hero_image.file,  # type: ignore[arg-type]
             )
     return recipe

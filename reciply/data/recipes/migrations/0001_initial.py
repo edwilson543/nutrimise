@@ -20,7 +20,8 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
-                ("description", models.TextField()),
+                ("description", models.TextField(blank=True)),
+                ("number_of_servings", models.PositiveSmallIntegerField()),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
@@ -94,6 +95,14 @@ class Migration(migrations.Migration):
                 models.F("author"),
                 models.F("name"),
                 name="users_can_only_have_one_recipe_per_name",
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name="recipeingredient",
+            constraint=models.UniqueConstraint(
+                models.F("recipe"),
+                models.F("ingredient"),
+                name="ingredient_features_max_once_per_recipe",
             ),
         ),
     ]

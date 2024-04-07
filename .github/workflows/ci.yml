@@ -40,10 +40,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements/app-requirements.txt
-          pip install -r requirements/dev-requirements.txt
-          pip install -r requirements/test-requirements.txt
+        run: make install_dependencies
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Create env file
@@ -51,22 +48,20 @@ jobs:
           echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Run test suite with pytest
-        run: pytest .
+        run: make test
 
       - name: Run mypy on application code
         if: success() || failure()
-        run: mypy ./reciply
+        run: make mypy
 
       - name: Run black
         if: success() || failure()
-        run: black .
+        run: make black
 
       - name: Run isort on all python code
         if: success() || failure()
-        run: isort . --profile=black
+        run: make isort
 
       - name: Run flake8 on all python code
         if: success() || failure()
-        run: |
-          flake8 ./reciply
-          flake8 ./tests
+        run: make flake8

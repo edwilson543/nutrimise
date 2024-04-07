@@ -7,45 +7,32 @@
 
 ---
 
-### Setup:
-#### System requirements:
+### System requirements:
 - Python 3.11
-- postgres 14.9
+- postgres 15.1
 - mkcert 1.4.4 (optional)
 
-#### Create database
+---
+
+### Installation:
+
 ```bash
-createdb reciply
+python3.11 -m venv venv
+source venv/bin/activate
+make install
 ```
 
-#### Install dependencies
+---
+
+### Run the development server:
+With HTTP:
 ```bash
-python -m venv venv
-source ./venv/bin/activate
-pip install -r requirements/app-requirements.txt
-pip install -r requirements/dev-requirements.txt
-pip install -r requirements/test-requirements.txt
-cd reciply
-python manage.py migrate
+make server
 ```
 
-### Run the development server with HTTP:
+With HTTPS:
 ```bash
-cd reciply
-python manage.py runserver 8000 --configuration=Settings
+make server_https
 ```
 
-### Run the development server with HTTPS:
-#### Setup SSL
-```bash
-# Install a local certificate authority so that the OS will trust ours
-mkcert -install
-
-# Generate a certificate for the localhost domain
-mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1
-```
-#### Run the server
-```bash
-cd reciply
-runserver_plus 8000 --configuration=Settings --cert-file=cert.pem --key-file=key.pem
-```
+---

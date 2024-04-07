@@ -22,7 +22,22 @@ class RecipeIngredient(django_models.Model):
         related_name="recipe_ingredients",
     )
 
-    quantity = django_models.FloatField()  # Maybe should be per serving
+    # Total to meet `number_of_portions` on the recipe.
+    quantity = django_models.FloatField()
+
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                "recipe", "ingredient", name="ingredient_features_max_once_per_recipe"
+            )
+        ]
 
     def __str__(self) -> str:
         return f"{self.ingredient.name_singular} for {self.recipe.name}"
+
+    # ----------
+    # Queries
+    # ----------
+
+    def grams(self) -> float:
+        return self.quantity * self.ingredient.grams_per_unit
