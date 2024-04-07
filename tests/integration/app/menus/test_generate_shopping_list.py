@@ -1,6 +1,6 @@
 # Local application imports
-from app.menus import _generate_shopping_list
-from data import constants
+from reciply.app.menus import _generate_shopping_list
+from reciply.data import constants
 from tests import factories
 
 

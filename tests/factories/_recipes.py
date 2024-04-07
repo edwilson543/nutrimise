@@ -2,7 +2,7 @@
 import factory
 
 # Local application imports
-from data.recipes import models as recipe_models
+from reciply.data.recipes import models as recipe_models
 
 from . import _auth, _ingredients
 

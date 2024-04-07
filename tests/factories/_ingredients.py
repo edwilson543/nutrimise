@@ -2,7 +2,7 @@
 import factory
 
 # Local application imports
-from data.ingredients import models as ingredient_models
+from reciply.data.ingredients import models as ingredient_models
 
 
 class Ingredient(factory.django.DjangoModelFactory):

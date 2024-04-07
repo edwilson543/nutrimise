@@ -5,7 +5,7 @@ from rest_framework import status as drf_status
 from django import urls as django_urls
 
 # Local application imports
-from data import constants
+from reciply.data import constants
 from tests import factories
 
 

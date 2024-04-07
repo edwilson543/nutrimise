@@ -1,5 +1,5 @@
 # Local application imports
-from interfaces.rest_api.recipes import serializers
+from reciply.interfaces.rest_api.recipes import serializers
 from tests import factories
 from tests.helpers import storage as storage_helpers
 

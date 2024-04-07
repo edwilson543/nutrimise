@@ -1,5 +1,5 @@
 # Local application imports
-from domain.ingredients import nutritional_information
+from reciply.domain.ingredients import nutritional_information
 from tests import factories
 
 

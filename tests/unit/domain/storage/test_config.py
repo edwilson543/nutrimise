@@ -1,5 +1,5 @@
 # Local application imports
-from domain.storage import _config as storage_config
+from reciply.domain.storage import _config as storage_config
 from tests.helpers import storage as storage_helpers
 
 

@@ -1,5 +1,5 @@
 # Local application imports
-from domain.recipes import queries
+from reciply.domain.recipes import queries
 from tests import factories
 
 

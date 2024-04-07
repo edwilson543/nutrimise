@@ -2,8 +2,8 @@
 import factory
 
 # Local application imports
-from data import constants
-from data.menus import models as menu_models
+from reciply.data import constants
+from reciply.data.menus import models as menu_models
 
 from . import _auth, _recipes
 
