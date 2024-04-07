@@ -76,7 +76,7 @@ lint: mypy black isort flake8
 
 .PHONY:mypy
 mypy:
-	mypy ./src
+	mypy .
 
 .PHONY:black
 black:
