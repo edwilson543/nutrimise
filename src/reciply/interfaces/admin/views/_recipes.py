@@ -24,9 +24,9 @@ class RecipeDetails(_base.AdminTemplateView):
         context = super().get_context_data(**kwargs)
         context["recipe"] = self.recipe
         context["recipe_ingredients"] = list(self.recipe.ingredients.all())
-        context[
-            "nutritional_information"
-        ] = nutritional_information.get_nutritional_information_for_recipe(
-            recipe=self.recipe, per_serving=True
+        context["nutritional_information"] = (
+            nutritional_information.get_nutritional_information_for_recipe(
+                recipe=self.recipe, per_serving=True
+            )
         )
         return context

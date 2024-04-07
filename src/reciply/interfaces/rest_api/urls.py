@@ -19,5 +19,7 @@ urlpatterns = [
     # ----------
     urls.path("recipes/", urls.include("reciply.interfaces.rest_api.recipes.urls")),
     urls.path("menus/", urls.include("reciply.interfaces.rest_api.menus.urls")),
-    urls.path("suggestions/", urls.include("reciply.interfaces.rest_api.suggestions.urls")),
+    urls.path(
+        "suggestions/", urls.include("reciply.interfaces.rest_api.suggestions.urls")
+    ),
 ]

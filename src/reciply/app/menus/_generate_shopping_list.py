@@ -17,9 +17,9 @@ def generate_shopping_list(*, menu: menu_models.Menu) -> dict[str, list[str]]:
             aggregated_ingredients[
                 recipe_ingredient.ingredient.id
             ] += recipe_ingredient.quantity
-            ingredient_lookup[
-                recipe_ingredient.ingredient.id
-            ] = recipe_ingredient.ingredient
+            ingredient_lookup[recipe_ingredient.ingredient.id] = (
+                recipe_ingredient.ingredient
+            )
 
     # Organize the ingredients by category and generate suitable display names
     shopping_list: dict[str, list[str]] = defaultdict(lambda: [])
