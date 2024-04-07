@@ -1,6 +1,6 @@
 # Installation
 
-install: env_file install_dependencies db
+install: env_file install_dev_deps db
 
 .PHONY:db
 db: createdb migrate superuser
@@ -17,7 +17,7 @@ createdb:
 
 .PHONY:server
 server:
-	python reciply/manage.py runserver 8000 --configuration=Settings
+	python manage.py runserver 8000 --configuration=Settings
 
 .PHONY:server_https
 server_https:
@@ -25,40 +25,42 @@ server_https:
 	mkcert -install
 	# Generate a certificate for the localhost domain
 	mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1
-	python reciply/manage.py runserver_plus 8000 --configuration=Settings --cert-file=cert.pem --key-file=key.pem
+	python manage.py runserver_plus 8000 --configuration=Settings --cert-file=cert.pem --key-file=key.pem
 
 .PHONY:migrate
 migrate:
-	python reciply/manage.py migrate --configuration=Settings
+	python manage.py migrate --configuration=Settings
 
 .PHONY:migrations
 migrations:
-	python reciply/manage.py makemigrations --configuration=Settings
+	python manage.py makemigrations --configuration=Settings
 
 .PHONY:superuser
 superuser:
-	DJANGO_SUPERUSER_PASSWORD=password python reciply/manage.py createsuperuser --configuration=Settings --username=edwilson543 --email=fake@example.com --no-input
+	DJANGO_SUPERUSER_PASSWORD=password python manage.py createsuperuser --configuration=Settings --username=edwilson543 --email=fake@example.com --no-input
 
 .PHONY:dump
 dump:
-	python reciply/manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/dump.json
+	python manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/dump.json
 
 # Python environment
 
-install_dependencies: app_dependencies dev_dependencies test_dependencies
+.PHONY:install_ci_deps
+install_ci_deps:
+	pip install -r requirements/ci-requirements.txt
+	pip install -e .
 
-.PHONY:app_dependencies
-app_dependencies:
-	pip install -r requirements/app-requirements.txt
+.PHONY:install_dev_deps
+install_dev_deps:
+	pip-sync requirements/dev-requirements.txt
+	pip install -e .
 
-.PHONY:dev_dependencies
-dev_dependencies:
-	pip install -r requirements/dev-requirements.txt
 
-.PHONY:test_dependencies
-test_dependencies:
-	pip install -r requirements/test-requirements.txt
-
+.PHONY:lock_dependencies
+lock_dependencies:
+	pip-compile pyproject.toml -q --resolver=backtracking --output-file=requirements/app-requirements.txt
+	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --output-file=requirements/ci-requirements.txt
+	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --extra=dev --output-file=requirements/dev-requirements.txt
 
 # CI checks
 
@@ -72,7 +74,7 @@ lint: mypy black isort flake8
 
 .PHONY:mypy
 mypy:
-	mypy ./reciply
+	mypy .
 
 .PHONY:black
 black:
@@ -84,5 +86,5 @@ isort:
 
 .PHONY:flake8
 flake8:
-	flake8 ./reciply
+	flake8 ./src
 	flake8 ./tests

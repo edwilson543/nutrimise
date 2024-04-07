@@ -6,7 +6,7 @@ from rest_framework import status as drf_status
 from django import urls as django_urls
 
 # Local application imports
-from data.menus import models as menu_models
+from reciply.data.menus import models as menu_models
 from tests import factories
 
 

@@ -2,9 +2,9 @@
 import pytest
 
 # Local application imports
-from app.menus import _add_item_to_menu
-from data import constants
-from data.recipes import models as recipe_models
+from reciply.app.menus import _add_item_to_menu
+from reciply.data import constants
+from reciply.data.recipes import models as recipe_models
 from tests import factories
 
 

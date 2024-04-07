@@ -2,7 +2,7 @@
 import pytest
 
 # Local application imports
-from app.recipes import _create_recipe_image
+from reciply.app.recipes import _create_recipe_image
 from tests import factories
 from tests.helpers import storage as storage_helpers
 

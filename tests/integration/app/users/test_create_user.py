@@ -10,7 +10,7 @@ from knox import models as knox_models
 from django.contrib.auth import models as auth_models
 
 # Local application imports
-from app.users import _create_user
+from reciply.app.users import _create_user
 from tests import factories
 
 

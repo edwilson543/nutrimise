@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "reciply"
+version = "0"
+
+dependencies = [
+    "boto3",
+    "django",
+    "django-configurations",
+    "djangorestframework",
+    "django-rest-knox",
+    "pillow",
+    "psycopg",
+    "python-decouple"
+]
+
+[project.optional-dependencies]
+
+ci = [
+    # Test framework
+    "pytest",
+    "pytest-django",
+    # Test setup
+    "factory_boy",
+    # Functional testing
+    "django-webtest",
+    "webtest",
+    # Linting / typing
+    "black",
+    "django-stubs",
+    "djangorestframework-stubs",
+    "flake8",
+    "isort",
+    "mypy",
+    # Needs relegating to `dev`
+    "django-extensions",
+]
+
+dev = [
+    # Running the HTTPS server
+    "Werkzeug",
+    "pyOpenSSL",
+    # Git
+    "pre-commit",
+    # Pytest plugins for assisting local dev (but not used in CI)
+    "pytest-random-order",
+    "pytest-repeat",
+]

@@ -9,8 +9,8 @@ from django.core import files
 from django.test import override_settings
 
 # Local application imports
-from data.recipes import models as recipe_models
-from domain.storage import _config as storage_config
+from reciply.data.recipes import models as recipe_models
+from reciply.domain.storage import _config as storage_config
 
 PUBLIC_IMAGE_SOURCE = "media/some-url.jpg"
 

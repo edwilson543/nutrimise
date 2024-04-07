@@ -2,8 +2,8 @@
 import pytest
 
 # Local application imports
-from app.menus import _delete_menu_item
-from data.menus import models as menu_models
+from reciply.app.menus import _delete_menu_item
+from reciply.data.menus import models as menu_models
 from tests import factories
 
 

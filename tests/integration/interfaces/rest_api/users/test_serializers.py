@@ -2,7 +2,7 @@
 import pytest
 
 # Local application imports
-from interfaces.rest_api.users import serializers
+from reciply.interfaces.rest_api.users import serializers
 from tests import factories
 
 

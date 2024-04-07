@@ -1,6 +1,6 @@
 # Local application imports
-from app.menus import _add_suggestions_to_menu
-from data import constants
+from reciply.app.menus import _add_suggestions_to_menu
+from reciply.data import constants
 from tests import factories
 
 
