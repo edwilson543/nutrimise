@@ -40,10 +40,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements/app-requirements.txt
-          pip install -r requirements/dev-requirements.txt
-          pip install -r requirements/test-requirements.txt
+        run: make install_dependencies
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Create env file

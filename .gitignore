@@ -1,6 +1,6 @@
 # Specific files
 *TODO*.txt
-data/data.json
+data/*.json
 
 # Certification
 cert.pem
