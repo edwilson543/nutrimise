@@ -1,6 +1,6 @@
 # Installation
 
-install: env_file install_dependencies db
+install: env_file install_dev_deps db
 
 .PHONY:db
 db: createdb migrate superuser
@@ -45,24 +45,22 @@ dump:
 
 # Python environment
 
-install_dependencies: app_dependencies dev_dependencies test_dependencies editable_mode
-
-.PHONY:editable_mode
-editable_mode:
+.PHONY:install_ci_deps
+install_ci_deps:
+	pip install -r requirements/ci-requirements.txt
 	pip install -e .
 
-.PHONY:app_dependencies
-app_dependencies:
-	pip install -r requirements/app-requirements.txt
+.PHONY:install_dev_deps
+install_dev_deps:
+	pip-sync requirements/dev-requirements.txt
+	pip install -e .
 
-.PHONY:dev_dependencies
-dev_dependencies:
-	pip install -r requirements/dev-requirements.txt
 
-.PHONY:test_dependencies
-test_dependencies:
-	pip install -r requirements/test-requirements.txt
-
+.PHONY:lock_dependencies
+lock_dependencies:
+	pip-compile pyproject.toml -q --resolver=backtracking --output-file=requirements/app-requirements.txt
+	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --output-file=requirements/ci-requirements.txt
+	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --extra=dev --output-file=requirements/dev-requirements.txt
 
 # CI checks
 
