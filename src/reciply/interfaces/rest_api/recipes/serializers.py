@@ -7,7 +7,7 @@ from rest_framework.utils import serializer_helpers
 
 # Local application imports
 from reciply.data.recipes import models as recipe_models
-from reciply.domain.ingredients import queries as ingredient_queries
+from reciply.domain import ingredients
 from reciply.domain.recipes import queries
 
 
@@ -54,15 +54,15 @@ class RecipeDetail(RecipeList):
         )
 
     def get_ingredients(self, recipe: recipe_models.Recipe) -> list[str]:
-        ingredients = recipe.ingredients.prefetch_related("ingredient").order_by(
+        all_ingredients = recipe.ingredients.prefetch_related("ingredient").order_by(
             "ingredient__category", "ingredient__name_singular"
         )
         return [
-            ingredient_queries.get_ingredient_display_name(
+            ingredients.get_ingredient_display_name(
                 ingredient=recipe_ingredient.ingredient,
                 quantity=recipe_ingredient.quantity,
             )
-            for recipe_ingredient in ingredients
+            for recipe_ingredient in all_ingredients
         ]
 
     def get_nutritional_information(

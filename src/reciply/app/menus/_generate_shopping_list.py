@@ -4,7 +4,7 @@ from collections import defaultdict
 # Local application imports
 from reciply.data.ingredients import models as ingredient_models
 from reciply.data.menus import models as menu_models
-from reciply.domain.ingredients import queries as ingredient_queries
+from reciply.domain import ingredients
 
 
 def generate_shopping_list(*, menu: menu_models.Menu) -> dict[str, list[str]]:
@@ -28,7 +28,7 @@ def generate_shopping_list(*, menu: menu_models.Menu) -> dict[str, list[str]]:
     for ingredient_id, quantity in aggregated_ingredients.items():
         ingredient = ingredient_lookup[ingredient_id]
         shopping_list[ingredient.category].append(
-            ingredient_queries.get_ingredient_display_name(
+            ingredients.get_ingredient_display_name(
                 ingredient=ingredient, quantity=quantity
             )
         )

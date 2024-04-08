@@ -1,11 +1,12 @@
 from __future__ import annotations
+
+# Standard library imports
 import dataclasses
 
-from reciply.domain import recipes
-from reciply.domain import menus
-from reciply.data.menus import models as menu_models
+# Local application imports
 from reciply.data import constants
-from reciply.domain.ingredients import nutritional_information
+from reciply.data.menus import models as menu_models
+from reciply.domain import menus, recipes
 
 
 @dataclasses.dataclass(frozen=True)
@@ -28,9 +29,6 @@ def optimise_recipes_for_menu(
     requirements: MenuRequirements,
     recipe_to_consider: list[recipes.Recipe],
     # TODO -> will need to match by ID.
-    recipe_nutritional_information: dict[
-        int, list[nutritional_information.NutritionalInformation]
-    ],
 ) -> menu_models.Menu:
     pass
     # Create problem.

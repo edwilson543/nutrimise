@@ -57,7 +57,7 @@
             </tr>
             {% for nutrient in nutritional_information %}
                 <tr>
-                    <td>{{ nutrient.nutrient_name }}</td>
+                    <td>{{ nutrient.nutrient.name }}</td>
                     <td>{{ nutrient.nutrient_quantity_grams | floatformat:"1" }}</td>
                 </tr>
             {% endfor %}

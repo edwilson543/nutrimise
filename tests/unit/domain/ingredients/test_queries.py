@@ -2,7 +2,7 @@
 import pytest
 
 # Local application imports
-from reciply.domain.ingredients import queries
+from reciply.domain.ingredients import _queries as queries
 from tests import factories
 
 
