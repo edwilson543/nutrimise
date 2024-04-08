@@ -1,5 +1,5 @@
 # Local application imports
-from reciply.domain.menus import queries
+from reciply.domain.menus import _queries as queries
 from tests import factories
 
 

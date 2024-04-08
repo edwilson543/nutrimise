@@ -1,4 +1,5 @@
 # Third party imports
+# Third party imports
 from rest_framework import response
 from rest_framework import status as drf_status
 from rest_framework import views
@@ -7,9 +8,9 @@ from rest_framework import views
 from django import shortcuts
 
 # Local application imports
-from reciply.app import menus
+from reciply.app import menus as menus_app
 from reciply.data.menus import models as menu_models
-from reciply.domain.menus import queries
+from reciply.domain import menus
 from reciply.interfaces.rest_api import types
 from reciply.interfaces.rest_api.menus import serializers
 
@@ -24,12 +25,12 @@ class MyMenuList(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        menus = (
-            queries.get_menus_authored_by_user(author=request.user)
+        users_menus = (
+            menus.get_menus_authored_by_user(author=request.user)
             .prefetch_related("items")
             .order_by("name")
         )
-        serialized_menus = serializers.MenuList(instance=menus, many=True).data
+        serialized_menus = serializers.MenuList(instance=users_menus, many=True).data
         return response.Response(serialized_menus, status=drf_status.HTTP_200_OK)
 
 
@@ -63,13 +64,13 @@ class MenuCreate(views.APIView):
         serializer = serializers.MenuCreate(data=request.data)
         if serializer.is_valid():
             try:
-                menu = menus.create_menu(
+                menu = menus_app.create_menu(
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data.get("description", ""),
                     add_suggestions=serializer.validated_data["add_suggestions"],
                 )
-            except menus.MenuNameNotUniqueForAuthor:
+            except menus_app.MenuNameNotUniqueForAuthor:
                 errors = {"name": ["You already have a menu with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 
@@ -98,7 +99,7 @@ class AddItemToMenu(views.APIView):
         )
         serializer = serializers.AddItemToMenu(data=request.data)
         if serializer.is_valid():
-            menu_item = menus.add_item_to_menu(
+            menu_item = menus_app.add_item_to_menu(
                 menu=menu,
                 recipe_id=serializer.validated_data["recipe_id"],
                 day=serializer.validated_data["day"],
@@ -130,10 +131,10 @@ class AddItemsToMenu(views.APIView):
         serializer = serializers.AddItemToMenu(data=request.data, many=True)
         if serializer.is_valid():
             try:
-                menu_items = menus.add_items_to_menu(
+                menu_items = menus_app.add_items_to_menu(
                     menu=menu, items=serializer.validated_data
                 )
-            except menus.MealTimesAreNotUnique:
+            except menus_app.MealTimesAreNotUnique:
                 errors = {
                     "items": ["You cannot select more than one recipe per meal time!"]
                 }
@@ -162,7 +163,7 @@ class MenuItem(views.APIView):
         menu_item = shortcuts.get_object_or_404(
             klass=menu_models.MenuItem, id=kwargs["id"], menu__author=request.user
         )
-        menus.delete_menu_item(item=menu_item)
+        menus_app.delete_menu_item(item=menu_item)
         return response.Response(status=drf_status.HTTP_200_OK)
 
 
@@ -179,5 +180,5 @@ class GenerateShoppingList(views.APIView):
         menu = shortcuts.get_object_or_404(
             klass=menu_models.Menu, id=kwargs["id"], author=request.user
         )
-        shopping_list = menus.generate_shopping_list(menu=menu)
+        shopping_list = menus_app.generate_shopping_list(menu=menu)
         return response.Response(shopping_list, status=drf_status.HTTP_200_OK)
