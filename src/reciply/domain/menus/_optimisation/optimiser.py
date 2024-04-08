@@ -5,7 +5,6 @@ import dataclasses
 
 # Local application imports
 from reciply.data import constants
-from reciply.data.menus import models as menu_models
 from reciply.domain import menus, recipes
 
 
@@ -29,13 +28,13 @@ def optimise_recipes_for_menu(
     requirements: MenuRequirements,
     recipe_to_consider: list[recipes.Recipe],
     # TODO -> will need to match by ID.
-) -> menu_models.Menu:
-    pass
+) -> menus.Menu:
     # Create problem.
     # Generate decision variables (without making any queries).
     # Add constraints.
     # Add objective.
     # Solve.
+    return menu
 
 
 class DecisionVariable:
