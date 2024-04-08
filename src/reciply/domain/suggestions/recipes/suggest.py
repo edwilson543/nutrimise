@@ -23,7 +23,9 @@ def get_suggested_recipes_for_menu(
     Get the suggested recipes for a menu.
     """
     user = menu.author
-    excluded_recipe_ids = [menu_item.recipe.id for menu_item in menu.items.all()]
+    excluded_recipe_ids = [
+        menu_item.recipe_id for menu_item in menu.items.all() if menu_item.recipe
+    ]
     return (
         recipe_models.Recipe.objects.filter(author=user)
         .exclude(id__in=excluded_recipe_ids)

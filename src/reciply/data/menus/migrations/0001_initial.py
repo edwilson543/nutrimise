@@ -62,6 +62,7 @@ class Migration(migrations.Migration):
                         max_length=16,
                     ),
                 ),
+                ("optimiser_generated", models.BooleanField(default=False)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
@@ -76,6 +77,7 @@ class Migration(migrations.Migration):
                     "recipe",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
+                        null=True,
                         related_name="recipes",
                         to="recipes.recipe",
                     ),

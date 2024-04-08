@@ -13,6 +13,8 @@ def generate_shopping_list(*, menu: menu_models.Menu) -> dict[str, list[str]]:
 
     # Aggregate the quantity of each ingredient that is required
     for menu_item in menu.items.prefetch_related("recipe__ingredients__ingredient"):
+        if not menu_item.recipe:
+            continue
         for recipe_ingredient in menu_item.recipe.ingredients.all():
             aggregated_ingredients[
                 recipe_ingredient.ingredient.id
