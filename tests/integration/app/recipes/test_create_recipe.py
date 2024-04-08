@@ -3,6 +3,7 @@ import pytest
 
 # Local application imports
 from reciply.app.recipes import _create_recipe
+from reciply.data import constants
 from tests import factories
 from tests.helpers import storage as storage_helpers
 
@@ -15,6 +16,7 @@ class TestCreateRecipe:
             author=author,
             name="Beef",
             description="Beef beef",
+            meal_times=[constants.MealTime.DINNER],
             number_of_servings=3,
             hero_image=None,
         )
@@ -22,6 +24,7 @@ class TestCreateRecipe:
         assert recipe.author == author
         assert recipe.name == "Beef"
         assert recipe.description == "Beef beef"
+        assert recipe.meal_times == [constants.MealTime.DINNER]
         assert recipe.number_of_servings == 3
 
     @storage_helpers.install_test_file_storage
@@ -33,6 +36,7 @@ class TestCreateRecipe:
             author=author,
             name="Beef",
             description="Beef beef",
+            meal_times=[constants.MealTime.BREAKFAST],
             number_of_servings=1,
             hero_image=hero_image,
         )
@@ -40,6 +44,7 @@ class TestCreateRecipe:
         assert recipe.author == author
         assert recipe.name == "Beef"
         assert recipe.description == "Beef beef"
+        assert recipe.meal_times == [constants.MealTime.BREAKFAST]
         assert recipe.number_of_servings == 1
 
         image = recipe.images.get()
@@ -56,6 +61,7 @@ class TestCreateRecipe:
                 author=author,
                 name=name,
                 description="",
+                meal_times=[constants.MealTime.LUNCH],
                 number_of_servings=1,
                 hero_image=None,
             )

@@ -8,6 +8,7 @@ from django import shortcuts
 
 # Local application imports
 from reciply.app import recipes
+from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
 from reciply.domain.recipes import queries
 from reciply.interfaces.rest_api import types
@@ -67,6 +68,7 @@ class RecipeCreate(views.APIView):
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data.get("description", ""),
+                    meal_times=[constants.MealTime.DINNER],
                     hero_image=serializer.validated_data.get("hero_image"),
                     number_of_servings=serializer.validated_data.get(
                         "number_of_servings"
