@@ -7,10 +7,10 @@ from rest_framework import views
 from django import shortcuts
 
 # Local application imports
-from reciply.app import recipes
+from reciply.app import recipes as recipes_app
 from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
-from reciply.domain.recipes import queries
+from reciply.domain import recipes
 from reciply.interfaces.rest_api import types
 from reciply.interfaces.rest_api.recipes import serializers
 
@@ -25,12 +25,14 @@ class MyRecipeList(views.APIView):
     def get(
         self, request: types.AuthenticatedRequest, *args: object, **kwargs: object
     ) -> response.Response:
-        recipes = (
-            queries.get_recipes_authored_by_user(author=request.user)
+        users_recipes = (
+            recipes.get_recipes_authored_by_user(author=request.user)
             .prefetch_related("images")
             .order_by("name")
         )
-        serialized_recipes = serializers.RecipeList(instance=recipes, many=True).data
+        serialized_recipes = serializers.RecipeList(
+            instance=users_recipes, many=True
+        ).data
         return response.Response(serialized_recipes, status=drf_status.HTTP_200_OK)
 
 
@@ -64,7 +66,7 @@ class RecipeCreate(views.APIView):
         serializer = serializers.RecipeCreate(data=request.data)
         if serializer.is_valid():
             try:
-                recipe = recipes.create_recipe(
+                recipe = recipes_app.create_recipe(
                     author=request.user,
                     name=serializer.validated_data["name"],
                     description=serializer.validated_data.get("description", ""),
@@ -74,7 +76,7 @@ class RecipeCreate(views.APIView):
                         "number_of_servings"
                     ),
                 )
-            except recipes.RecipeNameNotUniqueForAuthor:
+            except recipes_app.RecipeNameNotUniqueForAuthor:
                 errors = {"name": ["You already have a recipe with this name!"]}
                 return response.Response(errors, status=drf_status.HTTP_400_BAD_REQUEST)
 

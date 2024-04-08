@@ -7,8 +7,7 @@ from rest_framework.utils import serializer_helpers
 
 # Local application imports
 from reciply.data.recipes import models as recipe_models
-from reciply.domain import ingredients
-from reciply.domain.recipes import queries
+from reciply.domain import ingredients, recipes
 
 
 class _RecipeBase(serializers.Serializer):
@@ -22,8 +21,8 @@ class RecipeList(_RecipeBase):
     hero_image_source = serializers.SerializerMethodField(read_only=True)
 
     def get_hero_image_source(self, recipe: recipe_models.Recipe) -> str | None:
-        if image := queries.get_hero_image(recipe):
-            source = queries.get_image_source(recipe_image=image)
+        if image := recipes.get_hero_image(recipe):
+            source = recipes.get_image_source(recipe_image=image)
             return source
         return None
 
@@ -34,7 +33,7 @@ class _RecipeImage(serializers.Serializer):
     is_hero = serializers.BooleanField()
 
     def get_image_source(self, recipe_image: recipe_models.RecipeImage) -> str:
-        return queries.get_image_source(recipe_image=recipe_image)
+        return recipes.get_image_source(recipe_image=recipe_image)
 
 
 class RecipeDetail(RecipeList):
