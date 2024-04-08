@@ -15,13 +15,13 @@
 {% endblock %}
 
 {% block content %}
+
     <div id="basic-info">
         <h1>{{ recipe.name }}</h1>
         <p>By {{ recipe.author }}</p>
         <p>Serves: {{ recipe.number_of_servings }}</p>
         <p>{{recipe.description}}</p>
     </div>
-
     <hr>
 
     <div id="recipe-ingredients">
@@ -44,7 +44,6 @@
             {% endfor %}
         </table>
     </div>
-
     <hr>
 
     <div id="nutritional-information">
@@ -63,4 +62,6 @@
             {% endfor %}
         </table>
     </div>
+    <hr>
+
 {% endblock %}
