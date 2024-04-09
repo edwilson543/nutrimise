@@ -1,32 +1,13 @@
 from __future__ import annotations
 
-# Standard library imports
-import dataclasses
-
 # Local application imports
-from reciply.data import constants
 from reciply.domain import menus, recipes
-
-
-@dataclasses.dataclass(frozen=True)
-class MenuRequirements:
-    daily_nutrient_requirements: list[NutrientRequirement]
-    maximum_occurrences_per_recipe: dict[constants.MealTime, int]
-
-
-@dataclasses.dataclass(frozen=True)
-class NutrientRequirement:
-    nutrient_id: int
-    minimum_grams: float | None
-    maximum_grams: float | None
-    target_grams: float | None
 
 
 def optimise_recipes_for_menu(
     *,
     menu: menus.Menu,
-    requirements: MenuRequirements,
-    recipe_to_consider: list[recipes.Recipe],
+    recipes_to_consider: tuple[recipes.Recipe, ...],
     # TODO -> will need to match by ID.
 ) -> menus.Menu:
     # Create problem.
