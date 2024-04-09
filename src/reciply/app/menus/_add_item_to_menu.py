@@ -18,7 +18,7 @@ def add_item_to_menu(
     menu: menu_models.Menu,
     recipe_id: int,
     day: constants.Day,
-    meal_time: constants.MealTime
+    meal_time: constants.MealTime,
 ) -> menu_models.MenuItem:
     recipe = recipe_models.Recipe.objects.get(id=recipe_id)
     try:
