@@ -151,18 +151,3 @@ class Settings(configurations.Configuration):
     # ----------
 
     STATIC_URL = "static/"
-
-    # ----------
-    # Plugins
-    # ----------
-
-    FILE_STORAGE_CLASS = env.as_str("FILE_STORAGE_CLASS")
-
-    # ----------
-    # AWS credentials
-    # ----------
-
-    AWS_ACCESS_KEY_ID = env.as_str("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = env.as_str("AWS_SECRET_ACCESS_KEY")
-    AWS_REGION_NAME = env.as_str("AWS_REGION_NAME")
-    AWS_BUCKET_NAME = env.as_str("AWS_BUCKET_NAME")
