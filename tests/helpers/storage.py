@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 # Standard library imports
-import dataclasses
 import uuid
+
+# Third party imports
+import attrs
 
 # Django imports
 from django.core import files
@@ -28,7 +30,7 @@ def assert_recipe_has_stored_images(recipe: recipe_models, n_images: int) -> Non
     ), f"Expected recipe {recipe.id} to have {n_images} images stored, found: {len(all_keys)}."
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class StorageContext(storage_config.StorageContext):
     key: str
 

@@ -5,6 +5,7 @@ from django.core import files
 from django.db import transaction
 
 # Local application imports
+from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
 
 from . import _create_recipe_image
@@ -19,6 +20,7 @@ def create_recipe(
     author: auth_models.User,
     name: str,
     description: str,
+    meal_times: list[constants.MealTime],
     number_of_servings: int,
     hero_image: files.File | None,
 ) -> recipe_models.Recipe:
@@ -30,6 +32,7 @@ def create_recipe(
             author=author,
             name=name,
             description=description,
+            meal_times=meal_times,
             number_of_servings=number_of_servings,
         )
         if hero_image and hero_image.file:

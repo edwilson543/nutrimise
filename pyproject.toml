@@ -8,8 +8,10 @@ where = ["src"]
 [project]
 name = "reciply"
 version = "0"
+requires-python = ">= 3.11"
 
 dependencies = [
+    "attrs",
     "boto3",
     "django",
     "django-configurations",

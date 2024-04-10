@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING
 
 # Django imports
 from django.contrib.auth import models as auth_models
+from django.contrib.postgres import fields as pg_fields
 from django.db import models as django_models
+
+# Local application imports
+from reciply.data import constants
 
 if TYPE_CHECKING:
     from . import _recipe_image
@@ -23,6 +27,10 @@ class Recipe(django_models.Model):
     name = django_models.CharField(max_length=128)
 
     description = django_models.TextField(blank=True)
+
+    meal_times = pg_fields.ArrayField(
+        base_field=django_models.TextField(choices=constants.MealTime.choices)
+    )
 
     number_of_servings = django_models.PositiveSmallIntegerField()
 
@@ -51,12 +59,14 @@ class Recipe(django_models.Model):
         author: auth_models.User,
         name: str,
         description: str,
+        meal_times: list[constants.MealTime],
         number_of_servings: int,
     ) -> Recipe:
         return cls.objects.create(
             author=author,
             name=name,
             description=description,
+            meal_times=meal_times,
             number_of_servings=number_of_servings,
         )
 

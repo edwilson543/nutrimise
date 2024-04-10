@@ -22,7 +22,10 @@ class MenuItem(django_models.Model):
     )
 
     recipe = django_models.ForeignKey(
-        recipe_models.Recipe, on_delete=django_models.CASCADE, related_name="recipes"
+        recipe_models.Recipe,
+        on_delete=django_models.CASCADE,
+        null=True,
+        related_name="recipes",
     )
 
     day = django_models.PositiveSmallIntegerField(choices=constants.Day.choices)
@@ -30,6 +33,8 @@ class MenuItem(django_models.Model):
     meal_time = django_models.CharField(
         max_length=16, choices=constants.MealTime.choices
     )
+
+    optimiser_generated = django_models.BooleanField(default=False)
 
     created_at = django_models.DateTimeField(auto_now_add=True)
 
@@ -51,7 +56,7 @@ class MenuItem(django_models.Model):
     # ----------
     # Mutators
     # ----------
-    def update_recipe(self, recipe: recipe_models.Recipe) -> MenuItem:
-        self.recipe = recipe
+    def update_recipe(self, recipe_id: int) -> MenuItem:
+        self.recipe_id = recipe_id
         self.save(update_fields=["recipe", "updated_at"])
         return self

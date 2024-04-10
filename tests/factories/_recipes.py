@@ -2,6 +2,7 @@
 import factory
 
 # Local application imports
+from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
 
 from . import _auth, _ingredients
@@ -11,6 +12,7 @@ class Recipe(factory.django.DjangoModelFactory):
     author = factory.SubFactory(_auth.User)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = "Some description"
+    meal_times = [constants.MealTime.DINNER.value]
     number_of_servings = 2
 
     class Meta:

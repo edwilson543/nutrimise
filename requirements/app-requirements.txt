@@ -6,6 +6,8 @@
 #
 asgiref==3.8.1
     # via django
+attrs==23.2.0
+    # via reciply (pyproject.toml)
 boto3==1.34.79
     # via reciply (pyproject.toml)
 botocore==1.34.79

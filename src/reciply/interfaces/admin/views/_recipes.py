@@ -6,7 +6,7 @@ from django import http
 
 # Local application imports
 from reciply.data.recipes import models as recipe_models
-from reciply.domain.ingredients import nutritional_information
+from reciply.domain import ingredients
 
 from . import _base
 
@@ -25,7 +25,7 @@ class RecipeDetails(_base.AdminTemplateView):
         context["recipe"] = self.recipe
         context["recipe_ingredients"] = list(self.recipe.ingredients.all())
         context["nutritional_information"] = (
-            nutritional_information.get_nutritional_information_for_recipe(
+            ingredients.get_nutritional_information_for_recipe(
                 recipe=self.recipe, per_serving=True
             )
         )

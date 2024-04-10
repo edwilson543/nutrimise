@@ -62,6 +62,7 @@ class Migration(migrations.Migration):
                         max_length=16,
                     ),
                 ),
+                ("optimiser_generated", models.BooleanField(default=False)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (
@@ -76,8 +77,61 @@ class Migration(migrations.Migration):
                     "recipe",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
+                        null=True,
                         related_name="recipes",
                         to="recipes.recipe",
+                    ),
+                ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="MenuRequirements",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("maximum_occurrences_per_recipe", models.SmallIntegerField()),
+                (
+                    "menu",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="requirements",
+                        to="menus.menu",
+                    ),
+                ),
+            ],
+        ),
+        migrations.CreateModel(
+            name="NutrientRequirement",
+            fields=[
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("minimum_grams", models.FloatField(null=True)),
+                ("maximum_grams", models.FloatField(null=True)),
+                ("target_grams", models.FloatField(null=True)),
+                (
+                    "enforcement_interval",
+                    models.TextField(choices=[("DAILY", "Daily")]),
+                ),
+                (
+                    "menu_requirements",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="nutrient_requirements",
+                        to="menus.menurequirements",
+                    ),
+                ),
+                (
+                    "nutrient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="+",
+                        to="ingredients.nutrient",
                     ),
                 ),
             ],

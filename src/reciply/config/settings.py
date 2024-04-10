@@ -95,6 +95,8 @@ class Settings(configurations.Configuration):
         },
     ]
 
+    FIXTURE_DIRS = [BASE_DIR.parents[1] / "fixtures"]
+
     # ----------
     # Database
     # ----------

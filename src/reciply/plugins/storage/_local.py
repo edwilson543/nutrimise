@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 # Standard library imports
-import dataclasses
 import enum
 import io
 import pathlib
 import uuid
+
+# Third party imports
+import attrs
 
 # Django imports
 from django.conf import settings
@@ -19,7 +21,7 @@ class Namespace(enum.StrEnum):
     RECIPES = "recipes"
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class StorageContext(storage.StorageContext):
     namespace: Namespace
     filename: str

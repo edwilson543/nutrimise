@@ -6,6 +6,8 @@
 #
 asgiref==3.8.1
     # via django
+attrs==23.2.0
+    # via reciply (pyproject.toml)
 beautifulsoup4==4.12.3
     # via webtest
 black==24.3.0

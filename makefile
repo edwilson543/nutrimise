@@ -43,6 +43,10 @@ superuser:
 dump:
 	python manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/dump.json
 
+.PHONY:load
+load:
+	python manage.py loaddata dump.json
+
 # Python environment
 
 .PHONY:install_ci_deps
