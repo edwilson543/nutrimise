@@ -14,8 +14,6 @@ class Menu:
     items: tuple[MenuItem, ...]
     requirements: MenuRequirements | None
 
-    # Factories
-
     @classmethod
     def from_orm_model(cls, *, menu: menu_models.Menu) -> Menu:
         try:
