@@ -2,9 +2,11 @@ from __future__ import annotations
 
 # Standard library imports
 import abc
-import dataclasses
 import io
 from typing import Generic, TypeVar
+
+# Third party imports
+import attrs
 
 # Django imports
 from django.conf import settings
@@ -30,14 +32,14 @@ class UnableToDeleteFile(_StorageError):
     pass
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class StorageContext(abc.ABC):
     """
     Store and generate the context for some file storage operation.
     """
 
     def serialize(self) -> dict[str, str]:
-        return dataclasses.asdict(self)
+        return attrs.asdict(self)
 
     @classmethod
     @abc.abstractmethod

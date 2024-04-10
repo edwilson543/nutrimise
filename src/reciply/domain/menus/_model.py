@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-# Standard library imports
-import dataclasses
+# Third party imports
+import attrs
 
 # Local application imports
 from reciply.data import constants
 from reciply.data.menus import models as menu_models
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class Menu:
     id: int
     items: tuple[MenuItem, ...]
@@ -32,7 +32,7 @@ class Menu:
         )
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class MenuItem:
     id: int
     recipe_id: int | None
@@ -54,7 +54,7 @@ class MenuItem:
         )
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class MenuRequirements:
     nutrient_requirements: tuple[NutrientRequirement, ...]
     maximum_occurrences_per_recipe: int
@@ -71,7 +71,7 @@ class MenuRequirements:
         )
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class NutrientRequirement:
     nutrient_id: int
     minimum_grams: float | None

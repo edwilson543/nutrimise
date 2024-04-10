@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 # Standard library imports
-import dataclasses
 import enum
 import io
 import uuid
 
 # Third party imports
+import attrs
 import boto3
 from boto3 import exceptions as aws_exceptions
 
@@ -22,7 +22,7 @@ class Folder(enum.StrEnum):
     RECIPES = "recipes"
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class StorageContext(storage.StorageContext):
     key: str
     bucket: str

@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-# Standard library imports
-import dataclasses
+# Third party imports
+import attrs
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class Nutrient:
     id: int
     name: str
 
 
-@dataclasses.dataclass(frozen=True)
+@attrs.frozen
 class NutritionalInformation:
     nutrient: Nutrient
     nutrient_quantity_grams: float
