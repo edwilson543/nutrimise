@@ -36,6 +36,7 @@ class MenuItem:
     recipe_id: int | None
     day: constants.Day
     meal_time: constants.MealTime
+    optimiser_generated: bool
 
     @classmethod
     def from_orm_model(
@@ -47,6 +48,7 @@ class MenuItem:
                 recipe_id=item.recipe_id,
                 day=constants.Day(item.day),
                 meal_time=constants.MealTime(item.meal_time),
+                optimiser_generated=item.optimiser_generated,
             )
             for item in items
         )

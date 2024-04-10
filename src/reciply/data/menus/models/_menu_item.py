@@ -56,7 +56,7 @@ class MenuItem(django_models.Model):
     # ----------
     # Mutators
     # ----------
-    def update_recipe(self, recipe: recipe_models.Recipe) -> MenuItem:
-        self.recipe = recipe
+    def update_recipe(self, recipe_id: int) -> MenuItem:
+        self.recipe_id = recipe_id
         self.save(update_fields=["recipe", "updated_at"])
         return self
