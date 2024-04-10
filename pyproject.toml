@@ -11,6 +11,7 @@ version = "0"
 requires-python = ">= 3.11"
 
 dependencies = [
+    "attrs",
     "boto3",
     "django",
     "django-configurations",
