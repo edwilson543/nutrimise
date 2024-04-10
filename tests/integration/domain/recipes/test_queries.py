@@ -1,6 +1,23 @@
 # Local application imports
-from reciply.domain.recipes import _queries as queries
+from reciply.domain import recipes
 from tests import factories
+import pytest
+
+
+class TestGetRecipe:
+    def test_gets_recipe_when_exists(self):
+        recipe = factories.Recipe()
+
+        result = recipes.get_recipe(recipe_id=recipe.id)
+
+        assert isinstance(result, recipes.Recipe)
+        assert result.id == recipe.id
+
+    def test_raises_when_recipe_does_not_exist(self):
+        with pytest.raises(recipes.RecipeDoesNotExist) as exc:
+            recipes.get_recipe(recipe_id=123)
+
+        assert exc.value.recipe_id == 123
 
 
 class TestGetRecipesAuthoredByUser:
@@ -11,7 +28,7 @@ class TestGetRecipesAuthoredByUser:
         other_user = factories.User()
         factories.Recipe(author=other_user)
 
-        user_recipes = queries.get_recipes_authored_by_user(user)
+        user_recipes = recipes.get_recipes_authored_by_user(user)
 
         assert user_recipes.get() == recipe
 
@@ -20,13 +37,13 @@ class TestGetHeroImage:
     def test_gets_hero_image_when_exists(self):
         hero_image = factories.RecipeImage(is_hero=True)
 
-        result = queries.get_hero_image(hero_image.recipe)
+        result = recipes.get_hero_image(hero_image.recipe)
 
         assert result == hero_image
 
     def test_gets_none_when_no_hero_image(self):
         recipe = factories.Recipe()
 
-        result = queries.get_hero_image(recipe)
+        result = recipes.get_hero_image(recipe)
 
         assert result is None
