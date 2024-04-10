@@ -25,9 +25,7 @@ class Settings(configurations.Configuration):
 
     INSTALLED_APPS = [
         # Third party
-        "rest_framework",
-        "knox",
-        "django_extensions",  # TODO -> remove from prod
+        "django_extensions",
         # Django
         "django.contrib.admin",
         "django.contrib.auth",
@@ -56,20 +54,6 @@ class Settings(configurations.Configuration):
     ROOT_URLCONF = "reciply.config.urls"
 
     WSGI_APPLICATION = "reciply.config.wsgi.application"
-
-    # ----------
-    # API settings
-    # ----------
-    CORS_ALLOW_ALL_ORIGINS = True
-
-    REST_FRAMEWORK = {
-        "DEFAULT_AUTHENTICATION_CLASSES": ["knox.auth.TokenAuthentication"],
-        "DEFAULT_PERMISSION_CLASSES": [
-            "rest_framework.permissions.IsAuthenticated",
-        ],
-    }
-
-    REST_KNOX = {"TOKEN_TTL": None}
 
     # ----------
     # Media settings

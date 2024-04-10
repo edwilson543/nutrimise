@@ -19,14 +19,6 @@ createdb:
 server:
 	python manage.py runserver 8000 --configuration=Settings
 
-.PHONY:server_https
-server_https:
-	# Install a local certificate authority so that the OS will trust ours
-	mkcert -install
-	# Generate a certificate for the localhost domain
-	mkcert -cert-file cert.pem -key-file key.pem localhost 127.0.0.1
-	python manage.py runserver_plus 8000 --configuration=Settings --cert-file=cert.pem --key-file=key.pem
-
 .PHONY:migrate
 migrate:
 	python manage.py migrate --configuration=Settings

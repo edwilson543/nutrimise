@@ -12,50 +12,24 @@ beautifulsoup4==4.12.3
     # via webtest
 black==24.3.0
     # via reciply (pyproject.toml)
-boto3==1.34.79
-    # via reciply (pyproject.toml)
-botocore==1.34.79
-    # via
-    #   boto3
-    #   s3transfer
-certifi==2024.2.2
-    # via requests
-cffi==1.16.0
-    # via cryptography
-charset-normalizer==3.3.2
-    # via requests
 click==8.1.7
     # via black
-cryptography==42.0.5
-    # via django-rest-knox
 django==5.0.4
     # via
     #   django-configurations
     #   django-extensions
-    #   django-rest-knox
     #   django-stubs
     #   django-stubs-ext
-    #   djangorestframework
     #   reciply (pyproject.toml)
 django-configurations==2.5.1
     # via reciply (pyproject.toml)
 django-extensions==3.2.3
     # via reciply (pyproject.toml)
-django-rest-knox==4.2.0
-    # via reciply (pyproject.toml)
 django-stubs==4.2.7
-    # via
-    #   djangorestframework-stubs
-    #   reciply (pyproject.toml)
+    # via reciply (pyproject.toml)
 django-stubs-ext==4.2.7
     # via django-stubs
 django-webtest==1.9.11
-    # via reciply (pyproject.toml)
-djangorestframework==3.15.1
-    # via
-    #   django-rest-knox
-    #   reciply (pyproject.toml)
-djangorestframework-stubs==3.14.5
     # via reciply (pyproject.toml)
 exceptiongroup==1.2.0
     # via pytest
@@ -65,16 +39,10 @@ faker==24.7.1
     # via factory-boy
 flake8==7.0.0
     # via reciply (pyproject.toml)
-idna==3.6
-    # via requests
 iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via reciply (pyproject.toml)
-jmespath==1.0.1
-    # via
-    #   boto3
-    #   botocore
 mccabe==0.7.0
     # via flake8
 mypy==1.9.0
@@ -89,8 +57,6 @@ packaging==24.0
     #   pytest
 pathspec==0.12.1
     # via black
-pillow==10.3.0
-    # via reciply (pyproject.toml)
 platformdirs==4.2.0
     # via black
 pluggy==1.4.0
@@ -99,8 +65,6 @@ psycopg==3.1.18
     # via reciply (pyproject.toml)
 pycodestyle==2.11.1
     # via flake8
-pycparser==2.22
-    # via cffi
 pyflakes==3.2.0
     # via flake8
 pytest==8.1.1
@@ -110,15 +74,9 @@ pytest==8.1.1
 pytest-django==4.8.0
     # via reciply (pyproject.toml)
 python-dateutil==2.9.0.post0
-    # via
-    #   botocore
-    #   faker
+    # via faker
 python-decouple==3.8
     # via reciply (pyproject.toml)
-requests==2.31.0
-    # via djangorestframework-stubs
-s3transfer==0.10.1
-    # via boto3
 six==1.16.0
     # via python-dateutil
 soupsieve==2.5
@@ -134,25 +92,15 @@ tomli==2.0.1
 types-pytz==2024.1.0.20240203
     # via django-stubs
 types-pyyaml==6.0.12.20240311
-    # via
-    #   django-stubs
-    #   djangorestframework-stubs
-types-requests==2.31.0.20240406
-    # via djangorestframework-stubs
+    # via django-stubs
 typing-extensions==4.11.0
     # via
     #   asgiref
     #   black
     #   django-stubs
     #   django-stubs-ext
-    #   djangorestframework-stubs
     #   mypy
     #   psycopg
-urllib3==2.2.1
-    # via
-    #   botocore
-    #   requests
-    #   types-requests
 waitress==3.0.0
     # via webtest
 webob==1.8.7
