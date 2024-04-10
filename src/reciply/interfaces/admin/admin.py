@@ -36,12 +36,6 @@ class RecipeAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(recipe_models.RecipeImage)
-class RecipeImageAdmin(admin.ModelAdmin):
-    list_display = ["id", "recipe"]
-    ordering = ["recipe__name"]
-
-
 @admin.register(recipe_models.RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "recipe_name", "ingredient_name", "quantity", "units"]

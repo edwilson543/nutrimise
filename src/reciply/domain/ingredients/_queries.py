@@ -4,7 +4,6 @@ from __future__ import annotations
 import collections
 
 # Local application imports
-from reciply.data.ingredients import models as ingredient_models
 from reciply.data.recipes import models as recipe_models
 
 from . import _model
@@ -46,21 +45,3 @@ def get_nutritional_information_for_recipe(
         for nutrient, value in recipe_nutrition.items()
     )
     return sorted(nutritional_information, key=lambda n: n.nutrient.name)
-
-
-def get_ingredient_display_name(
-    *, ingredient: ingredient_models.Ingredient, quantity: float
-) -> str:
-    is_integer = quantity == int(quantity)
-    if is_integer:
-        quantity = int(quantity)
-    else:
-        quantity = round(quantity, 2)
-
-    if ingredient.units:
-        return f"{quantity} {ingredient.units} of {ingredient.name_singular}"
-    else:
-        if quantity == 1:
-            return f"{quantity} {ingredient.name_singular}"
-        else:
-            return f"{quantity} {ingredient.name_plural}"

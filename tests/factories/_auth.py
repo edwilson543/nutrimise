@@ -1,6 +1,5 @@
 # Third party imports
 import factory
-from knox import models as knox_models
 
 # Django imports
 from django.contrib.auth import models as auth_models
@@ -24,15 +23,3 @@ class User(factory.django.DjangoModelFactory):
         Use create_user so that the password can be manually set.
         """
         return model_class.objects.create_user(*args, **kwargs)
-
-
-class AuthToken(factory.django.DjangoModelFactory):
-    user = factory.SubFactory(User)
-
-    class Meta:
-        model = knox_models.AuthToken
-
-    @classmethod
-    def create(cls, **kwargs: object) -> tuple[knox_models.AuthToken, str]:
-        user = kwargs.get("user") or User()
-        return knox_models.AuthToken.objects.create(user=user)

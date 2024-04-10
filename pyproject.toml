@@ -12,12 +12,8 @@ requires-python = ">= 3.11"
 
 dependencies = [
     "attrs",
-    "boto3",
     "django",
     "django-configurations",
-    "djangorestframework",
-    "django-rest-knox",
-    "pillow",
     "psycopg",
     "python-decouple"
 ]
@@ -36,7 +32,6 @@ ci = [
     # Linting / typing
     "black",
     "django-stubs",
-    "djangorestframework-stubs",
     "flake8",
     "isort",
     "mypy",
@@ -45,9 +40,6 @@ ci = [
 ]
 
 dev = [
-    # Running the HTTPS server
-    "Werkzeug",
-    "pyOpenSSL",
     # Git
     "pre-commit",
     # Pytest plugins for assisting local dev (but not used in CI)

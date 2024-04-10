@@ -72,31 +72,6 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        migrations.CreateModel(
-            name="RecipeImage",
-            fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("storage_context", models.JSONField(default=dict)),
-                ("is_hero", models.BooleanField()),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                (
-                    "recipe",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="images",
-                        to="recipes.recipe",
-                    ),
-                ),
-            ],
-        ),
-        migrations.AddConstraint(
-            model_name="recipeimage",
-            constraint=models.UniqueConstraint(
-                models.F("recipe"),
-                models.F("is_hero"),
-                name="recipe_can_only_have_one_hero_image",
-            ),
-        ),
         migrations.AddConstraint(
             model_name="recipe",
             constraint=models.UniqueConstraint(

@@ -1,9 +1,4 @@
-### Backend for the [reciply mobile app](https://github.com/edwilson543/reciply-mobile)
-
-- Django and Django Rest Framework for the API used by the app
-- Django Rest Knox for token authentication
-- Postgres for the database
-- Plugin S3 integration for storing images
+### Web app for optimising meal plans
 
 ---
 
