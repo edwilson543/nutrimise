@@ -7,5 +7,4 @@ from django.contrib import admin
 urlpatterns = [
     urls.path("admin/", urls.include("reciply.interfaces.admin.urls")),
     urls.path("admin/", admin.site.urls),
-    urls.path("api/", urls.include("reciply.interfaces.rest_api.urls")),
 ] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
