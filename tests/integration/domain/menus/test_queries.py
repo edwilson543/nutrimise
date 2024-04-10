@@ -1,7 +1,9 @@
+# Third party imports
+import pytest
+
 # Local application imports
 from reciply.domain import menus
 from tests import factories
-import pytest
 
 
 class TestGetMenu:

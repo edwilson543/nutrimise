@@ -1,3 +1,4 @@
+# Third party imports
 import attrs
 
 # Django imports
@@ -6,6 +7,7 @@ from django.db import models as django_models
 
 # Local application imports
 from reciply.data.menus import models as menu_models
+
 from . import _model
 
 

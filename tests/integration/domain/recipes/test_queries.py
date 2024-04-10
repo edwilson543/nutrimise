@@ -1,7 +1,9 @@
+# Third party imports
+import pytest
+
 # Local application imports
 from reciply.domain import recipes
 from tests import factories
-import pytest
 
 
 class TestGetRecipe:
@@ -18,6 +20,21 @@ class TestGetRecipe:
             recipes.get_recipe(recipe_id=123)
 
         assert exc.value.recipe_id == 123
+
+
+class TestGetRecipes:
+    def test_gets_all_recipes(self):
+        factories.Recipe()
+        factories.Recipe()
+
+        result = recipes.get_recipes()
+
+        assert len(result) == 2
+
+    def test_gets_empty_tuple_when_there_are_no_recipes(self):
+        result = recipes.get_recipes()
+
+        assert result == ()
 
 
 class TestGetRecipesAuthoredByUser:
