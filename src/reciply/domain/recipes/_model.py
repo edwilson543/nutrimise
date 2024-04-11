@@ -13,7 +13,7 @@ from reciply.domain import ingredients
 class Recipe:
     id: int
     meal_times: tuple[constants.MealTime, ...]
-    nutritional_information: tuple[ingredients.NutritionalInformation, ...]
+    nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
     """
     The absolute amount of each nutrient, per serving.
     """
@@ -28,5 +28,5 @@ class Recipe:
             meal_times=tuple(
                 constants.MealTime(meal_time) for meal_time in recipe.meal_times
             ),
-            nutritional_information=tuple(nutritional_information),
+            nutritional_information_per_serving=tuple(nutritional_information),
         )

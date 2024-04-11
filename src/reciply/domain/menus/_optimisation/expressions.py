@@ -28,7 +28,7 @@ def total_nutrient_grams_for_day(
 def _get_nutrient_grams_for_decision_variable(
     *, variable: variables.DecisionVariable, nutrient_id: int
 ) -> lp.LpAffineExpression:
-    for nutritional_information in variable.recipe.nutritional_information:
+    for nutritional_information in variable.recipe.nutritional_information_per_serving:
         if nutritional_information.nutrient.id == nutrient_id:
             return (
                 nutritional_information.nutrient_quantity_grams * variable.lp_variable

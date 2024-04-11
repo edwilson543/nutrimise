@@ -18,4 +18,4 @@ class TestRecipeFromOrmModel:
 
         assert recipe.id == orm_recipe.id
         assert recipe.meal_times == tuple(meal_times)
-        assert len(recipe.nutritional_information) > 0
+        assert len(recipe.nutritional_information_per_serving) > 0

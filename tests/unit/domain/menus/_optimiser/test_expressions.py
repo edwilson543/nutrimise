@@ -26,7 +26,10 @@ class TestNutrientGramsForDay:
             nutrient=other_nutrient, nutrient_quantity_grams=7
         )
         recipe = domain_factories.Recipe(
-            nutritional_information=(nutritional_information, other_nutritional_information),
+            nutritional_information_per_serving=(
+                nutritional_information,
+                other_nutritional_information,
+            ),
             meal_times=[constants.MealTime.LUNCH],
         )
 
@@ -34,7 +37,7 @@ class TestNutrientGramsForDay:
             nutrient=nutrient, nutrient_quantity_grams=3
         )
         other_recipe = domain_factories.Recipe(
-            nutritional_information=(nutritional_information,),
+            nutritional_information_per_serving=(nutritional_information,),
             meal_times=[constants.MealTime.LUNCH],
         )
 
