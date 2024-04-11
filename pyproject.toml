@@ -35,7 +35,6 @@ ci = [
     "django-webtest",
     "webtest",
     # Linting / typing
-    "black",
     "django-stubs",
     "flake8",
     "ruff",

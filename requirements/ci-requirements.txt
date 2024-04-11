@@ -10,10 +10,6 @@ attrs==23.2.0
     # via reciply (pyproject.toml)
 beautifulsoup4==4.12.3
     # via webtest
-black==24.3.0
-    # via reciply (pyproject.toml)
-click==8.1.7
-    # via black
 django==5.0.4
     # via
     #   django-configurations
@@ -48,17 +44,9 @@ mccabe==0.7.0
 mypy==1.9.0
     # via reciply (pyproject.toml)
 mypy-extensions==1.0.0
-    # via
-    #   black
-    #   mypy
+    # via mypy
 packaging==24.0
-    # via
-    #   black
-    #   pytest
-pathspec==0.12.1
-    # via black
-platformdirs==4.2.0
-    # via black
+    # via pytest
 pluggy==1.4.0
     # via pytest
 psycopg[binary]==3.1.18
@@ -91,7 +79,6 @@ sqlparse==0.4.4
     # via django
 tomli==2.0.1
     # via
-    #   black
     #   django-stubs
     #   mypy
     #   pytest
@@ -102,7 +89,6 @@ types-pyyaml==6.0.12.20240311
 typing-extensions==4.11.0
     # via
     #   asgiref
-    #   black
     #   django-stubs
     #   django-stubs-ext
     #   mypy
