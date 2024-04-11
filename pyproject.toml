@@ -58,9 +58,24 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = "./src/reciply"
-DJANGO_SETTINGS_MODULE = "config.settings"
+DJANGO_SETTINGS_MODULE = "reciply.config.settings"
 DJANGO_CONFIGURATION = "Settings"
 
 filterwarnings = [
     "ignore:The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated:django.utils.deprecation.RemovedInDjango60Warning:django",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+exclude = ["venv", "tests"]
+plugins = ["./init_mypy.py"]
+
+[[tool.mypy.overrides]]
+module = "django.conf.settings"
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "reciply.config.settings"
+strict_settings = false
+
