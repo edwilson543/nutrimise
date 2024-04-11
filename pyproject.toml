@@ -38,6 +38,7 @@ ci = [
     "black",
     "django-stubs",
     "flake8",
+    "ruff",
     "isort",
     "mypy",
     # Needs relegating to `dev`

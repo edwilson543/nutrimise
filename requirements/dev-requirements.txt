@@ -103,6 +103,8 @@ python-decouple==3.8
     # via reciply (pyproject.toml)
 pyyaml==6.0.1
     # via pre-commit
+ruff==0.3.6
+    # via reciply (pyproject.toml)
 six==1.16.0
     # via python-dateutil
 soupsieve==2.5

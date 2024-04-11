@@ -81,6 +81,8 @@ python-dateutil==2.9.0.post0
     # via faker
 python-decouple==3.8
     # via reciply (pyproject.toml)
+ruff==0.3.6
+    # via reciply (pyproject.toml)
 six==1.16.0
     # via python-dateutil
 soupsieve==2.5
