@@ -50,7 +50,7 @@ jobs:
       - name: Run test suite with pytest
         run: make test
 
-      - name: Run mypy on application code
+      - name: Run mypy
         if: success() || failure()
         run: make mypy
 

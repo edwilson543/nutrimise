@@ -67,15 +67,12 @@ filterwarnings = [
 
 [tool.mypy]
 ignore_missing_imports = true
-disallow_untyped_defs = true
-exclude = ["venv", "tests"]
+exclude = ["venv"]
 plugins = ["./init_mypy.py"]
 
 [[tool.mypy.overrides]]
-module = "django.conf.settings"
-ignore_errors = true
+module = "tests.*"
+allow_untyped_defs = true
 
 [tool.django-stubs]
 django_settings_module = "reciply.config.settings"
-strict_settings = false
-

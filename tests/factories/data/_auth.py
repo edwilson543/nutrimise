@@ -17,7 +17,7 @@ class User(factory.django.DjangoModelFactory):
 
     @classmethod
     def _create(
-        cls, model_class: type[auth_models.User], *args: object, **kwargs: object
+        cls, model_class: type[auth_models.User], *args: str, **kwargs: str
     ) -> auth_models.User:
         """
         Use create_user so that the password can be manually set.
