@@ -14,8 +14,10 @@ django==5.0.4
     #   reciply (pyproject.toml)
 django-configurations==2.5.1
     # via reciply (pyproject.toml)
-psycopg==3.1.18
+psycopg[binary]==3.1.18
     # via reciply (pyproject.toml)
+psycopg-binary==3.1.18
+    # via psycopg
 pulp==2.8.0
     # via reciply (pyproject.toml)
 python-decouple==3.8

@@ -48,7 +48,7 @@ install_ci_deps:
 
 .PHONY:install_dev_deps
 install_dev_deps:
-	pip-sync requirements/dev-requirements.txt
+	pip install -r requirements/dev-requirements.txt
 	pip install -e .
 
 
