@@ -3,12 +3,12 @@ import pytest
 
 # Local application imports
 from reciply.domain import recipes
-from tests import factories
+from tests.factories import data as data_factories
 
 
 class TestGetRecipe:
     def test_gets_recipe_when_exists(self):
-        recipe = factories.Recipe()
+        recipe = data_factories.Recipe()
 
         result = recipes.get_recipe(recipe_id=recipe.id)
 
@@ -24,8 +24,8 @@ class TestGetRecipe:
 
 class TestGetRecipes:
     def test_gets_all_recipes(self):
-        factories.Recipe()
-        factories.Recipe()
+        data_factories.Recipe()
+        data_factories.Recipe()
 
         result = recipes.get_recipes()
 

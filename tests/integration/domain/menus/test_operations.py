@@ -1,12 +1,12 @@
 # Local application imports
 from reciply.domain import menus
-from tests import factories
+from tests.factories import data as data_factories
 
 
 class TestUpdateMenuItemRecipe:
     def test_updates_menu_item_recipe(self):
-        recipe = factories.Recipe()
-        menu_item = factories.MenuItem(recipe_id=None)
+        recipe = data_factories.Recipe()
+        menu_item = data_factories.MenuItem(recipe_id=None)
 
         menus.update_menu_item_recipe(menu_item_id=menu_item.id, recipe_id=recipe.id)
 

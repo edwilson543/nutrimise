@@ -5,12 +5,12 @@ import pytest
 from django import db as django_db
 
 # Local application imports
-from tests import factories
+from tests.factories import data as data_factories
 
 
 class TestMenuConstraints:
     def test_user_cannot_have_two_menus_with_the_same_name(self):
-        menu = factories.Menu()
+        menu = data_factories.Menu()
 
         with pytest.raises(django_db.IntegrityError):
-            factories.Menu(author=menu.author, name=menu.name)
+            data_factories.Menu(author=menu.author, name=menu.name)

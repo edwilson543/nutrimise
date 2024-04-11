@@ -1,14 +1,14 @@
 # Local application imports
 from reciply.domain import menus
-from tests import factories
+from tests.factories import data as data_factories
 
 
 class TestMenuFromOrmModel:
     def test_converts_menu_orm_model_with_requirements_to_menu_domain(self):
-        orm_menu = factories.Menu()
-        orm_item = factories.MenuItem(menu=orm_menu)
-        orm_requirements = factories.MenuRequirements(menu=orm_menu)
-        orm_nutrient_requirement = factories.NutrientRequirement(
+        orm_menu = data_factories.Menu()
+        orm_item = data_factories.MenuItem(menu=orm_menu)
+        orm_requirements = data_factories.MenuRequirements(menu=orm_menu)
+        orm_nutrient_requirement = data_factories.NutrientRequirement(
             menu_requirements=orm_requirements,
             minimum_grams=0,
             maximum_grams=10,
@@ -48,7 +48,7 @@ class TestMenuFromOrmModel:
         )
 
     def test_converts_menu_orm_model_without_requirements_to_menu_domain(self):
-        orm_menu = factories.Menu()
+        orm_menu = data_factories.Menu()
 
         menu = menus.Menu.from_orm_model(menu=orm_menu)
 
