@@ -21,7 +21,7 @@ class MenuItem(factory.Factory):
     recipe_id = None
     day = constants.Day.MONDAY
     meal_time = constants.MealTime.LUNCH
-    optimiser_generated = False
+    optimiser_generated = True
 
     class Meta:
         model = menus.MenuItem

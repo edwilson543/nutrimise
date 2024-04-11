@@ -14,7 +14,7 @@ dependencies = [
     "attrs",
     "django",
     "django-configurations",
-    "psycopg",
+    "psycopg[binary]",
     "python-decouple",
     "pulp"
 ]

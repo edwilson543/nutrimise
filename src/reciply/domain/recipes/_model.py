@@ -14,6 +14,9 @@ class Recipe:
     id: int
     meal_times: tuple[constants.MealTime, ...]
     nutritional_information: tuple[ingredients.NutritionalInformation, ...]
+    """
+    The absolute amount of each nutrient, per serving.
+    """
 
     @classmethod
     def from_orm_model(cls, *, recipe: recipe_models.Recipe) -> Recipe:

@@ -12,5 +12,9 @@ class Nutrient:
 
 @attrs.frozen
 class NutritionalInformation:
+    """
+    An absolute quantity of a nutrient.
+    """
+
     nutrient: Nutrient
     nutrient_quantity_grams: float
