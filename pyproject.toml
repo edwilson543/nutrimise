@@ -10,6 +10,10 @@ name = "reciply"
 version = "0"
 requires-python = ">= 3.11"
 
+# ----------
+# Dependencies
+# ----------
+
 dependencies = [
     "attrs",
     "django",
@@ -46,4 +50,17 @@ dev = [
     # Pytest plugins for assisting local dev (but not used in CI)
     "pytest-random-order",
     "pytest-repeat",
+]
+
+# ----------
+# Tooling
+# ----------
+
+[tool.pytest.ini_options]
+pythonpath = "./src/reciply"
+DJANGO_SETTINGS_MODULE = "config.settings"
+DJANGO_CONFIGURATION = "Settings"
+
+filterwarnings = [
+    "ignore:The FORMS_URLFIELD_ASSUME_HTTPS transitional setting is deprecated:django.utils.deprecation.RemovedInDjango60Warning:django",
 ]
