@@ -66,15 +66,15 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy black isort flake8
+lint: mypy ruff_format isort flake8
 
 .PHONY:mypy
 mypy:
 	mypy .
 
-.PHONY:black
-black:
-	black .
+.PHONY:ruff_format
+ruff_format:
+	ruff format .
 
 .PHONY:isort
 isort:
