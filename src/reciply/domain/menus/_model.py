@@ -31,7 +31,8 @@ class Menu:
     def days(self) -> tuple[constants.Day, ...]:
         return tuple(set(item.day for item in self.items))
 
-@attrs.frozen
+
+@attrs.define
 class MenuItem:
     id: int
     recipe_id: int | None
@@ -53,6 +54,9 @@ class MenuItem:
             )
             for item in items
         )
+
+    def update_recipe_id(self, *, recipe_id: int) -> None:
+        self.recipe_id = recipe_id
 
 
 @attrs.frozen

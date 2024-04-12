@@ -1,7 +1,8 @@
 from typing import Generator
-import pulp as lp
 
 import attrs
+import pulp as lp
+
 from reciply.data.menus import models as menu_models
 from reciply.domain import menus
 
@@ -22,6 +23,7 @@ def yield_all_constraints(
 def _nutrient_requirements(
     *, menu: menus.Menu, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
+    assert menu.requirements  # Solver will not be given menu without requirements.
     for nutrient_requirement in menu.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
             case menu_models.NutrientRequirementEnforcementInterval.DAILY:

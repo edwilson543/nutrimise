@@ -6,19 +6,27 @@ MenuDoesNotExist = menus.MenuDoesNotExist
 
 
 @attrs.frozen
+class MenuHasNoRequirements(Exception):
+    menu_id: int
+
+
+@attrs.frozen
 class OptimiserDidNotDoItsJob(Exception):
     menu_item_ids: list[int]
 
 
 def optimise_menu(*, menu_id: int) -> None:
     menu = menus.get_menu(menu_id=menu_id)
+    if menu.requirements is None:
+        raise MenuHasNoRequirements(menu_id=menu_id)
+
     recipes_to_consider = recipes.get_recipes()
 
-    optimised_menu = menus.optimise_recipes_for_menu(
+    solution = menus.optimise_recipes_for_menu(
         menu=menu, recipes_to_consider=recipes_to_consider
     )
 
-    for menu_item in optimised_menu.items:
+    for menu_item in solution:
         # For mypy. The solver will raise if a menu item couldn't be solved.
         assert menu_item.recipe_id
         if menu_item.optimiser_generated:
