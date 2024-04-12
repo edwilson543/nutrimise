@@ -79,8 +79,3 @@ ruff_format:
 .PHONY:ruff_check
 ruff_check:
 	ruff check --fix .
-
-.PHONY:flake8
-flake8:
-	flake8 ./src
-	flake8 ./tests
