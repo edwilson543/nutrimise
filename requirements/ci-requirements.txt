@@ -37,8 +37,6 @@ flake8==7.0.0
     # via reciply (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
-isort==5.13.2
-    # via reciply (pyproject.toml)
 mccabe==0.7.0
     # via flake8
 mypy==1.9.0
