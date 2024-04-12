@@ -28,3 +28,10 @@ class Recipe:
             ),
             nutritional_information_per_serving=tuple(nutritional_information),
         )
+
+    # Queries
+    def nutrient_grams_per_serving(self, *, nutrient_id: int) -> float:
+        for nutritional_information in self.nutritional_information_per_serving:
+            if nutritional_information.nutrient.id == nutrient_id:
+                return nutritional_information.nutrient_quantity_grams
+        return 0

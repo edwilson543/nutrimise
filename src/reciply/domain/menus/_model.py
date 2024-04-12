@@ -4,6 +4,12 @@ import attrs
 
 from reciply.data import constants
 from reciply.data.menus import models as menu_models
+from reciply.domain import recipes
+
+
+@attrs.frozen
+class RecipeNotProvidedInLookup(Exception):
+    recipe_id: int
 
 
 @attrs.frozen
@@ -55,8 +61,18 @@ class MenuItem:
             for item in items
         )
 
+    # Mutators
+
     def update_recipe_id(self, *, recipe_id: int) -> None:
         self.recipe_id = recipe_id
+
+    # Queries
+
+    def look_up_recipe(self, *, recipes_: tuple[recipes.Recipe, ...]) -> recipes.Recipe:
+        for recipe in recipes_:
+            if recipe.id == self.recipe_id:
+                return recipe
+        raise RecipeNotProvidedInLookup(recipe_id=self.recipe_id)
 
 
 @attrs.frozen
