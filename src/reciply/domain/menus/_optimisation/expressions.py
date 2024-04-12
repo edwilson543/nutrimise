@@ -18,6 +18,19 @@ def sum_all_variables_for_menu_item(
     )
 
 
+def sum_all_variables_for_recipe(
+    *, variables_: variables.Variables, recipe_id: int
+) -> lp.LpAffineExpression:
+    """
+    Get the sum of all the decision variables for a recipe.
+    """
+    return lp.lpSum(
+        variable.lp_variable
+        for variable in variables_.decision_variables
+        if variable.recipe.id == recipe_id
+    )
+
+
 def total_nutrient_grams_for_day(
     *, variables_: variables.Variables, day: constants.Day, nutrient_id: int
 ) -> lp.LpAffineExpression:

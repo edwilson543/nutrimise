@@ -21,7 +21,7 @@ def optimise_recipes_for_menu(
         menu=menu, recipes_to_consider=recipes_to_consider
     )
     for constraint in constraints.yield_all_constraints(
-        menu=menu, variables_=variables_
+        menu=menu, recipes_=recipes_to_consider, variables_=variables_
     ):
         problem += constraint
     problem.solve(solver=lp.PULP_CBC_CMD(msg=False))

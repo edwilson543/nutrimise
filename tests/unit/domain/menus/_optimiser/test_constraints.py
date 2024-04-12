@@ -19,7 +19,8 @@ class TestNutrientGramsForDay:
             day=constants.Day.MONDAY, meal_time=constants.MealTime.DINNER
         )
         requirements = domain_factories.MenuRequirements(
-            nutrient_requirements=(requirement,)
+            maximum_occurrences_per_recipe=1,
+            nutrient_requirements=(requirement,),
         )
         menu = domain_factories.Menu(
             items=(monday_lunch, monday_dinner), requirements=requirements
@@ -50,7 +51,7 @@ class TestNutrientGramsForDay:
         all_constraints = [
             str(constraint)
             for constraint in constraints.yield_all_constraints(
-                menu=menu, variables_=variables_
+                recipes_=(recipe, other_recipe), menu=menu, variables_=variables_
             )
         ]
 
@@ -58,6 +59,9 @@ class TestNutrientGramsForDay:
             # Menu items assignment constraints.
             f"recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} = 1",
             f"recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} = 1",
+            # Maximum occurrences per recipe constraints.
+            f"recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + recipe_{recipe.id}_for_menu_item_{monday_dinner.id} <= 1",
+            f"recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= 1",
             # Nutrient requirement constraints.
             f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} >= {requirement.minimum_grams}",
             f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= {requirement.maximum_grams}",
