@@ -17,7 +17,20 @@ class EnforcementIntervalNotImplemented(Exception):
 def yield_all_constraints(
     *, menu: menus.Menu, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
+    yield from _all_menu_items_assigned_a_recipe(menu=menu, variables_=variables_)
     yield from _nutrient_requirements(menu=menu, variables_=variables_)
+
+
+def _all_menu_items_assigned_a_recipe(
+    *, menu: menus.Menu, variables_: variables.Variables
+) -> Generator[lp.LpConstraint, None, None]:
+    for menu_item in menu.items:
+        if not menu_item.optimiser_generated:
+            continue
+        sum_of_menu_item_variables = expressions.sum_all_variables_for_menu_item(
+            variables_=variables_, menu_item_id=menu_item.id
+        )
+        yield sum_of_menu_item_variables == 1
 
 
 def _nutrient_requirements(

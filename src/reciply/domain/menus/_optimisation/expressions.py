@@ -5,6 +5,19 @@ from reciply.data import constants
 from . import variables
 
 
+def sum_all_variables_for_menu_item(
+    *, variables_: variables.Variables, menu_item_id: int
+) -> lp.LpAffineExpression:
+    """
+    Get the sum of all the decision variables for a menu item.
+    """
+    return lp.lpSum(
+        variable.lp_variable
+        for variable in variables_.decision_variables
+        if variable.menu_item.id == menu_item_id
+    )
+
+
 def total_nutrient_grams_for_day(
     *, variables_: variables.Variables, day: constants.Day, nutrient_id: int
 ) -> lp.LpAffineExpression:
