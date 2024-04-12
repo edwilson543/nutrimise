@@ -18,17 +18,23 @@ def sum_all_variables_for_menu_item(
     )
 
 
-def sum_all_variables_for_recipe(
-    *, variables_: variables.Variables, recipe_id: int
+def number_of_occurrences_of_recipe(
+    *, inputs: inputs.OptimiserInputs, variables_: variables.Variables, recipe_id: int
 ) -> lp.LpAffineExpression:
     """
     Get the sum of all the decision variables for a recipe.
     """
-    return lp.lpSum(
+    existing_occurrences = 0
+    for menu_item in inputs.menu.items:
+        if menu_item.recipe_id == recipe_id and not menu_item.optimiser_generated:
+            existing_occurrences += 1
+
+    variables_sum = lp.lpSum(
         variable.lp_variable
         for variable in variables_.decision_variables
         if variable.recipe.id == recipe_id
     )
+    return variables_sum + existing_occurrences
 
 
 def total_nutrient_grams_for_day(
@@ -78,7 +84,7 @@ def _get_unoptimised_nutrient_grams_on_day(
     total = 0.0
     for menu_item in inputs.menu.items:
         if menu_item.day == day and not menu_item.optimiser_generated:
-            assert (recipe_id := menu_item.recipe_id)  # Type narrowing.
+            assert (recipe_id := menu_item.recipe_id) is not None  # Type narrowing.
             recipe = inputs.look_up_recipe(recipe_id=recipe_id)
             total += recipe.nutrient_grams_per_serving(nutrient_id=nutrient_id)
     return total

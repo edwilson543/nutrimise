@@ -4,15 +4,6 @@ from reciply.data.menus import models as menu_models
 from reciply.domain import menus
 
 
-class Menu(factory.Factory):
-    id = factory.Sequence(lambda n: n)
-    items = factory.LazyFunction(tuple)
-    requirements = factory.LazyFunction(tuple)
-
-    class Meta:
-        model = menus.Menu
-
-
 class MenuItem(factory.Factory):
     id = factory.Sequence(lambda n: n)
     recipe_id = None
@@ -30,6 +21,15 @@ class MenuRequirements(factory.Factory):
 
     class Meta:
         model = menus.MenuRequirements
+
+
+class Menu(factory.Factory):
+    id = factory.Sequence(lambda n: n)
+    items = factory.LazyFunction(tuple)
+    requirements = factory.SubFactory(MenuRequirements)
+
+    class Meta:
+        model = menus.Menu
 
 
 class NutrientRequirement(factory.Factory):

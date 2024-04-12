@@ -54,7 +54,8 @@ class TestNutrientGramsForDay:
         )
 
         # Total nutrients should be summed over `MONDAY` and the `nutrient` only.
-        assert (
-            str(total_nutrient_grams)
-            == f"2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id}"
-        )
+        options = [
+            f"2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id}",
+            f"3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id}",
+        ]
+        assert str(total_nutrient_grams) in options

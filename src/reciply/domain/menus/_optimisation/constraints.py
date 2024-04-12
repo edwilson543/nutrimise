@@ -42,11 +42,11 @@ def _maximum_occurrences_per_recipe(
     variables_: variables.Variables,
 ) -> lp.LpAffineExpression:
     for recipe in inputs.recipes_to_consider:
-        sum_of_all_recipe_variables = expressions.sum_all_variables_for_recipe(
-            variables_=variables_, recipe_id=recipe.id
+        number_of_occurrences_of_recipe = expressions.number_of_occurrences_of_recipe(
+            inputs=inputs, variables_=variables_, recipe_id=recipe.id
         )
         yield (
-            sum_of_all_recipe_variables
+            number_of_occurrences_of_recipe
             <= inputs.requirements.maximum_occurrences_per_recipe
         )
 

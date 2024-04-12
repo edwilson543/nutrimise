@@ -8,7 +8,9 @@ from . import constraints, inputs, variables
 
 
 def optimise_recipes_for_menu(
-    *, menu: menus.Menu, recipes_to_consider: tuple[recipes.Recipe, ...],
+    *,
+    menu: menus.Menu,
+    recipes_to_consider: tuple[recipes.Recipe, ...],
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
