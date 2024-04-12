@@ -4,24 +4,20 @@ import pulp as lp
 
 from reciply.domain import menus, recipes
 
-from . import constraints, variables
+from . import constraints, inputs, variables
 
 
 def optimise_recipes_for_menu(
-    *,
-    menu: menus.Menu,
-    recipes_to_consider: tuple[recipes.Recipe, ...],
-    # TODO -> will need to match by ID.
+    *, menu: menus.Menu, recipes_to_consider: tuple[recipes.Recipe, ...],
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
     """
     problem = lp.LpProblem(name=f"optimise-menu-{menu.id}")
-    variables_ = variables.Variables.from_spec(
-        menu=menu, recipes_to_consider=recipes_to_consider
-    )
+    inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=recipes_to_consider)
+    variables_ = variables.Variables.from_inputs(inputs_)
     for constraint in constraints.yield_all_constraints(
-        menu=menu, recipes_=recipes_to_consider, variables_=variables_
+        inputs=inputs_, variables_=variables_
     ):
         problem += constraint
     problem.solve(solver=lp.PULP_CBC_CMD(msg=False))

@@ -1,5 +1,5 @@
 from reciply.data import constants
-from reciply.domain.menus._optimisation import variables
+from reciply.domain.menus._optimisation import inputs, variables
 
 from tests.factories import domain as domain_factories
 
@@ -16,9 +16,8 @@ class TestFromSpec:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        variables_ = variables.Variables.from_spec(
-            menu=menu, recipes_to_consider=(recipe,)
-        )
+        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 2
@@ -37,9 +36,8 @@ class TestFromSpec:
 
         recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
 
-        variables_ = variables.Variables.from_spec(
-            menu=menu, recipes_to_consider=(recipe,)
-        )
+        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 1
@@ -58,9 +56,8 @@ class TestFromSpec:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        variables_ = variables.Variables.from_spec(
-            menu=menu, recipes_to_consider=(recipe,)
-        )
+        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 1

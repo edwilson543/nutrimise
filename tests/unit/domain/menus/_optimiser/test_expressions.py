@@ -1,5 +1,5 @@
 from reciply.data import constants
-from reciply.domain.menus._optimisation import expressions, variables
+from reciply.domain.menus._optimisation import expressions, inputs, variables
 
 from tests.factories import domain as domain_factories
 
@@ -41,13 +41,16 @@ class TestNutrientGramsForDay:
             meal_times=[constants.MealTime.LUNCH],
         )
 
-        # Create the variables.
-        variables_ = variables.Variables.from_spec(
+        inputs_ = inputs.OptimiserInputs(
             menu=menu, recipes_to_consider=(recipe, other_recipe)
         )
+        variables_ = variables.Variables.from_inputs(inputs_)
 
         total_nutrient_grams = expressions.total_nutrient_grams_for_day(
-            variables_=variables_, day=constants.Day.MONDAY, nutrient_id=nutrient.id
+            inputs=inputs_,
+            variables=variables_,
+            day=constants.Day.MONDAY,
+            nutrient_id=nutrient.id,
         )
 
         # Total nutrients should be summed over `MONDAY` and the `nutrient` only.

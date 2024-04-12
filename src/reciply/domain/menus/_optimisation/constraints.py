@@ -4,9 +4,9 @@ import attrs
 import pulp as lp
 
 from reciply.data.menus import models as menu_models
-from reciply.domain import menus, recipes
+from reciply.domain import menus
 
-from . import expressions, variables
+from . import expressions, inputs, variables
 
 
 @attrs.frozen
@@ -16,21 +16,18 @@ class EnforcementIntervalNotImplemented(Exception):
 
 def yield_all_constraints(
     *,
-    menu: menus.Menu,
-    recipes_: tuple[recipes.Recipe, ...],
+    inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
 ) -> Generator[lp.LpConstraint, None, None]:
-    yield from _all_menu_items_assigned_a_recipe(menu=menu, variables_=variables_)
-    yield from _maximum_occurrences_per_recipe(
-        recipes_=recipes_, menu=menu, variables_=variables_
-    )
-    yield from _nutrient_requirements(menu=menu, variables_=variables_)
+    yield from _all_menu_items_assigned_a_recipe(inputs=inputs, variables_=variables_)
+    yield from _maximum_occurrences_per_recipe(inputs=inputs, variables_=variables_)
+    yield from _nutrient_requirements(inputs=inputs, variables_=variables_)
 
 
 def _all_menu_items_assigned_a_recipe(
-    *, menu: menus.Menu, variables_: variables.Variables
+    *, inputs: inputs.OptimiserInputs, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
-    for menu_item in menu.items:
+    for menu_item in inputs.menu.items:
         if not menu_item.optimiser_generated:
             continue
         sum_of_menu_item_variables = expressions.sum_all_variables_for_menu_item(
@@ -41,29 +38,29 @@ def _all_menu_items_assigned_a_recipe(
 
 def _maximum_occurrences_per_recipe(
     *,
-    recipes_: tuple[recipes.Recipe, ...],
-    menu: menus.Menu,
+    inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
 ) -> lp.LpAffineExpression:
-    for recipe in recipes_:
+    for recipe in inputs.recipes_to_consider:
         sum_of_all_recipe_variables = expressions.sum_all_variables_for_recipe(
             variables_=variables_, recipe_id=recipe.id
         )
         yield (
             sum_of_all_recipe_variables
-            <= menu.requirements.maximum_occurrences_per_recipe
+            <= inputs.requirements.maximum_occurrences_per_recipe
         )
 
 
 def _nutrient_requirements(
-    *, menu: menus.Menu, variables_: variables.Variables
+    *, inputs: inputs.OptimiserInputs, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
-    assert menu.requirements  # Solver will not be given menu without requirements.
-    for nutrient_requirement in menu.requirements.nutrient_requirements:
+    for nutrient_requirement in inputs.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
             case menu_models.NutrientRequirementEnforcementInterval.DAILY:
                 yield from _daily_nutrient_requirements(
-                    requirement=nutrient_requirement, variables_=variables_, menu=menu
+                    inputs=inputs,
+                    requirement=nutrient_requirement,
+                    variables_=variables_,
                 )
             case _:
                 raise EnforcementIntervalNotImplemented(
@@ -73,13 +70,16 @@ def _nutrient_requirements(
 
 def _daily_nutrient_requirements(
     *,
-    requirement: menus.NutrientRequirement,
+    inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
-    menu: menus.Menu,
+    requirement: menus.NutrientRequirement,
 ) -> Generator[lp.LpConstraint, None, None]:
-    for day in menu.days:
+    for day in inputs.menu.days:
         total_nutrient_grams_for_day = expressions.total_nutrient_grams_for_day(
-            variables_=variables_, day=day, nutrient_id=requirement.nutrient_id
+            inputs=inputs,
+            variables=variables_,
+            day=day,
+            nutrient_id=requirement.nutrient_id,
         )
         if requirement.minimum_grams is not None:
             yield total_nutrient_grams_for_day >= requirement.minimum_grams

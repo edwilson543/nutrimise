@@ -1,5 +1,5 @@
 from reciply.data import constants
-from reciply.domain.menus._optimisation import constraints, variables
+from reciply.domain.menus._optimisation import constraints, inputs, variables
 
 from tests.factories import domain as domain_factories
 
@@ -43,15 +43,15 @@ class TestNutrientGramsForDay:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER],
         )
 
-        # Create the variables.
-        variables_ = variables.Variables.from_spec(
-            menu=menu, recipes_to_consider=(recipe,other_recipe)
+        inputs_ = inputs.OptimiserInputs(
+            menu=menu, recipes_to_consider=(recipe, other_recipe)
         )
+        variables_ = variables.Variables.from_inputs(inputs_)
 
         all_constraints = [
             str(constraint)
             for constraint in constraints.yield_all_constraints(
-                recipes_=(recipe, other_recipe), menu=menu, variables_=variables_
+                inputs=inputs_, variables_=variables_
             )
         ]
 
