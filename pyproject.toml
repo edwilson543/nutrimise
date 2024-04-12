@@ -36,7 +36,6 @@ ci = [
     "webtest",
     # Linting / typing
     "django-stubs",
-    "flake8",
     "ruff",
     "mypy",
     # Needs relegating to `dev`

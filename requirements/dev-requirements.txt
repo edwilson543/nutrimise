@@ -39,14 +39,10 @@ faker==24.7.1
     # via factory-boy
 filelock==3.13.3
     # via virtualenv
-flake8==7.0.0
-    # via reciply (pyproject.toml)
 identify==2.5.35
     # via pre-commit
 iniconfig==2.0.0
     # via pytest
-mccabe==0.7.0
-    # via flake8
 mypy==1.9.0
     # via reciply (pyproject.toml)
 mypy-extensions==1.0.0
@@ -67,10 +63,6 @@ psycopg-binary==3.1.18
     # via psycopg
 pulp==2.8.0
     # via reciply (pyproject.toml)
-pycodestyle==2.11.1
-    # via flake8
-pyflakes==3.2.0
-    # via flake8
 pytest==8.1.1
     # via
     #   pytest-django
