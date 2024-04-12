@@ -1,7 +1,6 @@
 # Standard library imports
 import pathlib
 
-# Third party imports
 import configurations
 
 from . import env

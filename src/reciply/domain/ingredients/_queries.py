@@ -3,7 +3,6 @@ from __future__ import annotations
 # Standard library imports
 import collections
 
-# Local application imports
 from reciply.data.recipes import models as recipe_models
 
 from . import _model

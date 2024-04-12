@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 # Standard library imports
 import os
 
-# Third party imports
 from configurations import wsgi
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "reciply.config.settings")

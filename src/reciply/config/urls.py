@@ -1,4 +1,3 @@
-# Django imports
 from django import urls
 from django.conf import settings
 from django.conf.urls import static

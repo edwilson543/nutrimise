@@ -1,4 +1,3 @@
-# Django imports
 from django.db import models as django_models
 
 from . import _ingredient, _nutrient

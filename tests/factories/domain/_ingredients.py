@@ -1,7 +1,4 @@
-# Third party imports
 import factory
-
-# Local application imports
 from reciply.domain import ingredients
 
 

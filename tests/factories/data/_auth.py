@@ -1,7 +1,4 @@
-# Third party imports
 import factory
-
-# Django imports
 from django.contrib.auth import models as auth_models
 
 

@@ -1,7 +1,5 @@
-# Third party imports
 import attrs
 
-# Local application imports
 from reciply.domain import menus, recipes
 
 MenuDoesNotExist = menus.MenuDoesNotExist

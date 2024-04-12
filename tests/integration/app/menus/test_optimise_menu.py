@@ -1,5 +1,5 @@
-# Local application imports
 from reciply.app import menus
+
 from tests.factories import data as data_factories
 
 

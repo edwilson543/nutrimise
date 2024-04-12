@@ -1,7 +1,4 @@
-# Third party imports
 import factory
-
-# Local application imports
 from reciply.data import constants
 from reciply.data.menus import models as menu_models
 

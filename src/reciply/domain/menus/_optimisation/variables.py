@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-# Third party imports
 import attrs
 import pulp as lp
 
-# Local application imports
 from reciply.data import constants
 from reciply.domain import menus, recipes
 

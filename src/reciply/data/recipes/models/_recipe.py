@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-# Django imports
 from django.contrib.auth import models as auth_models
 from django.contrib.postgres import fields as pg_fields
 from django.db import models as django_models
 
-# Local application imports
 from reciply.data import constants
 
 

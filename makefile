@@ -66,7 +66,7 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy ruff_format isort flake8
+lint: mypy ruff_format ruff_check
 
 .PHONY:mypy
 mypy:
@@ -76,9 +76,9 @@ mypy:
 ruff_format:
 	ruff format .
 
-.PHONY:isort
-isort:
-	isort . --profile=black
+.PHONY:ruff_check
+ruff_check:
+	ruff check --fix .
 
 .PHONY:flake8
 flake8:

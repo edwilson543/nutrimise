@@ -1,4 +1,3 @@
-# Django imports
 from django import urls as django_urls
 
 from . import views

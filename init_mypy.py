@@ -2,7 +2,6 @@
 import os
 from typing import Type
 
-# Third party imports
 from configurations.importer import install
 from mypy_django_plugin import main
 

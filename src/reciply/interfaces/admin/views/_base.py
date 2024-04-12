@@ -1,7 +1,6 @@
 # Standard library imports
 from typing import Any
 
-# Django imports
 from django.contrib import admin
 from django.views import generic
 

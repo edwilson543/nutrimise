@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# Third party imports
 import attrs
 
 

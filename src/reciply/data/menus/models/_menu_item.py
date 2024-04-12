@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Django imports
 from django.db import models as django_models
 
-# Local application imports
 from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
 

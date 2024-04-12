@@ -1,5 +1,5 @@
-# Local application imports
 from reciply.domain import ingredients
+
 from tests.factories import data as data_factories
 
 

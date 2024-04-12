@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Third party imports
 import attrs
 
-# Local application imports
 from reciply.data import constants
 from reciply.data.menus import models as menu_models
 

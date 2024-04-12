@@ -1,7 +1,5 @@
-# Third party imports
 import attrs
 
-# Local application imports
 from reciply.data.menus import models as menu_models
 
 from . import _model

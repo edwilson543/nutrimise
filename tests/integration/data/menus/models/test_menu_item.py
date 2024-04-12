@@ -1,10 +1,6 @@
-# Third party imports
 import pytest
-
-# Django imports
 from django import db as django_db
 
-# Local application imports
 from tests.factories import data as data_factories
 
 

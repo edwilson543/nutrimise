@@ -1,7 +1,5 @@
-# Django imports
 from django import urls as django_urls
 
-# Local application imports
 from tests.factories import data as data_factories
 
 

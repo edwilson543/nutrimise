@@ -1,7 +1,6 @@
 # Standard library imports
 import enum
 
-# Django imports
 from django.db import models as django_models
 
 

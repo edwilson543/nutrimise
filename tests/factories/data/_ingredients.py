@@ -1,7 +1,4 @@
-# Third party imports
 import factory
-
-# Local application imports
 from reciply.data.ingredients import models as ingredient_models
 
 

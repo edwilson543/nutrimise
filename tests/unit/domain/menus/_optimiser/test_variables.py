@@ -1,6 +1,6 @@
-# Local application imports
 from reciply.data import constants
 from reciply.domain.menus._optimisation import variables
+
 from tests.factories import domain as domain_factories
 
 

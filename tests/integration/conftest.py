@@ -1,7 +1,6 @@
 # Standard library imports
 from typing import Generator
 
-# Third party imports
 import pytest
 
 

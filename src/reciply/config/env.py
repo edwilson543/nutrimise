@@ -3,7 +3,6 @@ import os
 import pathlib
 from typing import TypeVar
 
-# Third party imports
 import decouple
 
 default_env_file = pathlib.Path(__file__).parents[3] / ".env.dev"

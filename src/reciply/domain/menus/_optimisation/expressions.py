@@ -1,7 +1,5 @@
-# Third party imports
 import pulp as lp
 
-# Local application imports
 from reciply.data import constants
 
 from . import variables

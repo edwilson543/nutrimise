@@ -1,6 +1,6 @@
-# Local application imports
 from reciply.data import constants
 from reciply.domain import recipes
+
 from tests.factories import data as data_factories
 
 

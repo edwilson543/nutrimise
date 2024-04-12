@@ -1,10 +1,8 @@
 # Standard library imports
 from typing import Any
 
-# Django imports
 from django import http
 
-# Local application imports
 from reciply.data.recipes import models as recipe_models
 from reciply.domain import ingredients
 

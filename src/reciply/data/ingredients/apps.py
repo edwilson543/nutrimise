@@ -1,4 +1,3 @@
-# Django imports
 from django import apps
 
 

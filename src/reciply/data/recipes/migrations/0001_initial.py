@@ -1,10 +1,8 @@
-# Django imports
 import django.db.models.deletion
 from django.conf import settings
 from django.contrib.postgres import fields as pg_fields
 from django.db import migrations, models
 
-# Local application imports
 from reciply.data import constants
 
 

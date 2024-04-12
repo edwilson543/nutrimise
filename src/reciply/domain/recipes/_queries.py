@@ -1,7 +1,5 @@
-# Third party imports
 import attrs
 
-# Local application imports
 from reciply.data.recipes import models as recipe_models
 
 from . import _model

@@ -3,15 +3,12 @@ from __future__ import annotations
 # Standard library imports
 from typing import TYPE_CHECKING
 
-# Django imports
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
 
-# Local application imports
 from reciply.data import constants
 
 if TYPE_CHECKING:
-    # Local application imports
     from reciply.data.recipes import models as recipe_models
 
     from . import _menu_item

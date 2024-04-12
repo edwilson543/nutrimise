@@ -13,7 +13,6 @@ def main() -> None:
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "reciply.config.settings")
     os.environ.setdefault("DJANGO_CONFIGURATION", "Settings")
 
-    # Third party imports
     from configurations.management import execute_from_command_line
 
     execute_from_command_line(sys.argv)

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# Local application imports
 from reciply.domain import menus, recipes
 
 

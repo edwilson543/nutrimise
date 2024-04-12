@@ -1,7 +1,5 @@
-# Django imports
 from django.db import models as django_models
 
-# Local application imports
 from reciply.data.ingredients import models as ingredient_models
 
 from . import _recipe

@@ -58,10 +58,6 @@ jobs:
         if: success() || failure()
         run: make ruff_format
 
-      - name: Run isort on all python code
+      - name: Run ruff checker
         if: success() || failure()
-        run: make isort
-
-      - name: Run flake8 on all python code
-        if: success() || failure()
-        run: make flake8
+        run: make ruff_check
