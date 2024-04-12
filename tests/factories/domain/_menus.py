@@ -32,7 +32,7 @@ class MenuRequirements(factory.Factory):
         model = menus.MenuRequirements
 
 
-class NutrientRequirements(factory.Factory):
+class NutrientRequirement(factory.Factory):
     nutrient_id = factory.Sequence(lambda n: n)
     minimum_grams = None
     maximum_grams = None

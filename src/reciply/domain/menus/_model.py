@@ -27,6 +27,9 @@ class Menu:
             requirements=requirements,
         )
 
+    @property
+    def days(self) -> tuple[constants.Day, ...]:
+        return tuple(set(item.day for item in self.items))
 
 @attrs.frozen
 class MenuItem:
