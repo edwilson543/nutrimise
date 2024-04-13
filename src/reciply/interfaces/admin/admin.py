@@ -1,8 +1,7 @@
+from django import forms, http
 from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
-from django import forms
-from django import http
 
 from reciply.data import constants
 from reciply.data.ingredients import models as ingredient_models

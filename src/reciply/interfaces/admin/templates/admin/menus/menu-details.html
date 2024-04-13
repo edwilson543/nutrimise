@@ -29,16 +29,30 @@
         </a>
         <table>
             <tr>
-                {% for day in menu.days %}
+                <th></th>
+                {% for day in days %}
                     <th>{{ day.label }}</th>
                 {% endfor %}
             </tr>
-            {% for menu_ingredient in menu_ingredients %}
+            {{ menu_items }}
+            {% for meal_time, days in meal_schedule.items %}
                 <tr>
-                    <td>{{ menu_ingredient.ingredient.name_singular }}</td>
-                    <td>{{ menu_ingredient.ingredient.category }}</td>
-                    <td>{{ menu_ingredient.quantity | floatformat:"0" }}</td>
-                    <td>{{ menu_ingredient.ingredient.units }}</td>
+                    <td><b>{{ meal_time.label }}</b></td>
+                    {% for day, menu_item in days.items %}
+                        {% if menu_item.recipe_id %}
+                            <td>
+                                <a href="{% url 'recipe-details' recipe_id=menu_item.recipe_id %}" target="_blank">
+                                    {{ menu_item.recipe.name }}
+                                </a>
+                            </td>
+                        {% else %}
+                            <td>
+                                <a href="{% url 'admin:menus_menuitem_change' object_id=menu_item.id %}" target="_blank">
+                                    Select
+                                </a>
+                            </td>
+                        {% endif %}
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </table>

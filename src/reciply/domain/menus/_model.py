@@ -37,6 +37,13 @@ class Menu:
             sorted(set(item.day for item in self.items), key=lambda day: day.value)
         )
 
+    @property
+    def meal_schedule(self) -> dict[constants.MealTime, dict[constants.Day, MenuItem]]:
+        schedule: dict[constants.MealTime, dict[constants.Day, MenuItem]] = {}
+        for item in self.items:
+            schedule[item.meal_time][item.day] = item
+        return schedule
+
 
 @attrs.define
 class MenuItem:
