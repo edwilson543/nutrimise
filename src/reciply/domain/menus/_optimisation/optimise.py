@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+import attrs
 import pulp as lp
 
 from reciply.domain import menus, recipes
 
 from . import constraints, inputs, variables
+
+
+@attrs.frozen
+class UnableToOptimiseMenu(Exception):
+    menu_id: int
 
 
 def optimise_recipes_for_menu(
@@ -22,9 +28,12 @@ def optimise_recipes_for_menu(
         inputs=inputs_, variables_=variables_
     ):
         problem += constraint
+
     problem.solve(solver=lp.PULP_CBC_CMD(msg=False))
+    if not problem.status == lp.constants.LpStatusOptimal:
+        raise UnableToOptimiseMenu(menu_id=menu.id)
+
     solution = _extract_solution(decision_variables=variables_.decision_variables)
-    _verify_solution(solution=solution, menu=menu)
     return solution
 
 
@@ -37,7 +46,3 @@ def _extract_solution(
             variable.menu_item.update_recipe_id(recipe_id=variable.recipe.id)
             solution.append(variable.menu_item)
     return tuple(solution)
-
-
-def _verify_solution(*, solution: tuple[menus.MenuItem, ...], menu: menus.Menu) -> None:
-    pass

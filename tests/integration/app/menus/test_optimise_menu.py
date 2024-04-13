@@ -7,9 +7,13 @@ from tests.factories import data as data_factories
 def test_optimises_menu():
     menu = data_factories.Menu()
     data_factories.MenuRequirements(menu=menu)
-    data_factories.MenuItem(menu=menu)
+    menu_item = data_factories.MenuItem(menu=menu)
+    recipe = data_factories.Recipe(meal_times=[menu_item.meal_time])
 
     menus.optimise_menu(menu_id=menu.id)
+
+    menu_item.refresh_from_db()
+    assert menu_item.recipe_id == recipe.id
 
 
 def test_raises_for_menu_without_requirements():

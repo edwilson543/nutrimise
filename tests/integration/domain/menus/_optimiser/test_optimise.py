@@ -2,6 +2,7 @@ from reciply.data import constants
 from reciply.domain import menus, recipes
 
 from tests.factories import domain as domain_factories
+import pytest
 
 
 def _lunch_and_dinner_menu(
@@ -24,6 +25,9 @@ def _lunch_and_dinner_menu(
     )
     requirements = requirements or domain_factories.MenuRequirements()
     return domain_factories.Menu(items=(lunch, dinner), requirements=requirements)
+
+
+# Basic requirements.
 
 
 def test_respects_menu_item_assignment_constraints():
@@ -52,6 +56,19 @@ def test_respects_recipe_meal_time_restrictions():
     assert solution[1].recipe_id == dinner_recipe.id
 
 
+def test_raises_if_insufficient_recipes_are_considered():
+    menu_item = domain_factories.MenuItem(recipe_id=None)
+    menu = domain_factories.Menu(items=[menu_item])
+
+    with pytest.raises(menus.UnableToOptimiseMenu) as exc:
+        menus.optimise_recipes_for_menu(menu=menu, recipes_to_consider=())
+
+    assert exc.value.menu_id == menu.id
+
+
+# Maximum recipe occurrences requirements.
+
+
 def test_respects_maximum_occurrences_per_recipe_constraint():
     menu = _lunch_and_dinner_menu()
 
@@ -68,8 +85,24 @@ def test_respects_maximum_occurrences_per_recipe_constraint():
 
 
 def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_constraint():
-    pass
+    meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
+    pre_selected_recipe = domain_factories.Recipe(meal_times=meal_times)
+    other_recipe = domain_factories.Recipe(meal_times=meal_times)
 
+    requirements = domain_factories.MenuRequirements(maximum_occurrences_per_recipe=1)
+    menu = _lunch_and_dinner_menu(
+        requirements=requirements, lunch=pre_selected_recipe, dinner=None
+    )
+
+    solution = menus.optimise_recipes_for_menu(
+        menu=menu, recipes_to_consider=(pre_selected_recipe, other_recipe)
+    )
+
+    assert len(solution) == 1
+    assert solution[0].recipe_id == other_recipe.id
+
+
+# Minimum nutrient constraints.
 
 def test_respects_minimum_nutrient_requirement_constraint():
     nutrient = domain_factories.Nutrient()
@@ -137,6 +170,9 @@ def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item():
 
     assert len(solution) == 1
     assert solution[0].recipe_id == ideal_dinner.id
+
+
+# Maximum nutrient constraints.
 
 
 def test_respects_maximum_nutrient_requirement_constraint():
