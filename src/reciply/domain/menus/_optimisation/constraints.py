@@ -82,7 +82,7 @@ def _daily_nutrient_requirements(
             day=day,
             nutrient_id=requirement.nutrient_id,
         )
-        if requirement.minimum_grams is not None:
-            yield total_nutrient_grams_for_day >= requirement.minimum_grams
-        if requirement.maximum_grams is not None:
-            yield total_nutrient_grams_for_day <= requirement.maximum_grams
+        if requirement.minimum_quantity is not None:
+            yield total_nutrient_quantity_for_day >= requirement.minimum_quantity
+        if requirement.maximum_quantity is not None:
+            yield total_nutrient_quantity_for_day <= requirement.maximum_quantity

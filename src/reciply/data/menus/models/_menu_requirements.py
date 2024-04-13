@@ -36,11 +36,11 @@ class NutrientRequirement(django_models.Model):
         "ingredients.Nutrient", on_delete=django_models.PROTECT, related_name="+"
     )
 
-    minimum_grams = django_models.FloatField(null=True)
+    minimum_quantity = django_models.FloatField(null=True)
 
-    maximum_grams = django_models.FloatField(null=True)
+    maximum_quantity = django_models.FloatField(null=True)
 
-    target_grams = django_models.FloatField(null=True)
+    target_quantity = django_models.FloatField(null=True)
 
     enforcement_interval = django_models.TextField(
         choices=constants.NutrientRequirementEnforcementInterval.choices

@@ -94,9 +94,9 @@ class MenuRequirements:
 @attrs.frozen
 class NutrientRequirement:
     nutrient_id: int
-    minimum_grams: float | None
-    maximum_grams: float | None
-    target_grams: float | None
+    minimum_quantity: float | None
+    maximum_quantity: float | None
+    target_quantity: float | None
     enforcement_interval: constants.NutrientRequirementEnforcementInterval
 
     @classmethod
@@ -106,9 +106,9 @@ class NutrientRequirement:
         return tuple(
             cls(
                 nutrient_id=requirement.nutrient_id,
-                minimum_grams=requirement.minimum_grams,
-                maximum_grams=requirement.maximum_grams,
-                target_grams=requirement.target_grams,
+                minimum_quantity=requirement.minimum_quantity,
+                maximum_quantity=requirement.maximum_quantity,
+                target_quantity=requirement.target_quantity,
                 enforcement_interval=constants.NutrientRequirementEnforcementInterval(
                     requirement.enforcement_interval
                 ),

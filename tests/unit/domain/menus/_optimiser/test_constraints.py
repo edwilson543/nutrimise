@@ -8,7 +8,7 @@ class TestNutrientGramsForDay:
     def test_sums_variables_for_given_day_only(self):
         nutrient = domain_factories.Nutrient()
         requirement = domain_factories.NutrientRequirement(
-            minimum_grams=11.25, maximum_grams=4.75
+            minimum_quantity=11.25, maximum_quantity=4.75
         )
 
         # Creat a menu consisting of Monday lunch & dinner.
@@ -63,8 +63,8 @@ class TestNutrientGramsForDay:
             f"recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + recipe_{recipe.id}_for_menu_item_{monday_dinner.id} <= 1",
             f"recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= 1",
             # Nutrient requirement constraints.
-            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} >= {requirement.minimum_grams}",
-            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= {requirement.maximum_grams}",
+            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} >= {requirement.minimum_quantity}",
+            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= {requirement.maximum_quantity}",
         ]
 
         assert all_constraints == expected_constraints

@@ -35,9 +35,9 @@ class Menu(factory.Factory):
 
 class NutrientRequirement(factory.Factory):
     nutrient_id = factory.Sequence(lambda n: n)
-    minimum_grams = None
-    maximum_grams = None
-    target_grams = None
+    minimum_quantity = None
+    maximum_quantity = None
+    target_quantity = None
     enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:

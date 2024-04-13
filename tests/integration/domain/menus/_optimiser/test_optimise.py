@@ -107,20 +107,20 @@ def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_con
 
 def test_respects_minimum_nutrient_requirement_constraint():
     nutrient = domain_factories.Nutrient()
-    minimum_grams = 10
+    minimum_quantity = 10
 
     high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=minimum_grams + 1
+        nutrient=nutrient, nutrient_quantity=minimum_quantity + 1
     )
     low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=minimum_grams - 1
+        nutrient=nutrient, nutrient_quantity=minimum_quantity - 1
     )
 
     menu_item = domain_factories.MenuItem(
         recipe_id=None, meal_time=constants.MealTime.LUNCH
     )
     nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, minimum_grams=minimum_grams
+        nutrient_id=nutrient.id, minimum_quantity=minimum_quantity
     )
     menu_requirements = domain_factories.MenuRequirements(
         nutrient_requirements=(nutrition_requirement,)
@@ -139,10 +139,12 @@ def test_respects_minimum_nutrient_requirement_constraint():
 def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item():
     nutrient = domain_factories.Nutrient()
     nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, minimum_grams=10
+        nutrient_id=nutrient.id, minimum_quantity=10
     )
-    lunch_grams = nutrition_requirement.minimum_grams / 2
-    min_dinner_grams = nutrition_requirement.minimum_grams - lunch_grams
+    lunch_nutrient_quantity = nutrition_requirement.minimum_quantity / 2
+    min_dinner_nutrient_quantity = (
+        nutrition_requirement.minimum_quantity - lunch_nutrient_quantity
+    )
 
     # Create two dinner options that can make up the nutrition deficit.
     lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
@@ -178,21 +180,21 @@ def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item():
 
 def test_respects_maximum_nutrient_requirement_constraint():
     nutrient = domain_factories.Nutrient()
-    maximum_grams = 10
+    maximum_quantity = 10
 
     # Create two recipes above / below the minimum nutrient requirements.
     low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=maximum_grams - 1
+        nutrient=nutrient, nutrient_quantity=maximum_quantity - 1
     )
     high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=maximum_grams + 1
+        nutrient=nutrient, nutrient_quantity=maximum_quantity + 1
     )
 
     menu_item = domain_factories.MenuItem(
         recipe_id=None, meal_time=constants.MealTime.LUNCH
     )
     nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, maximum_grams=maximum_grams
+        nutrient_id=nutrient.id, maximum_quantity=maximum_quantity
     )
     menu_requirements = domain_factories.MenuRequirements(
         nutrient_requirements=(nutrition_requirement,)
@@ -211,10 +213,12 @@ def test_respects_maximum_nutrient_requirement_constraint():
 def test_respects_maximum_nutrient_requirement_constraint_with_fixed_item():
     nutrient = domain_factories.Nutrient()
     nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, maximum_grams=8.3
+        nutrient_id=nutrient.id, maximum_quantity=8.3
     )
-    lunch_grams = nutrition_requirement.maximum_grams / 2
-    max_dinner_grams = nutrition_requirement.maximum_grams - lunch_grams
+    lunch_nutrient_quantity = nutrition_requirement.maximum_quantity / 2
+    max_dinner_nutrient = (
+        nutrition_requirement.maximum_quantity - lunch_nutrient_quantity
+    )
 
     # Create two dinner options.
     lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
