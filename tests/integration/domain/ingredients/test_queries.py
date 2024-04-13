@@ -1,3 +1,4 @@
+from reciply.data import constants
 from reciply.domain import ingredients
 
 from tests.factories import data as data_factories
@@ -39,11 +40,13 @@ class TestNutritionalInformationForRecipe:
         assert result == [
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
-                nutrient_quantity_grams=375.0,
+                nutrient_quantity=375.0,
+                units=constants.NutrientUnit.GRAMS,
             ),
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
-                nutrient_quantity_grams=75.0,
+                nutrient_quantity=75.0,
+                units=constants.NutrientUnit.GRAMS,
             ),
         ]
 
@@ -72,10 +75,12 @@ class TestNutritionalInformationForRecipe:
         assert result == [
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
-                nutrient_quantity_grams=175.0,
+                nutrient_quantity=175.0,
+                units=constants.NutrientUnit.GRAMS,
             ),
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
-                nutrient_quantity_grams=12.5,
+                nutrient_quantity=12.5,
+                units=constants.NutrientUnit.GRAMS,
             ),
         ]

@@ -1,4 +1,5 @@
 import factory
+from reciply.data import constants
 from reciply.domain import ingredients
 
 
@@ -12,7 +13,8 @@ class Nutrient(factory.Factory):
 
 class NutritionalInformation(factory.Factory):
     nutrient = factory.SubFactory(Nutrient)
-    nutrient_quantity_grams = 1
+    nutrient_quantity = 1
+    units = constants.NutrientUnit.GRAMS
 
     class Meta:
         model = ingredients.NutritionalInformation

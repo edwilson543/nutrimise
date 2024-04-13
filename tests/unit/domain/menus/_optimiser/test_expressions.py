@@ -20,10 +20,10 @@ class TestNutrientGramsForDay:
 
         # Create two recipes that could be used for Monday and or Tuesday lunch.
         nutritional_information = domain_factories.NutritionalInformation(
-            nutrient=nutrient, nutrient_quantity_grams=2
+            nutrient=nutrient, nutrient_quantity=2
         )
         other_nutritional_information = domain_factories.NutritionalInformation(
-            nutrient=other_nutrient, nutrient_quantity_grams=7
+            nutrient=other_nutrient, nutrient_quantity=7
         )
         recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(
@@ -34,7 +34,7 @@ class TestNutrientGramsForDay:
         )
 
         nutritional_information = domain_factories.NutritionalInformation(
-            nutrient=nutrient, nutrient_quantity_grams=3
+            nutrient=nutrient, nutrient_quantity=3
         )
         other_recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(nutritional_information,),
@@ -46,7 +46,7 @@ class TestNutrientGramsForDay:
         )
         variables_ = variables.Variables.from_inputs(inputs_)
 
-        total_nutrient_grams = expressions.total_nutrient_grams_for_day(
+        total_nutrient_quantity = expressions.total_nutrient_quantity_for_day(
             inputs=inputs_,
             variables=variables_,
             day=constants.Day.MONDAY,
@@ -58,4 +58,4 @@ class TestNutrientGramsForDay:
             f"2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id}",
             f"3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id}",
         ]
-        assert str(total_nutrient_grams) in options
+        assert str(total_nutrient_quantity) in options

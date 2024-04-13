@@ -15,10 +15,10 @@ class Recipe(factory.Factory):
 
     @classmethod
     def any_meal_time_with_nutrient(
-        cls, *, nutrient: ingredients.Nutrient, nutrient_quantity_grams: int
+        cls, *, nutrient: ingredients.Nutrient, nutrient_quantity: float
     ) -> recipes.Recipe:
         high_nutrition = _ingredients.NutritionalInformation(
-            nutrient=nutrient, nutrient_quantity_grams=nutrient_quantity_grams
+            nutrient=nutrient, nutrient_quantity=nutrient_quantity
         )
         return cls.create(
             nutritional_information_per_serving=(high_nutrition,),

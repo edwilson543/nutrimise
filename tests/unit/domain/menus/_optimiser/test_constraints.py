@@ -28,7 +28,7 @@ class TestNutrientGramsForDay:
 
         # Create some recipes that could be had for both lunch and dinner
         nutritional_information = domain_factories.NutritionalInformation(
-            nutrient=nutrient, nutrient_quantity_grams=7.6
+            nutrient=nutrient, nutrient_quantity=7.6
         )
         recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(nutritional_information,),
@@ -36,7 +36,7 @@ class TestNutrientGramsForDay:
         )
 
         other_nutritional_information = domain_factories.NutritionalInformation(
-            nutrient=nutrient, nutrient_quantity_grams=9.1
+            nutrient=nutrient, nutrient_quantity=9.1
         )
         other_recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(other_nutritional_information,),

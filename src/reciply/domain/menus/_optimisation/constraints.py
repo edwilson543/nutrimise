@@ -75,7 +75,8 @@ def _daily_nutrient_requirements(
     requirement: menus.NutrientRequirement,
 ) -> Generator[lp.LpConstraint, None, None]:
     for day in inputs.menu.days:
-        total_nutrient_grams_for_day = expressions.total_nutrient_grams_for_day(
+        # TODO: ensure units are consistent.
+        total_nutrient_quantity_for_day = expressions.total_nutrient_quantity_for_day(
             inputs=inputs,
             variables=variables_,
             day=day,

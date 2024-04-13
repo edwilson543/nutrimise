@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import attrs
 
+from reciply.data import constants
+
 
 @attrs.frozen
 class Nutrient:
@@ -16,4 +18,5 @@ class NutritionalInformation:
     """
 
     nutrient: Nutrient
-    nutrient_quantity_grams: float
+    nutrient_quantity: float
+    units: constants.NutrientUnit

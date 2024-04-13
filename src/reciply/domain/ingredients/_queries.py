@@ -3,6 +3,7 @@ from __future__ import annotations
 # Standard library imports
 import collections
 
+from reciply.data import constants
 from reciply.data.recipes import models as recipe_models
 
 from . import _model
@@ -25,7 +26,7 @@ def get_nutritional_information_for_recipe(
         for (
             ingredient_nutrition
         ) in recipe_ingredient.ingredient.nutritional_information.all():
-            nutrient_quantity_grams = (
+            nutrient_quantity = (
                 grams_of_ingredient
                 * ingredient_nutrition.quantity_per_gram
                 / per_serving_denominator
@@ -34,12 +35,13 @@ def get_nutritional_information_for_recipe(
                 id=ingredient_nutrition.nutrient.id,
                 name=ingredient_nutrition.nutrient.name,
             )
-            recipe_nutrition[nutrient] += nutrient_quantity_grams
+            recipe_nutrition[nutrient] += nutrient_quantity
 
     nutritional_information = (
         _model.NutritionalInformation(
             nutrient=nutrient,
-            nutrient_quantity_grams=value,
+            nutrient_quantity=value,
+            units=constants.NutrientUnit.GRAMS,
         )
         for nutrient, value in recipe_nutrition.items()
     )
