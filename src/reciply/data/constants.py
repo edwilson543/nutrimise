@@ -30,3 +30,7 @@ class MealTime(django_models.TextChoices):
 
 class NutrientRequirementEnforcementInterval(django_models.TextChoices):
     DAILY = "DAILY", "Daily"
+
+
+class NutrientUnit(django_models.TextChoices):
+    GRAMS = "GRAMS", "Grams"

@@ -1,5 +1,7 @@
 from django.db import models as django_models
 
+from reciply.data import constants
+
 from . import _ingredient, _nutrient
 
 
@@ -19,6 +21,8 @@ class IngredientNutritionalInformation(django_models.Model):
     )
 
     quantity_per_gram = django_models.FloatField()
+
+    units = django_models.TextField(choices=constants.NutrientUnit.choices)
 
     class Meta:
         constraints = [

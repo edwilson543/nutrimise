@@ -1,4 +1,5 @@
 import factory
+from reciply.data import constants
 from reciply.data.ingredients import models as ingredient_models
 
 
@@ -23,6 +24,7 @@ class IngredientNutritionalInformation(factory.django.DjangoModelFactory):
     ingredient = factory.SubFactory(Ingredient)
     nutrient = factory.SubFactory(Nutrient)
     quantity_per_gram = 0.5
+    units = constants.NutrientUnit
 
     class Meta:
         model = ingredient_models.IngredientNutritionalInformation
