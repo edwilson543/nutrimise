@@ -1,0 +1,78 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls i18n %}
+
+{% block title %}
+    {{ menu.name }} {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label='menus' %}">menus</a>
+        &rsaquo; <a href="{% url 'admin:menus_menu_changelist' %}">menus</a>
+        &rsaquo; {{ menu.name }}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div id="basic-info">
+        <h1>{{ menu.name }}</h1>
+        <p>{{menu.description}}</p>
+    </div>
+    <hr>
+
+    <div id="menu-items">
+        <h2>Meal schedule</h2>
+        <a href="{% url 'admin:menus_menu_change' object_id=menu.id %}" target="_blank">
+            Edit
+        </a>
+        <table>
+            <tr>
+                {% for day in menu.days %}
+                    <th>{{ day.label }}</th>
+                {% endfor %}
+            </tr>
+            {% for menu_ingredient in menu_ingredients %}
+                <tr>
+                    <td>{{ menu_ingredient.ingredient.name_singular }}</td>
+                    <td>{{ menu_ingredient.ingredient.category }}</td>
+                    <td>{{ menu_ingredient.quantity | floatformat:"0" }}</td>
+                    <td>{{ menu_ingredient.ingredient.units }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+
+    <div id="menu-requirements">
+        <h2>Requirements</h2>
+        {% if not menu.requirements %}
+            <p>Menu has no requirements!</p>
+            Select here
+        {% else %}
+            <p>
+                <b>Maximum occurrences per recipe:</b> {{ menu.menu_requirements.maximum_occurrences_per_recipe }}
+            </p>
+        {% endif %}
+    </div>
+
+    <div id="nutritional-information">
+        <h2>Nutritional information</h2>
+        <h3>Per serving</h3>
+        <table>
+            <tr>
+                <th>Nutrient</th>
+                <th>Grams</th>
+            </tr>
+            {% for nutrient in nutritional_information %}
+                <tr>
+                    <td>{{ nutrient.nutrient.name }}</td>
+                    <td>{{ nutrient.nutrient_quantity_grams | floatformat:"1" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <hr>
+
+{% endblock %}

@@ -9,6 +9,8 @@ from reciply.data.menus import models as menu_models
 @attrs.frozen
 class Menu:
     id: int
+    name: str
+    description: str
     items: tuple[MenuItem, ...]
     requirements: MenuRequirements | None
 
@@ -23,13 +25,17 @@ class Menu:
 
         return cls(
             id=menu.id,
+            name=menu.name,
+            description=menu.description,
             items=MenuItem.from_orm_model(items=list(menu.items.all())),
             requirements=requirements,
         )
 
     @property
     def days(self) -> tuple[constants.Day, ...]:
-        return tuple(set(item.day for item in self.items))
+        return tuple(
+            sorted(set(item.day for item in self.items), key=lambda day: day.value)
+        )
 
 
 @attrs.define

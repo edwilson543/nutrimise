@@ -1,8 +1,8 @@
+import pytest
 from reciply.data import constants
 from reciply.domain import menus, recipes
 
 from tests.factories import domain as domain_factories
-import pytest
 
 
 def _lunch_and_dinner_menu(
@@ -103,6 +103,7 @@ def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_con
 
 
 # Minimum nutrient constraints.
+
 
 def test_respects_minimum_nutrient_requirement_constraint():
     nutrient = domain_factories.Nutrient()

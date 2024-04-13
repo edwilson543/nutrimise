@@ -25,6 +25,8 @@ class MenuRequirements(factory.Factory):
 
 class Menu(factory.Factory):
     id = factory.Sequence(lambda n: n)
+    name = factory.Sequence(lambda n: f"menu-{n}")
+    description = "Some description"
     items = factory.LazyFunction(tuple)
     requirements = factory.SubFactory(MenuRequirements)
 

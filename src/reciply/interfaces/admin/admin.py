@@ -19,7 +19,7 @@ admin.site.site_title = "Reciply"
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "user_actions"]
     ordering = ["name"]
-    search_fields = ["name", "author"]
+    search_fields = ["name"]
 
     @admin.display(description="Actions")
     def user_actions(self, recipe: recipe_models.Recipe) -> safestring.SafeString:
@@ -59,11 +59,22 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 @admin.register(menu_models.Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", "name", "number_of_items"]
+    list_display = ["id", "name", "author", "meals", "user_actions"]
     ordering = ["name"]
+    search_fields = ["name"]
+
+    @admin.display(description="Actions")
+    def user_actions(self, menu: menu_models.Menu) -> safestring.SafeString:
+        detail_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu.id})
+        edit_url = django_urls.reverse(
+            "admin:menus_menu_change", kwargs={"object_id": menu.id}
+        )
+        return safestring.mark_safe(
+            f'<a href="{detail_url}"><b>View</b></a> | <a href="{edit_url}"><b>Edit</b></a>'
+        )
 
     @admin.display()
-    def number_of_items(self, menu: menu_models.Menu) -> int:
+    def meals(self, menu: menu_models.Menu) -> int:
         return menu.items.count()
 
 

@@ -23,6 +23,7 @@ class MenuItem(django_models.Model):
         recipe_models.Recipe,
         on_delete=django_models.CASCADE,
         null=True,
+        blank=True,
         related_name="recipes",
     )
 
