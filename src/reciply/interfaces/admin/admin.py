@@ -1,6 +1,8 @@
 from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
+from django import forms
+from django import http
 
 from reciply.data import constants
 from reciply.data.ingredients import models as ingredient_models
@@ -63,6 +65,16 @@ class MenuAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
 
+    class CreateForm(forms.ModelForm):
+        days = forms.MultipleChoiceField(choices=constants.Day.choices)
+        meal_times = forms.MultipleChoiceField(choices=constants.MealTime.choices)
+
+        class Meta:
+            model = menu_models.Menu
+            fields = ["author", "name", "description"]
+
+    form = CreateForm
+
     @admin.display(description="Actions")
     def user_actions(self, menu: menu_models.Menu) -> safestring.SafeString:
         detail_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu.id})
@@ -76,6 +88,30 @@ class MenuAdmin(admin.ModelAdmin):
     @admin.display()
     def meals(self, menu: menu_models.Menu) -> int:
         return menu.items.count()
+
+    def save_model(
+        self,
+        request: http.HttpRequest,
+        obj: menu_models.Menu,
+        form: CreateForm,
+        change: bool,
+    ) -> None:
+        """
+        Create the menu with the specified menu item schedule.
+        """
+        super().save_model(request=request, obj=obj, form=form, change=change)
+        days = form.cleaned_data["days"]
+        meal_times = form.cleaned_data["meal_times"]
+        if change:
+            for menu_item in obj.items.all():
+                valid_day = menu_item.day in days
+                valid_meal_time = menu_item.meal_time in meal_times
+                if not (valid_day and valid_meal_time):
+                    menu_item.delete()
+
+        for day in days:
+            for meal_time in meal_times:
+                obj.items.get_or_create(day=day, meal_time=meal_time)
 
 
 @admin.register(menu_models.MenuItem)
