@@ -97,6 +97,7 @@ class NutrientRequirement:
     minimum_quantity: float | None
     maximum_quantity: float | None
     target_quantity: float | None
+    units: constants.NutrientUnit
     enforcement_interval: constants.NutrientRequirementEnforcementInterval
 
     @classmethod
@@ -109,6 +110,7 @@ class NutrientRequirement:
                 minimum_quantity=requirement.minimum_quantity,
                 maximum_quantity=requirement.maximum_quantity,
                 target_quantity=requirement.target_quantity,
+                units=constants.NutrientUnit(requirement.units),
                 enforcement_interval=constants.NutrientRequirementEnforcementInterval(
                     requirement.enforcement_interval
                 ),

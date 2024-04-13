@@ -42,6 +42,8 @@ class NutrientRequirement(django_models.Model):
 
     target_quantity = django_models.FloatField(null=True)
 
+    units = django_models.TextField(choices=constants.NutrientUnit.choices)
+
     enforcement_interval = django_models.TextField(
         choices=constants.NutrientRequirementEnforcementInterval.choices
     )

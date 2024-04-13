@@ -38,6 +38,7 @@ class NutrientRequirement(factory.Factory):
     minimum_quantity = None
     maximum_quantity = None
     target_quantity = None
+    units = constants.NutrientUnit.GRAMS
     enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:
