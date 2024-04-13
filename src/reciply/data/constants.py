@@ -26,3 +26,7 @@ class MealTime(django_models.TextChoices):
     BREAKFAST = "BREAKFAST", "Breakfast"
     LUNCH = "LUNCH", "Lunch"
     DINNER = "DINNER", "Dinner"
+
+
+class NutrientRequirementEnforcementInterval(django_models.TextChoices):
+    DAILY = "DAILY", "Daily"

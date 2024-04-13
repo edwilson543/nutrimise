@@ -1,6 +1,5 @@
 import factory
 from reciply.data import constants
-from reciply.data.menus import models as menu_models
 from reciply.domain import menus
 
 
@@ -39,7 +38,7 @@ class NutrientRequirement(factory.Factory):
     minimum_grams = None
     maximum_grams = None
     target_grams = None
-    enforcement_interval = menu_models.NutrientRequirementEnforcementInterval.DAILY
+    enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:
         model = menus.NutrientRequirement

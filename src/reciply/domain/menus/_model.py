@@ -97,7 +97,7 @@ class NutrientRequirement:
     minimum_grams: float | None
     maximum_grams: float | None
     target_grams: float | None
-    enforcement_interval: menu_models.NutrientRequirementEnforcementInterval
+    enforcement_interval: constants.NutrientRequirementEnforcementInterval
 
     @classmethod
     def from_orm_model(
@@ -109,7 +109,7 @@ class NutrientRequirement:
                 minimum_grams=requirement.minimum_grams,
                 maximum_grams=requirement.maximum_grams,
                 target_grams=requirement.target_grams,
-                enforcement_interval=menu_models.NutrientRequirementEnforcementInterval(
+                enforcement_interval=constants.NutrientRequirementEnforcementInterval(
                     requirement.enforcement_interval
                 ),
             )

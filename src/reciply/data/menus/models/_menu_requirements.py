@@ -1,10 +1,8 @@
 from django.db import models as django_models
 
+from reciply.data import constants
+
 from . import _menu
-
-
-class NutrientRequirementEnforcementInterval(django_models.TextChoices):
-    DAILY = "DAILY", "Daily"
 
 
 class MenuRequirements(django_models.Model):
@@ -45,5 +43,5 @@ class NutrientRequirement(django_models.Model):
     target_grams = django_models.FloatField(null=True)
 
     enforcement_interval = django_models.TextField(
-        choices=NutrientRequirementEnforcementInterval.choices
+        choices=constants.NutrientRequirementEnforcementInterval.choices
     )

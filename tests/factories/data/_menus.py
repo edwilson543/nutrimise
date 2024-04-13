@@ -36,7 +36,7 @@ class NutrientRequirement(factory.django.DjangoModelFactory):
     minimum_grams = None
     maximum_grams = None
     target_grams = None
-    enforcement_interval = menu_models.NutrientRequirementEnforcementInterval.DAILY
+    enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:
         model = menu_models.NutrientRequirement

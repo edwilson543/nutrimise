@@ -3,7 +3,7 @@ from typing import Generator
 import attrs
 import pulp as lp
 
-from reciply.data.menus import models as menu_models
+from reciply.data import constants
 from reciply.domain import menus
 
 from . import expressions, inputs, variables
@@ -11,7 +11,7 @@ from . import expressions, inputs, variables
 
 @attrs.frozen
 class EnforcementIntervalNotImplemented(Exception):
-    interval: menu_models.NutrientRequirementEnforcementInterval
+    interval: constants.NutrientRequirementEnforcementInterval
 
 
 def yield_all_constraints(
@@ -56,7 +56,7 @@ def _nutrient_requirements(
 ) -> Generator[lp.LpConstraint, None, None]:
     for nutrient_requirement in inputs.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
-            case menu_models.NutrientRequirementEnforcementInterval.DAILY:
+            case constants.NutrientRequirementEnforcementInterval.DAILY:
                 yield from _daily_nutrient_requirements(
                     inputs=inputs,
                     requirement=nutrient_requirement,
