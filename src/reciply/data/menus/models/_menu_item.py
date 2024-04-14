@@ -33,7 +33,7 @@ class MenuItem(django_models.Model):
         max_length=16, choices=constants.MealTime.choices
     )
 
-    optimiser_generated = django_models.BooleanField(default=False)
+    optimiser_generated = django_models.BooleanField(default=True)
 
     created_at = django_models.DateTimeField(auto_now_add=True)
 
@@ -50,7 +50,7 @@ class MenuItem(django_models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.meal_time} ({self.day}) for {self.menu}"
+        return f"Day {self.day} {self.meal_time.title()}"
 
     # ----------
     # Mutators

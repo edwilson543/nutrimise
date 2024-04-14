@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                         max_length=16,
                     ),
                 ),
-                ("optimiser_generated", models.BooleanField(default=False)),
+                ("optimiser_generated", models.BooleanField(default=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("updated_at", models.DateTimeField(auto_now=True)),
                 (

@@ -58,11 +58,29 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 # ----------
 
 
+class MenuRequirementsInline(admin.TabularInline):
+    model = menu_models.MenuRequirements
+
+
+class MenuItemInline(admin.TabularInline):
+    model = menu_models.MenuItem
+
+    list_display = ["id", "menu", "recipe", "format_day", "meal_time"]
+    ordering = ["menu", "day", "meal_time"]
+    search_fields = ["menu"]
+
+    @admin.display()
+    def format_day(self, menu_item: menu_models.MenuItem) -> str:
+        return constants.Day(int(menu_item.day)).label.title()
+
+
 @admin.register(menu_models.Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "meals", "user_actions"]
     ordering = ["name"]
     search_fields = ["name"]
+
+    inlines = [MenuRequirementsInline, MenuItemInline]
 
     class CreateForm(forms.ModelForm):
         days = forms.MultipleChoiceField(choices=constants.Day.choices)

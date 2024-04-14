@@ -18,6 +18,9 @@ class MenuRequirements(django_models.Model):
 
     # TODO -> dietary requirements M2M field.
 
+    def __str__(self) -> str:
+        return f"Requirements for '{self.menu.name}'"
+
 
 class NutrientRequirement(django_models.Model):
     """
