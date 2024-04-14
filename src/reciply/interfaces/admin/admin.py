@@ -147,10 +147,18 @@ class MenuItemAdmin(admin.ModelAdmin):
 # ----------
 
 
+class IngredientNutritionalInformationInline(admin.TabularInline):
+    model = ingredient_models.IngredientNutritionalInformation
+
+
 @admin.register(ingredient_models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "units"]
     ordering = ["name_singular"]
+
+    inlines = [
+        IngredientNutritionalInformationInline,
+    ]
 
     @admin.display(description="Name")
     def name(self, ingredient: ingredient_models.Ingredient) -> str:
