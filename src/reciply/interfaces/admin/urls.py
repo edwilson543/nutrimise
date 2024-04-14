@@ -15,4 +15,9 @@ urlpatterns = [
         view=views.MenuDetails.as_view(),
         name="menu-details",
     ),
+    django_urls.path(
+        route="menus/<int:menu_id>/optimise/",
+        view=views.OptimiseMenu.as_view(),
+        name="menu-optimise",
+    ),
 ]

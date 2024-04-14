@@ -1,2 +1,2 @@
-from ._menus import MenuDetails
+from ._menus import MenuDetails, OptimiseMenu
 from ._recipes import RecipeDetails

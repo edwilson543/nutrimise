@@ -22,6 +22,13 @@
     </div>
     <hr>
 
+    <form id="optimise-menu" action="{% url 'menu-optimise' menu_id=menu.id %}" method="post">
+        {% csrf_token %}
+        <div class="submit-row">
+            <input type="submit" value="Optimise" class="default" name="_save">
+        </div>
+    </form>
+
     <div id="menu-items">
         <h2>Meal schedule</h2>
         <a href="{% url 'admin:menus_menu_change' object_id=menu.id %}" target="_blank">

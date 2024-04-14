@@ -3,7 +3,11 @@ import collections
 from typing import Any
 
 from django import http
+from django import urls as django_urls
+from django.contrib import messages
+from django.views import generic
 
+from reciply.app import menus as menus_app
 from reciply.data import constants
 from reciply.data.menus import models as menu_models
 
@@ -43,3 +47,20 @@ class MenuDetails(_base.AdminTemplateView):
                 constants.Day(item.day)
             ] = item
         return dict(meal_schedule)
+
+
+class OptimiseMenu(generic.View):
+    def post(
+        self, request: http.HttpRequest, *args: object, **kwargs: int
+    ) -> http.HttpResponseRedirect:
+        menu_id = kwargs["menu_id"]
+        try:
+            menus_app.optimise_menu(menu_id=menu_id)
+        except menus_app.MenuHasNoRequirements:
+            messages.error(request, "The menu has no requirements to optimise against.")
+        except menus_app.UnableToOptimiseMenu:
+            messages.error(request, "Menu requirements could not be met.")
+        else:
+            messages.success(request, "Menu has been optimised.")
+        redirect_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu_id})
+        return http.HttpResponseRedirect(redirect_to=redirect_url)

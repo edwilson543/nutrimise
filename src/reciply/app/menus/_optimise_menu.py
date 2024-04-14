@@ -4,18 +4,24 @@ from reciply.domain import menus, recipes
 
 MenuDoesNotExist = menus.MenuDoesNotExist
 
+UnableToOptimiseMenu = menus.UnableToOptimiseMenu
+
 
 @attrs.frozen
 class MenuHasNoRequirements(Exception):
     menu_id: int
 
 
-@attrs.frozen
-class OptimiserDidNotDoItsJob(Exception):
-    menu_item_ids: list[int]
-
-
 def optimise_menu(*, menu_id: int) -> None:
+    """
+    Find the optimal recipes for a menu.
+
+    :raises MenuDoesNotExist: When `menu_id` is invalid.
+    :raises MenuHasNoRequirements: When the menu has no optimisation requirements.
+    :raises UnableToOptimiseMenu: When the optimiser could not find any menus
+        meeting the requirements.
+    """
+
     menu = menus.get_menu(menu_id=menu_id)
     if menu.requirements is None:
         raise MenuHasNoRequirements(menu_id=menu_id)
