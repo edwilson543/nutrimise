@@ -16,11 +16,19 @@ admin.site.site_title = "Reciply"
 # ----------
 
 
+class RecipeIngredientInline(admin.TabularInline):
+    model = recipe_models.RecipeIngredient
+
+
 @admin.register(recipe_models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "user_actions"]
     ordering = ["name"]
     search_fields = ["name"]
+
+    inlines = [
+        RecipeIngredientInline,
+    ]
 
     @admin.display(description="Actions")
     def user_actions(self, recipe: recipe_models.Recipe) -> safestring.SafeString:
