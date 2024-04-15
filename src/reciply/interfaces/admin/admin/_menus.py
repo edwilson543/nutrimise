@@ -25,23 +25,35 @@ class _MenuItemInline(admin.TabularInline):
         return constants.Day(int(menu_item.day)).label.title()
 
 
+class _MenuChangeForm(forms.ModelForm):
+    days = forms.MultipleChoiceField(choices=constants.Day.choices)
+    meal_times = forms.MultipleChoiceField(choices=constants.MealTime.choices)
+
+    class Meta:
+        model = menu_models.Menu
+        fields = ["author", "name", "description"]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        if menu := kwargs.get("instance"):
+            initial_days: set[int] = set()
+            initial_meal_times: set[str] = set()
+            for item in list(menu.items.values("day", "meal_time")):
+                initial_days.add(item["day"])
+                initial_meal_times.add(item["meal_time"])
+            self.fields["days"].initial = list(initial_days)
+            self.fields["meal_times"].initial = list(initial_meal_times)
+
+
 @admin.register(menu_models.Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "meals", "user_actions"]
     ordering = ["name"]
     search_fields = ["name"]
 
+    form = _MenuChangeForm
+
     inlines = [_MenuRequirementsInline, _MenuItemInline]
-
-    class CreateForm(forms.ModelForm):
-        days = forms.MultipleChoiceField(choices=constants.Day.choices)
-        meal_times = forms.MultipleChoiceField(choices=constants.MealTime.choices)
-
-        class Meta:
-            model = menu_models.Menu
-            fields = ["author", "name", "description"]
-
-    form = CreateForm
 
     @admin.display(description="Actions")
     def user_actions(self, menu: menu_models.Menu) -> safestring.SafeString:
@@ -61,7 +73,7 @@ class MenuAdmin(admin.ModelAdmin):
         self,
         request: http.HttpRequest,
         obj: menu_models.Menu,
-        form: CreateForm,
+        form: _MenuChangeForm,
         change: bool,
     ) -> None:
         """
