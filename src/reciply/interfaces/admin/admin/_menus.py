@@ -11,6 +11,7 @@ from reciply.data.menus import models as menu_models
 
 class _MenuRequirementsInline(admin.TabularInline):
     model = menu_models.MenuRequirements
+    show_change_link = True
 
 
 class _MenuItemInline(admin.TabularInline):
@@ -103,3 +104,12 @@ class MenuItemAdmin(admin.ModelAdmin):
     @admin.display()
     def format_day(self, menu_item: menu_models.MenuItem) -> str:
         return constants.Day(int(menu_item.day)).label.title()
+
+
+class _NutrientRequirementInline(admin.TabularInline):
+    model = menu_models.NutrientRequirement
+
+
+@admin.register(menu_models.MenuRequirements)
+class MenuRequirementsAdmin(admin.ModelAdmin):
+    inlines = [_NutrientRequirementInline]

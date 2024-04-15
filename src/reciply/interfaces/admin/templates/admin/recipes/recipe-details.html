@@ -16,7 +16,7 @@
 
 {% block content %}
 
-    <div id="basic-info">
+    <div id="basic-info" class="module">
         <h1>{{ recipe.name }}</h1>
         <p>By {{ recipe.author }}</p>
         <p>Serves: {{ recipe.number_of_servings }}</p>
@@ -24,7 +24,7 @@
     </div>
     <hr>
 
-    <div id="recipe-ingredients">
+    <div id="recipe-ingredients" class="module">
         <h2>Ingredients</h2>
         <h3>For {{ recipe.number_of_servings }} servings</h3>
         <table>
@@ -44,24 +44,24 @@
             {% endfor %}
         </table>
     </div>
-    <hr>
 
-    <div id="nutritional-information">
+    <div id="nutritional-information" class="module">
         <h2>Nutritional information</h2>
         <h3>Per serving</h3>
         <table>
             <tr>
                 <th>Nutrient</th>
-                <th>Grams</th>
+                <th>Quantity</th>
+                <th>Units</th>
             </tr>
             {% for nutrient in nutritional_information %}
                 <tr>
                     <td>{{ nutrient.nutrient.name }}</td>
-                    <td>{{ nutrient.nutrient_quantity_grams | floatformat:"1" }}</td>
+                    <td>{{ nutrient.nutrient_quantity | floatformat:"1" }}</td>
+                    <td>{{ nutrient.units | title }}</td>
                 </tr>
             {% endfor %}
         </table>
     </div>
-    <hr>
 
 {% endblock %}
