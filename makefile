@@ -11,7 +11,7 @@ env_file:
 
 .PHONY:createdb
 createdb:
-	createdb reciply
+	createdb nutrimise
 
 # Django management commands
 

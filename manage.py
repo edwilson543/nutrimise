@@ -10,7 +10,7 @@ import sys
 
 def main() -> None:
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "reciply.config.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nutrimise.config.settings")
     os.environ.setdefault("DJANGO_CONFIGURATION", "Settings")
 
     from configurations.management import execute_from_command_line

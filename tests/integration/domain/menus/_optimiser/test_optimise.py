@@ -1,6 +1,6 @@
 import pytest
-from reciply.data import constants
-from reciply.domain import menus, recipes
+from nutrimise.data import constants
+from nutrimise.domain import menus, recipes
 
 from tests.factories import domain as domain_factories
 

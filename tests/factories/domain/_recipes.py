@@ -1,6 +1,6 @@
 import factory
-from reciply.data import constants
-from reciply.domain import ingredients, recipes
+from nutrimise.data import constants
+from nutrimise.domain import ingredients, recipes
 
 from . import _ingredients
 

@@ -1,5 +1,5 @@
-from reciply.data import constants
-from reciply.domain import recipes
+from nutrimise.data import constants
+from nutrimise.domain import recipes
 
 from tests.factories import data as data_factories
 

@@ -1,5 +1,5 @@
 import pytest
-from reciply.domain import recipes
+from nutrimise.domain import recipes
 
 from tests.factories import data as data_factories
 

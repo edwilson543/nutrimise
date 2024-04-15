@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project]
-name = "reciply"
+name = "nutrimise"
 version = "0"
 requires-python = ">= 3.11"
 
@@ -55,8 +55,8 @@ dev = [
 # ----------
 
 [tool.pytest.ini_options]
-pythonpath = "./src/reciply"
-DJANGO_SETTINGS_MODULE = "reciply.config.settings"
+pythonpath = "./src/nutrimise"
+DJANGO_SETTINGS_MODULE = "nutrimise.config.settings"
 DJANGO_CONFIGURATION = "Settings"
 
 filterwarnings = [
@@ -73,7 +73,7 @@ module = "tests.*"
 allow_untyped_defs = true
 
 [tool.django-stubs]
-django_settings_module = "reciply.config.settings"
+django_settings_module = "nutrimise.config.settings"
 
 
 [tool.ruff]

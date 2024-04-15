@@ -1,6 +1,6 @@
 import factory
-from reciply.data import constants
-from reciply.data.ingredients import models as ingredient_models
+from nutrimise.data import constants
+from nutrimise.data.ingredients import models as ingredient_models
 
 
 class IngredientCategory(factory.django.DjangoModelFactory):

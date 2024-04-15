@@ -1,6 +1,6 @@
 import factory
-from reciply.data import constants
-from reciply.data.menus import models as menu_models
+from nutrimise.data import constants
+from nutrimise.data.menus import models as menu_models
 
 from . import _auth, _ingredients, _recipes
 

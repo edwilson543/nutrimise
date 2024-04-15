@@ -1,5 +1,5 @@
-from reciply.data import constants
-from reciply.domain.menus._optimisation import expressions, inputs, variables
+from nutrimise.data import constants
+from nutrimise.domain.menus._optimisation import expressions, inputs, variables
 
 from tests.factories import domain as domain_factories
 
