@@ -32,7 +32,7 @@
         <form id="optimise-menu" action="{% url 'menu-optimise' menu_id=menu.id %}" method="post">
             {% csrf_token %}
             <div class="submit-row">
-                <input type="submit" value="Optimise" class="default" name="_save" disabled="{% if menu.requirements is None %}true{% else %}false{% endif %}">
+                <input type="submit" value="Optimise" class="default" name="_save" {% if not menu.requirements %}disabled{% endif %}>
             </div>
         </form>
         <table>
