@@ -3,10 +3,16 @@ from reciply.data import constants
 from reciply.data.ingredients import models as ingredient_models
 
 
+class IngredientCategory(factory.django.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"ingredient-category-{n}")
+
+    class Meta:
+        model = ingredient_models.IngredientCategory
+
+
 class Ingredient(factory.django.DjangoModelFactory):
-    name_singular = factory.Sequence(lambda n: f"ingredient-{n}")
-    name_plural = factory.Sequence(lambda n: f"ingredient-{n}s")
-    category = "Meat"
+    name = factory.Sequence(lambda n: f"ingredient-{n}")
+    category = factory.SubFactory(IngredientCategory)
     grams_per_unit = 1
 
     class Meta:

@@ -10,6 +10,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name="IngredientCategory",
+            fields=[
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.TextField(unique=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name="Ingredient",
             fields=[
                 (
@@ -21,9 +28,15 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name_singular", models.CharField(max_length=128, unique=True)),
-                ("name_plural", models.CharField(max_length=128, unique=True)),
-                ("category", models.CharField(max_length=128)),
+                ("name", models.CharField(max_length=128, unique=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        "ingredients.IngredientCategory",
+                        on_delete=models.PROTECT,
+                        related_name="ingredients",
+                    ),
+                ),
                 (
                     "units",
                     models.CharField(max_length=64, null=True, blank=True),

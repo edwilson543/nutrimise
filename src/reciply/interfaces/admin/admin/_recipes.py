@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
 @admin.register(recipe_models.RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "recipe_name", "ingredient_name", "quantity", "units"]
-    ordering = ["recipe__name", "ingredient__name_singular"]
+    ordering = ["recipe__name", "ingredient__name"]
 
     @admin.display(description="Recipe name")
     def recipe_name(self, ingredient: recipe_models.RecipeIngredient) -> str:
@@ -43,7 +43,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
     @admin.display(description="Ingredient name")
     def ingredient_name(self, ingredient: recipe_models.RecipeIngredient) -> str:
-        return ingredient.ingredient.name_singular
+        return ingredient.ingredient.name
 
     @admin.display(description="Units")
     def units(self, ingredient: recipe_models.RecipeIngredient) -> str:

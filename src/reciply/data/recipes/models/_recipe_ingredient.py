@@ -31,7 +31,7 @@ class RecipeIngredient(django_models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.ingredient.name_singular} for {self.recipe.name}"
+        return f"{self.ingredient.name} for {self.recipe.name}"
 
     # ----------
     # Queries
