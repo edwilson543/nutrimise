@@ -1,14 +1,12 @@
-# Django imports
 from django import urls as django_urls
 
-# Local application imports
-from tests import factories
+from tests.factories import data as data_factories
 
 
 def test_can_view_recipe_details(admin_client):
-    recipe = factories.Recipe()
-    nutritional_information = factories.IngredientNutritionalInformation()
-    factories.RecipeIngredient(
+    recipe = data_factories.Recipe()
+    nutritional_information = data_factories.IngredientNutritionalInformation()
+    data_factories.RecipeIngredient(
         recipe=recipe, ingredient=nutritional_information.ingredient
     )
 

@@ -11,7 +11,7 @@ env_file:
 
 .PHONY:createdb
 createdb:
-	createdb reciply
+	createdb nutrimise
 
 # Django management commands
 
@@ -48,7 +48,7 @@ install_ci_deps:
 
 .PHONY:install_dev_deps
 install_dev_deps:
-	pip-sync requirements/dev-requirements.txt
+	pip install -r requirements/dev-requirements.txt
 	pip install -e .
 
 
@@ -66,21 +66,16 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy black isort flake8
+lint: mypy ruff_format ruff_check
 
 .PHONY:mypy
 mypy:
 	mypy .
 
-.PHONY:black
-black:
-	black .
+.PHONY:ruff_format
+ruff_format:
+	ruff format .
 
-.PHONY:isort
-isort:
-	isort . --profile=black
-
-.PHONY:flake8
-flake8:
-	flake8 ./src
-	flake8 ./tests
+.PHONY:ruff_check
+ruff_check:
+	ruff check --fix .

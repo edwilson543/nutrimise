@@ -10,10 +10,6 @@ attrs==23.2.0
     # via reciply (pyproject.toml)
 beautifulsoup4==4.12.3
     # via webtest
-black==24.3.0
-    # via reciply (pyproject.toml)
-click==8.1.7
-    # via black
 django==5.0.4
     # via
     #   django-configurations
@@ -37,36 +33,22 @@ factory-boy==3.3.0
     # via reciply (pyproject.toml)
 faker==24.7.1
     # via factory-boy
-flake8==7.0.0
-    # via reciply (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
-isort==5.13.2
-    # via reciply (pyproject.toml)
-mccabe==0.7.0
-    # via flake8
 mypy==1.9.0
     # via reciply (pyproject.toml)
 mypy-extensions==1.0.0
-    # via
-    #   black
-    #   mypy
+    # via mypy
 packaging==24.0
-    # via
-    #   black
-    #   pytest
-pathspec==0.12.1
-    # via black
-platformdirs==4.2.0
-    # via black
+    # via pytest
 pluggy==1.4.0
     # via pytest
-psycopg==3.1.18
+psycopg[binary]==3.1.18
     # via reciply (pyproject.toml)
-pycodestyle==2.11.1
-    # via flake8
-pyflakes==3.2.0
-    # via flake8
+psycopg-binary==3.1.18
+    # via psycopg
+pulp==2.8.0
+    # via reciply (pyproject.toml)
 pytest==8.1.1
     # via
     #   pytest-django
@@ -77,6 +59,8 @@ python-dateutil==2.9.0.post0
     # via faker
 python-decouple==3.8
     # via reciply (pyproject.toml)
+ruff==0.3.6
+    # via reciply (pyproject.toml)
 six==1.16.0
     # via python-dateutil
 soupsieve==2.5
@@ -85,7 +69,6 @@ sqlparse==0.4.4
     # via django
 tomli==2.0.1
     # via
-    #   black
     #   django-stubs
     #   mypy
     #   pytest
@@ -96,7 +79,6 @@ types-pyyaml==6.0.12.20240311
 typing-extensions==4.11.0
     # via
     #   asgiref
-    #   black
     #   django-stubs
     #   django-stubs-ext
     #   mypy

@@ -10,27 +10,15 @@ repos:
         args: [ --config-file=mypy.ini ]
         exclude: (tests)|(migrations)|(settings)
 
-    # black code formatter
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.3.6
     hooks:
-      - id: black
-        language_version: python3.11
-
-    # isort
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-        args: [ --profile, black ]
-        name: isort (python)
-
-    # flake8
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        args: [ --config=.flake8 ]
+      # Run the linter.
+      - id: ruff
+        args: [ --fix ]
+      # Run the formatter.
+      - id: ruff-format
 
     # Basic pre-commit hooks provided by default
   - repo: https://github.com/pre-commit/pre-commit-hooks

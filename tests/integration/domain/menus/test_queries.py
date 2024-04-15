@@ -1,14 +1,12 @@
-# Third party imports
 import pytest
+from nutrimise.domain import menus
 
-# Local application imports
-from reciply.domain import menus
-from tests import factories
+from tests.factories import data as data_factories
 
 
 class TestGetMenu:
     def test_gets_menu_when_exists(self):
-        menu = factories.Menu()
+        menu = data_factories.Menu()
 
         result = menus.get_menu(menu_id=menu.id)
 
