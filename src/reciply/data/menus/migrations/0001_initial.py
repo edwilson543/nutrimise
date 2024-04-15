@@ -111,9 +111,9 @@ class Migration(migrations.Migration):
             name="NutrientRequirement",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("minimum_quantity", models.FloatField(null=True)),
-                ("maximum_quantity", models.FloatField(null=True)),
-                ("target_quantity", models.FloatField(null=True)),
+                ("minimum_quantity", models.FloatField(null=True, blank=True)),
+                ("maximum_quantity", models.FloatField(null=True, blank=True)),
+                ("target_quantity", models.FloatField(null=True, blank=True)),
                 ("units", models.TextField(choices=constants.NutrientUnit.choices)),
                 (
                     "enforcement_interval",

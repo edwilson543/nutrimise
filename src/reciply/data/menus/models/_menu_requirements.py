@@ -39,11 +39,11 @@ class NutrientRequirement(django_models.Model):
         "ingredients.Nutrient", on_delete=django_models.PROTECT, related_name="+"
     )
 
-    minimum_quantity = django_models.FloatField(null=True)
+    minimum_quantity = django_models.FloatField(null=True, blank=True)
 
-    maximum_quantity = django_models.FloatField(null=True)
+    maximum_quantity = django_models.FloatField(null=True, blank=True)
 
-    target_quantity = django_models.FloatField(null=True)
+    target_quantity = django_models.FloatField(null=True, blank=True)
 
     units = django_models.TextField(choices=constants.NutrientUnit.choices)
 
