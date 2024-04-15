@@ -60,25 +60,3 @@ class Menu(django_models.Model):
             name=name,
             description=description,
         )
-
-    def add_item(
-        self,
-        *,
-        recipe: recipe_models.Recipe,
-        day: constants.Day,
-        meal_time: constants.MealTime,
-    ) -> _menu_item.MenuItem:
-        """
-        Persist a list of menu items in the db.
-        """
-        return self.items.create(recipe=recipe, day=day, meal_time=meal_time)
-
-    def add_items(
-        self,
-        *,
-        items: list[_menu_item.MenuItem],
-    ) -> list[_menu_item.MenuItem]:
-        """
-        Persist a list of menu items in the db.
-        """
-        return self.items.bulk_create(items)
