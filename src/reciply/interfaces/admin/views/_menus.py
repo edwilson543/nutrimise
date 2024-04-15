@@ -64,3 +64,27 @@ class OptimiseMenu(generic.View):
             messages.success(request, "Menu has been optimised.")
         redirect_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu_id})
         return http.HttpResponseRedirect(redirect_to=redirect_url)
+
+
+class LockMenuItemFromOptimiser(generic.View):
+    def post(
+        self, request: http.HttpRequest, *args: object, **kwargs: int
+    ) -> http.HttpResponseRedirect:
+        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
+        menu_item.lock_from_optimiser()
+        redirect_url = django_urls.reverse(
+            "menu-details", kwargs={"menu_id": menu_item.menu_id}
+        )
+        return http.HttpResponseRedirect(redirect_to=redirect_url)
+
+
+class UnlockMenuItemForOptimiser(generic.View):
+    def post(
+        self, request: http.HttpRequest, *args: object, **kwargs: int
+    ) -> http.HttpResponseRedirect:
+        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
+        menu_item.unlock_for_optimiser()
+        redirect_url = django_urls.reverse(
+            "menu-details", kwargs={"menu_id": menu_item.menu_id}
+        )
+        return http.HttpResponseRedirect(redirect_to=redirect_url)

@@ -20,4 +20,15 @@ urlpatterns = [
         view=views.OptimiseMenu.as_view(),
         name="menu-optimise",
     ),
+    # Menu items.
+    django_urls.path(
+        route="menu-items/<int:menu_item_id>/lock/",
+        view=views.LockMenuItemFromOptimiser.as_view(),
+        name="menu-item-lock",
+    ),
+    django_urls.path(
+        route="menu-items/<int:menu_item_id>/unlock/",
+        view=views.UnlockMenuItemForOptimiser.as_view(),
+        name="menu-item-unlock",
+    ),
 ]

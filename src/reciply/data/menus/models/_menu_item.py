@@ -55,7 +55,18 @@ class MenuItem(django_models.Model):
     # ----------
     # Mutators
     # ----------
+
     def update_recipe(self, recipe_id: int) -> MenuItem:
         self.recipe_id = recipe_id
         self.save(update_fields=["recipe", "updated_at"])
         return self
+
+    def lock_from_optimiser(self) -> None:
+        if self.optimiser_generated:
+            self.optimiser_generated = False
+        self.save(update_fields=["optimiser_generated", "updated_at"])
+
+    def unlock_for_optimiser(self) -> None:
+        if not self.optimiser_generated:
+            self.optimiser_generated = True
+        self.save(update_fields=["optimiser_generated", "updated_at"])

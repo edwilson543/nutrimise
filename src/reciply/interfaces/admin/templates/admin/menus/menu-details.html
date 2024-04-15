@@ -56,9 +56,15 @@
                                 </p>
                                 <p>
                                     {% if menu_item.optimiser_generated %}
-                                        Lock
+                                        <form id="lock-menu-item-{{ menu_item.id }}" action="{% url 'menu-item-lock' menu_item_id=menu_item.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit">lock</button>
+                                        </form>
                                     {% else %}
-                                        Unlock
+                                        <form id="unlock-menu-item-{{ menu_item.id }}" action="{% url 'menu-item-unlock' menu_item_id=menu_item.id %}" method="post">
+                                            {% csrf_token %}
+                                            <button type="submit">unlock</button>
+                                        </form>
                                     {% endif %}
                                 </p>
                             {% else %}
@@ -76,8 +82,12 @@
     <div id="menu-requirements" class="module">
         <h2>Requirements</h2>
         {% if not menu.requirements %}
-            <p>Menu has no requirements!</p>
-            Select here
+            <p>
+                Menu has no requirements!
+                <a href="{% url 'admin:menus_menurequirements_add' %}?menu={{ menu.id }}" target="_blank">
+                    Set here
+                </a>
+            </p>
         {% else %}
             <p>
                 <a href="{% url 'admin:menus_menurequirements_change' object_id=menu.requirements.id %}" target="_blank" class="changelink">
