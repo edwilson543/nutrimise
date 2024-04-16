@@ -7,7 +7,7 @@
 asgiref==3.8.1
     # via django
 attrs==23.2.0
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 beautifulsoup4==4.12.3
     # via webtest
 django==5.0.4
@@ -16,27 +16,27 @@ django==5.0.4
     #   django-extensions
     #   django-stubs
     #   django-stubs-ext
-    #   reciply (pyproject.toml)
+    #   nutrimise (pyproject.toml)
 django-configurations==2.5.1
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 django-extensions==3.2.3
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 django-stubs==4.2.7
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 django-stubs-ext==4.2.7
     # via django-stubs
 django-webtest==1.9.11
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 exceptiongroup==1.2.0
     # via pytest
 factory-boy==3.3.0
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 faker==24.7.1
     # via factory-boy
 iniconfig==2.0.0
     # via pytest
 mypy==1.9.0
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
 packaging==24.0
@@ -44,23 +44,23 @@ packaging==24.0
 pluggy==1.4.0
     # via pytest
 psycopg[binary]==3.1.18
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 psycopg-binary==3.1.18
     # via psycopg
 pulp==2.8.0
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 pytest==8.1.1
     # via
     #   pytest-django
-    #   reciply (pyproject.toml)
+    #   nutrimise (pyproject.toml)
 pytest-django==4.8.0
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via faker
 python-decouple==3.8
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 ruff==0.3.6
-    # via reciply (pyproject.toml)
+    # via nutrimise (pyproject.toml)
 six==1.16.0
     # via python-dateutil
 soupsieve==2.5
@@ -90,4 +90,4 @@ webob==1.8.7
 webtest==3.0.0
     # via
     #   django-webtest
-    #   reciply (pyproject.toml)
+    #   nutrimise (pyproject.toml)
