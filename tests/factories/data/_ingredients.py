@@ -3,6 +3,13 @@ from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 
 
+class DietaryRequirement(factory.django.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"dietary-requirement-{n}")
+
+    class Meta:
+        model = ingredient_models.DietaryRequirement
+
+
 class IngredientCategory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f"ingredient-category-{n}")
 

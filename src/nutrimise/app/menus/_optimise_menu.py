@@ -26,7 +26,9 @@ def optimise_menu(*, menu_id: int) -> None:
     if menu.requirements is None:
         raise MenuHasNoRequirements(menu_id=menu_id)
 
-    recipes_to_consider = recipes.get_recipes()
+    recipes_to_consider = recipes.get_recipes(
+        dietary_requirement_ids=menu.requirements.dietary_requirement_ids
+    )
 
     solution = menus.optimise_recipes_for_menu(
         menu=menu, recipes_to_consider=recipes_to_consider

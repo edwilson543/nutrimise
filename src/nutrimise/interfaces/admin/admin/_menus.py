@@ -9,7 +9,7 @@ from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
 
 
-class _MenuRequirementsInline(admin.TabularInline):
+class _MenuRequirementsInline(admin.StackedInline):
     model = menu_models.MenuRequirements
     show_change_link = True
 
@@ -48,7 +48,14 @@ class _MenuChangeForm(forms.ModelForm):
 
 @admin.register(menu_models.Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "author", "meals", "user_actions"]
+    list_display = [
+        "id",
+        "name",
+        "author",
+        "meals",
+        "dietary_requirements",
+        "user_actions",
+    ]
     ordering = ["name"]
     search_fields = ["name"]
 
@@ -69,6 +76,12 @@ class MenuAdmin(admin.ModelAdmin):
     @admin.display()
     def meals(self, menu: menu_models.Menu) -> int:
         return menu.items.count()
+
+    @admin.display()
+    def dietary_requirements(self, menu: menu_models.Menu) -> int:
+        if not menu.requirements:
+            return 0
+        return menu.requirements.dietary_requirements.count()
 
     def save_model(
         self,

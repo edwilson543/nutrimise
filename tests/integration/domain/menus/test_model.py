@@ -8,6 +8,8 @@ class TestMenuFromOrmModel:
         orm_menu = data_factories.Menu()
         orm_item = data_factories.MenuItem(menu=orm_menu)
         orm_requirements = data_factories.MenuRequirements(menu=orm_menu)
+        orm_dietary_requirement = data_factories.DietaryRequirement()
+        orm_requirements.dietary_requirements.add(orm_dietary_requirement)
         orm_nutrient_requirement = data_factories.NutrientRequirement(
             menu_requirements=orm_requirements,
             minimum_quantity=0,
@@ -30,6 +32,10 @@ class TestMenuFromOrmModel:
             menu.requirements.maximum_occurrences_per_recipe
             == orm_requirements.maximum_occurrences_per_recipe
         )
+
+        dietary_requirement_ids = menu.requirements.dietary_requirement_ids
+        assert dietary_requirement_ids == (orm_dietary_requirement.id,)
+
         assert len(menu.requirements.nutrient_requirements) == 1
         nutrient_requirement = menu.requirements.nutrient_requirements[0]
         assert nutrient_requirement.nutrient_id == orm_nutrient_requirement.nutrient_id

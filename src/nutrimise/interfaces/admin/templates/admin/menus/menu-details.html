@@ -94,7 +94,18 @@
                     Edit
                 </a>
             </p>
-            <h3>Maximum occurrences per recipe: {{ menu.requirements.maximum_occurrences_per_recipe }}</h3>
+            <h3>Maximum occurrences per recipe:</h3>
+            <p>{{ menu.requirements.maximum_occurrences_per_recipe }}</p>
+
+            <h3>Dietary requirements:</h3>
+            <ul>
+                {% for dietary_requirement in menu.requirements.dietary_requirements.all %}
+                    <li>{{ dietary_requirement.name }}</li>
+                {% empty %}
+                    <li>None!</li>
+                {% endfor %}
+            </ul>
+
             <h3>Nutrient requirements:</h3>
             <table>
                 <tr>
