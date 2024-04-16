@@ -78,6 +78,7 @@ class MenuItem:
 class MenuRequirements:
     nutrient_requirements: tuple[NutrientRequirement, ...]
     maximum_occurrences_per_recipe: int
+    dietary_requirement_ids: tuple[int, ...]
 
     @classmethod
     def from_orm_model(
@@ -87,6 +88,9 @@ class MenuRequirements:
             maximum_occurrences_per_recipe=requirements.maximum_occurrences_per_recipe,
             nutrient_requirements=NutrientRequirement.from_orm_model(
                 requirements=list(requirements.nutrient_requirements.all())
+            ),
+            dietary_requirement_ids=tuple(
+                *requirements.dietary_requirements.values_list("id")
             ),
         )
 
