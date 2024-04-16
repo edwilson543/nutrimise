@@ -3,6 +3,11 @@ from django.contrib import admin
 from nutrimise.data.ingredients import models as ingredient_models
 
 
+@admin.register(ingredient_models.DietaryRequirement)
+class DietaryRequirementAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+
+
 @admin.register(ingredient_models.IngredientCategory)
 class IngredientCategoryAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "number_of_ingredients"]
