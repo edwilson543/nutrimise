@@ -1,5 +1,8 @@
+from typing import Any
+
 import factory
 from nutrimise.data import constants
+from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
 
 from . import _auth, _ingredients
@@ -14,6 +17,22 @@ class Recipe(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.Recipe
+
+    @classmethod
+    def create_to_satisfy_dietary_requirements(
+        cls,
+        dietary_requirements: tuple[ingredient_models.DietaryRequirement, ...],
+        **kwargs: Any,
+    ) -> recipe_models.Recipe:
+        """
+        Create a recipe whose only ingredient satisfied the requirements.
+        """
+        ingredient = _ingredients.Ingredient()
+        ingredient.dietary_requirements_satisfied.add(*dietary_requirements)
+
+        recipe = cls(**kwargs)
+        RecipeIngredient(recipe=recipe, ingredient=ingredient)
+        return recipe
 
 
 class RecipeIngredient(factory.django.DjangoModelFactory):

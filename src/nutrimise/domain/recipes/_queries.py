@@ -18,10 +18,18 @@ def get_recipe(*, recipe_id: int) -> _model.Recipe:
     return _model.Recipe.from_orm_model(recipe=recipe)
 
 
-def get_recipes() -> tuple[_model.Recipe, ...]:
+def get_recipes(
+    *, dietary_requirement_ids: tuple[int, ...] = ()
+) -> tuple[_model.Recipe, ...]:
     recipes = recipe_models.Recipe.objects.prefetch_related(
         "ingredients",
         "ingredients__ingredient",
         "ingredients__ingredient__nutritional_information",
     ).all()
+
+    if dietary_requirement_ids:
+        for dietary_requirement_id in dietary_requirement_ids:
+            recipes = recipes.filter(
+                ingredients__ingredient__dietary_requirements_satisfied=dietary_requirement_id
+            )
     return tuple(_model.Recipe.from_orm_model(recipe=recipe) for recipe in recipes)
