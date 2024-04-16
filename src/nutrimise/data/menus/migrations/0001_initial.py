@@ -105,6 +105,14 @@ class Migration(migrations.Migration):
                         to="menus.menu",
                     ),
                 ),
+                (
+                    "dietary_requirements",
+                    models.ManyToManyField(
+                        related_name="+",
+                        to="ingredients.dietaryrequirement",
+                        blank=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(

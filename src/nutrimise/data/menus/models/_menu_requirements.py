@@ -16,7 +16,9 @@ class MenuRequirements(django_models.Model):
 
     maximum_occurrences_per_recipe = django_models.SmallIntegerField()
 
-    # TODO -> dietary requirements M2M field.
+    dietary_requirements = django_models.ManyToManyField(
+        "ingredients.DietaryRequirement", related_name="+", blank=True
+    )
 
     def __str__(self) -> str:
         return f"Requirements for '{self.menu.name}'"

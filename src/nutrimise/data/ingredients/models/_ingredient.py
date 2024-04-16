@@ -1,5 +1,7 @@
 from django.db import models as django_models
 
+from . import _dietary_requirement
+
 
 class IngredientCategory(django_models.Model):
     """
@@ -27,8 +29,11 @@ class Ingredient(django_models.Model):
     units = django_models.CharField(max_length=64, null=True, blank=True)
 
     # Conversion factor (e.g. for calculating nutritional information per apple)
-
     grams_per_unit = django_models.FloatField()
+
+    dietary_requirements_satisfied = django_models.ManyToManyField(  # type: ignore[var-annotated]
+        _dietary_requirement.DietaryRequirement, related_name="ingredients", blank=True
+    )
 
     def __str__(self) -> str:
         return self.name

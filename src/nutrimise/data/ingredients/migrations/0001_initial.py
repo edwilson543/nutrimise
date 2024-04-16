@@ -10,6 +10,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name="DietaryRequirement",
+            fields=[
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.TextField(unique=True)),
+            ],
+        ),
+        migrations.CreateModel(
             name="IngredientCategory",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
@@ -42,6 +49,14 @@ class Migration(migrations.Migration):
                     models.CharField(max_length=64, null=True, blank=True),
                 ),
                 ("grams_per_unit", models.FloatField()),
+                (
+                    "dietary_requirements_satisfied",
+                    models.ManyToManyField(
+                        related_name="ingredients",
+                        to="ingredients.dietaryrequirement",
+                        blank=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
