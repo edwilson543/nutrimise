@@ -1,5 +1,4 @@
 import attrs
-
 from django.db import transaction
 
 from nutrimise.domain import menus, recipes
