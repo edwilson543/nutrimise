@@ -37,6 +37,7 @@ class Settings(configurations.Configuration):
             "nutrimise.data.menus",
             "nutrimise.data.recipes",
             "nutrimise.interfaces.admin.apps.AdminConfig",
+            "nutrimise.interfaces.management.apps.ManagementConfig",
         ]
 
     MIDDLEWARE = [
