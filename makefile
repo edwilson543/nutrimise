@@ -7,7 +7,7 @@ db: createdb migrate superuser
 
 .PHONY:env_file
 env_file:
-	cp .env.example .env.dev
+	cp .env.example .env
 
 .PHONY:createdb
 createdb:
@@ -79,3 +79,15 @@ ruff_format:
 .PHONY:ruff_check
 ruff_check:
 	ruff check --fix .
+
+# Docker
+
+docker_server: docker_image docker_run
+
+.PHONY:docker_run
+docker_run:
+	docker container run -p 8000:8000 --name=nutrimise nutrimise:latest
+
+.PHONY:docker_image
+docker_image:
+	docker image build . -t nutrimise:latest
