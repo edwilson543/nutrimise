@@ -20,7 +20,9 @@ dependencies = [
     "django-configurations",
     "psycopg[binary]",
     "python-decouple",
-    "pulp"
+    "pulp",
+    # Production
+    "gunicorn",
 ]
 
 [project.optional-dependencies]

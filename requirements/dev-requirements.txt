@@ -39,6 +39,8 @@ faker==24.7.1
     # via factory-boy
 filelock==3.13.3
     # via virtualenv
+gunicorn==22.0.0
+    # via nutrimise (pyproject.toml)
 identify==2.5.35
     # via pre-commit
 iniconfig==2.0.0
@@ -50,7 +52,9 @@ mypy-extensions==1.0.0
 nodeenv==1.8.0
     # via pre-commit
 packaging==24.0
-    # via pytest
+    # via
+    #   gunicorn
+    #   pytest
 platformdirs==4.2.0
     # via virtualenv
 pluggy==1.4.0
@@ -65,10 +69,10 @@ pulp==2.8.0
     # via nutrimise (pyproject.toml)
 pytest==8.1.1
     # via
+    #   nutrimise (pyproject.toml)
     #   pytest-django
     #   pytest-random-order
     #   pytest-repeat
-    #   nutrimise (pyproject.toml)
 pytest-django==4.8.0
     # via nutrimise (pyproject.toml)
 pytest-random-order==1.1.1
