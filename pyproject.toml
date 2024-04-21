@@ -20,7 +20,9 @@ dependencies = [
     "django-configurations",
     "psycopg[binary]",
     "python-decouple",
-    "pulp"
+    "pulp",
+    # Production
+    "gunicorn",
 ]
 
 [project.optional-dependencies]
@@ -74,6 +76,7 @@ allow_untyped_defs = true
 
 [tool.django-stubs]
 django_settings_module = "nutrimise.config.settings"
+strict_settings = false
 
 
 [tool.ruff]

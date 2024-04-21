@@ -14,6 +14,10 @@ django==5.0.4
     #   nutrimise (pyproject.toml)
 django-configurations==2.5.1
     # via nutrimise (pyproject.toml)
+gunicorn==22.0.0
+    # via nutrimise (pyproject.toml)
+packaging==24.0
+    # via gunicorn
 psycopg[binary]==3.1.18
     # via nutrimise (pyproject.toml)
 psycopg-binary==3.1.18

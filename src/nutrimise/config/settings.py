@@ -16,28 +16,29 @@ class Settings(configurations.Configuration):
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
 
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0"]
 
     # ----------
     # Application definition
     # ----------
 
-    INSTALLED_APPS = [
-        # Third party
-        "django_extensions",
-        # Django
-        "django.contrib.admin",
-        "django.contrib.auth",
-        "django.contrib.contenttypes",
-        "django.contrib.sessions",
-        "django.contrib.messages",
-        "django.contrib.staticfiles",
-        # Local
-        "nutrimise.data.ingredients",
-        "nutrimise.data.menus",
-        "nutrimise.data.recipes",
-        "nutrimise.interfaces.admin.apps.AdminConfig",
-    ]
+    @property
+    def INSTALLED_APPS(self) -> list[str]:
+        return [
+            # Django
+            "django.contrib.admin",
+            "django.contrib.auth",
+            "django.contrib.contenttypes",
+            "django.contrib.sessions",
+            "django.contrib.messages",
+            "django.contrib.staticfiles",
+            # Local
+            "nutrimise.data.ingredients",
+            "nutrimise.data.menus",
+            "nutrimise.data.recipes",
+            "nutrimise.interfaces.admin.apps.AdminConfig",
+            "nutrimise.interfaces.management.apps.ManagementConfig",
+        ]
 
     MIDDLEWARE = [
         # Django
@@ -134,3 +135,15 @@ class Settings(configurations.Configuration):
     # ----------
 
     STATIC_URL = "static/"
+    STATIC_ROOT = "static/"
+
+
+class DevSettings(Settings):
+    @property
+    def INSTALLED_APPS(self) -> list[str]:
+        installed_apps = [
+            # Third party
+            "django_extensions",
+            *super().INSTALLED_APPS,
+        ]
+        return installed_apps

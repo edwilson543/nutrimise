@@ -1,6 +1,7 @@
 # Specific files
 *TODO*.txt
 fixtures/*.json
+data/target/*.csv
 
 # Certification
 cert.pem

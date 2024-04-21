@@ -5,13 +5,20 @@ install: env_file install_dev_deps db
 .PHONY:db
 db: createdb migrate superuser
 
+.PHONY:new_db
+new_db: dropdb createdb migrate superuser load_example_data
+
 .PHONY:env_file
 env_file:
-	cp .env.example .env.dev
+	cp .env.example .env
 
 .PHONY:createdb
 createdb:
 	createdb nutrimise
+
+.PHONY:dropdb
+dropdb:
+	dropdb nutrimise
 
 # Django management commands
 
@@ -35,9 +42,13 @@ superuser:
 dump:
 	python manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/dump.json
 
-.PHONY:load
-load:
-	python manage.py loaddata dump.json
+.PHONY:load_example_data
+load_example_data:
+	python manage.py import_from_csv --dataset=example
+
+.PHONY:load_target_data
+load_target_data:
+	python manage.py import_from_csv --dataset=target
 
 # Python environment
 
@@ -79,3 +90,15 @@ ruff_format:
 .PHONY:ruff_check
 ruff_check:
 	ruff check --fix .
+
+# Docker
+
+docker_server: docker_image docker_run
+
+.PHONY:docker_run
+docker_run:
+	docker container run -p 8000:8000 --name=nutrimise nutrimise:latest
+
+.PHONY:docker_image
+docker_image:
+	docker image build . -t nutrimise:latest
