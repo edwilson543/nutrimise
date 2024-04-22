@@ -4,7 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.data import constants
-from nutrimise.domain import menus, recipes
+from nutrimise.domain import ingredients, menus, recipes
 
 from . import inputs
 
@@ -24,11 +24,12 @@ class DecisionVariable:
         return self.menu_item.day
 
 
-class RecipeIncludedDependentVariable:
-    def __init__(self, *, recipe: recipes.Recipe) -> None:
-        self.recipe = recipe
+class IngredientIncludedDependentVariable:
+    def __init__(self, *, ingredient: ingredients.Ingredient) -> None:
+        self.ingredient = ingredient
         self.lp_variable = lp.LpVariable(
-            cat=lp.constants.LpBinary, name=f"recipe-{recipe.id}-included-in-menu"
+            cat=lp.constants.LpBinary,
+            name=f"ingredient-{ingredient.id}-included-in-menu",
         )
 
 
@@ -36,13 +37,15 @@ class RecipeIncludedDependentVariable:
 class Variables:
     decision_variables: tuple[DecisionVariable, ...]
     # Dependent variables.
-    recipe_included_dependent_variables: tuple[RecipeIncludedDependentVariable, ...]
+    ingredient_included_dependent_variables: tuple[
+        IngredientIncludedDependentVariable, ...
+    ]
 
     @classmethod
     def from_inputs(cls, inputs: inputs.OptimiserInputs) -> Variables:
         return cls(
             decision_variables=cls._decision_variables_from_inputs(inputs),
-            recipe_included_dependent_variables=cls._recipe_included_variables_from_inputs(
+            ingredient_included_dependent_variables=cls._ingredient_included_variables_from_inputs(
                 inputs
             ),
         )
@@ -74,4 +77,13 @@ class Variables:
         return tuple(
             RecipeIncludedDependentVariable(recipe=recipe)
             for recipe in inputs.recipes_to_consider
+        )
+
+    @classmethod
+    def _ingredient_included_variables_from_inputs(
+        cls, inputs: inputs.OptimiserInputs
+    ) -> tuple[IngredientIncludedDependentVariable, ...]:
+        return tuple(
+            IngredientIncludedDependentVariable(ingredient=ingredient)
+            for ingredient in inputs.relevant_ingredients
         )

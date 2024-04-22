@@ -44,7 +44,9 @@ class TestNutrientGramsForDay:
         )
 
         inputs_ = inputs.OptimiserInputs(
-            menu=menu, recipes_to_consider=(recipe, other_recipe)
+            menu=menu,
+            recipes_to_consider=(recipe, other_recipe),
+            relevant_ingredients=(),
         )
         variables_ = variables.Variables.from_inputs(inputs_)
 

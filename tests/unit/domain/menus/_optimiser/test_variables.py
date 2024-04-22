@@ -16,7 +16,9 @@ class TestFromSpec:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        inputs_ = inputs.OptimiserInputs(
+            menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
+        )
         variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
@@ -36,7 +38,9 @@ class TestFromSpec:
 
         recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
 
-        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        inputs_ = inputs.OptimiserInputs(
+            menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
+        )
         variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
@@ -56,7 +60,9 @@ class TestFromSpec:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=(recipe,))
+        inputs_ = inputs.OptimiserInputs(
+            menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
+        )
         variables_ = variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables

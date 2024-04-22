@@ -51,7 +51,9 @@ def test_respects_recipe_meal_time_restrictions():
     dinner_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.DINNER])
 
     solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(lunch_recipe, dinner_recipe)
+        menu=menu,
+        recipes_to_consider=(lunch_recipe, dinner_recipe),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 2
