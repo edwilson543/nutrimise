@@ -19,6 +19,7 @@ class Ingredient(django_models.Model):
     """
     Some ingredient and its nutritional information.
     """
+
     name = django_models.CharField(max_length=128, unique=True)
 
     category = django_models.ForeignKey(

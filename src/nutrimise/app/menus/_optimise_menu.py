@@ -2,7 +2,7 @@ import attrs
 
 from django.db import transaction
 
-from nutrimise.domain import menus, recipes
+from nutrimise.domain import ingredients, menus, recipes
 
 
 MenuDoesNotExist = menus.MenuDoesNotExist
@@ -32,9 +32,16 @@ def optimise_menu(*, menu_id: int) -> None:
     recipes_to_consider = recipes.get_recipes(
         dietary_requirement_ids=menu.requirements.dietary_requirement_ids
     )
+    # Only bother loading the ingredients if the menu has variety requirements.
+    if len(menu.requirements.variety_requirements) > 0:
+        relevant_ingredients = _get_relevant_ingredients(recipes_to_consider)
+    else:
+        relevant_ingredients = ()
 
     solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=recipes_to_consider
+        menu=menu,
+        recipes_to_consider=recipes_to_consider,
+        relevant_ingredients=relevant_ingredients,
     )
 
     with transaction.atomic():
@@ -45,3 +52,13 @@ def optimise_menu(*, menu_id: int) -> None:
                 menus.update_menu_item_recipe(
                     menu_item_id=menu_item.id, recipe_id=menu_item.recipe_id
                 )
+
+
+def _get_relevant_ingredients(
+    recipes_to_consider: tuple[recipes.Recipe, ...],
+) -> tuple[ingredients.Ingredient, ...]:
+    ingredient_ids: set[int] = set()
+    for recipe in recipes_to_consider:
+        for ingredient in recipe.ingredients:
+            ingredient_ids.add(ingredient.ingredient_id)
+    return ingredients.get_ingredients(ingredient_ids=ingredient_ids)

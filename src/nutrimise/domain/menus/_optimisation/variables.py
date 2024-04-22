@@ -4,7 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.data import constants
-from nutrimise.domain import ingredients, menus, recipes
+from nutrimise.domain import menus, recipes
 
 from . import inputs
 

@@ -36,7 +36,9 @@ def test_respects_menu_item_assignment_constraints():
     menu = domain_factories.Menu(items=[menu_item])
     recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
 
-    solution = menus.optimise_recipes_for_menu(menu=menu, recipes_to_consider=(recipe,))
+    solution = menus.optimise_recipes_for_menu(
+        menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
+    )
 
     assert len(solution) == 1
     assert solution[0].recipe_id == recipe.id
@@ -62,7 +64,9 @@ def test_raises_if_insufficient_recipes_are_considered():
     menu = domain_factories.Menu(items=[menu_item])
 
     with pytest.raises(menus.UnableToOptimiseMenu) as exc:
-        menus.optimise_recipes_for_menu(menu=menu, recipes_to_consider=())
+        menus.optimise_recipes_for_menu(
+            menu=menu, recipes_to_consider=(), relevant_ingredients=()
+        )
 
     assert exc.value.menu_id == menu.id
 
@@ -78,7 +82,7 @@ def test_respects_maximum_occurrences_per_recipe_constraint():
     other_recipe = domain_factories.Recipe(meal_times=meal_times)
 
     solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(recipe, other_recipe)
+        menu=menu, recipes_to_consider=(recipe, other_recipe), relevant_ingredients=()
     )
 
     assert len(solution) == 2
@@ -96,7 +100,9 @@ def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_con
     )
 
     solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(pre_selected_recipe, other_recipe)
+        menu=menu,
+        recipes_to_consider=(pre_selected_recipe, other_recipe),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 1
@@ -131,6 +137,7 @@ def test_respects_minimum_nutrient_requirement_constraint():
     solution = menus.optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 1
@@ -170,6 +177,7 @@ def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item():
     solution = menus.optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 1
@@ -205,6 +213,7 @@ def test_respects_maximum_nutrient_requirement_constraint():
     solution = menus.optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 1
@@ -244,6 +253,7 @@ def test_respects_maximum_nutrient_requirement_constraint_with_fixed_item():
     solution = menus.optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
+        relevant_ingredients=(),
     )
 
     assert len(solution) == 1

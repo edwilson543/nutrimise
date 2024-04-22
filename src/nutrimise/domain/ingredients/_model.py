@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import attrs
 
-from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data import constants
+from nutrimise.data.ingredients import models as ingredient_models
 
 
 @attrs.frozen

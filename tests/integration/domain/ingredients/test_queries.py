@@ -1,14 +1,17 @@
+import pytest
+
 from nutrimise.data import constants
 from nutrimise.domain import ingredients
 
 from tests.factories import data as data_factories
-import pytest
 
 
 class TestGetIngredients:
     @pytest.mark.parametrize("matching_ingredients", [0, 1, 2])
     def test_gets_ingredients_with_passed_id_only(self, matching_ingredients: int):
-        ingredient_ids = [data_factories.Ingredient().id for _ in range(0, matching_ingredients)]
+        ingredient_ids = [
+            data_factories.Ingredient().id for _ in range(0, matching_ingredients)
+        ]
         data_factories.Ingredient()  # Some other ingredient.
 
         result = ingredients.get_ingredients(ingredient_ids=ingredient_ids)
