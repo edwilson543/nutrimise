@@ -1,4 +1,5 @@
 import factory
+
 from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
 
