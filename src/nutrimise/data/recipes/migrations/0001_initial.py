@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Recipe",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
                 (
@@ -45,12 +45,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
+                    models.BigAutoField(primary_key=True, serialize=False),
                 ),
                 ("quantity", models.FloatField()),
                 (

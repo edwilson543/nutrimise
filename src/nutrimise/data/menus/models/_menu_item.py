@@ -13,7 +13,7 @@ class MenuItem(django_models.Model):
     A single item from a menu.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     menu = django_models.ForeignKey(
         _menu.Menu, on_delete=django_models.CASCADE, related_name="items"

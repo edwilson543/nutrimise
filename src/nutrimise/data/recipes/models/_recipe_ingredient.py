@@ -10,6 +10,8 @@ class RecipeIngredient(django_models.Model):
     Record that a known quantity of some ingredient should be included in a recipe.
     """
 
+    id = django_models.BigAutoField(primary_key=True)
+
     recipe = django_models.ForeignKey(
         _recipe.Recipe, on_delete=django_models.CASCADE, related_name="ingredients"
     )

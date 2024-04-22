@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Menu",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="MenuItem",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 (
                     "day",
                     models.PositiveSmallIntegerField(
@@ -90,12 +90,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
+                    models.BigAutoField(primary_key=True, serialize=False),
                 ),
                 ("maximum_occurrences_per_recipe", models.SmallIntegerField()),
                 (
@@ -119,7 +114,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="NutrientRequirement",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("minimum_quantity", models.FloatField(null=True, blank=True)),
                 ("maximum_quantity", models.FloatField(null=True, blank=True)),
                 ("target_quantity", models.FloatField(null=True, blank=True)),
@@ -149,7 +144,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="VarietyRequirement",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("minimum", models.PositiveSmallIntegerField(blank=True, null=True)),
                 ("maximum", models.PositiveSmallIntegerField(blank=True, null=True)),
                 ("target", models.PositiveSmallIntegerField(blank=True, null=True)),

@@ -12,29 +12,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="DietaryRequirement",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.TextField(unique=True)),
             ],
         ),
         migrations.CreateModel(
             name="IngredientCategory",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.TextField(unique=True)),
             ],
         ),
         migrations.CreateModel(
             name="Ingredient",
             fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128, unique=True)),
                 (
                     "category",
@@ -62,30 +54,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Nutrient",
             fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.TextField(unique=True)),
             ],
         ),
         migrations.CreateModel(
             name="IngredientNutritionalInformation",
             fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("quantity_per_gram", models.FloatField()),
                 ("units", models.TextField(choices=constants.NutrientUnit.choices)),
                 (

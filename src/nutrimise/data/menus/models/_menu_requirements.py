@@ -10,6 +10,8 @@ class MenuRequirements(django_models.Model):
     The requirements to meet when optimising a menu.
     """
 
+    id = django_models.BigAutoField(primary_key=True)
+
     menu = django_models.OneToOneField(
         _menu.Menu, on_delete=django_models.CASCADE, related_name="requirements"
     )
@@ -29,7 +31,7 @@ class NutrientRequirement(django_models.Model):
     The nutrient requirements to meet when optimising a menu.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     menu_requirements = django_models.ForeignKey(
         MenuRequirements,
@@ -67,7 +69,7 @@ class VarietyRequirement(django_models.Model):
     Requirements for the number of ingredients that must feature in a menu, per category.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     menu_requirements = django_models.ForeignKey(
         MenuRequirements,

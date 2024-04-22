@@ -15,7 +15,7 @@ class Menu(django_models.Model):
     A collection of recipes.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     author = django_models.ForeignKey(
         auth_models.User, on_delete=django_models.CASCADE, related_name="menus"

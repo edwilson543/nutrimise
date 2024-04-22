@@ -12,7 +12,7 @@ class Recipe(django_models.Model):
     Basic data that defines a recipe.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     author = django_models.ForeignKey(auth_models.User, on_delete=django_models.CASCADE)
 

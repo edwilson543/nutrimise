@@ -10,6 +10,8 @@ class IngredientNutritionalInformation(django_models.Model):
     Information on the amount of a nutrient found in an ingredient.
     """
 
+    id = django_models.BigAutoField(primary_key=True)
+
     ingredient = django_models.ForeignKey(
         _ingredient.Ingredient,
         on_delete=django_models.CASCADE,
