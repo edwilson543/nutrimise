@@ -1,4 +1,3 @@
-# Standard library imports
 import collections
 
 from typing import Any

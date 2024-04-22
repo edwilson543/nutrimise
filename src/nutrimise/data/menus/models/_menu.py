@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# Standard library imports
+
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import models as auth_models

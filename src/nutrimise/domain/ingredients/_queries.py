@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# Standard library imports
+
 import collections
 
 from nutrimise.data import constants

@@ -1,4 +1,3 @@
-# Standard library imports
 from typing import Any
 
 from django import http
