@@ -4,7 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.data import constants
-from nutrimise.domain import menus, recipes
+from nutrimise.domain import ingredients, menus, recipes
 
 from . import inputs
 
@@ -24,14 +24,27 @@ class DecisionVariable:
         return self.menu_item.day
 
 
+class RecipeIncludedDependentVariable:
+    def __init__(self, *, recipe: recipes.Recipe) -> None:
+        self.recipe = recipe
+        self.lp_variable = lp.LpVariable(
+            cat=lp.constants.LpBinary, name=f"recipe-{recipe.id}-included-in-menu"
+        )
+
+
 @attrs.frozen
 class Variables:
     decision_variables: tuple[DecisionVariable, ...]
+    # Dependent variables.
+    recipe_included_dependent_variables: tuple[RecipeIncludedDependentVariable, ...]
 
     @classmethod
     def from_inputs(cls, inputs: inputs.OptimiserInputs) -> Variables:
         return cls(
             decision_variables=cls._decision_variables_from_inputs(inputs),
+            recipe_included_dependent_variables=cls._recipe_included_variables_from_inputs(
+                inputs
+            ),
         )
 
     @classmethod
@@ -53,3 +66,12 @@ class Variables:
                     )
                     decision_variables.append(decision_variable)
         return tuple(decision_variables)
+
+    @classmethod
+    def _recipe_included_variables_from_inputs(
+        cls, inputs: inputs.OptimiserInputs
+    ) -> tuple[RecipeIncludedDependentVariable, ...]:
+        return tuple(
+            RecipeIncludedDependentVariable(recipe=recipe)
+            for recipe in inputs.recipes_to_consider
+        )

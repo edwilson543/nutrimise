@@ -11,6 +11,7 @@ class RecipeNotProvidedInLookup(Exception):
 @attrs.frozen
 class OptimiserInputs:
     menu: menus.Menu
+    # Note: `recipes_to_consider` also necessarily includes any pre-selected recipes.
     recipes_to_consider: tuple[recipes.Recipe, ...]
 
     def look_up_recipe(self, *, recipe_id: int) -> recipes.Recipe:
