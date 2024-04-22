@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
 
+
 if TYPE_CHECKING:
     pass
 

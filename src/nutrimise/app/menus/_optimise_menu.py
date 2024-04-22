@@ -4,6 +4,7 @@ from django.db import transaction
 
 from nutrimise.domain import menus, recipes
 
+
 MenuDoesNotExist = menus.MenuDoesNotExist
 
 UnableToOptimiseMenu = menus.UnableToOptimiseMenu

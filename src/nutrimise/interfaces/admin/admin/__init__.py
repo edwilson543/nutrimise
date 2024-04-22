@@ -8,6 +8,7 @@ from ._ingredients import (
 from ._menus import MenuAdmin, MenuItemAdmin
 from ._recipes import RecipeAdmin, RecipeIngredientAdmin
 
+
 # Overrides
 admin.site.site_header = "nutrimise admin"
 admin.site.site_title = "nutrimise"

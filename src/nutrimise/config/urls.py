@@ -3,6 +3,7 @@ from django.conf import settings
 from django.conf.urls import static
 from django.contrib import admin
 
+
 urlpatterns = [
     urls.path("admin/", urls.include("nutrimise.interfaces.admin.urls")),
     urls.path("admin/", admin.site.urls),

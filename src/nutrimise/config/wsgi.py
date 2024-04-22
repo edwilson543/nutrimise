@@ -12,6 +12,7 @@ import os
 
 from configurations import wsgi
 
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nutrimise.config.settings")
 os.environ.setdefault("DJANGO_CONFIGURATION", "Settings")
 
