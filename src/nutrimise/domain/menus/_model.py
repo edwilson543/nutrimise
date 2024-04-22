@@ -94,7 +94,7 @@ class MenuRequirements:
             ),
             maximum_occurrences_per_recipe=requirements.maximum_occurrences_per_recipe,
             dietary_requirement_ids=tuple(
-                *requirements.dietary_requirements.values_list("id")
+                requirements.dietary_requirements.values_list("id", flat=True)
             ),
         )
 
