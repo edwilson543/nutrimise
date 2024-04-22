@@ -6,6 +6,13 @@ from nutrimise.data import constants
 
 
 @attrs.frozen
+class Ingredient:
+    id: int
+    name: str
+    category_id: int
+
+
+@attrs.frozen
 class Nutrient:
     id: int
     name: str
