@@ -41,3 +41,13 @@ class NutrientRequirement(factory.django.DjangoModelFactory):
 
     class Meta:
         model = menu_models.NutrientRequirement
+
+
+class VarietyRequirement(factory.django.DjangoModelFactory):
+    ingredient_category = factory.SubFactory(_ingredients.IngredientCategory)
+    minimum = None
+    Maximum = None
+    target = None
+
+    class Meta:
+        model = menu_models.VarietyRequirement

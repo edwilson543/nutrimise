@@ -145,6 +145,38 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
+        migrations.CreateModel(
+            name="VarietyRequirement",
+            fields=[
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("minimum", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("maximum", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("target", models.PositiveSmallIntegerField(blank=True, null=True)),
+                (
+                    "ingredient_category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="+",
+                        to="ingredients.ingredientcategory",
+                    ),
+                ),
+                (
+                    "menu_requirements",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="variety_requirements",
+                        to="menus.menurequirements",
+                    ),
+                ),
+            ],
+        ),
+        migrations.AddConstraint(
+            model_name="varietyrequirement",
+            constraint=models.UniqueConstraint(
+                fields=("menu_requirements_id", "ingredient_category_id"),
+                name="unique_requirements_per_ingredient_category_per_menu",
+            ),
+        ),
         migrations.AddConstraint(
             model_name="menuitem",
             constraint=models.UniqueConstraint(
