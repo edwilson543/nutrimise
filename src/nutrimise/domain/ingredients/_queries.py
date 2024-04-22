@@ -1,12 +1,22 @@
 from __future__ import annotations
 
-
 import collections
 
 from nutrimise.data import constants
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.data.ingredients import models as ingredient_models
 
 from . import _model
+
+
+def get_ingredients(
+    *, ingredient_ids: collections.Iterable[int, ...]
+) -> tuple[_model.Ingredient, ...]:
+    ingredients = ingredient_models.Ingredient.objects.filter(id__in=ingredient_ids)
+    return tuple(
+        _model.Ingredient.from_orm_model(ingredient=ingredient)
+        for ingredient in ingredients
+    )
 
 
 def get_nutritional_information_for_recipe(
