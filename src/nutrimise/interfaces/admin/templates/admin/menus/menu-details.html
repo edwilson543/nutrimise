@@ -120,11 +120,30 @@
                         <td>{{ nutrient_requirement.nutrient.name }}</td>
                         <td>{{ nutrient_requirement.minimum_quantity | floatformat:"1" | default_if_none:"None" }}</td>
                         <td>{{ nutrient_requirement.maximum_quantity | floatformat:"1" | default_if_none:"None" }}</td>
-                        <td>{{ nutrient_requirement.target_quantity | floatformat:"1" }}</td>
+                        <td>{{ nutrient_requirement.target_quantity | floatformat:"1" | default_if_none:"None" }}</td>
                         <td>{{ nutrient_requirement.units | title }}</td>
                     </tr>
                 {% endfor %}
             </table>
+
+            <h3>Variety requirements:</h3>
+            <table>
+                <tr>
+                    <th>Ingredient category</th>
+                    <th>Minimum</th>
+                    <th>Maximum</th>
+                    <th>Target</th>
+                </tr>
+                {% for variety_requirement in menu.requirements.variety_requirements.all %}
+                    <tr>
+                        <td>{{ variety_requirement.ingredient_category.name }}</td>
+                        <td>{{ variety_requirement.minimum | default_if_none:"None" }}</td>
+                        <td>{{ variety_requirement.maximum | default_if_none:"None" }}</td>
+                        <td>{{ variety_requirement.target | default_if_none:"None" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
         {% endif %}
     </div>
 
