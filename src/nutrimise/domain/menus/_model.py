@@ -77,6 +77,7 @@ class MenuItem:
 @attrs.frozen
 class MenuRequirements:
     nutrient_requirements: tuple[NutrientRequirement, ...]
+    variety_requirements: tuple[VarietyRequirement, ...]
     maximum_occurrences_per_recipe: int
     dietary_requirement_ids: tuple[int, ...]
 
@@ -85,10 +86,13 @@ class MenuRequirements:
         cls, *, requirements: menu_models.MenuRequirements
     ) -> MenuRequirements:
         return cls(
-            maximum_occurrences_per_recipe=requirements.maximum_occurrences_per_recipe,
             nutrient_requirements=NutrientRequirement.from_orm_model(
                 requirements=list(requirements.nutrient_requirements.all())
             ),
+            variety_requirements=VarietyRequirement.from_orm_model(
+                requirements=list(requirements.variety_requirements.all())
+            ),
+            maximum_occurrences_per_recipe=requirements.maximum_occurrences_per_recipe,
             dietary_requirement_ids=tuple(
                 *requirements.dietary_requirements.values_list("id")
             ),
@@ -118,6 +122,28 @@ class NutrientRequirement:
                 enforcement_interval=constants.NutrientRequirementEnforcementInterval(
                     requirement.enforcement_interval
                 ),
+            )
+            for requirement in requirements
+        )
+
+
+@attrs.frozen
+class VarietyRequirement:
+    ingredient_category_id: int
+    minimum: int | None
+    maximum: int | None
+    target: int | None
+
+    @classmethod
+    def from_orm_model(
+        cls, *, requirements: list[menu_models.VarietyRequirement]
+    ) -> tuple[VarietyRequirement, ...]:
+        return tuple(
+            cls(
+                ingredient_category_id=requirement.ingredient_category_id,
+                minimum=requirement.minimum,
+                maximum=requirement.maximum,
+                target=requirement.target,
             )
             for requirement in requirements
         )

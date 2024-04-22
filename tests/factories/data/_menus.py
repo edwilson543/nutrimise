@@ -47,7 +47,7 @@ class NutrientRequirement(factory.django.DjangoModelFactory):
 class VarietyRequirement(factory.django.DjangoModelFactory):
     ingredient_category = factory.SubFactory(_ingredients.IngredientCategory)
     minimum = None
-    Maximum = None
+    maximum = None
     target = None
 
     class Meta:

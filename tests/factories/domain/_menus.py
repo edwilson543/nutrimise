@@ -17,6 +17,7 @@ class MenuItem(factory.Factory):
 
 class MenuRequirements(factory.Factory):
     nutrient_requirements = factory.LazyFunction(tuple)
+    variety_requirements = factory.LazyFunction(tuple)
     maximum_occurrences_per_recipe = 1
     dietary_requirement_ids = factory.LazyFunction(tuple)
 
@@ -45,3 +46,13 @@ class NutrientRequirement(factory.Factory):
 
     class Meta:
         model = menus.NutrientRequirement
+
+
+class VarietyRequirement(factory.Factory):
+    ingredient_category_id = factory.Sequence(lambda n: n)
+    minimum = None
+    maximum = None
+    target = None
+
+    class Meta:
+        model = menus.VarietyRequirement
