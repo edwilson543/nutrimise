@@ -52,3 +52,11 @@ class NutrientRequirement(django_models.Model):
     enforcement_interval = django_models.TextField(
         choices=constants.NutrientRequirementEnforcementInterval.choices
     )
+
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                fields=["menu_requirements_id", "nutrient_id"],
+                name="unique_requirements_per_nutrient_per_menu",
+            )
+        ]

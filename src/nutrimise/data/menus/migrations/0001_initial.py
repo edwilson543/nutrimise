@@ -162,4 +162,11 @@ class Migration(migrations.Migration):
                 name="users_can_only_have_one_menu_per_name",
             ),
         ),
+        migrations.AddConstraint(
+            model_name="nutrientrequirement",
+            constraint=models.UniqueConstraint(
+                fields=("menu_requirements_id", "nutrient_id"),
+                name="unique_requirements_per_nutrient_per_menu",
+            ),
+        ),
     ]
