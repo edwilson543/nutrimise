@@ -30,6 +30,14 @@ class Variables:
 
     @classmethod
     def from_inputs(cls, inputs: inputs.OptimiserInputs) -> Variables:
+        return cls(
+            decision_variables=cls._decision_variables_from_inputs(inputs),
+        )
+
+    @classmethod
+    def _decision_variables_from_inputs(
+        cls, inputs: inputs.OptimiserInputs
+    ) -> tuple[DecisionVariable, ...]:
         decision_variables: list[DecisionVariable] = []
 
         for menu_item in inputs.menu.items:
@@ -44,5 +52,4 @@ class Variables:
                         recipe=recipe, menu_item=menu_item
                     )
                     decision_variables.append(decision_variable)
-
-        return cls(decision_variables=tuple(decision_variables))
+        return tuple(decision_variables)
