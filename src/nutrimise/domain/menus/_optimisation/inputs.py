@@ -1,3 +1,5 @@
+import functools
+
 import attrs
 
 from nutrimise.domain import ingredients, menus, recipes
@@ -39,3 +41,26 @@ class OptimiserInputs:
     def requirements(self) -> menus.MenuRequirements:
         assert self.menu.requirements  # Solver will reject menu without requirements.
         return self.menu.requirements
+
+    @functools.cached_property
+    def unoptimised_recipe_selections(self) -> tuple[recipes.Recipe, ...]:
+        unique_recipe_ids = {
+            menu_item.recipe_id
+            for menu_item in self.menu.items
+            if menu_item.recipe_id is not None
+        }
+        return tuple(
+            self.look_up_recipe(recipe_id=recipe_id) for recipe_id in unique_recipe_ids
+        )
+
+    @functools.cached_property
+    def unoptimised_ingredient_selections(self) -> tuple[ingredients.Ingredient, ...]:
+        unique_ingredient_ids = {
+            recipe_ingredient.ingredient_id
+            for recipe in self.unoptimised_recipe_selections
+            for recipe_ingredient in recipe.ingredients
+        }
+        return tuple(
+            self.look_up_ingredient(ingredient_id=ingredient_id)
+            for ingredient_id in unique_ingredient_ids
+        )

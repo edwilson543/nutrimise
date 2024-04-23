@@ -27,3 +27,10 @@ class Recipe(factory.Factory):
             nutritional_information_per_serving=(high_nutrition,),
             meal_times=[meal_time for meal_time in constants.MealTime],
         )
+
+
+class RecipeIngredient(factory.Factory):
+    ingredient_id = factory.Sequence(lambda n: n)
+
+    class Meta:
+        model = recipes.RecipeIngredient

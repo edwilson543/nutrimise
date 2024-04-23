@@ -71,19 +71,11 @@ class Variables:
         return tuple(decision_variables)
 
     @classmethod
-    def _recipe_included_variables_from_inputs(
-        cls, inputs: inputs.OptimiserInputs
-    ) -> tuple[RecipeIncludedDependentVariable, ...]:
-        return tuple(
-            RecipeIncludedDependentVariable(recipe=recipe)
-            for recipe in inputs.recipes_to_consider
-        )
-
-    @classmethod
     def _ingredient_included_variables_from_inputs(
         cls, inputs: inputs.OptimiserInputs
     ) -> tuple[IngredientIncludedDependentVariable, ...]:
         return tuple(
             IngredientIncludedDependentVariable(ingredient=ingredient)
             for ingredient in inputs.relevant_ingredients
+            if ingredient not in inputs.unoptimised_ingredient_selections
         )
