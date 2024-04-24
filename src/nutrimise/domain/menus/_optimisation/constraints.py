@@ -19,12 +19,16 @@ def yield_all_constraints(
     inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
 ) -> Generator[lp.LpConstraint, None, None]:
-    yield from _all_menu_items_assigned_a_recipe(inputs=inputs, variables_=variables_)
-    yield from _maximum_occurrences_per_recipe(inputs=inputs, variables_=variables_)
-    yield from _nutrient_requirements(inputs=inputs, variables_=variables_)
+    yield from _all_menu_items_are_assigned_a_recipe(
+        inputs=inputs, variables_=variables_
+    )
+    yield from _recipes_do_not_exceed_maximum_occurrences(
+        inputs=inputs, variables_=variables_
+    )
+    yield from _all_nutrient_requirements_are_met(inputs=inputs, variables_=variables_)
 
 
-def _all_menu_items_assigned_a_recipe(
+def _all_menu_items_are_assigned_a_recipe(
     *, inputs: inputs.OptimiserInputs, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
     for menu_item in inputs.menu.items:
@@ -36,7 +40,7 @@ def _all_menu_items_assigned_a_recipe(
         yield sum_of_menu_item_variables == 1
 
 
-def _maximum_occurrences_per_recipe(
+def _recipes_do_not_exceed_maximum_occurrences(
     *,
     inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
@@ -51,13 +55,13 @@ def _maximum_occurrences_per_recipe(
         )
 
 
-def _nutrient_requirements(
+def _all_nutrient_requirements_are_met(
     *, inputs: inputs.OptimiserInputs, variables_: variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
     for nutrient_requirement in inputs.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
             case constants.NutrientRequirementEnforcementInterval.DAILY:
-                yield from _daily_nutrient_requirements(
+                yield from _daily_nutrient_requirements_are_met(
                     inputs=inputs,
                     requirement=nutrient_requirement,
                     variables_=variables_,
@@ -68,7 +72,7 @@ def _nutrient_requirements(
                 )
 
 
-def _daily_nutrient_requirements(
+def _daily_nutrient_requirements_are_met(
     *,
     inputs: inputs.OptimiserInputs,
     variables_: variables.Variables,
