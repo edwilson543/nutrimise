@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+
 import factory
 
 from nutrimise.data import constants
@@ -27,6 +29,15 @@ class Recipe(factory.Factory):
             nutritional_information_per_serving=(high_nutrition,),
             meal_times=[meal_time for meal_time in constants.MealTime],
         )
+
+    @classmethod
+    def with_ingredients(
+        cls, *, ingredients: Iterable[ingredients_domain.Ingredient], **kwargs: object
+    ) -> recipes.Recipe:
+        recipe_ingredients = tuple(
+            RecipeIngredient(ingredient_id=ingredient.id) for ingredient in ingredients
+        )
+        return cls.create(ingredients=recipe_ingredients, **kwargs)
 
 
 class RecipeIngredient(factory.Factory):

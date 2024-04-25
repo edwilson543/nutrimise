@@ -16,7 +16,7 @@ class DecisionVariable:
 
         self.lp_variable = lp.LpVariable(
             cat=lp.constants.LpBinary,
-            name=f"recipe-{recipe.id}-for-menu-item-{menu_item.id}",
+            name=f"recipe_{recipe.id}_for_menu_item_{menu_item.id}",
         )
 
     @property
@@ -29,7 +29,7 @@ class IngredientIncludedDependentVariable:
         self.ingredient = ingredient
         self.lp_variable = lp.LpVariable(
             cat=lp.constants.LpBinary,
-            name=f"ingredient-{ingredient.id}-included-in-menu",
+            name=f"ingredient_{ingredient.id}_included_in_menu",
         )
 
 

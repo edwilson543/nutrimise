@@ -40,6 +40,10 @@ class Recipe:
                 return nutritional_information.nutrient_quantity
         return 0
 
+    @property
+    def unique_ingredient_ids(self) -> tuple[int, ...]:
+        return tuple({ingredient.ingredient_id for ingredient in self.ingredients})
+
 
 @attrs.frozen
 class RecipeIngredient:

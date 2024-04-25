@@ -64,6 +64,43 @@ def total_nutrient_quantity_for_day(
     return total
 
 
+def number_of_ingredients_in_category_across_menu(
+    *,
+    inputs: inputs.OptimiserInputs,
+    variables: variables.Variables,
+    ingedient_category_id: int,
+) -> lp.LpAffineExpression:
+    variable_contribution = lp.lpSum(
+        [
+            ingredient.lp_variable
+            for ingredient in variables.ingredient_included_dependent_variables
+            if ingredient.ingredient.category_id == ingedient_category_id
+        ]
+    )
+    fixed_contribution = len(
+        [
+            ingredient
+            for ingredient in inputs.unoptimised_ingredient_selections
+            if ingredient.category_id == ingedient_category_id
+        ]
+    )
+    return variable_contribution + fixed_contribution
+
+
+def number_of_times_ingredient_features_across_menu(
+    *, variables: variables.Variables, ingredient_id: int
+) -> lp.LpAffineExpression:
+    # Note: ingredients in unoptimised recipe selections are already accounted for.
+    return lp.lpSum(
+        decision_var.lp_variable
+        for decision_var in variables.decision_variables
+        if ingredient_id in decision_var.recipe.unique_ingredient_ids
+    )
+
+
+# Nutrition helpers.
+
+
 def _get_nutrient_quantity_for_decision_variable(
     *, variable: variables.DecisionVariable, nutrient_id: int
 ) -> lp.LpAffineExpression:
