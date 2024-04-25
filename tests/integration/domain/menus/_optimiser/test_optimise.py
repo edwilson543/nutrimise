@@ -254,3 +254,136 @@ class TestNutrientRequirements:
 
         assert len(solution) == 1
         assert solution[0].recipe_id == ideal_dinner.id
+
+
+class TestVarietyRequirements:
+    @pytest.mark.parametrize("requirement", ["minimum", "maximum"])
+    def test_respects_minimum_or_maximum_variety_requirement_constraint(
+        self, requirement: str
+    ):
+        # Create a menu needing a single recipe selecting.
+        ingredient = domain_factories.Ingredient()
+        requirement_kwargs = {requirement: 1}
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id, **requirement_kwargs
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
+
+        # Create a recipe with / without an ingredient in the required category.
+        recipe_with_ingredient_in_category = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[menu_item.meal_time]
+        )
+        recipe_without_ingredient_in_category = (
+            domain_factories.Recipe.with_ingredients(
+                ingredients=[], meal_times=[menu_item.meal_time]
+            )
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(
+                recipe_with_ingredient_in_category,
+                recipe_without_ingredient_in_category,
+            ),
+            relevant_ingredients=(ingredient,),
+        )
+
+        assert len(solution) == 1
+        if requirement == "minimum":
+            assert solution[0].recipe_id == recipe_with_ingredient_in_category.id
+        elif requirement == "maximum":
+            assert solution[0].recipe_id == recipe_without_ingredient_in_category.id
+        else:
+            pytest.fail("Invalid scenario.")
+
+    def test_respects_minimum_and_maximum_variety_requirement(self):
+        # Create a menu needing a single recipe selecting.
+        ingredient_category_id = 123
+        requirement = 2
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient_category_id,
+            minimum=requirement,
+            maximum=requirement,
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
+
+        # Create recipes with 0-3 ingredients in the required category.
+        n_recipes_to_create = requirement + 1
+        relevant_ingredients = tuple(
+            domain_factories.Ingredient(category_id=ingredient_category_id)
+            for _ in range(0, n_recipes_to_create + 1)
+        )
+
+        recipes_to_consider = tuple(
+            domain_factories.Recipe.with_ingredients(
+                ingredients=relevant_ingredients[:n_ingredients],
+                meal_times=[menu_item.meal_time],
+            )
+            for n_ingredients in range(0, n_recipes_to_create + 1)
+        )
+        only_recipe_meeting_requirement = recipes_to_consider[requirement]
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=recipes_to_consider,
+            relevant_ingredients=relevant_ingredients,
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == only_recipe_meeting_requirement.id
+
+    def test_unoptimised_recipe_selection_counts_towards_variety_requirement(self):
+        ingredient = domain_factories.Ingredient()
+
+        lunch_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[constants.MealTime.LUNCH]
+        )
+        ideal_dinner_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[constants.MealTime.DINNER]
+        )
+        suboptimal_dinner_recipe = domain_factories.Recipe(
+            meal_times=[constants.MealTime.DINNER]
+        )
+
+        # Create a menu with lunch already selected, but requiring dinner selecting.
+        lunch = domain_factories.MenuItem(
+            recipe_id=lunch_recipe.id,
+            meal_time=constants.MealTime.LUNCH,
+            optimiser_generated=False,
+        )
+        dinner = domain_factories.MenuItem(
+            recipe_id=None,
+            meal_time=constants.MealTime.DINNER,
+            optimiser_generated=True,
+        )
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id,
+            minimum=1,
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu = domain_factories.Menu(
+            items=[lunch, dinner], requirements=menu_requirements
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(
+                lunch_recipe,
+                ideal_dinner_recipe,
+                suboptimal_dinner_recipe,
+            ),
+            relevant_ingredients=(ingredient,),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == ideal_dinner_recipe.id
