@@ -48,6 +48,7 @@ class OptimiserInputs:
             menu_item.recipe_id
             for menu_item in self.menu.items
             if menu_item.recipe_id is not None
+            and not menu_item.optimiser_generated
         }
         return tuple(
             self.look_up_recipe(recipe_id=recipe_id) for recipe_id in unique_recipe_ids
