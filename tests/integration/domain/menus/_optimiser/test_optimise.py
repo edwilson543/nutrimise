@@ -277,10 +277,8 @@ class TestVarietyRequirements:
         ideal_recipe = domain_factories.Recipe.with_ingredients(
             ingredients=[ingredient, other_ingredient], meal_times=[menu_item.meal_time]
         )
-        suboptimal_recipe = (
-            domain_factories.Recipe.with_ingredients(
-                ingredients=[ingredient], meal_times=[menu_item.meal_time]
-            )
+        suboptimal_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[menu_item.meal_time]
         )
 
         solution = menus.optimise_recipes_for_menu(
