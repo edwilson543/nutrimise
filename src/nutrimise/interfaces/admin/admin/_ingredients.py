@@ -27,13 +27,17 @@ class _IngredientNutritionalInformationInline(admin.TabularInline):
 
 @admin.register(ingredient_models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "units"]
+    list_display = ["id", "name", "category_name", "units"]
     list_display_links = ["name"]
     ordering = ["name"]
 
     inlines = [
         _IngredientNutritionalInformationInline,
     ]
+
+    @admin.display(description="Category")
+    def category_name(self, ingredient: ingredient_models.Ingredient) -> str:
+        return ingredient.category.name
 
     @admin.display(description="Units")
     def units(self, ingredient: ingredient_models.Ingredient) -> str:

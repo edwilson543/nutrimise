@@ -112,7 +112,9 @@ class TestFromInclusionDependentVariables:
         )
 
         # Force `recipe` to be included in the menu.
-        unoptimised_selection = domain_factories.MenuItem(recipe_id=recipe.id)
+        unoptimised_selection = domain_factories.MenuItem(
+            recipe_id=recipe.id, optimiser_generated=False
+        )
         menu = domain_factories.Menu(items=(unoptimised_selection,))
 
         inputs_ = inputs.OptimiserInputs(

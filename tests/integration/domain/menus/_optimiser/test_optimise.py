@@ -257,15 +257,47 @@ class TestNutrientRequirements:
 
 
 class TestVarietyRequirements:
-    @pytest.mark.parametrize("requirement", ["minimum", "maximum"])
-    def test_respects_minimum_or_maximum_variety_requirement_constraint(
-        self, requirement: str
-    ):
+    def test_respects_minimum_variety_requirement_constraint(self):
+        # Create two ingredients in the same category.
+        category_id = 1
+        ingredient = domain_factories.Ingredient(category_id=category_id)
+        other_ingredient = domain_factories.Ingredient(category_id=category_id)
+
+        # Create a menu needing a single recipe, with two ingredients in the given category.
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id, minimum=2
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
+
+        # Create a recipe with / without sufficient ingredients in the required category.
+        ideal_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient, other_ingredient], meal_times=[menu_item.meal_time]
+        )
+        suboptimal_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[menu_item.meal_time]
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(
+                ideal_recipe,
+                suboptimal_recipe,
+            ),
+            relevant_ingredients=(ingredient, other_ingredient),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == ideal_recipe.id
+
+    def test_respects_maximum_variety_requirement_constraint(self):
         # Create a menu needing a single recipe selecting.
         ingredient = domain_factories.Ingredient()
-        requirement_kwargs = {requirement: 1}
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id, **requirement_kwargs
+            ingredient_category_id=ingredient.category_id, maximum=1
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -293,12 +325,7 @@ class TestVarietyRequirements:
         )
 
         assert len(solution) == 1
-        if requirement == "minimum":
-            assert solution[0].recipe_id == recipe_with_ingredient_in_category.id
-        elif requirement == "maximum":
-            assert solution[0].recipe_id == recipe_without_ingredient_in_category.id
-        else:
-            pytest.fail("Invalid scenario.")
+        assert solution[0].recipe_id == recipe_without_ingredient_in_category.id
 
     def test_respects_minimum_and_maximum_variety_requirement(self):
         # Create a menu needing a single recipe selecting.
