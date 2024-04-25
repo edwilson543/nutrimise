@@ -33,3 +33,6 @@ class IngredientNutritionalInformation(django_models.Model):
                 name="ingredient_nutrient_unique_together",
             )
         ]
+
+    def __str__(self) -> str:
+        return f"{self.nutrient.name} in {self.ingredient.name}"

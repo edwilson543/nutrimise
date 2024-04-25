@@ -63,6 +63,9 @@ class NutrientRequirement(django_models.Model):
             )
         ]
 
+    def __str__(self) -> str:
+        return f"{self.nutrient.name} requirements"
+
 
 class VarietyRequirement(django_models.Model):
     """
@@ -96,3 +99,6 @@ class VarietyRequirement(django_models.Model):
                 name="unique_requirements_per_ingredient_category_per_menu",
             )
         ]
+
+    def __str__(self) -> str:
+        return f"{self.ingredient_category.name} requirements"
