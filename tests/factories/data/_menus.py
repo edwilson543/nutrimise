@@ -1,4 +1,5 @@
 import factory
+
 from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
 
@@ -41,3 +42,13 @@ class NutrientRequirement(factory.django.DjangoModelFactory):
 
     class Meta:
         model = menu_models.NutrientRequirement
+
+
+class VarietyRequirement(factory.django.DjangoModelFactory):
+    ingredient_category = factory.SubFactory(_ingredients.IngredientCategory)
+    minimum = None
+    maximum = None
+    target = None
+
+    class Meta:
+        model = menu_models.VarietyRequirement

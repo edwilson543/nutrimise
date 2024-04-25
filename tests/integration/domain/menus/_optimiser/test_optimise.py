@@ -1,4 +1,5 @@
 import pytest
+
 from nutrimise.data import constants
 from nutrimise.domain import menus, recipes
 
@@ -27,223 +28,362 @@ def _lunch_and_dinner_menu(
     return domain_factories.Menu(items=(lunch, dinner), requirements=requirements)
 
 
-# Basic requirements.
+class TestBasicRequirements:
+    def test_respects_menu_item_assignment_constraints(self):
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item])
+        recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == recipe.id
+
+    def test_respects_recipe_meal_time_restrictions(self):
+        menu = _lunch_and_dinner_menu()
+
+        lunch_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
+        dinner_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.DINNER])
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(lunch_recipe, dinner_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 2
+        assert solution[0].recipe_id == lunch_recipe.id
+        assert solution[1].recipe_id == dinner_recipe.id
+
+    def test_raises_if_insufficient_recipes_are_considered(self):
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item])
+
+        with pytest.raises(menus.UnableToOptimiseMenu) as exc:
+            menus.optimise_recipes_for_menu(
+                menu=menu, recipes_to_consider=(), relevant_ingredients=()
+            )
+
+        assert exc.value.menu_id == menu.id
 
 
-def test_respects_menu_item_assignment_constraints():
-    menu_item = domain_factories.MenuItem(recipe_id=None)
-    menu = domain_factories.Menu(items=[menu_item])
-    recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
+class TestMaximumRecipeOccurrencesPerRecipeConstraints:
+    def test_respects_maximum_occurrences_per_recipe_constraint(self):
+        requirements = domain_factories.MenuRequirements(
+            maximum_occurrences_per_recipe=1
+        )
+        menu = _lunch_and_dinner_menu(requirements=requirements)
 
-    solution = menus.optimise_recipes_for_menu(menu=menu, recipes_to_consider=(recipe,))
+        meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
+        recipe = domain_factories.Recipe(meal_times=meal_times)
+        other_recipe = domain_factories.Recipe(meal_times=meal_times)
 
-    assert len(solution) == 1
-    assert solution[0].recipe_id == recipe.id
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(recipe, other_recipe),
+            relevant_ingredients=(),
+        )
 
+        assert len(solution) == 2
+        assert {item.recipe_id for item in solution} == {recipe.id, other_recipe.id}
 
-def test_respects_recipe_meal_time_restrictions():
-    menu = _lunch_and_dinner_menu()
+    def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_constraint(
+        self,
+    ):
+        meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
+        pre_selected_recipe = domain_factories.Recipe(meal_times=meal_times)
+        other_recipe = domain_factories.Recipe(meal_times=meal_times)
 
-    lunch_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
-    dinner_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.DINNER])
+        requirements = domain_factories.MenuRequirements(
+            maximum_occurrences_per_recipe=1
+        )
+        menu = _lunch_and_dinner_menu(
+            requirements=requirements, lunch=pre_selected_recipe, dinner=None
+        )
 
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(lunch_recipe, dinner_recipe)
-    )
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(pre_selected_recipe, other_recipe),
+            relevant_ingredients=(),
+        )
 
-    assert len(solution) == 2
-    assert solution[0].recipe_id == lunch_recipe.id
-    assert solution[1].recipe_id == dinner_recipe.id
-
-
-def test_raises_if_insufficient_recipes_are_considered():
-    menu_item = domain_factories.MenuItem(recipe_id=None)
-    menu = domain_factories.Menu(items=[menu_item])
-
-    with pytest.raises(menus.UnableToOptimiseMenu) as exc:
-        menus.optimise_recipes_for_menu(menu=menu, recipes_to_consider=())
-
-    assert exc.value.menu_id == menu.id
-
-
-# Maximum recipe occurrences requirements.
-
-
-def test_respects_maximum_occurrences_per_recipe_constraint():
-    menu = _lunch_and_dinner_menu()
-
-    meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
-    recipe = domain_factories.Recipe(meal_times=meal_times)
-    other_recipe = domain_factories.Recipe(meal_times=meal_times)
-
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(recipe, other_recipe)
-    )
-
-    assert len(solution) == 2
-    assert {item.recipe_id for item in solution} == {recipe.id, other_recipe.id}
+        assert len(solution) == 1
+        assert solution[0].recipe_id == other_recipe.id
 
 
-def test_unoptimised_selection_contributes_to_maximum_occurrences_per_recipe_constraint():
-    meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
-    pre_selected_recipe = domain_factories.Recipe(meal_times=meal_times)
-    other_recipe = domain_factories.Recipe(meal_times=meal_times)
+class TestNutrientRequirements:
+    def test_respects_minimum_nutrient_requirement_constraint(self):
+        nutrient = domain_factories.Nutrient()
+        minimum_quantity = 10
 
-    requirements = domain_factories.MenuRequirements(maximum_occurrences_per_recipe=1)
-    menu = _lunch_and_dinner_menu(
-        requirements=requirements, lunch=pre_selected_recipe, dinner=None
-    )
+        high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=minimum_quantity + 1
+        )
+        low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=minimum_quantity - 1
+        )
 
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu, recipes_to_consider=(pre_selected_recipe, other_recipe)
-    )
+        menu_item = domain_factories.MenuItem(
+            recipe_id=None, meal_time=constants.MealTime.LUNCH
+        )
+        nutrition_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, minimum_quantity=minimum_quantity
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            nutrient_requirements=(nutrition_requirement,)
+        )
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
 
-    assert len(solution) == 1
-    assert solution[0].recipe_id == other_recipe.id
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == high_nutrition_recipe.id
+
+    def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item(self):
+        nutrient = domain_factories.Nutrient()
+        nutrition_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, minimum_quantity=10
+        )
+        lunch_nutrient_quantity = nutrition_requirement.minimum_quantity / 2
+        min_dinner_nutrient_quantity = (
+            nutrition_requirement.minimum_quantity - lunch_nutrient_quantity
+        )
+
+        # Create two dinner options that can make up the nutrition deficit.
+        lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=lunch_nutrient_quantity
+        )
+        ideal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=min_dinner_nutrient_quantity + 1
+        )
+        suboptimal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=min_dinner_nutrient_quantity - 1
+        )
+
+        # Create a menu with lunch already selected.
+        menu_requirements = domain_factories.MenuRequirements(
+            nutrient_requirements=(nutrition_requirement,),
+            maximum_occurrences_per_recipe=1,  # To avoid the lunch recipe getting selected for dinner.
+        )
+        menu = _lunch_and_dinner_menu(
+            requirements=menu_requirements, lunch=lunch_recipe, dinner=None
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == ideal_dinner.id
+
+    def test_respects_maximum_nutrient_requirement_constraint(self):
+        nutrient = domain_factories.Nutrient()
+        maximum_quantity = 10
+
+        # Create two recipes above / below the minimum nutrient requirements.
+        low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=maximum_quantity - 1
+        )
+        high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=maximum_quantity + 1
+        )
+
+        menu_item = domain_factories.MenuItem(
+            recipe_id=None, meal_time=constants.MealTime.LUNCH
+        )
+        nutrition_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, maximum_quantity=maximum_quantity
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            nutrient_requirements=(nutrition_requirement,)
+        )
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == low_nutrition_recipe.id
+
+    def test_respects_maximum_nutrient_requirement_constraint_with_fixed_item(self):
+        nutrient = domain_factories.Nutrient()
+        nutrition_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, maximum_quantity=8.3
+        )
+        lunch_nutrient_quantity = nutrition_requirement.maximum_quantity / 2
+        max_dinner_nutrient = (
+            nutrition_requirement.maximum_quantity - lunch_nutrient_quantity
+        )
+
+        # Create two dinner options.
+        lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=lunch_nutrient_quantity
+        )
+        ideal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=max_dinner_nutrient - 1
+        )
+        suboptimal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=max_dinner_nutrient + 1
+        )
+
+        # Create a menu with lunch already selected.
+        menu_requirements = domain_factories.MenuRequirements(
+            nutrient_requirements=(nutrition_requirement,),
+            maximum_occurrences_per_recipe=1,  # To avoid the lunch recipe getting selected for dinner.
+        )
+        menu = _lunch_and_dinner_menu(
+            requirements=menu_requirements, lunch=lunch_recipe, dinner=None
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == ideal_dinner.id
 
 
-# Minimum nutrient constraints.
+class TestVarietyRequirements:
+    @pytest.mark.parametrize("requirement", ["minimum", "maximum"])
+    def test_respects_minimum_or_maximum_variety_requirement_constraint(
+        self, requirement: str
+    ):
+        # Create a menu needing a single recipe selecting.
+        ingredient = domain_factories.Ingredient()
+        requirement_kwargs = {requirement: 1}
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id, **requirement_kwargs
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
 
+        # Create a recipe with / without an ingredient in the required category.
+        recipe_with_ingredient_in_category = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[menu_item.meal_time]
+        )
+        recipe_without_ingredient_in_category = (
+            domain_factories.Recipe.with_ingredients(
+                ingredients=[], meal_times=[menu_item.meal_time]
+            )
+        )
 
-def test_respects_minimum_nutrient_requirement_constraint():
-    nutrient = domain_factories.Nutrient()
-    minimum_quantity = 10
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(
+                recipe_with_ingredient_in_category,
+                recipe_without_ingredient_in_category,
+            ),
+            relevant_ingredients=(ingredient,),
+        )
 
-    high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=minimum_quantity + 1
-    )
-    low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=minimum_quantity - 1
-    )
+        assert len(solution) == 1
+        if requirement == "minimum":
+            assert solution[0].recipe_id == recipe_with_ingredient_in_category.id
+        elif requirement == "maximum":
+            assert solution[0].recipe_id == recipe_without_ingredient_in_category.id
+        else:
+            pytest.fail("Invalid scenario.")
 
-    menu_item = domain_factories.MenuItem(
-        recipe_id=None, meal_time=constants.MealTime.LUNCH
-    )
-    nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, minimum_quantity=minimum_quantity
-    )
-    menu_requirements = domain_factories.MenuRequirements(
-        nutrient_requirements=(nutrition_requirement,)
-    )
-    menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
+    def test_respects_minimum_and_maximum_variety_requirement(self):
+        # Create a menu needing a single recipe selecting.
+        ingredient_category_id = 123
+        requirement = 2
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient_category_id,
+            minimum=requirement,
+            maximum=requirement,
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu_item = domain_factories.MenuItem(recipe_id=None)
+        menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
 
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu,
-        recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
-    )
+        # Create recipes with 0-3 ingredients in the required category.
+        n_recipes_to_create = requirement + 1
+        relevant_ingredients = tuple(
+            domain_factories.Ingredient(category_id=ingredient_category_id)
+            for _ in range(0, n_recipes_to_create + 1)
+        )
 
-    assert len(solution) == 1
-    assert solution[0].recipe_id == high_nutrition_recipe.id
+        recipes_to_consider = tuple(
+            domain_factories.Recipe.with_ingredients(
+                ingredients=relevant_ingredients[:n_ingredients],
+                meal_times=[menu_item.meal_time],
+            )
+            for n_ingredients in range(0, n_recipes_to_create + 1)
+        )
+        only_recipe_meeting_requirement = recipes_to_consider[requirement]
 
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=recipes_to_consider,
+            relevant_ingredients=relevant_ingredients,
+        )
 
-def test_respects_minimum_nutrient_requirement_constraint_with_fixed_item():
-    nutrient = domain_factories.Nutrient()
-    nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, minimum_quantity=10
-    )
-    lunch_nutrient_quantity = nutrition_requirement.minimum_quantity / 2
-    min_dinner_nutrient_quantity = (
-        nutrition_requirement.minimum_quantity - lunch_nutrient_quantity
-    )
+        assert len(solution) == 1
+        assert solution[0].recipe_id == only_recipe_meeting_requirement.id
 
-    # Create two dinner options that can make up the nutrition deficit.
-    lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=lunch_nutrient_quantity
-    )
-    ideal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=min_dinner_nutrient_quantity + 1
-    )
-    suboptimal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=min_dinner_nutrient_quantity - 1
-    )
+    def test_unoptimised_recipe_selection_counts_towards_variety_requirement(self):
+        ingredient = domain_factories.Ingredient()
 
-    # Create a menu with lunch already selected.
-    menu_requirements = domain_factories.MenuRequirements(
-        nutrient_requirements=(nutrition_requirement,),
-        maximum_occurrences_per_recipe=1,  # To avoid the lunch recipe getting selected for dinner.
-    )
-    menu = _lunch_and_dinner_menu(
-        requirements=menu_requirements, lunch=lunch_recipe, dinner=None
-    )
+        lunch_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[constants.MealTime.LUNCH]
+        )
+        ideal_dinner_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[constants.MealTime.DINNER]
+        )
+        suboptimal_dinner_recipe = domain_factories.Recipe(
+            meal_times=[constants.MealTime.DINNER]
+        )
 
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu,
-        recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
-    )
+        # Create a menu with lunch already selected, but requiring dinner selecting.
+        lunch = domain_factories.MenuItem(
+            recipe_id=lunch_recipe.id,
+            meal_time=constants.MealTime.LUNCH,
+            optimiser_generated=False,
+        )
+        dinner = domain_factories.MenuItem(
+            recipe_id=None,
+            meal_time=constants.MealTime.DINNER,
+            optimiser_generated=True,
+        )
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id,
+            minimum=1,
+        )
+        menu_requirements = domain_factories.MenuRequirements(
+            variety_requirements=(variety_requirement,)
+        )
+        menu = domain_factories.Menu(
+            items=[lunch, dinner], requirements=menu_requirements
+        )
 
-    assert len(solution) == 1
-    assert solution[0].recipe_id == ideal_dinner.id
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(
+                lunch_recipe,
+                ideal_dinner_recipe,
+                suboptimal_dinner_recipe,
+            ),
+            relevant_ingredients=(ingredient,),
+        )
 
-
-# Maximum nutrient constraints.
-
-
-def test_respects_maximum_nutrient_requirement_constraint():
-    nutrient = domain_factories.Nutrient()
-    maximum_quantity = 10
-
-    # Create two recipes above / below the minimum nutrient requirements.
-    low_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=maximum_quantity - 1
-    )
-    high_nutrition_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=maximum_quantity + 1
-    )
-
-    menu_item = domain_factories.MenuItem(
-        recipe_id=None, meal_time=constants.MealTime.LUNCH
-    )
-    nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, maximum_quantity=maximum_quantity
-    )
-    menu_requirements = domain_factories.MenuRequirements(
-        nutrient_requirements=(nutrition_requirement,)
-    )
-    menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
-
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu,
-        recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
-    )
-
-    assert len(solution) == 1
-    assert solution[0].recipe_id == low_nutrition_recipe.id
-
-
-def test_respects_maximum_nutrient_requirement_constraint_with_fixed_item():
-    nutrient = domain_factories.Nutrient()
-    nutrition_requirement = domain_factories.NutrientRequirement(
-        nutrient_id=nutrient.id, maximum_quantity=8.3
-    )
-    lunch_nutrient_quantity = nutrition_requirement.maximum_quantity / 2
-    max_dinner_nutrient = (
-        nutrition_requirement.maximum_quantity - lunch_nutrient_quantity
-    )
-
-    # Create two dinner options.
-    lunch_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=lunch_nutrient_quantity
-    )
-    ideal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=max_dinner_nutrient - 1
-    )
-    suboptimal_dinner = domain_factories.Recipe.any_meal_time_with_nutrient(
-        nutrient=nutrient, nutrient_quantity=max_dinner_nutrient + 1
-    )
-
-    # Create a menu with lunch already selected.
-    menu_requirements = domain_factories.MenuRequirements(
-        nutrient_requirements=(nutrition_requirement,),
-        maximum_occurrences_per_recipe=1,  # To avoid the lunch recipe getting selected for dinner.
-    )
-    menu = _lunch_and_dinner_menu(
-        requirements=menu_requirements, lunch=lunch_recipe, dinner=None
-    )
-
-    solution = menus.optimise_recipes_for_menu(
-        menu=menu,
-        recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
-    )
-
-    assert len(solution) == 1
-    assert solution[0].recipe_id == ideal_dinner.id
+        assert len(solution) == 1
+        assert solution[0].recipe_id == ideal_dinner_recipe.id

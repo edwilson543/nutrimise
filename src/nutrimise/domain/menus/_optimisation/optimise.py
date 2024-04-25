@@ -3,7 +3,7 @@ from __future__ import annotations
 import attrs
 import pulp as lp
 
-from nutrimise.domain import menus, recipes
+from nutrimise.domain import ingredients, menus, recipes
 
 from . import constraints, inputs, variables
 
@@ -17,12 +17,17 @@ def optimise_recipes_for_menu(
     *,
     menu: menus.Menu,
     recipes_to_consider: tuple[recipes.Recipe, ...],
+    relevant_ingredients: tuple[ingredients.Ingredient, ...],
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
     """
     problem = lp.LpProblem(name=f"optimise-menu-{menu.id}")
-    inputs_ = inputs.OptimiserInputs(menu=menu, recipes_to_consider=recipes_to_consider)
+    inputs_ = inputs.OptimiserInputs(
+        menu=menu,
+        recipes_to_consider=recipes_to_consider,
+        relevant_ingredients=relevant_ingredients,
+    )
     variables_ = variables.Variables.from_inputs(inputs_)
     for constraint in constraints.yield_all_constraints(
         inputs=inputs_, variables_=variables_

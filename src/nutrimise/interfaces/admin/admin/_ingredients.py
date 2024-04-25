@@ -6,11 +6,13 @@ from nutrimise.data.ingredients import models as ingredient_models
 @admin.register(ingredient_models.DietaryRequirement)
 class DietaryRequirementAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
+    list_display_links = ["name"]
 
 
 @admin.register(ingredient_models.IngredientCategory)
 class IngredientCategoryAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "number_of_ingredients"]
+    list_display_links = ["name"]
 
     @admin.display(description="Number of ingredients")
     def number_of_ingredients(
@@ -26,6 +28,7 @@ class _IngredientNutritionalInformationInline(admin.TabularInline):
 @admin.register(ingredient_models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "units"]
+    list_display_links = ["name"]
     ordering = ["name"]
 
     inlines = [
@@ -40,12 +43,14 @@ class IngredientAdmin(admin.ModelAdmin):
 @admin.register(ingredient_models.Nutrient)
 class NutrientAdmin(admin.ModelAdmin):
     list_display = ["id", "name"]
+    list_display_links = ["name"]
     ordering = ["name"]
 
 
 @admin.register(ingredient_models.IngredientNutritionalInformation)
 class IngredientNutritionalInformationAdmin(admin.ModelAdmin):
     list_display = ["id", "ingredient_name", "nutrient_name", "quantity_per_gram"]
+    list_display_links = ["ingredient_name"]
     ordering = ["ingredient__name"]
 
     @admin.display(description="Ingredient")

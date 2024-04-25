@@ -123,6 +123,10 @@ class _NutrientRequirementInline(admin.TabularInline):
     model = menu_models.NutrientRequirement
 
 
+class _VarietyRequirementInline(admin.TabularInline):
+    model = menu_models.VarietyRequirement
+
+
 @admin.register(menu_models.MenuRequirements)
 class MenuRequirementsAdmin(admin.ModelAdmin):
-    inlines = [_NutrientRequirementInline]
+    inlines = [_NutrientRequirementInline, _VarietyRequirementInline]

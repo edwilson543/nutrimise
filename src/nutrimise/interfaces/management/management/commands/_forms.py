@@ -2,6 +2,7 @@ from django import forms as django_forms
 
 from nutrimise.data.ingredients import models as ingredient_models
 
+
 M2M_DELIMITER = "|"
 
 

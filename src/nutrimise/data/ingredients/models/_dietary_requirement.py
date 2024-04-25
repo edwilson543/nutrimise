@@ -6,7 +6,7 @@ class DietaryRequirement(django_models.Model):
     Some dietary requirement.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     name = django_models.TextField(unique=True)
 

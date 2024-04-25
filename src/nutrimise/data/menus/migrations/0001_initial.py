@@ -1,4 +1,5 @@
 import django.db.models.deletion
+
 from django.conf import settings
 from django.db import migrations, models
 
@@ -17,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Menu",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
@@ -35,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="MenuItem",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 (
                     "day",
                     models.PositiveSmallIntegerField(
@@ -89,12 +90,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
+                    models.BigAutoField(primary_key=True, serialize=False),
                 ),
                 ("maximum_occurrences_per_recipe", models.SmallIntegerField()),
                 (
@@ -118,7 +114,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="NutrientRequirement",
             fields=[
-                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("minimum_quantity", models.FloatField(null=True, blank=True)),
                 ("maximum_quantity", models.FloatField(null=True, blank=True)),
                 ("target_quantity", models.FloatField(null=True, blank=True)),
@@ -145,6 +141,38 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
+        migrations.CreateModel(
+            name="VarietyRequirement",
+            fields=[
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("minimum", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("maximum", models.PositiveSmallIntegerField(blank=True, null=True)),
+                ("target", models.PositiveSmallIntegerField(blank=True, null=True)),
+                (
+                    "ingredient_category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="+",
+                        to="ingredients.ingredientcategory",
+                    ),
+                ),
+                (
+                    "menu_requirements",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="variety_requirements",
+                        to="menus.menurequirements",
+                    ),
+                ),
+            ],
+        ),
+        migrations.AddConstraint(
+            model_name="varietyrequirement",
+            constraint=models.UniqueConstraint(
+                fields=("menu_requirements_id", "ingredient_category_id"),
+                name="unique_requirements_per_ingredient_category_per_menu",
+            ),
+        ),
         migrations.AddConstraint(
             model_name="menuitem",
             constraint=models.UniqueConstraint(
@@ -160,6 +188,13 @@ class Migration(migrations.Migration):
                 models.F("author"),
                 models.F("name"),
                 name="users_can_only_have_one_menu_per_name",
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name="nutrientrequirement",
+            constraint=models.UniqueConstraint(
+                fields=("menu_requirements_id", "nutrient_id"),
+                name="unique_requirements_per_nutrient_per_menu",
             ),
         ),
     ]

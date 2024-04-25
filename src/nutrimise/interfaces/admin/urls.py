@@ -2,6 +2,7 @@ from django import urls as django_urls
 
 from . import views
 
+
 urlpatterns = [
     # Recipes.
     django_urls.path(

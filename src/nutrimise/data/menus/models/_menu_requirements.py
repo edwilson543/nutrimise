@@ -10,6 +10,8 @@ class MenuRequirements(django_models.Model):
     The requirements to meet when optimising a menu.
     """
 
+    id = django_models.BigAutoField(primary_key=True)
+
     menu = django_models.OneToOneField(
         _menu.Menu, on_delete=django_models.CASCADE, related_name="requirements"
     )
@@ -29,7 +31,7 @@ class NutrientRequirement(django_models.Model):
     The nutrient requirements to meet when optimising a menu.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
 
     menu_requirements = django_models.ForeignKey(
         MenuRequirements,
@@ -52,3 +54,51 @@ class NutrientRequirement(django_models.Model):
     enforcement_interval = django_models.TextField(
         choices=constants.NutrientRequirementEnforcementInterval.choices
     )
+
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                fields=["menu_requirements_id", "nutrient_id"],
+                name="unique_requirements_per_nutrient_per_menu",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.nutrient.name} requirements"
+
+
+class VarietyRequirement(django_models.Model):
+    """
+    Requirements for the number of ingredients that must feature in a menu, per category.
+    """
+
+    id = django_models.BigAutoField(primary_key=True)
+
+    menu_requirements = django_models.ForeignKey(
+        MenuRequirements,
+        on_delete=django_models.CASCADE,
+        related_name="variety_requirements",
+    )
+
+    ingredient_category = django_models.ForeignKey(
+        "ingredients.IngredientCategory",
+        on_delete=django_models.PROTECT,
+        related_name="+",
+    )
+
+    minimum = django_models.PositiveSmallIntegerField(null=True, blank=True)
+
+    maximum = django_models.PositiveSmallIntegerField(null=True, blank=True)
+
+    target = django_models.PositiveSmallIntegerField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            django_models.UniqueConstraint(
+                fields=["menu_requirements_id", "ingredient_category_id"],
+                name="unique_requirements_per_ingredient_category_per_menu",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.ingredient_category.name} requirements"

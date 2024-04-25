@@ -8,7 +8,8 @@ class IngredientCategory(django_models.Model):
     A category of ingredients.
     """
 
-    id = django_models.AutoField(primary_key=True)
+    id = django_models.BigAutoField(primary_key=True)
+
     name = django_models.TextField(unique=True)
 
     def __str__(self) -> str:
@@ -19,6 +20,8 @@ class Ingredient(django_models.Model):
     """
     Some ingredient and its nutritional information.
     """
+
+    id = django_models.BigAutoField(primary_key=True)
 
     name = django_models.CharField(max_length=128, unique=True)
 

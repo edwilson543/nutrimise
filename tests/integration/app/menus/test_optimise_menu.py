@@ -1,4 +1,5 @@
 import pytest
+
 from nutrimise.app import menus
 
 from tests.factories import data as data_factories
@@ -6,7 +7,9 @@ from tests.factories import data as data_factories
 
 def test_optimises_menu():
     menu = data_factories.Menu()
-    data_factories.MenuRequirements(menu=menu)
+    menu_requirements = data_factories.MenuRequirements(menu=menu)
+    # Create a variety requirement to force the ingredients to be loaded.
+    data_factories.VarietyRequirement(menu_requirements=menu_requirements)
     menu_item = data_factories.MenuItem(menu=menu, recipe_id=None)
     recipe = data_factories.Recipe(meal_times=[menu_item.meal_time])
 

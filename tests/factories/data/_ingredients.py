@@ -1,4 +1,5 @@
 import factory
+
 from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 

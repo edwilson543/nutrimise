@@ -1,4 +1,3 @@
-# Standard library imports
 import enum
 
 from django.db import models as django_models

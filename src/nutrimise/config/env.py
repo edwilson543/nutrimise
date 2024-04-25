@@ -1,9 +1,10 @@
-# Standard library imports
 import os
 import pathlib
+
 from typing import TypeVar
 
 import decouple
+
 
 default_env_file = pathlib.Path(__file__).parents[3] / ".env"
 env_file = os.environ.get("ENV_FILE", default_env_file)

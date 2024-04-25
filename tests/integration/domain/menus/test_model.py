@@ -16,6 +16,9 @@ class TestMenuFromOrmModel:
             maximum_quantity=10,
             target_quantity=None,
         )
+        orm_variety_requirement = data_factories.VarietyRequirement(
+            menu_requirements=orm_requirements, minimum=0, maximum=10, target=None
+        )
 
         menu = menus.Menu.from_orm_model(menu=orm_menu)
 
@@ -55,6 +58,16 @@ class TestMenuFromOrmModel:
             nutrient_requirement.enforcement_interval
             == orm_nutrient_requirement.enforcement_interval
         )
+
+        assert len(menu.requirements.variety_requirements) == 1
+        variety_requirement = menu.requirements.variety_requirements[0]
+        assert (
+            variety_requirement.ingredient_category_id
+            == orm_variety_requirement.ingredient_category_id
+        )
+        assert variety_requirement.minimum == orm_variety_requirement.minimum
+        assert variety_requirement.maximum == orm_variety_requirement.maximum
+        assert variety_requirement.target == orm_variety_requirement.target
 
     def test_converts_menu_orm_model_without_requirements_to_menu_domain(self):
         orm_menu = data_factories.Menu()
