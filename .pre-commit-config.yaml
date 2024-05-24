@@ -7,7 +7,6 @@ repos:
         language: system
         entry: mypy
         types_or: [python, pyi]
-        args: [ --config-file=mypy.ini ]
         exclude: (tests)|(migrations)|(settings)
 
   - repo: https://github.com/astral-sh/ruff-pre-commit

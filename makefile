@@ -1,6 +1,6 @@
 # Installation
 
-install: env_file install_dev_deps db
+install: install_pre_commit env_file install_dev_deps db
 
 .PHONY:db
 db: createdb migrate superuser
@@ -19,6 +19,10 @@ createdb:
 .PHONY:dropdb
 dropdb:
 	dropdb nutrimise
+
+.PHONY:install_pre_commit
+install_pre_commit:
+	pre-commit install
 
 # Django management commands
 
