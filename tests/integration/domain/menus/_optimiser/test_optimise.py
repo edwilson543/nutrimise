@@ -13,13 +13,12 @@ def _lunch_and_dinner_menu(
     dinner: recipes.Recipe | None = None,
 ):
     lunch = domain_factories.MenuItem(
-        day=constants.Day.MONDAY,
         meal_time=constants.MealTime.LUNCH,
         recipe_id=lunch.id if lunch else None,
         optimiser_generated=lunch is None,
     )
     dinner = dinner or domain_factories.MenuItem(
-        day=constants.Day.MONDAY,
+        day=lunch.day,
         meal_time=constants.MealTime.DINNER,
         recipe_id=dinner.id if dinner else None,
         optimiser_generated=dinner is None,

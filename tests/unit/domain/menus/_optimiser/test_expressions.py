@@ -6,14 +6,14 @@ from tests.factories import domain as domain_factories
 
 class TestNutrientGramsForDay:
     def test_sums_variables_for_given_day_only(self):
-        # Creat a menu consisting of Monday and Tuesday Lunch.
-        monday_lunch = domain_factories.MenuItem(
-            day=constants.Day.MONDAY, meal_time=constants.MealTime.LUNCH
+        # Creat a menu consisting of lunch for two days.
+        day_one_lunch = domain_factories.MenuItem(
+            day=1, meal_time=constants.MealTime.LUNCH
         )
-        tuesday_lunch = domain_factories.MenuItem(
-            day=constants.Day.TUESDAY, meal_time=constants.MealTime.LUNCH
+        day_two_lunch = domain_factories.MenuItem(
+            day=2, meal_time=constants.MealTime.LUNCH
         )
-        menu = domain_factories.Menu(items=(monday_lunch, tuesday_lunch))
+        menu = domain_factories.Menu(items=(day_one_lunch, day_two_lunch))
 
         nutrient = domain_factories.Nutrient()
         other_nutrient = domain_factories.Nutrient()
@@ -51,13 +51,13 @@ class TestNutrientGramsForDay:
         total_nutrient_quantity = expressions.total_nutrient_quantity_for_day(
             inputs=inputs_,
             variables=variables_,
-            day=constants.Day.MONDAY,
+            day=day_one_lunch.day,
             nutrient_id=nutrient.id,
         )
 
         # Total nutrients should be summed over `MONDAY` and the `nutrient` only.
         options = [
-            f"2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id}",
-            f"3*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 2*recipe_{recipe.id}_for_menu_item_{monday_lunch.id}",
+            f"2*recipe_{recipe.id}_for_menu_item_{day_one_lunch.id} + 3*recipe_{other_recipe.id}_for_menu_item_{day_one_lunch.id}",
+            f"3*recipe_{other_recipe.id}_for_menu_item_{day_one_lunch.id} + 2*recipe_{recipe.id}_for_menu_item_{day_one_lunch.id}",
         ]
         assert str(total_nutrient_quantity) in options
