@@ -64,25 +64,31 @@ class OptimiseMenu(generic.View):
         return http.HttpResponseRedirect(redirect_to=redirect_url)
 
 
-class LockMenuItemFromOptimiser(generic.View):
-    def post(
-        self, request: http.HttpRequest, *args: object, **kwargs: int
-    ) -> http.HttpResponseRedirect:
-        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
-        menu_item.lock_from_optimiser()
-        redirect_url = django_urls.reverse(
-            "menu-details", kwargs={"menu_id": menu_item.menu_id}
-        )
-        return http.HttpResponseRedirect(redirect_to=redirect_url)
+class BaseLockUnlockMenuItem(generic.TemplateView):
+    template_name = "admin/menus/partials/menu-item.html"
+    menu_item: menu_models.MenuItem
+
+    def setup(self, request, *args: object, **kwargs: int):
+        super().setup(request, *args, **kwargs)
+        self.menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
+
+    def get_context_data(self, **kwargs: object) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["menu_item"] = self.menu_item
+        return context
 
 
-class UnlockMenuItemForOptimiser(generic.View):
+class LockMenuItemFromOptimiser(BaseLockUnlockMenuItem):
     def post(
         self, request: http.HttpRequest, *args: object, **kwargs: int
-    ) -> http.HttpResponseRedirect:
-        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
-        menu_item.unlock_for_optimiser()
-        redirect_url = django_urls.reverse(
-            "menu-details", kwargs={"menu_id": menu_item.menu_id}
-        )
-        return http.HttpResponseRedirect(redirect_to=redirect_url)
+    ) -> http.HttpResponse:
+        self.menu_item.lock_from_optimiser()
+        return super().get(request, *args, **kwargs)
+
+
+class UnlockMenuItemForOptimiser(BaseLockUnlockMenuItem):
+    def post(
+        self, request: http.HttpRequest, *args: object, **kwargs: int
+    ) -> http.HttpResponse:
+        self.menu_item.unlock_for_optimiser()
+        return super().get(request, *args, **kwargs)
