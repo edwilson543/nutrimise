@@ -19,7 +19,7 @@ class MenuItem(factory.django.DjangoModelFactory):
     menu = factory.SubFactory(Menu)
     recipe = factory.SubFactory(_recipes.Recipe)
     meal_time = constants.MealTime.LUNCH
-    day = constants.Day.MONDAY
+    day = factory.Sequence(lambda n: n + 1)
 
     class Meta:
         model = menu_models.MenuItem

@@ -3,7 +3,6 @@ from __future__ import annotations
 import attrs
 import pulp as lp
 
-from nutrimise.data import constants
 from nutrimise.domain import ingredients, menus, recipes
 
 from . import inputs
@@ -20,7 +19,7 @@ class DecisionVariable:
         )
 
     @property
-    def day(self) -> constants.Day:
+    def day(self) -> int:
         return self.menu_item.day
 
 

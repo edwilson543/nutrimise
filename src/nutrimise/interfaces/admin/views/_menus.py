@@ -35,17 +35,15 @@ class MenuDetails(_base.AdminTemplateView):
 
     def get_meal_schedule(
         self,
-    ) -> dict[constants.MealTime, dict[constants.Day, menu_models.MenuItem]]:
+    ) -> dict[constants.MealTime, dict[int, menu_models.MenuItem]]:
         """
         Get the menu items in a way that's easy to construct an HTML table from.
         """
-        meal_schedule: dict[
-            constants.MealTime, dict[constants.Day, menu_models.MenuItem]
-        ] = collections.defaultdict(dict)
+        meal_schedule: dict[constants.MealTime, dict[int, menu_models.MenuItem]] = (
+            collections.defaultdict(dict)
+        )
         for item in list(self.menu.items.order_by("day")):
-            meal_schedule[constants.MealTime(item.meal_time)][
-                constants.Day(item.day)
-            ] = item
+            meal_schedule[constants.MealTime(item.meal_time)][item.day] = item
         return dict(meal_schedule)
 
 

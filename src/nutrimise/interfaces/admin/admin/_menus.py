@@ -23,7 +23,7 @@ class _MenuItemInline(admin.TabularInline):
 
     @admin.display()
     def format_day(self, menu_item: menu_models.MenuItem) -> str:
-        return constants.Day(int(menu_item.day)).label.title()
+        return f"Day {menu_item.day}"
 
 
 class _MenuChangeForm(forms.ModelForm):
@@ -116,7 +116,7 @@ class MenuItemAdmin(admin.ModelAdmin):
 
     @admin.display()
     def format_day(self, menu_item: menu_models.MenuItem) -> str:
-        return constants.Day(int(menu_item.day)).label.title()
+        return f"Day {menu_item.day}"
 
 
 class _NutrientRequirementInline(admin.TabularInline):

@@ -7,7 +7,7 @@ from nutrimise.domain import menus
 class MenuItem(factory.Factory):
     id = factory.Sequence(lambda n: n)
     recipe_id = None
-    day = constants.Day.MONDAY
+    day = factory.Sequence(lambda n: n + 1)
     meal_time = constants.MealTime.LUNCH
     optimiser_generated = True
 
