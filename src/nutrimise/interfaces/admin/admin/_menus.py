@@ -27,7 +27,7 @@ class _MenuItemInline(admin.TabularInline):
 
 
 class _MenuChangeForm(forms.ModelForm):
-    days = forms.MultipleChoiceField(choices=constants.Day.choices)
+    number_of_days = forms.IntegerField(min_value=1)
     meal_times = forms.MultipleChoiceField(choices=constants.MealTime.choices)
 
     class Meta:
@@ -42,7 +42,7 @@ class _MenuChangeForm(forms.ModelForm):
             for item in list(menu.items.values("day", "meal_time")):
                 initial_days.add(item["day"])
                 initial_meal_times.add(item["meal_time"])
-            self.fields["days"].initial = list(initial_days)
+            self.fields["number_of_days"].initial = len(initial_days)
             self.fields["meal_times"].initial = list(initial_meal_times)
 
 
@@ -94,16 +94,16 @@ class MenuAdmin(admin.ModelAdmin):
         Create the menu with the specified menu item schedule.
         """
         super().save_model(request=request, obj=obj, form=form, change=change)
-        days = form.cleaned_data["days"]
+        number_of_days = form.cleaned_data["number_of_days"]
         meal_times = form.cleaned_data["meal_times"]
         if change:
             for menu_item in obj.items.all():
-                valid_day = menu_item.day in days
+                valid_day = menu_item.day <= number_of_days
                 valid_meal_time = menu_item.meal_time in meal_times
                 if not (valid_day and valid_meal_time):
                     menu_item.delete()
 
-        for day in days:
+        for day in range(1, number_of_days + 1):
             for meal_time in meal_times:
                 obj.items.get_or_create(day=day, meal_time=meal_time)
 
