@@ -1,6 +1,7 @@
 import django.db.models.deletion
 
 from django.conf import settings
+from django.core import validators as django_validators
 from django.db import migrations, models
 
 from nutrimise.data import constants
@@ -40,15 +41,7 @@ class Migration(migrations.Migration):
                 (
                     "day",
                     models.PositiveSmallIntegerField(
-                        choices=[
-                            (1, "Monday"),
-                            (2, "Tuesday"),
-                            (3, "Wednesday"),
-                            (4, "Thursday"),
-                            (5, "Friday"),
-                            (6, "Saturday"),
-                            (7, "Sunday"),
-                        ]
+                        validators=[django_validators.MinValueValidator(limit_value=1)]
                     ),
                 ),
                 (

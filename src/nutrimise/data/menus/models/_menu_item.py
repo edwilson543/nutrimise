@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from django.core import validators as django_validators
 from django.db import models as django_models
 
 from nutrimise.data import constants
@@ -27,7 +28,9 @@ class MenuItem(django_models.Model):
         related_name="recipes",
     )
 
-    day = django_models.PositiveSmallIntegerField(choices=constants.Day.choices)
+    day = django_models.PositiveSmallIntegerField(
+        validators=[django_validators.MinValueValidator(limit_value=1)]
+    )
 
     meal_time = django_models.CharField(
         max_length=16, choices=constants.MealTime.choices
