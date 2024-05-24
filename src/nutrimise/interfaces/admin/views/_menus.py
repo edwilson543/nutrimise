@@ -44,7 +44,8 @@ class MenuDetails(_base.AdminTemplateView):
         )
         for item in list(self.menu.items.order_by("day")):
             meal_schedule[constants.MealTime(item.meal_time)][item.day] = item
-        return dict(meal_schedule)
+        ordered_keys = sorted(meal_schedule, key=lambda meal_time: meal_time.order())
+        return {key: meal_schedule[key] for key in ordered_keys}
 
 
 class OptimiseMenu(generic.View):
