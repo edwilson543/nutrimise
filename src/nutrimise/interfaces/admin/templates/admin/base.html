@@ -1,4 +1,14 @@
-{% extends 'admin/base.html' %} {% block extrahead %}{{ block.super }}
+{% extends 'admin/base.html' %}
+{% block extrahead %}
+{{ block.super }}
+
+<!--HTMX-->
+<script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+
+<!--Font Awesome-->
+<script src="https://kit.fontawesome.com/37cdbdaf5c.js" crossorigin="anonymous"></script>
+
+<!--Override of the Django admin styling-->
 <style>
   :root {
     --primary: #87679a;
@@ -18,4 +28,6 @@
     --link-selected-fg: var(--secondary);
   }
 </style>
+
+
 {% endblock %}

@@ -48,7 +48,7 @@
                     <td><b>{{ meal_time.label }}</b></td>
                     {% for day, menu_item in days.items %}
                         <td>
-                            {% include 'admin/menus/partials/menu-item.html' with menu_item=menu_item only %}
+                            {% include 'admin/menus/partials/menu-item.html' with menu_item=menu_item %}
                         </td>
                     {% endfor %}
                 </tr>
