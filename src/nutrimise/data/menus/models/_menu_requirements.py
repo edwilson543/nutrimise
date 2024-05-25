@@ -1,3 +1,4 @@
+from django.core import validators as django_validators
 from django.db import models as django_models
 
 from nutrimise.data import constants
@@ -20,7 +21,9 @@ class MenuRequirements(django_models.Model):
         choices=constants.OptimisationMode.choices
     )
 
-    maximum_occurrences_per_recipe = django_models.SmallIntegerField()
+    maximum_occurrences_per_recipe = django_models.SmallIntegerField(
+        validators=[django_validators.MinValueValidator(limit_value=1)]
+    )
 
     dietary_requirements = django_models.ManyToManyField(
         "ingredients.DietaryRequirement", related_name="+", blank=True
