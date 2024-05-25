@@ -44,23 +44,19 @@ class TestNutrientGramsForDay:
     def test_gets_nutrient_requirement_constraints(self):
         nutrient = domain_factories.Nutrient()
         requirement = domain_factories.NutrientRequirement(
-            minimum_quantity=11.25, maximum_quantity=4.75
+            nutrient_id=nutrient.id, minimum_quantity=4.75, maximum_quantity=11.25
         )
 
-        # Creat a menu consisting of Monday lunch & dinner.
-        monday_lunch = domain_factories.MenuItem(
-            day=constants.Day.MONDAY, meal_time=constants.MealTime.LUNCH
-        )
-        monday_dinner = domain_factories.MenuItem(
-            day=constants.Day.MONDAY, meal_time=constants.MealTime.DINNER
+        # Creat a menu consisting of lunch & dinner on the same day.
+        lunch = domain_factories.MenuItem(meal_time=constants.MealTime.LUNCH)
+        dinner = domain_factories.MenuItem(
+            day=lunch.day, meal_time=constants.MealTime.DINNER
         )
         requirements = domain_factories.MenuRequirements(
             maximum_occurrences_per_recipe=1,
             nutrient_requirements=(requirement,),
         )
-        menu = domain_factories.Menu(
-            items=(monday_lunch, monday_dinner), requirements=requirements
-        )
+        menu = domain_factories.Menu(items=(lunch, dinner), requirements=requirements)
 
         # Create some recipes that could be had for both lunch and dinner
         nutritional_information = domain_factories.NutritionalInformation(
@@ -94,8 +90,8 @@ class TestNutrientGramsForDay:
         }
 
         nutrient_requirement_constraints = {
-            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} >= {requirement.minimum_quantity}",
-            f"7.6*recipe_{recipe.id}_for_menu_item_{monday_lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{monday_dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{monday_dinner.id} <= {requirement.maximum_quantity}",
+            f"7.6*recipe_{recipe.id}_for_menu_item_{lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{dinner.id} >= {requirement.minimum_quantity}",
+            f"7.6*recipe_{recipe.id}_for_menu_item_{lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{dinner.id} <= {requirement.maximum_quantity}",
         }
 
         assert nutrient_requirement_constraints < all_constraints

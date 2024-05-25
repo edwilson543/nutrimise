@@ -32,14 +32,12 @@ class Menu:
         )
 
     @property
-    def days(self) -> tuple[constants.Day, ...]:
-        return tuple(
-            sorted(set(item.day for item in self.items), key=lambda day: day.value)
-        )
+    def days(self) -> tuple[int, ...]:
+        return tuple(sorted(set(item.day for item in self.items)))
 
     @property
-    def meal_schedule(self) -> dict[constants.MealTime, dict[constants.Day, MenuItem]]:
-        schedule: dict[constants.MealTime, dict[constants.Day, MenuItem]] = {}
+    def meal_schedule(self) -> dict[constants.MealTime, dict[int, MenuItem]]:
+        schedule: dict[constants.MealTime, dict[int, MenuItem]] = {}
         for item in self.items:
             schedule[item.meal_time][item.day] = item
         return schedule
@@ -49,7 +47,7 @@ class Menu:
 class MenuItem:
     id: int
     recipe_id: int | None
-    day: constants.Day
+    day: int
     meal_time: constants.MealTime
     optimiser_generated: bool
 
@@ -61,7 +59,7 @@ class MenuItem:
             cls(
                 id=item.id,
                 recipe_id=item.recipe_id,
-                day=constants.Day(item.day),
+                day=item.day,
                 meal_time=constants.MealTime(item.meal_time),
                 optimiser_generated=item.optimiser_generated,
             )

@@ -10,6 +10,7 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
+from nutrimise.domain import ingredients
 
 from . import _base
 
@@ -31,22 +32,26 @@ class MenuDetails(_base.AdminTemplateView):
         context["days"] = sorted(
             set(day for days in meal_schedule.values() for day in days.keys())
         )
+        context["nutritional_information"] = (
+            ingredients.get_nutritional_information_for_menu_per_day(
+                menu=self.menu, per_serving=True
+            )
+        )
         return context
 
     def get_meal_schedule(
         self,
-    ) -> dict[constants.MealTime, dict[constants.Day, menu_models.MenuItem]]:
+    ) -> dict[constants.MealTime, dict[int, menu_models.MenuItem]]:
         """
         Get the menu items in a way that's easy to construct an HTML table from.
         """
-        meal_schedule: dict[
-            constants.MealTime, dict[constants.Day, menu_models.MenuItem]
-        ] = collections.defaultdict(dict)
+        meal_schedule: dict[constants.MealTime, dict[int, menu_models.MenuItem]] = (
+            collections.defaultdict(dict)
+        )
         for item in list(self.menu.items.order_by("day")):
-            meal_schedule[constants.MealTime(item.meal_time)][
-                constants.Day(item.day)
-            ] = item
-        return dict(meal_schedule)
+            meal_schedule[constants.MealTime(item.meal_time)][item.day] = item
+        ordered_keys = sorted(meal_schedule, key=lambda meal_time: meal_time.order())
+        return {key: meal_schedule[key] for key in ordered_keys}
 
 
 class OptimiseMenu(generic.View):
@@ -66,25 +71,31 @@ class OptimiseMenu(generic.View):
         return http.HttpResponseRedirect(redirect_to=redirect_url)
 
 
-class LockMenuItemFromOptimiser(generic.View):
-    def post(
-        self, request: http.HttpRequest, *args: object, **kwargs: int
-    ) -> http.HttpResponseRedirect:
-        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
-        menu_item.lock_from_optimiser()
-        redirect_url = django_urls.reverse(
-            "menu-details", kwargs={"menu_id": menu_item.menu_id}
-        )
-        return http.HttpResponseRedirect(redirect_to=redirect_url)
+class BaseLockUnlockMenuItem(generic.TemplateView):
+    template_name = "admin/menus/partials/menu-item.html"
+    menu_item: menu_models.MenuItem
+
+    def setup(self, request, *args: object, **kwargs: int):
+        super().setup(request, *args, **kwargs)
+        self.menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
+
+    def get_context_data(self, **kwargs: object) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["menu_item"] = self.menu_item
+        return context
 
 
-class UnlockMenuItemForOptimiser(generic.View):
+class LockMenuItemFromOptimiser(BaseLockUnlockMenuItem):
     def post(
         self, request: http.HttpRequest, *args: object, **kwargs: int
-    ) -> http.HttpResponseRedirect:
-        menu_item = menu_models.MenuItem.objects.get(id=kwargs["menu_item_id"])
-        menu_item.unlock_for_optimiser()
-        redirect_url = django_urls.reverse(
-            "menu-details", kwargs={"menu_id": menu_item.menu_id}
-        )
-        return http.HttpResponseRedirect(redirect_to=redirect_url)
+    ) -> http.HttpResponse:
+        self.menu_item.lock_from_optimiser()
+        return super().get(request, *args, **kwargs)
+
+
+class UnlockMenuItemForOptimiser(BaseLockUnlockMenuItem):
+    def post(
+        self, request: http.HttpRequest, *args: object, **kwargs: int
+    ) -> http.HttpResponse:
+        self.menu_item.unlock_for_optimiser()
+        return super().get(request, *args, **kwargs)

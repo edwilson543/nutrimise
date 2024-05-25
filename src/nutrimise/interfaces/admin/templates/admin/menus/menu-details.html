@@ -14,6 +14,14 @@
     </div>
 {% endblock %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        #menu-nutritional-information tr { display: block; float: left; }
+        #menu-nutritional-information th, #menu-nutritional-information td { display: block; }
+    </style>
+{% endblock %}
+
 {% block content %}
 
     <div id="basic-info" class="module">
@@ -39,7 +47,7 @@
             <tr>
                 <th></th>
                 {% for day in days %}
-                    <th>{{ day.label }}</th>
+                    <th>Day {{ day }}</th>
                 {% endfor %}
             </tr>
             {{ menu_items }}
@@ -48,30 +56,7 @@
                     <td><b>{{ meal_time.label }}</b></td>
                     {% for day, menu_item in days.items %}
                         <td>
-                            {% if menu_item.recipe_id %}
-                                <p>
-                                    <a href="{% url 'recipe-details' recipe_id=menu_item.recipe_id %}" target="_blank">
-                                        {{ menu_item.recipe.name }}
-                                    </a>
-                                </p>
-                                <p>
-                                    {% if menu_item.optimiser_generated %}
-                                        <form id="lock-menu-item-{{ menu_item.id }}" action="{% url 'menu-item-lock' menu_item_id=menu_item.id %}" method="post">
-                                            {% csrf_token %}
-                                            <button type="submit">lock</button>
-                                        </form>
-                                    {% else %}
-                                        <form id="unlock-menu-item-{{ menu_item.id }}" action="{% url 'menu-item-unlock' menu_item_id=menu_item.id %}" method="post">
-                                            {% csrf_token %}
-                                            <button type="submit">unlock</button>
-                                        </form>
-                                    {% endif %}
-                                </p>
-                            {% else %}
-                                <a href="{% url 'admin:menus_menuitem_change' object_id=menu_item.id %}" target="_blank">
-                                    Select
-                                </a>
-                            {% endif %}
+                            {% include 'admin/menus/partials/menu-item.html' with menu_item=menu_item %}
                         </td>
                     {% endfor %}
                 </tr>
@@ -147,19 +132,24 @@
         {% endif %}
     </div>
 
-    <div id="nutritional-information" class="module">
+    <div id="menu-nutritional-information" class="module">
         <h2>Nutritional information</h2>
-        <h3>Per serving</h3>
-        <table>
-            <tr>
-                <th>Nutrient</th>
-                <th>Grams</th>
-            </tr>
-            {% for nutrient in nutritional_information %}
+        <h3>Per day, per serving</h3>
+        <table id="menu-nutritional-information-table">
+            {% for day, info_list in nutritional_information.items %}
+                {% if forloop.first %}
+                    <tr>
+                        <th>/</th>
+                        {% for info in info_list %}
+                            <th>{{ info.nutrient.name }}</th>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
                 <tr>
-                    <td>{{ nutrient.nutrient.name }}</td>
-                    <td>{{ nutrient.nutrient_quantity | floatformat:"1" }}</td>
-                    <td>{{ nutrient.units | title }}</td>
+                    <td><b>Day {{ day }}</b></td>
+                    {% for info in info_list %}
+                        <td>{{ info.nutrient_quantity }}</td>
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </table>

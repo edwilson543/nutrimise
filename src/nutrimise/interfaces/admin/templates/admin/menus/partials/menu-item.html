@@ -1,0 +1,44 @@
+{% load admin_urls %}
+
+<div id="menu-item-{{ menu_item.id }}">
+    {% if menu_item.recipe_id %}
+        <p>
+            <a href="{% url 'recipe-details' recipe_id=menu_item.recipe_id %}" target="_blank">
+                {{ menu_item.recipe.name }}
+            </a>
+        </p>
+        <p>
+            {% if menu_item.optimiser_generated %}
+                <form
+                    id="lock-menu-item-{{ menu_item.id }}"
+                    hx-post="{% url 'menu-item-lock' menu_item_id=menu_item.id %}"
+                    hx-trigger="click"
+                    hx-target="#menu-item-{{ menu_item.id }}"
+                    hx-swap="outerHTML"
+                >
+                    {% csrf_token %}
+                    <button type="submit">
+                        <i class="fa-solid fa-lock-open"></i>
+                    </button>
+                </form>
+            {% else %}
+                <form
+                    id="unlock-menu-item-{{ menu_item.id }}"
+                    hx-post="{% url 'menu-item-unlock' menu_item_id=menu_item.id %}"
+                    hx-trigger="click"
+                    hx-target="#menu-item-{{ menu_item.id }}"
+                    hx-swap="outerHTML"
+                >
+                    {% csrf_token %}
+                    <button type="submit">
+                        <i class="fa-solid fa-lock"></i>
+                    </button>
+                </form>
+            {% endif %}
+        </p>
+    {% else %}
+        <a href="{% url 'admin:menus_menuitem_change' object_id=menu_item.id %}" target="_blank">
+            Select
+        </a>
+    {% endif %}
+</div>

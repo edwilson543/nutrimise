@@ -1,7 +1,5 @@
 import pulp as lp
 
-from nutrimise.data import constants
-
 from . import inputs, variables
 
 
@@ -41,7 +39,7 @@ def total_nutrient_quantity_for_day(
     *,
     inputs: inputs.OptimiserInputs,
     variables: variables.Variables,
-    day: constants.Day,
+    day: int,
     nutrient_id: int,
 ) -> lp.LpAffineExpression:
     """
@@ -111,10 +109,7 @@ def _get_nutrient_quantity_for_decision_variable(
 
 
 def _get_unoptimised_nutrient_quantity_on_day(
-    *,
-    inputs: inputs.OptimiserInputs,
-    day: constants.Day,
-    nutrient_id: int,
+    *, inputs: inputs.OptimiserInputs, day: int, nutrient_id: int
 ) -> float:
     total = 0.0
     for menu_item in inputs.menu.items:
