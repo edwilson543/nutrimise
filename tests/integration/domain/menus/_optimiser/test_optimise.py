@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 
 from nutrimise.data import constants
@@ -296,7 +298,7 @@ class TestVarietyRequirements:
         # Create a menu needing a single recipe selecting.
         ingredient = domain_factories.Ingredient()
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id, maximum=1
+            ingredient_category_id=ingredient.category_id, maximum=0
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -367,22 +369,24 @@ class TestVarietyRequirements:
         assert solution[0].recipe_id == only_recipe_meeting_requirement.id
 
     def test_unoptimised_recipe_selection_counts_towards_variety_requirement(self):
-        ingredient = domain_factories.Ingredient()
+        category_id = 1
+        ingredient = domain_factories.Ingredient(category_id=category_id)
+        other_ingredient = domain_factories.Ingredient(category_id=category_id)
 
         lunch_recipe = domain_factories.Recipe.with_ingredients(
             ingredients=[ingredient], meal_times=[constants.MealTime.LUNCH]
         )
         ideal_dinner_recipe = domain_factories.Recipe.with_ingredients(
-            ingredients=[ingredient], meal_times=[constants.MealTime.DINNER]
+            ingredients=[other_ingredient], meal_times=[constants.MealTime.DINNER]
         )
         suboptimal_dinner_recipe = domain_factories.Recipe(
-            meal_times=[constants.MealTime.DINNER]
+            ingredients=[], meal_times=[constants.MealTime.DINNER]
         )
 
         # Create a menu with lunch already selected, but requiring dinner selecting.
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id,
-            minimum=1,
+            ingredient_category_id=category_id,
+            minimum=2,
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -398,8 +402,32 @@ class TestVarietyRequirements:
                 ideal_dinner_recipe,
                 suboptimal_dinner_recipe,
             ),
-            relevant_ingredients=(ingredient,),
+            relevant_ingredients=(ingredient, other_ingredient),
         )
 
         assert len(solution) == 1
         assert solution[0].recipe_id == ideal_dinner_recipe.id
+
+
+class TestObjectiveFunctions:
+    @mock.patch("random.random", side_effect=[0.5, 0.1])
+    def test_random_objective_decides_selected_recipe(self, mock_random: mock.Mock):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.RANDOM
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        # `random.random` is mocked to favour the latter recipe (the second mock
+        # value is lower, order is preserved, and the optimisation sense is minimise).
+        recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
+        favoured_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(recipe, favoured_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == favoured_recipe.id

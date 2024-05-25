@@ -5,7 +5,7 @@ import pulp as lp
 
 from nutrimise.domain import ingredients, menus, recipes
 
-from . import constraints, inputs, variables
+from . import constraints, inputs, objective, variables
 
 
 @attrs.frozen
@@ -33,6 +33,9 @@ def optimise_recipes_for_menu(
         inputs=inputs_, variables_=variables_
     ):
         problem += constraint
+    problem = objective.add_objective_to_problem(
+        problem=problem, variables=variables_, inputs=inputs_
+    )
 
     problem.solve(solver=lp.PULP_CBC_CMD(msg=False))
     if not problem.status == lp.constants.LpStatusOptimal:

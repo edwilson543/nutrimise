@@ -167,7 +167,7 @@ def _variety_requirement_met_for_ingredient_category(
         variables=variables,
         ingedient_category_id=requirement.ingredient_category_id,
     )
-    if requirement.minimum:
+    if requirement.minimum is not None:
         yield number_of_ingredients >= requirement.minimum
-    if requirement.maximum:
+    if requirement.maximum is not None:
         yield number_of_ingredients <= requirement.maximum
