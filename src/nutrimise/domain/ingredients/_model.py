@@ -26,6 +26,10 @@ class Nutrient:
     id: int
     name: str
 
+    @classmethod
+    def from_orm_model(cls, *, nutrient: ingredient_models.Nutrient) -> Nutrient:
+        return Nutrient(id=nutrient.id, name=nutrient.name)
+
 
 @attrs.frozen
 class NutritionalInformation:

@@ -19,8 +19,69 @@ class TestGetIngredients:
         assert {ingredient.id for ingredient in result} == set(ingredient_ids)
 
 
+class TestNutritionalInformationForMenuPerDay:
+    def test_combines_nutritional_information_across_recipes_for_day(self):
+        beef = data_factories.Ingredient(grams_per_unit=1)
+        protein = data_factories.Nutrient(name="Protein")
+        data_factories.IngredientNutritionalInformation(
+            ingredient=beef, nutrient=protein, quantity_per_gram=0.2
+        )
+
+        beef_stew_ingredient = data_factories.RecipeIngredient(
+            ingredient=beef, quantity=250
+        )
+        beef_lasagne_ingredient = data_factories.RecipeIngredient(
+            ingredient=beef, quantity=150
+        )
+        beef_curry_ingredient = data_factories.RecipeIngredient(
+            ingredient=beef, quantity=100
+        )
+
+        # Define a menu with two of the beef recipes both on day one.
+        menu = data_factories.Menu()
+        data_factories.MenuItem(
+            menu=menu,
+            day=1,
+            meal_time=constants.MealTime.LUNCH,
+            recipe=beef_stew_ingredient.recipe,
+        )
+        data_factories.MenuItem(
+            menu=menu,
+            day=1,
+            meal_time=constants.MealTime.DINNER,
+            recipe=beef_lasagne_ingredient.recipe,
+        )
+        data_factories.MenuItem(
+            menu=menu,
+            day=2,
+            meal_time=constants.MealTime.LUNCH,
+            recipe=beef_curry_ingredient.recipe,
+        )
+
+        result = ingredients.get_nutritional_information_for_menu_per_day(
+            menu=menu, per_serving=False
+        )
+
+        assert result == {
+            1: [
+                ingredients.NutritionalInformation(
+                    nutrient=ingredients.Nutrient.from_orm_model(nutrient=protein),
+                    nutrient_quantity=80,  # Beef stew + beef lasagne.
+                    units=constants.NutrientUnit.GRAMS,
+                )
+            ],
+            2: [
+                ingredients.NutritionalInformation(
+                    nutrient=ingredients.Nutrient.from_orm_model(nutrient=protein),
+                    nutrient_quantity=20,  # Just beef curry.
+                    units=constants.NutrientUnit.GRAMS,
+                )
+            ],
+        }
+
+
 class TestNutritionalInformationForRecipe:
-    def test_gets_total_ingredients_for_recipe(self):
+    def test_gets_total_nutritional_information_for_recipe(self):
         beef = data_factories.Ingredient(grams_per_unit=1)
         pasta = data_factories.Ingredient(grams_per_unit=1)
 
@@ -65,7 +126,7 @@ class TestNutritionalInformationForRecipe:
             ),
         ]
 
-    def test_gets_ingredients_for_recipe_per_serving(self):
+    def test_gets_nutritional_information_for_recipe_per_serving(self):
         pasta = data_factories.Ingredient(grams_per_unit=1)
 
         protein = data_factories.Nutrient(name="Protein")

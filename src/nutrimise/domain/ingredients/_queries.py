@@ -6,6 +6,7 @@ from collections import abc as collections_abc
 
 from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
+from nutrimise.data.menus import models as menu_models
 from nutrimise.data.recipes import models as recipe_models
 
 from . import _model
@@ -19,6 +20,40 @@ def get_ingredients(
         _model.Ingredient.from_orm_model(ingredient=ingredient)
         for ingredient in ingredients
     )
+
+
+def get_nutritional_information_for_menu_per_day(
+    *, menu: menu_models.Menu, per_serving: bool
+) -> dict[int, list[_model.NutritionalInformation]]:
+    """
+    Return a list of all the nutrients in a menu and their quantities, per day.
+
+    Note that the same set of nutrients is included for each day, even if that nutrient
+    is not included in any of the recipes on that day.
+    """
+    unaggregated_information: collections.defaultdict[
+        int, list[_model.NutritionalInformation]
+    ] = collections.defaultdict(list)
+    nutrients: set[_model.Nutrient] = set()
+
+    for menu_item in menu.items.all():
+        if (recipe := menu_item.recipe) is not None:
+            nutritional_information = get_nutritional_information_for_recipe(
+                recipe=recipe, per_serving=per_serving
+            )
+            unaggregated_information[menu_item.day].extend(nutritional_information)
+
+            # Collect the unique set of ingredients.
+            for information in nutritional_information:
+                nutrients.add(information.nutrient)
+
+    ordered_nutrients = list(sorted(nutrients, key=lambda nutrient: nutrient.name))
+    return {
+        day: _model.NutritionalInformation.sum_by_nutrient(
+            nutritional_information=nutritional_information, nutrients=ordered_nutrients
+        )
+        for day, nutritional_information in unaggregated_information.items()
+    }
 
 
 def get_nutritional_information_for_recipe(
