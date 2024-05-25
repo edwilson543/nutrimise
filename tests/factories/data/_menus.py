@@ -26,6 +26,7 @@ class MenuItem(factory.django.DjangoModelFactory):
 
 
 class MenuRequirements(factory.django.DjangoModelFactory):
+    optimisation_mode = constants.OptimisationMode.RANDOM.value
     maximum_occurrences_per_recipe = 1
 
     class Meta:

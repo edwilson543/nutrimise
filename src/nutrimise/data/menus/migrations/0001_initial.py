@@ -95,6 +95,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    "optimisation_mode",
+                    models.TextField(
+                        choices=constants.OptimisationMode.choices,
+                    ),
+                ),
+                (
                     "dietary_requirements",
                     models.ManyToManyField(
                         related_name="+",

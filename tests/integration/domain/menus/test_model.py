@@ -32,6 +32,10 @@ class TestMenuFromOrmModel:
         assert item.meal_time == orm_item.meal_time
 
         assert (
+            menu.requirements.optimisation_mode.value
+            == menu.requirements.optimisation_mode
+        )
+        assert (
             menu.requirements.maximum_occurrences_per_recipe
             == orm_requirements.maximum_occurrences_per_recipe
         )

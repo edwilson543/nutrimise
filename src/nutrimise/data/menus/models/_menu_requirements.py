@@ -16,6 +16,10 @@ class MenuRequirements(django_models.Model):
         _menu.Menu, on_delete=django_models.CASCADE, related_name="requirements"
     )
 
+    optimisation_mode = django_models.TextField(
+        choices=constants.OptimisationMode.choices
+    )
+
     maximum_occurrences_per_recipe = django_models.SmallIntegerField()
 
     dietary_requirements = django_models.ManyToManyField(
