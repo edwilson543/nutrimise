@@ -10,6 +10,7 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
+from nutrimise.domain import ingredients
 
 from . import _base
 
@@ -30,6 +31,11 @@ class MenuDetails(_base.AdminTemplateView):
         context["meal_schedule"] = meal_schedule
         context["days"] = sorted(
             set(day for days in meal_schedule.values() for day in days.keys())
+        )
+        context["nutritional_information"] = (
+            ingredients.get_nutritional_information_for_menu_per_day(
+                menu=self.menu, per_serving=True
+            )
         )
         return context
 

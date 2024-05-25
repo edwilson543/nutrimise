@@ -14,6 +14,14 @@
     </div>
 {% endblock %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        #menu-nutritional-information tr { display: block; float: left; }
+        #menu-nutritional-information th, #menu-nutritional-information td { display: block; }
+    </style>
+{% endblock %}
+
 {% block content %}
 
     <div id="basic-info" class="module">
@@ -124,19 +132,24 @@
         {% endif %}
     </div>
 
-    <div id="nutritional-information" class="module">
+    <div id="menu-nutritional-information" class="module">
         <h2>Nutritional information</h2>
-        <h3>Per serving</h3>
-        <table>
-            <tr>
-                <th>Nutrient</th>
-                <th>Grams</th>
-            </tr>
-            {% for nutrient in nutritional_information %}
+        <h3>Per day, per serving</h3>
+        <table id="menu-nutritional-information-table">
+            {% for day, info_list in nutritional_information.items %}
+                {% if forloop.first %}
+                    <tr>
+                        <th>/</th>
+                        {% for info in info_list %}
+                            <th>{{ info.nutrient.name }}</th>
+                        {% endfor %}
+                    </tr>
+                {% endif %}
                 <tr>
-                    <td>{{ nutrient.nutrient.name }}</td>
-                    <td>{{ nutrient.nutrient_quantity | floatformat:"1" }}</td>
-                    <td>{{ nutrient.units | title }}</td>
+                    <td><b>Day {{ day }}</b></td>
+                    {% for info in info_list %}
+                        <td>{{ info.nutrient_quantity }}</td>
+                    {% endfor %}
                 </tr>
             {% endfor %}
         </table>

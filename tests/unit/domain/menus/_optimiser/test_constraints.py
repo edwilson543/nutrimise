@@ -44,10 +44,10 @@ class TestNutrientGramsForDay:
     def test_gets_nutrient_requirement_constraints(self):
         nutrient = domain_factories.Nutrient()
         requirement = domain_factories.NutrientRequirement(
-            minimum_quantity=11.25, maximum_quantity=4.75
+            nutrient_id=nutrient.id, minimum_quantity=4.75, maximum_quantity=11.25
         )
 
-        # Creat a menu consisting of lunch & dinner.
+        # Creat a menu consisting of lunch & dinner on the same day.
         lunch = domain_factories.MenuItem(meal_time=constants.MealTime.LUNCH)
         dinner = domain_factories.MenuItem(
             day=lunch.day, meal_time=constants.MealTime.DINNER
