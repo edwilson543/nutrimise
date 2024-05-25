@@ -2,7 +2,6 @@ import pytest
 
 from nutrimise.domain import ingredients, recipes
 from nutrimise.domain.menus._optimisation import inputs
-
 from tests.factories import domain as domain_factories
 
 

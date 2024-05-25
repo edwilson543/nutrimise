@@ -1,6 +1,5 @@
 from nutrimise.data import constants
 from nutrimise.domain.menus._optimisation import inputs, variables
-
 from tests.factories import domain as domain_factories
 
 
