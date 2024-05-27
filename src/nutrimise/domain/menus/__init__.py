@@ -8,6 +8,8 @@ from ._model import (
 from ._operations import update_menu_item_recipe
 from ._optimisation.optimise import (
     NoNutrientTargetsSet,
+    NoTargetsSet,
+    NoVarietyTargetsSet,
     UnableToOptimiseMenu,
     optimise_recipes_for_menu,
 )

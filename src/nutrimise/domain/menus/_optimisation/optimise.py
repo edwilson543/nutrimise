@@ -13,7 +13,11 @@ class UnableToOptimiseMenu(Exception):
     menu_id: int
 
 
+NoTargetsSet = objectives.NoTargetsSet
+
 NoNutrientTargetsSet = objectives.NoNutrientTargetsSet
+
+NoVarietyTargetsSet = objectives.NoVarietyTargetsSet
 
 
 def optimise_recipes_for_menu(
@@ -26,8 +30,12 @@ def optimise_recipes_for_menu(
     Express and solve the menu optimisation as an integer programming problem.
 
     :raises UnableToOptimiseMenu: If the solver did not find a solution.
+    :raises NoTargetsSet: If the optimisation mode is `EVERYTHING` but
+        no targets are set for any metric.
     :raises NoNutrientTargetsSet: If the optimisation mode is `NUTRIENT` but
         no nutrient targets have been set.
+    :raises NoNutrientTargetsSet: If the optimisation mode is `INGREDIENT_VARIETY` but
+        no ingredient variety targets have been set.
     """
     problem = lp.LpProblem(name=f"optimise-menu-{menu.id}")
     inputs_ = inputs.OptimiserInputs(

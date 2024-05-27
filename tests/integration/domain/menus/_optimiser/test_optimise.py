@@ -470,7 +470,7 @@ class TestNutrientObjective:
         assert len(solution) == 1
         assert solution[0].recipe_id == optimal_recipe.id
 
-    def test_raises_when_no_nutrient_requirements_set(self):
+    def test_raises_when_no_nutrient_targets_set(self):
         requirements = domain_factories.MenuRequirements(
             optimisation_mode=constants.OptimisationMode.NUTRIENT,
         )
@@ -480,6 +480,26 @@ class TestNutrientObjective:
         recipe = domain_factories.Recipe()
 
         with pytest.raises(menus.NoNutrientTargetsSet) as exc:
+            menus.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(recipe,),
+                relevant_ingredients=(),
+            )
+
+        assert exc.value.menu_id == menu.id
+
+
+class TestEverythingObjective:
+    def test_raises_when_no_targets_are_set(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.EVERYTHING,
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        recipe = domain_factories.Recipe()
+
+        with pytest.raises(menus.NoTargetsSet) as exc:
             menus.optimise_recipes_for_menu(
                 menu=menu,
                 recipes_to_consider=(recipe,),
