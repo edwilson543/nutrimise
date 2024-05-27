@@ -13,7 +13,7 @@ def add_objective_to_problem(
     variables: variables.Variables,
 ) -> lp.LpProblem:
     """
-    Return the LP problem with the objective function installed.
+    Return the LP problem with the objectives function installed.
     """
     match inputs.requirements.optimisation_mode:
         case constants.OptimisationMode.RANDOM:

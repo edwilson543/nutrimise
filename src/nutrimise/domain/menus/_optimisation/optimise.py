@@ -5,7 +5,7 @@ import pulp as lp
 
 from nutrimise.domain import ingredients, menus, recipes
 
-from . import constraints, inputs, objective, variables
+from . import constraints, inputs, objectives, variables
 
 
 @attrs.frozen
@@ -13,7 +13,7 @@ class UnableToOptimiseMenu(Exception):
     menu_id: int
 
 
-NoNutrientTargetsSet = objective.NoNutrientTargetsSet
+NoNutrientTargetsSet = objectives.NoNutrientTargetsSet
 
 
 def optimise_recipes_for_menu(
@@ -40,7 +40,7 @@ def optimise_recipes_for_menu(
         inputs=inputs_, variables_=variables_
     ):
         problem += constraint
-    problem = objective.add_objective_to_problem(
+    problem = objectives.add_objective_to_problem(
         problem=problem, variables=variables_, inputs=inputs_
     )
 
