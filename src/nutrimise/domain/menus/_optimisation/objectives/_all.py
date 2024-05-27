@@ -26,6 +26,6 @@ def add_objective_to_problem(
         constants.OptimisationMode.EVERYTHING,
     ]:
         problem = _nutrient.add_nutrient_objective_to_problem(
-            problem=problem, inputs=inputs, decision_variables=variables
+            problem=problem, inputs=inputs, variables=variables
         )
     return problem

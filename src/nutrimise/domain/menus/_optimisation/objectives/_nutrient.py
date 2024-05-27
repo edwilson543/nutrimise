@@ -36,10 +36,10 @@ def add_nutrient_objective_to_problem(
     *,
     problem: lp.LpProblem,
     inputs: inputs.OptimiserInputs,
-    decision_variables: variables.Variables,
+    variables: variables.Variables,
 ) -> lp.LpProblem:
     """
-    Add an objectives to the problem that forces the solution towards the nutrient targets.
+    Add an objective to the problem that forces the solution towards the nutrient targets.
     """
     nutrient_objective_variables = _get_nutrient_objective_variables(inputs=inputs)
     if len(nutrient_objective_variables) == 0:
@@ -47,7 +47,7 @@ def add_nutrient_objective_to_problem(
 
     for constraint in _yield_all_nutrient_objective_constraints(
         inputs=inputs,
-        decision_variables=decision_variables,
+        variables=variables,
         nutrient_objective_variables=nutrient_objective_variables,
     ):
         problem += constraint
@@ -77,16 +77,16 @@ def _get_nutrient_objective(
 def _yield_all_nutrient_objective_constraints(
     *,
     inputs: inputs.OptimiserInputs,
-    decision_variables: variables.Variables,
+    variables: variables.Variables,
     nutrient_objective_variables: tuple[_NutrientObjectiveVariable, ...],
 ) -> Generator[lp.LpConstraint, None, None]:
     """
-    Big M constraints on the objectives's deviation from each nutrient target.
+    Big M constraints on the objective's deviation from each nutrient target.
     """
     for variable in nutrient_objective_variables:
         total_nutrient_quantity = expressions.total_nutrient_quantity_for_day(
             inputs=inputs,
-            variables=decision_variables,
+            variables=variables,
             day=variable.day,
             nutrient_id=variable.nutrient_id,
         )
