@@ -16,6 +16,7 @@ class MenuItem(factory.Factory):
 
 
 class MenuRequirements(factory.Factory):
+    optimisation_mode = constants.OptimisationMode.RANDOM.value
     nutrient_requirements = factory.LazyFunction(tuple)
     variety_requirements = factory.LazyFunction(tuple)
     maximum_occurrences_per_recipe = 1

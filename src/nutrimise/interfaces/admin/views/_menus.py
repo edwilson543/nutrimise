@@ -61,10 +61,8 @@ class OptimiseMenu(generic.View):
         menu_id = kwargs["menu_id"]
         try:
             menus_app.optimise_menu(menu_id=menu_id)
-        except menus_app.MenuHasNoRequirements:
-            messages.error(request, "The menu has no requirements to optimise against.")
-        except menus_app.UnableToOptimiseMenu:
-            messages.error(request, "Menu requirements could not be met.")
+        except Exception as exc:
+            messages.error(request, str(exc))
         else:
             messages.success(request, "Menu has been optimised.")
         redirect_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu_id})

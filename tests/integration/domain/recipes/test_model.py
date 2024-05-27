@@ -1,6 +1,5 @@
 from nutrimise.data import constants
 from nutrimise.domain import recipes
-
 from tests.factories import data as data_factories
 
 

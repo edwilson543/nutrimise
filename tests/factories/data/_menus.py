@@ -1,6 +1,7 @@
 import factory
 
 from nutrimise.data import constants
+from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
 
 from . import _auth, _ingredients, _recipes
@@ -26,10 +27,24 @@ class MenuItem(factory.django.DjangoModelFactory):
 
 
 class MenuRequirements(factory.django.DjangoModelFactory):
+    optimisation_mode = constants.OptimisationMode.RANDOM.value
     maximum_occurrences_per_recipe = 1
 
     class Meta:
         model = menu_models.MenuRequirements
+        skip_postgeneration_save = True
+
+    @factory.post_generation
+    def dietary_requirements(
+        obj,
+        create: bool,
+        extracted: tuple[ingredient_models.DietaryRequirement, ...],
+        **kwargs: object,
+    ):
+        if not create:
+            return
+        elif extracted:
+            obj.dietary_requirements.add(*extracted)
 
 
 class NutrientRequirement(factory.django.DjangoModelFactory):

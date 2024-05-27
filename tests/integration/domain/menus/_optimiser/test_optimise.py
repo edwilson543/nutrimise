@@ -1,8 +1,9 @@
+from unittest import mock
+
 import pytest
 
 from nutrimise.data import constants
 from nutrimise.domain import menus, recipes
-
 from tests.factories import domain as domain_factories
 
 
@@ -296,7 +297,7 @@ class TestVarietyRequirements:
         # Create a menu needing a single recipe selecting.
         ingredient = domain_factories.Ingredient()
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id, maximum=1
+            ingredient_category_id=ingredient.category_id, maximum=0
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -367,22 +368,24 @@ class TestVarietyRequirements:
         assert solution[0].recipe_id == only_recipe_meeting_requirement.id
 
     def test_unoptimised_recipe_selection_counts_towards_variety_requirement(self):
-        ingredient = domain_factories.Ingredient()
+        category_id = 1
+        ingredient = domain_factories.Ingredient(category_id=category_id)
+        other_ingredient = domain_factories.Ingredient(category_id=category_id)
 
         lunch_recipe = domain_factories.Recipe.with_ingredients(
             ingredients=[ingredient], meal_times=[constants.MealTime.LUNCH]
         )
         ideal_dinner_recipe = domain_factories.Recipe.with_ingredients(
-            ingredients=[ingredient], meal_times=[constants.MealTime.DINNER]
+            ingredients=[other_ingredient], meal_times=[constants.MealTime.DINNER]
         )
         suboptimal_dinner_recipe = domain_factories.Recipe(
-            meal_times=[constants.MealTime.DINNER]
+            ingredients=[], meal_times=[constants.MealTime.DINNER]
         )
 
         # Create a menu with lunch already selected, but requiring dinner selecting.
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id,
-            minimum=1,
+            ingredient_category_id=category_id,
+            minimum=2,
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -398,8 +401,168 @@ class TestVarietyRequirements:
                 ideal_dinner_recipe,
                 suboptimal_dinner_recipe,
             ),
-            relevant_ingredients=(ingredient,),
+            relevant_ingredients=(ingredient, other_ingredient),
         )
 
         assert len(solution) == 1
         assert solution[0].recipe_id == ideal_dinner_recipe.id
+
+
+class TestRandomObjective:
+    @mock.patch("random.random", side_effect=[0.5, 0.1])
+    def test_random_objective_decides_selected_recipe(self, mock_random: mock.Mock):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.RANDOM
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        # `random.random` is mocked to favour the latter recipe (the second mock
+        # value is lower, order is preserved, and the optimisation sense is minimise).
+        recipe = domain_factories.Recipe(meal_times=[item.meal_time])
+        favoured_recipe = domain_factories.Recipe(meal_times=[item.meal_time])
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(recipe, favoured_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == favoured_recipe.id
+
+
+class TestNutrientObjective:
+    # Include a recipe above / below the target to ensure we aren't just minimizing / maximizing.
+    @pytest.mark.parametrize("suboptimal_deviation", [-5, 5])
+    @pytest.mark.parametrize(
+        "optimisation_mode",
+        [constants.OptimisationMode.NUTRIENT, constants.OptimisationMode.EVERYTHING],
+    )
+    def test_nutrient_objective_forces_recipe_selection_with_target_nutrient_content(
+        self, suboptimal_deviation: int, optimisation_mode: constants.OptimisationMode
+    ):
+        nutrient = domain_factories.Nutrient()
+        target_quantity = 10
+        nutrient_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, target_quantity=target_quantity
+        )
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=optimisation_mode,
+            nutrient_requirements=(nutrient_requirement,),
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        optimal_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=target_quantity
+        )
+        suboptimal_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=target_quantity + suboptimal_deviation
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(optimal_recipe, suboptimal_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == optimal_recipe.id
+
+    def test_raises_when_no_nutrient_targets_set(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.NUTRIENT,
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        recipe = domain_factories.Recipe()
+
+        with pytest.raises(menus.NoNutrientTargetsSet) as exc:
+            menus.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(recipe,),
+                relevant_ingredients=(),
+            )
+
+        assert exc.value.menu_id == menu.id
+
+
+class TestVarietyObjective:
+    @pytest.mark.parametrize("target", [0, 1])
+    @pytest.mark.parametrize(
+        "optimisation_mode",
+        [constants.OptimisationMode.VARIETY, constants.OptimisationMode.EVERYTHING],
+    )
+    def test_variety_objective_forces_selection_of_recipe_containing_ingredient(
+        self, optimisation_mode: constants.OptimisationMode, target: int
+    ):
+        ingredient = domain_factories.Ingredient()
+        variety_requirement = domain_factories.VarietyRequirement(
+            ingredient_category_id=ingredient.category_id,
+            target=target,
+        )
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=optimisation_mode,
+            variety_requirements=(variety_requirement,),
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        with_ingredient_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[ingredient], meal_times=[item.meal_time]
+        )
+        without_ingredient_recipe = domain_factories.Recipe.with_ingredients(
+            ingredients=[], meal_times=[item.meal_time]
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(with_ingredient_recipe, without_ingredient_recipe),
+            relevant_ingredients=(ingredient,),
+        )
+
+        assert len(solution) == 1
+        optimal_recipe = {0: without_ingredient_recipe, 1: with_ingredient_recipe}[
+            target
+        ]
+        assert solution[0].recipe_id == optimal_recipe.id
+
+    def test_raises_when_no_variety_targets_set(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.VARIETY,
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        recipe = domain_factories.Recipe()
+
+        with pytest.raises(menus.NoVarietyTargetsSet) as exc:
+            menus.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(recipe,),
+                relevant_ingredients=(),
+            )
+
+        assert exc.value.menu_id == menu.id
+
+
+class TestEverythingObjective:
+    def test_raises_when_no_targets_are_set(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.EVERYTHING,
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        recipe = domain_factories.Recipe()
+
+        with pytest.raises(menus.NoTargetsSet) as exc:
+            menus.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(recipe,),
+                relevant_ingredients=(),
+            )
+
+        assert exc.value.menu_id == menu.id

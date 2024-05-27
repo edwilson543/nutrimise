@@ -74,6 +74,7 @@ class MenuItem:
 
 @attrs.frozen
 class MenuRequirements:
+    optimisation_mode: constants.OptimisationMode
     nutrient_requirements: tuple[NutrientRequirement, ...]
     variety_requirements: tuple[VarietyRequirement, ...]
     maximum_occurrences_per_recipe: int
@@ -84,6 +85,9 @@ class MenuRequirements:
         cls, *, requirements: menu_models.MenuRequirements
     ) -> MenuRequirements:
         return cls(
+            optimisation_mode=constants.OptimisationMode(
+                requirements.optimisation_mode
+            ),
             nutrient_requirements=NutrientRequirement.from_orm_model(
                 requirements=list(requirements.nutrient_requirements.all())
             ),

@@ -85,13 +85,24 @@ class Migration(migrations.Migration):
                     "id",
                     models.BigAutoField(primary_key=True, serialize=False),
                 ),
-                ("maximum_occurrences_per_recipe", models.SmallIntegerField()),
+                (
+                    "maximum_occurrences_per_recipe",
+                    models.SmallIntegerField(
+                        validators=[django_validators.MinValueValidator(limit_value=1)]
+                    ),
+                ),
                 (
                     "menu",
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="requirements",
                         to="menus.menu",
+                    ),
+                ),
+                (
+                    "optimisation_mode",
+                    models.TextField(
+                        choices=constants.OptimisationMode.choices,
                     ),
                 ),
                 (

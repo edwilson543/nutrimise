@@ -1,7 +1,6 @@
 import pytest
 
 from nutrimise.app import menus
-
 from tests.factories import data as data_factories
 
 
@@ -20,11 +19,12 @@ def test_optimises_menu():
 
 
 def test_optimises_menu_by_excluding_recipes_not_meeting_dietary_requirements():
-    menu = data_factories.Menu()
-    data_factories.MenuRequirements(menu=menu)
-    menu_item = data_factories.MenuItem(menu=menu, recipe_id=None)
-
     veggie = data_factories.DietaryRequirement()
+
+    menu = data_factories.Menu()
+    data_factories.MenuRequirements(menu=menu, dietary_requirements=(veggie,))
+    menu_item = data_factories.MenuItem(menu=menu, recipe=None)
+
     recipe = data_factories.Recipe.create_to_satisfy_dietary_requirements(
         dietary_requirements=(veggie,), meal_times=[menu_item.meal_time]
     )

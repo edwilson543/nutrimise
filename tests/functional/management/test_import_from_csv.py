@@ -1,4 +1,5 @@
 from django.core import management as django_management
+
 from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 

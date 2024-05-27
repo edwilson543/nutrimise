@@ -113,6 +113,7 @@ ignore = [
 [tool.ruff.lint.isort]
 # Sections
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = ["nutrimise", "tests"]
 lines-between-types = 1
 lines-after-imports = 2
 

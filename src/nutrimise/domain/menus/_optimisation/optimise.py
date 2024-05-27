@@ -5,12 +5,22 @@ import pulp as lp
 
 from nutrimise.domain import ingredients, menus, recipes
 
-from . import constraints, inputs, variables
+from . import constraints, inputs, objectives, variables
+
+
+NoTargetsSet = objectives.NoTargetsSet
+
+NoNutrientTargetsSet = objectives.NoNutrientTargetsSet
+
+NoVarietyTargetsSet = objectives.NoVarietyTargetsSet
 
 
 @attrs.frozen
 class UnableToOptimiseMenu(Exception):
     menu_id: int
+
+    def __str__(self) -> str:
+        return "Menu requirements could not be met."
 
 
 def optimise_recipes_for_menu(
@@ -21,6 +31,14 @@ def optimise_recipes_for_menu(
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
+
+    :raises UnableToOptimiseMenu: If the solver did not find a solution.
+    :raises NoTargetsSet: If the optimisation mode is `EVERYTHING` but
+        no targets are set for any metric.
+    :raises NoNutrientTargetsSet: If the optimisation mode is `NUTRIENT` but
+        no nutrient targets have been set.
+    :raises NoNutrientTargetsSet: If the optimisation mode is `INGREDIENT_VARIETY` but
+        no ingredient variety targets have been set.
     """
     problem = lp.LpProblem(name=f"optimise-menu-{menu.id}")
     inputs_ = inputs.OptimiserInputs(
@@ -33,6 +51,9 @@ def optimise_recipes_for_menu(
         inputs=inputs_, variables_=variables_
     ):
         problem += constraint
+    problem = objectives.add_objective_to_problem(
+        problem=problem, variables=variables_, inputs=inputs_
+    )
 
     problem.solve(solver=lp.PULP_CBC_CMD(msg=False))
     if not problem.status == lp.constants.LpStatusOptimal:
