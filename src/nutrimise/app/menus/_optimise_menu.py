@@ -25,8 +25,12 @@ def optimise_menu(*, menu_id: int) -> None:
     :raises MenuHasNoRequirements: When the menu has no optimisation requirements.
     :raises UnableToOptimiseMenu: When the optimiser could not find any menus
         meeting the requirements.
+    :raises NoTargetsSet: If the optimisation mode is `EVERYTHING` but
+        no targets are set for any metric.
     :raises NoNutrientTargetsSet: If the optimisation mode is `NUTRIENT` but
         no nutrient targets have been set.
+    :raises NoNutrientTargetsSet: If the optimisation mode is `INGREDIENT_VARIETY` but
+        no ingredient variety targets have been set.
     """
 
     menu = menus.get_menu(menu_id=menu_id)

@@ -18,6 +18,7 @@ class MealTime(django_models.TextChoices):
 class OptimisationMode(django_models.TextChoices):
     RANDOM = "RANDOM", "Random"
     NUTRIENT = "NUTRIENT", "Nutrient"
+    VARIETY = "VARIETY", "Ingredient variety"
     EVERYTHING = "EVERYTHING", "Everything"
 
 

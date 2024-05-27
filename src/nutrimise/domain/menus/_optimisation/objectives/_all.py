@@ -4,7 +4,7 @@ import pulp as lp
 from nutrimise.data import constants
 
 from .. import inputs, variables
-from . import _nutrient, _random
+from . import _nutrient, _random, _variety
 
 
 @attrs.frozen
@@ -30,6 +30,10 @@ def add_objective_to_problem(
             return _nutrient.add_nutrient_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
             )
+        case constants.OptimisationMode.VARIETY:
+            return _variety.add_variety_objective_to_problem(
+                problem=problem, inputs=inputs, variables=variables
+            )
         case constants.OptimisationMode.EVERYTHING:
             return _add_everything_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
@@ -45,17 +49,25 @@ def _add_everything_objective_to_problem(
     """
     Return the objective to use when optimising for 'everything'.
     """
-    n_objectives_added = 0
+    no_objectives_added = True
 
     try:
         problem = _nutrient.add_nutrient_objective_to_problem(
             problem=problem, inputs=inputs, variables=variables
         )
-        n_objectives_added += 1
+        no_objectives_added = False
     except _nutrient.NoNutrientTargetsSet:
         pass
 
-    if n_objectives_added == 0:
+    try:
+        problem = _variety.add_variety_objective_to_problem(
+            problem=problem, inputs=inputs, variables=variables
+        )
+        no_objectives_added = False
+    except _variety.NoVarietyTargetsSet:
+        pass
+
+    if no_objectives_added:
         raise NoTargetsSet(menu_id=inputs.menu.id)
 
     return problem
