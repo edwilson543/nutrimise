@@ -435,8 +435,12 @@ class TestRandomObjective:
 class TestNutrientObjective:
     # Include a recipe above / below the target to ensure we aren't just minimizing / maximizing.
     @pytest.mark.parametrize("suboptimal_deviation", [-5, 5])
+    @pytest.mark.parametrize(
+        "optimisation_mode",
+        [constants.OptimisationMode.NUTRIENT, constants.OptimisationMode.EVERYTHING],
+    )
     def test_nutrient_objective_forces_recipe_selection_with_target_nutrient_content(
-        self, suboptimal_deviation: int
+        self, suboptimal_deviation: int, optimisation_mode: constants.OptimisationMode
     ):
         nutrient = domain_factories.Nutrient()
         target_quantity = 10
@@ -444,7 +448,7 @@ class TestNutrientObjective:
             nutrient_id=nutrient.id, target_quantity=target_quantity
         )
         requirements = domain_factories.MenuRequirements(
-            optimisation_mode=constants.OptimisationMode.NUTRIENT,
+            optimisation_mode=optimisation_mode,
             nutrient_requirements=(nutrient_requirement,),
         )
         item = domain_factories.MenuItem()

@@ -13,14 +13,19 @@ def add_objective_to_problem(
     variables: variables.Variables,
 ) -> lp.LpProblem:
     """
-    Return the LP problem with the objectives function installed.
+    Return the LP problem with the objectives function(s) installed.
     """
-    match inputs.requirements.optimisation_mode:
-        case constants.OptimisationMode.RANDOM:
-            return _random.add_random_objective_to_problem(
-                problem=problem, variables=variables
-            )
-        case constants.OptimisationMode.NUTRIENT:
-            return _nutrient.add_nutrient_objective_to_problem(
-                problem=problem, inputs=inputs, decision_variables=variables
-            )
+    mode = inputs.requirements.optimisation_mode
+
+    if mode == constants.OptimisationMode.RANDOM:
+        problem = _random.add_random_objective_to_problem(
+            problem=problem, variables=variables
+        )
+    if mode in [
+        constants.OptimisationMode.NUTRIENT,
+        constants.OptimisationMode.EVERYTHING,
+    ]:
+        problem = _nutrient.add_nutrient_objective_to_problem(
+            problem=problem, inputs=inputs, decision_variables=variables
+        )
+    return problem
