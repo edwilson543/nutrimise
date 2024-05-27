@@ -1,46 +1,11 @@
 from nutrimise.data import constants
-from nutrimise.domain.menus._optimisation import constraints, inputs, variables
+from nutrimise.domain.menus._optimisation import inputs, variables
+from nutrimise.domain.menus._optimisation.constraints import _nutrient
 from tests.factories import domain as domain_factories
 
 
-class TestNutrientGramsForDay:
-    def test_gets_all_basic_constraints(self):
-        # Creat a menu with one empty item.
-        menu_item = domain_factories.MenuItem()
-        requirements = domain_factories.MenuRequirements(
-            maximum_occurrences_per_recipe=1
-        )
-        menu = domain_factories.Menu(items=(menu_item,), requirements=requirements)
-
-        # Create two recipes that could fulfill the menu item
-        recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
-        other_recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
-
-        inputs_ = inputs.OptimiserInputs(
-            menu=menu,
-            recipes_to_consider=(recipe, other_recipe),
-            relevant_ingredients=(),
-        )
-        variables_ = variables.Variables.from_inputs(inputs_)
-
-        all_constraints = [
-            str(constraint)
-            for constraint in constraints.yield_all_constraints(
-                inputs=inputs_, variables_=variables_
-            )
-        ]
-
-        expected_constraints = [
-            # Menu items assignment constraints.
-            f"recipe_{recipe.id}_for_menu_item_{menu_item.id} + recipe_{other_recipe.id}_for_menu_item_{menu_item.id} = 1",
-            # Maximum occurrences per recipe constraints.
-            f"recipe_{recipe.id}_for_menu_item_{menu_item.id} <= 1",
-            f"recipe_{other_recipe.id}_for_menu_item_{menu_item.id} <= 1",
-        ]
-
-        assert all_constraints == expected_constraints
-
-    def test_gets_nutrient_requirement_constraints(self):
+class TestNutrientConstraints:
+    def test_constraints_minimum_and_maximum_nutrient_quantity(self):
         nutrient = domain_factories.Nutrient()
         requirement = domain_factories.NutrientRequirement(
             nutrient_id=nutrient.id, minimum_quantity=4.75, maximum_quantity=11.25
@@ -83,7 +48,7 @@ class TestNutrientGramsForDay:
 
         all_constraints = {
             str(constraint)
-            for constraint in constraints.yield_all_constraints(
+            for constraint in _nutrient.all_nutrient_requirements_are_met(
                 inputs=inputs_, variables_=variables_
             )
         }
@@ -93,4 +58,4 @@ class TestNutrientGramsForDay:
             f"7.6*recipe_{recipe.id}_for_menu_item_{lunch.id} + 7.6*recipe_{recipe.id}_for_menu_item_{dinner.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{lunch.id} + 9.1*recipe_{other_recipe.id}_for_menu_item_{dinner.id} <= {requirement.maximum_quantity}",
         }
 
-        assert nutrient_requirement_constraints < all_constraints
+        assert nutrient_requirement_constraints == all_constraints
