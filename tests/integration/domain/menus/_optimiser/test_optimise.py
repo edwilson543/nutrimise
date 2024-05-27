@@ -408,7 +408,7 @@ class TestVarietyRequirements:
         assert solution[0].recipe_id == ideal_dinner_recipe.id
 
 
-class TestObjectiveFunctions:
+class TestRandomObjective:
     @mock.patch("random.random", side_effect=[0.5, 0.1])
     def test_random_objective_decides_selected_recipe(self, mock_random: mock.Mock):
         requirements = domain_factories.MenuRequirements(
@@ -419,8 +419,8 @@ class TestObjectiveFunctions:
 
         # `random.random` is mocked to favour the latter recipe (the second mock
         # value is lower, order is preserved, and the optimisation sense is minimise).
-        recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
-        favoured_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
+        recipe = domain_factories.Recipe(meal_times=[item.meal_time])
+        favoured_recipe = domain_factories.Recipe(meal_times=[item.meal_time])
 
         solution = menus.optimise_recipes_for_menu(
             menu=menu,
@@ -430,3 +430,38 @@ class TestObjectiveFunctions:
 
         assert len(solution) == 1
         assert solution[0].recipe_id == favoured_recipe.id
+
+
+class TestNutrientObjective:
+    # Include a recipe above / below the target to ensure we aren't just minimizing / maximizing.
+    @pytest.mark.parametrize("suboptimal_deviation", [-5, 5])
+    def test_nutrient_objective_forces_recipe_selection_with_target_nutrient_content(
+        self, suboptimal_deviation: int
+    ):
+        nutrient = domain_factories.Nutrient()
+        target_quantity = 10
+        nutrient_requirement = domain_factories.NutrientRequirement(
+            nutrient_id=nutrient.id, target_quantity=target_quantity
+        )
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode.NUTRIENT,
+            nutrient_requirements=(nutrient_requirement,),
+        )
+        item = domain_factories.MenuItem()
+        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+
+        optimal_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=target_quantity
+        )
+        suboptimal_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
+            nutrient=nutrient, nutrient_quantity=target_quantity + suboptimal_deviation
+        )
+
+        solution = menus.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(optimal_recipe, suboptimal_recipe),
+            relevant_ingredients=(),
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == optimal_recipe.id

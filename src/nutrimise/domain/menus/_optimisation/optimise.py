@@ -13,6 +13,9 @@ class UnableToOptimiseMenu(Exception):
     menu_id: int
 
 
+NoNutrientTargetsSet = objective.NoNutrientTargetsSet
+
+
 def optimise_recipes_for_menu(
     *,
     menu: menus.Menu,
@@ -21,6 +24,10 @@ def optimise_recipes_for_menu(
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
+
+    :raises UnableToOptimiseMenu: If the solver did not find a solution.
+    :raises NoNutrientTargetsSet: If the optimisation mode is `NUTRIENT` but
+        no nutrient targets have been set.
     """
     problem = lp.LpProblem(name=f"optimise-menu-{menu.id}")
     inputs_ = inputs.OptimiserInputs(
