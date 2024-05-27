@@ -11,6 +11,12 @@ from . import _nutrient, _random, _variety
 class NoTargetsSet(Exception):
     menu_id: int
 
+    def __str__(self) -> str:
+        return (
+            "Menu optimisation mode is set to 'Everything' but no targets are set. "
+            "Either change the optimisation mode, or set at least one target."
+        )
+
 
 def add_objective_to_problem(
     *,

@@ -9,12 +9,13 @@ MenuDoesNotExist = menus.MenuDoesNotExist
 
 UnableToOptimiseMenu = menus.UnableToOptimiseMenu
 
-NoNutrientTargetsSet = menus.NoNutrientTargetsSet
-
 
 @attrs.frozen
 class MenuHasNoRequirements(Exception):
     menu_id: int
+
+    def __str__(self) -> str:
+        return "The menu has no requirements to optimise against."
 
 
 def optimise_menu(*, menu_id: int) -> None:

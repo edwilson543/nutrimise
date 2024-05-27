@@ -12,6 +12,12 @@ from .. import expressions, inputs, variables
 class NoNutrientTargetsSet(Exception):
     menu_id: int
 
+    def __str__(self) -> str:
+        return (
+            "Menu optimisation mode is set to 'Nutrient' but no nutrient targets are set. "
+            "Either change the optimisation mode, or set at least one nutrient target."
+        )
+
 
 class _NutrientObjectiveVariable:
     """

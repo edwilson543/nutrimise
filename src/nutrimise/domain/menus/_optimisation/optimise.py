@@ -8,16 +8,19 @@ from nutrimise.domain import ingredients, menus, recipes
 from . import constraints, inputs, objectives, variables
 
 
-@attrs.frozen
-class UnableToOptimiseMenu(Exception):
-    menu_id: int
-
-
 NoTargetsSet = objectives.NoTargetsSet
 
 NoNutrientTargetsSet = objectives.NoNutrientTargetsSet
 
 NoVarietyTargetsSet = objectives.NoVarietyTargetsSet
+
+
+@attrs.frozen
+class UnableToOptimiseMenu(Exception):
+    menu_id: int
+
+    def __str__(self) -> str:
+        return "Menu requirements could not be met."
 
 
 def optimise_recipes_for_menu(

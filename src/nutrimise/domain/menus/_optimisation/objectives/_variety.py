@@ -12,6 +12,12 @@ from .. import expressions, inputs, variables
 class NoVarietyTargetsSet(Exception):
     menu_id: int
 
+    def __str__(self) -> str:
+        return (
+            "Menu optimisation mode is set to 'Ingredient variety' but no variety targets are set. "
+            "Either change the optimisation mode, or set at least one variety target."
+        )
+
 
 class _VarietyObjectiveVariable:
     """
