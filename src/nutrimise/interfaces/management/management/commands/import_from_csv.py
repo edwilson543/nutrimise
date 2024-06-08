@@ -46,7 +46,7 @@ class CSVFile:
         filepath = path / self.filename.value
         invalid_rows: dict[int, str] = {}
 
-        with open(filepath, "r") as file, transaction.atomic():
+        with open(filepath, "r", encoding="utf-8-sig") as file, transaction.atomic():
             reader = csv.DictReader(file)
             for row_number, row in enumerate(reader):
                 form = self.model_form(data=row)
