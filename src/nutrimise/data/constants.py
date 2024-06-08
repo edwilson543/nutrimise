@@ -28,3 +28,4 @@ class NutrientRequirementEnforcementInterval(django_models.TextChoices):
 
 class NutrientUnit(django_models.TextChoices):
     GRAMS = "GRAMS", "Grams"
+    KCAL = "KCAL", "kcal"
