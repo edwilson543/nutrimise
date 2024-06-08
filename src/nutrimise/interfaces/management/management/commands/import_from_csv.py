@@ -26,11 +26,13 @@ class FileName(enum.Enum):
 
 @attrs.frozen
 class ValidationError(Exception):
+    filename: FileName
     invalid_rows: dict[int, str]  # Mapping of row numbers to errors.
 
     def __str__(self) -> str:
         return "\n".join(
-            f"Error in row {row}: {error}" for row, error in self.invalid_rows.items()
+            f"{self.filename.value}: Error in row {row}: {error}"
+            for row, error in self.invalid_rows.items()
         )
 
 
@@ -44,7 +46,7 @@ class CSVFile:
         filepath = path / self.filename.value
         invalid_rows: dict[int, str] = {}
 
-        with open(filepath, "r") as file, transaction.atomic():
+        with open(filepath, "r", encoding="utf-8-sig") as file, transaction.atomic():
             reader = csv.DictReader(file)
             for row_number, row in enumerate(reader):
                 form = self.model_form(data=row)
@@ -55,7 +57,7 @@ class CSVFile:
                     invalid_rows[row_number] = str(form.errors.as_text())
 
         if invalid_rows:
-            raise ValidationError(invalid_rows=invalid_rows)
+            raise ValidationError(filename=self.filename, invalid_rows=invalid_rows)
 
     def success_message(self) -> str:
         return f"Imported {self._successful_import_count} row(s) from '{self.filename.value}'"

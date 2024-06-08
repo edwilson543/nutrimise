@@ -1,2 +1,126 @@
-name,category,units,grams_per_unit,dietary_requirements
-Carrot,Vegetable,GRAMS,1.0,Vegetarian|Vegan
+﻿name,category,units,grams_per_unit,dietary_requirements
+"Alfalfa sprouts, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Allspice, ground",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Almonds, whole kernels",Nut,grams,1,Gluten free;Vegan;Vegetarian
+"Apples, eating, raw, flesh and skin, weighed with core",Fruit,whole,200,Gluten free;Vegan;Vegetarian
+"Artichoke, globe, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Asafoetida",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Asparagus, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Aubergine, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Avocado, Hass, flesh only",Fruit,whole,150,Gluten free;Vegan;Vegetarian
+"Bananas, flesh only",Fruit,whole,120,Gluten free;Vegan;Vegetarian
+"Basil, dried, ground",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Basil, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Bay leaf, dried",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Beansprouts, mung, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Beetroot, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Blackberries, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Blackcurrants, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Brazil nuts, kernel only",Nut,grams,1,Gluten free;Vegan;Vegetarian
+"Broccoli, green, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Broccoli, purple sprouting, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Brussels sprouts, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cabbage, green, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cabbage, red, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cabbage, white, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Caraway seeds",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Carrots, young, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cashew nuts, kernel only, plain",Nut,grams,1,Gluten free;Vegan;Vegetarian
+"Cauliflower, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Celeriac, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Celery, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Chard, Swiss, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cherries, flesh and skin, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Chilli powder",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Chinese 5 spice",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Chives, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Cinnamon, ground",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Citrus fruit, soft/easy peelers, flesh only",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Cloves, dried",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Coconut, flesh only, fresh",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Coriander leaves, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Coriander seeds",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Courgette, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cucumber, raw, flesh and skin",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Cumin seeds",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Curly kale, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Curry leaves, fresh",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Curry powder",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Dates, dried, flesh and skin",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Dill, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Fennel seeds",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Fenugreek leaves, raw",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Fenugreek seeds",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Garam masala",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Garlic powder",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Garlic, raw",Vegetable,cloves,5,Gluten free;Vegan;Vegetarian
+"Grapes, green",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Grapes, red",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Kiwi fruit, flesh only, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Leeks, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Lemon juice, fresh",Fruit,tablespoons,15,Gluten free;Vegan;Vegetarian
+"Lime juice, fresh",Fruit,tablespoons,15,Gluten free;Vegan;Vegetarian
+"Mangoes, ripe, flesh only, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Melon, Canteloupe-type, flesh only",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Melon, Galia, flesh only",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Melon, watermelon, flesh only",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Mint, dried",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Mint, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Mushrooms, oyster, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Mushrooms, white, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Mustard seeds",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Nectarines, flesh and skin, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Nutmeg, ground",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Onions, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Oranges, flesh only",Fruit,whole,150,Gluten free;Vegan;Vegetarian
+"Oregano, dried, ground",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Oregano, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Pak choi, steamed",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Paprika",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Parsley, dried",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Parsley, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Parsnip, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Peaches, raw, flesh and skin",Fruit,whole,140,Gluten free;Vegan;Vegetarian
+"Peas, frozen, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Peas, mange-tout, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Peas, sugar-snap, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Pecan nuts, kernel only",Nut,grams,1,Gluten free;Vegan;Vegetarian
+"Pepper, black",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Pepper, capsicum, red, raw",Vegetable,whole,140,Gluten free;Vegan;Vegetarian
+"Pepper, capsicum, yellow, raw",Vegetable,whole,140,Gluten free;Vegan;Vegetarian
+"Pepper, cayenne, ground",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Peppers, capsicum, chilli, green, raw",Vegetable,whole,50,Gluten free;Vegan;Vegetarian
+"Peppers, capsicum, chilli, red, raw",Vegetable,whole,50,Gluten free;Vegan;Vegetarian
+"Peppers, capsicum, green, raw",Vegetable,whole,140,Gluten free;Vegan;Vegetarian
+"Pineapple, flesh only, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Potatoes, raw, flesh only",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Pumpkin seeds",Seed,grams,1,Gluten free;Vegan;Vegetarian
+"Pumpkin, flesh only, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Radish, red, flesh and skin, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Raspberries, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Rhubarb, stems only, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Rocket, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Rosemary, dried",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Rosemary, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Saffron",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Sage, dried, ground",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Sage, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Sesame seeds",Seed,grams,1,Gluten free;Vegan;Vegetarian
+"Spinach, baby, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Spring onions, bulbs and tops, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Squash, butternut, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Strawberries, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Sunflower seeds",Seed,grams,1,Gluten free;Vegan;Vegetarian
+"Swede, flesh only, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Sweet potato, raw, flesh only",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Sweetcorn, 'on-the-cob', raw, weighed with core",Vegetable,whole,180,Gluten free;Vegan;Vegetarian
+"Tarragon, dried, ground",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Tarragon, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Thyme, dried, ground",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Thyme, fresh",Herb,grams,1,Gluten free;Vegan;Vegetarian
+"Tomatoes, cherry, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Tomatoes, standard, raw",Fruit,grams,1,Gluten free;Vegan;Vegetarian
+"Turmeric, ground",Spice,grams,1,Gluten free;Vegan;Vegetarian
+"Turnip, flesh only, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
+"Walnuts, kernel only",Nut,grams,1,Gluten free;Vegan;Vegetarian
+"Watercress, raw",Vegetable,grams,1,Gluten free;Vegan;Vegetarian
