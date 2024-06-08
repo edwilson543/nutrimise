@@ -5,7 +5,7 @@ from nutrimise.data.ingredients import models as ingredient_models
 
 
 def test_example_dataset_can_be_imported():
-    django_management.call_command("import_from_csv", dataset="example")
+    django_management.call_command("import_from_csv", dataset="test")
 
     assert ingredient_models.DietaryRequirement.objects.count() == 2
 
