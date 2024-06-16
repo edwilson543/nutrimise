@@ -49,6 +49,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "category_name", "units"]
     list_display_links = ["name"]
     ordering = ["name"]
+    search_fields = ["name"]
 
     inlines = [
         _IngredientNutritionalInformationInline,
