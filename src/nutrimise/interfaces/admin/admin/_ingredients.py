@@ -1,5 +1,9 @@
+from typing import Any
+
+from django import forms, http
 from django.contrib import admin
 
+from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 
 
@@ -22,7 +26,22 @@ class IngredientCategoryAdmin(admin.ModelAdmin):
 
 
 class _IngredientNutritionalInformationInline(admin.TabularInline):
+    class _FormSet(forms.BaseInlineFormSet):
+        def __init__(self, *args: Any, **kwargs: Any):
+            nutrients = ingredient_models.Nutrient.objects.order_by("name")
+            kwargs["initial"] = [
+                {"nutrient": nutrient, "units": constants.NutrientUnit.GRAMS.value}
+                for nutrient in nutrients
+            ]
+            super().__init__(*args, **kwargs)
+
     model = ingredient_models.IngredientNutritionalInformation
+    formset = _FormSet
+
+    def get_extra(
+        self, request: http.HttpRequest, obj: Any | None = None, **kwargs: object
+    ) -> int:
+        return ingredient_models.Nutrient.objects.count()
 
 
 @admin.register(ingredient_models.Ingredient)
