@@ -2,6 +2,7 @@
 *TODO*.txt
 fixtures/*.json
 data/target/*.csv
+data/snapshot.json
 
 # Certification
 cert.pem
