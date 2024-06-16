@@ -28,6 +28,7 @@ install_pre_commit:
 
 .PHONY:server
 server:
+	make snapshot
 	python manage.py runserver 8000 --configuration=Settings
 
 .PHONY:migrate
@@ -42,9 +43,9 @@ migrations:
 superuser:
 	DJANGO_SUPERUSER_PASSWORD=password python manage.py createsuperuser --configuration=Settings --username=edwilson543 --email=fake@example.com --no-input
 
-.PHONY:dump
-dump:
-	python manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/dump.json
+.PHONY:snapshot
+snapshot:
+	python manage.py dumpdata ingredients recipes menus --configuration=Settings --output=data/snapshot.json
 
 .PHONY:load_example_data
 load_example_data:

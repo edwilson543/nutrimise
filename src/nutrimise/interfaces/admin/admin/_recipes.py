@@ -7,6 +7,7 @@ from nutrimise.data.recipes import models as recipe_models
 
 class _RecipeIngredientInline(admin.TabularInline):
     model = recipe_models.RecipeIngredient
+    extra = 10
 
 
 @admin.register(recipe_models.Recipe)
