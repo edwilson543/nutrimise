@@ -36,7 +36,7 @@
             </tr>
             {% for recipe_ingredient in recipe_ingredients %}
                 <tr>
-                    <td>{{ recipe_ingredient.ingredient.name_singular }}</td>
+                    <td>{{ recipe_ingredient.ingredient.name }}</td>
                     <td>{{ recipe_ingredient.ingredient.category }}</td>
                     <td>{{ recipe_ingredient.quantity | floatformat:"0" }}</td>
                     <td>{{ recipe_ingredient.ingredient.units }}</td>
