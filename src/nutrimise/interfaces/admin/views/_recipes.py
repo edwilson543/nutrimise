@@ -20,7 +20,10 @@ class RecipeDetails(_base.AdminTemplateView):
     def get_context_data(self, **kwargs: object) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["recipe"] = self.recipe
-        context["recipe_ingredients"] = list(self.recipe.ingredients.all())
+        recipe_ingredients = self.recipe.ingredients.order_by(
+            "ingredient__category__name", "ingredient__name"
+        )
+        context["recipe_ingredients"] = list(recipe_ingredients)
         context["nutritional_information"] = (
             ingredients.get_nutritional_information_for_recipe(
                 recipe=self.recipe, per_serving=True
