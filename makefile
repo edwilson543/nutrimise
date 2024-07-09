@@ -6,7 +6,7 @@ install: install_pre_commit env_file install_dev_deps db
 db: createdb migrate superuser
 
 .PHONY:new_db
-new_db: dropdb createdb migrate superuser load_example_data
+new_db: dropdb createdb migrate superuser
 
 .PHONY:env_file
 env_file:
