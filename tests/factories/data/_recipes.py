@@ -56,4 +56,4 @@ class RecipeEmbedding(factory.django.DjangoModelFactory):
 
     @staticmethod
     def stub_embedding() -> list[float]:
-        return [1] + [0] * (constants.EMBEDDING_DIMENSIONS - 1)
+        return [1.0] + [0] * (constants.EMBEDDING_DIMENSIONS - 1)

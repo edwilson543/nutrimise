@@ -36,7 +36,11 @@ class NutrientUnit(django_models.TextChoices):
 
 class EmbeddingVendor(django_models.TextChoices):
     OPEN_AI = "OPEN_AI"
+
+    # Fakes. - todo.
     FAKE = "FAKE"
+    FAKE_NO_SERVICE = "FAKE_NO_SERVICE"
+    FAKE_NO_MODEL = "FAKE_NO_MODEL"
 
 
 class EmbeddingModel(django_models.TextChoices):

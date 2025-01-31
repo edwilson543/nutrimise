@@ -137,6 +137,12 @@ class Settings(configurations.Configuration):
     STATIC_URL = "static/"
     STATIC_ROOT = "static/"
 
+    # ----------
+    # Embeddings
+    # ----------
+
+    EMBEDDING_VENDOR = "OPEN_AI"
+
 
 class DevSettings(Settings):
     @property
