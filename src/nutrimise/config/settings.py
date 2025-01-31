@@ -32,6 +32,7 @@ class Settings(configurations.Configuration):
             "django.contrib.messages",
             "django.contrib.staticfiles",
             # Local
+            "nutrimise.data.pgvector",
             "nutrimise.data.ingredients",
             "nutrimise.data.menus",
             "nutrimise.data.recipes",
