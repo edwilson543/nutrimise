@@ -43,3 +43,17 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.RecipeIngredient
+
+
+class RecipeEmbedding(factory.django.DjangoModelFactory):
+    recipe = factory.SubFactory(Recipe)
+    embedding = factory.LazyFunction(lambda: RecipeEmbedding.stub_embedding())
+    vendor = constants.EmbeddingVendor.FAKE.value
+    model = constants.EmbeddingModel.FAKE.value
+
+    class Meta:
+        model = recipe_models.RecipeEmbedding
+
+    @staticmethod
+    def stub_embedding() -> list[float]:
+        return [1] + [0] * (constants.EMBEDDING_DIMENSIONS - 1)
