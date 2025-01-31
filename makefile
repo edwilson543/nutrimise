@@ -68,8 +68,9 @@ install_dev_deps:
 	pip install -e .
 
 
-.PHONY:lock_dependencies
-lock_dependencies:
+.PHONY:lock_deps
+lock_deps:
+	pip install pip-tools
 	pip-compile pyproject.toml -q --resolver=backtracking --output-file=requirements/app-requirements.txt
 	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --output-file=requirements/ci-requirements.txt
 	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --extra=dev --output-file=requirements/dev-requirements.txt
