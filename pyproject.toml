@@ -97,6 +97,19 @@ layers = [
 ]
 exhaustive = true
 
+[[tool.importlinter.contracts]]
+name = "Domain layers"
+type = "layers"
+containers = "nutrimise.domain"
+layers = [
+    "embeddings",
+    "menus",
+    "recipes",
+    "ingredients",
+    "constants",
+]
+exhaustive = true
+
 [tool.ruff]
 
 # Same as Black.
