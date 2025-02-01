@@ -1,7 +1,7 @@
 from django.db import models as django_models
 from pgvector import django as pgvector_django
 
-from nutrimise.domain import constants
+from nutrimise.domain import embeddings
 
 from . import _recipe
 
@@ -17,11 +17,11 @@ class RecipeEmbedding(django_models.Model):
         _recipe.Recipe, on_delete=django_models.CASCADE, related_name="embeddings"
     )
 
-    embedding = pgvector_django.VectorField(dimensions=constants.EMBEDDING_DIMENSIONS)
+    embedding = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
 
-    vendor = django_models.TextField(choices=constants.EmbeddingVendor.choices)
+    vendor = django_models.TextField(choices=embeddings.EmbeddingVendor.choices)
 
-    model = django_models.TextField(choices=constants.EmbeddingModel.choices)
+    model = django_models.TextField(choices=embeddings.EmbeddingModel.choices)
 
     class Meta:
         constraints = [

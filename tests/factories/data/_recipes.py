@@ -4,7 +4,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import constants
+from nutrimise.domain import constants, embeddings
 
 from . import _auth, _ingredients
 
@@ -48,12 +48,12 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 class RecipeEmbedding(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
     embedding = factory.LazyFunction(lambda: RecipeEmbedding.stub_embedding())
-    vendor = constants.EmbeddingVendor.FAKE.value
-    model = constants.EmbeddingModel.FAKE.value
+    vendor = embeddings.EmbeddingVendor.FAKE.value
+    model = embeddings.EmbeddingModel.FAKE.value
 
     class Meta:
         model = recipe_models.RecipeEmbedding
 
     @staticmethod
     def stub_embedding() -> list[float]:
-        return [1.0] + [0] * (constants.EMBEDDING_DIMENSIONS - 1)
+        return [1.0] + [0] * (embeddings.EMBEDDING_DIMENSIONS - 1)

@@ -1,9 +1,6 @@
 from django.db import models as django_models
 
 
-EMBEDDING_DIMENSIONS = 1024
-
-
 class MealTime(django_models.TextChoices):
     BREAKFAST = "BREAKFAST", "Breakfast"
     LUNCH = "LUNCH", "Lunch"
@@ -32,18 +29,3 @@ class NutrientRequirementEnforcementInterval(django_models.TextChoices):
 class NutrientUnit(django_models.TextChoices):
     GRAMS = "GRAMS", "Grams"
     KCAL = "KCAL", "kcal"
-
-
-class EmbeddingVendor(django_models.TextChoices):
-    OPEN_AI = "OPEN_AI"
-
-    # Fakes. - todo.
-    FAKE = "FAKE"
-    FAKE_NO_SERVICE = "FAKE_NO_SERVICE"
-    FAKE_NO_MODEL = "FAKE_NO_MODEL"
-
-
-class EmbeddingModel(django_models.TextChoices):
-    # OpenAI.
-    TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small"
-    FAKE = "fake"

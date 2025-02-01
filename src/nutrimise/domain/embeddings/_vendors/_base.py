@@ -2,22 +2,22 @@ import abc
 
 import attrs
 
-from nutrimise.domain import constants
+from nutrimise.domain.embeddings import _embedding
 
 
 @attrs.frozen
 class UnableToGetEmbedding(Exception):
-    vendor: constants.EmbeddingVendor
-    model: constants.EmbeddingModel
+    vendor: _embedding.EmbeddingVendor
+    model: _embedding.EmbeddingModel
 
 
 class EmbeddingService(abc.ABC):
-    vendor: constants.EmbeddingVendor
+    vendor: _embedding.EmbeddingVendor
 
     @abc.abstractmethod
     def get_embedding(
-        self, *, text: str, model: constants.EmbeddingModel
-    ) -> list[float]:
+        self, *, text: str, model: _embedding.EmbeddingModel
+    ) -> _embedding.Embedding:
         """
         Get an embedding for the passed text.
 

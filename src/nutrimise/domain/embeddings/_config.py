@@ -1,17 +1,15 @@
 import attrs
 from django.conf import settings
 
-from nutrimise.domain import constants
-
-from . import _vendors
+from . import _embedding, _vendors
 
 
 @attrs.frozen
 class EmbeddingServiceMisconfigured(Exception):
-    vendor: constants.EmbeddingVendor
+    vendor: _embedding.EmbeddingVendor
 
 
-def get_embedding(*, text: str) -> list[float]:
+def get_embedding(*, text: str) -> _embedding.Embedding:
     """
     Get an embedding, using the installed embedding service.
 
@@ -20,7 +18,7 @@ def get_embedding(*, text: str) -> list[float]:
     :raises UnableToGetEmbedding: If the installed embedding service is unable
         to produce an embedding.
     """
-    vendor = constants.EmbeddingVendor(settings.EMBEDDING_VENDOR)
+    vendor = _embedding.EmbeddingVendor(settings.EMBEDDING_VENDOR)
     service = _get_embedding_service_for_vendor(vendor)
     model = _get_model_for_vendor(vendor)
 
@@ -28,7 +26,7 @@ def get_embedding(*, text: str) -> list[float]:
 
 
 def _get_embedding_service_for_vendor(
-    vendor: constants.EmbeddingVendor,
+    vendor: _embedding.EmbeddingVendor,
 ) -> _vendors.EmbeddingService:
     match vendor:
         case vendor.FAKE | vendor.FAKE_NO_MODEL:
@@ -38,11 +36,11 @@ def _get_embedding_service_for_vendor(
 
 
 def _get_model_for_vendor(
-    vendor: constants.EmbeddingVendor,
-) -> constants.EmbeddingModel:
+    vendor: _embedding.EmbeddingVendor,
+) -> _embedding.EmbeddingModel:
     mapping = {
-        constants.EmbeddingVendor.OPEN_AI: constants.EmbeddingModel.TEXT_EMBEDDING_3_SMALL,
-        constants.EmbeddingVendor.FAKE: constants.EmbeddingModel.FAKE,
+        _embedding.EmbeddingVendor.OPEN_AI: _embedding.EmbeddingModel.TEXT_EMBEDDING_3_SMALL,
+        _embedding.EmbeddingVendor.FAKE: _embedding.EmbeddingModel.FAKE,
     }
 
     try:

@@ -4,7 +4,7 @@ import django.db.models.deletion
 import pgvector.django.vector
 from django.db import migrations, models
 
-from nutrimise.domain import constants
+from nutrimise.domain import embeddings
 
 
 class Migration(migrations.Migration):
@@ -20,11 +20,11 @@ class Migration(migrations.Migration):
                 ("embedding", pgvector.django.vector.VectorField(dimensions=1024)),
                 (
                     "model",
-                    models.TextField(choices=constants.EmbeddingModel.choices),
+                    models.TextField(choices=embeddings.EmbeddingModel.choices),
                 ),
                 (
                     "vendor",
-                    models.TextField(choices=constants.EmbeddingVendor.choices),
+                    models.TextField(choices=embeddings.EmbeddingVendor.choices),
                 ),
                 (
                     "recipe",
