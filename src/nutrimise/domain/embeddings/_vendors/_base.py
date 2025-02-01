@@ -11,13 +11,13 @@ class UnableToGetEmbedding(Exception):
     model: _embedding.EmbeddingModel
 
 
+@attrs.frozen
 class EmbeddingService(abc.ABC):
+    model: _embedding.EmbeddingModel
     vendor: _embedding.EmbeddingVendor
 
     @abc.abstractmethod
-    def get_embedding(
-        self, *, text: str, model: _embedding.EmbeddingModel
-    ) -> _embedding.Embedding:
+    def get_embedding(self, *, text: str) -> _embedding.Embedding:
         """
         Get an embedding for the passed text.
 
