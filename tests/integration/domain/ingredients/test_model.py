@@ -1,5 +1,4 @@
-from nutrimise.data import constants
-from nutrimise.domain import ingredients
+from nutrimise.domain import constants, ingredients
 from tests.factories import domain as domain_factories
 
 

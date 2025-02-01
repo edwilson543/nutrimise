@@ -3,8 +3,7 @@ from typing import Generator
 import attrs
 import pulp as lp
 
-from nutrimise.data import constants
-from nutrimise.domain import menus
+from nutrimise.domain import constants, menus
 
 from .. import expressions, inputs, variables
 

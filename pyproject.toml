@@ -91,8 +91,8 @@ containers = "nutrimise"
 layers = [
     "interfaces",
     "app",
-    "domain",
     "data",
+    "domain",
     "config",
 ]
 exhaustive = true

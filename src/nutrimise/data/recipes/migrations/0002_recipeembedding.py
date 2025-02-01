@@ -5,7 +5,7 @@ import pgvector.django.vector
 
 from django.db import migrations, models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 
 class Migration(migrations.Migration):

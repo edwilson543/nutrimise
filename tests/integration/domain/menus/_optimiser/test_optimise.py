@@ -2,8 +2,7 @@ from unittest import mock
 
 import pytest
 
-from nutrimise.data import constants
-from nutrimise.domain import menus, recipes
+from nutrimise.domain import constants, menus, recipes
 from tests.factories import domain as domain_factories
 
 

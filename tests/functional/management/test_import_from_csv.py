@@ -1,7 +1,7 @@
 from django.core import management as django_management
 
-from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
+from nutrimise.domain import constants
 
 
 def test_example_dataset_can_be_imported():

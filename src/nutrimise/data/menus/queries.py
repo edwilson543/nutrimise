@@ -1,8 +1,7 @@
 import attrs
 
 from nutrimise.data.menus import models as menu_models
-
-from . import _model
+from nutrimise.domain.menus import _model
 
 
 @attrs.frozen
@@ -20,4 +19,4 @@ def get_menu(*, menu_id: int) -> _model.Menu:
         ).get(id=menu_id)
     except menu_models.Menu.DoesNotExist as exc:
         raise MenuDoesNotExist(menu_id=menu_id) from exc
-    return _model.Menu.from_orm_model(menu=menu)
+    return menu.to_domain_model()

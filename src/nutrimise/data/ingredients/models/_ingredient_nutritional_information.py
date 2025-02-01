@@ -1,6 +1,6 @@
 from django.db import models as django_models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 from . import _ingredient, _nutrient
 

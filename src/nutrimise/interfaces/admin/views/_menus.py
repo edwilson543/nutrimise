@@ -8,9 +8,9 @@ from django.contrib import messages
 from django.views import generic
 
 from nutrimise.app import menus as menus_app
-from nutrimise.data import constants
+from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import ingredients
+from nutrimise.domain import constants
 
 from . import _base
 
@@ -33,7 +33,7 @@ class MenuDetails(_base.AdminTemplateView):
             set(day for days in meal_schedule.values() for day in days.keys())
         )
         context["nutritional_information"] = (
-            ingredients.get_nutritional_information_for_menu_per_day(
+            ingredient_queries.get_nutritional_information_for_menu_per_day(
                 menu=self.menu, per_serving=True
             )
         )

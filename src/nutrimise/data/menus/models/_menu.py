@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from django.contrib.auth import models as auth_models
 from django.db import models as django_models
 
-
-if TYPE_CHECKING:
-    pass
+from nutrimise.domain import menus
 
 
 class Menu(django_models.Model):
@@ -39,10 +35,6 @@ class Menu(django_models.Model):
     def __str__(self) -> str:
         return self.name
 
-    # ----------
-    # Factories
-    # ----------
-
     @classmethod
     def new(
         cls,
@@ -55,4 +47,20 @@ class Menu(django_models.Model):
             author=author,
             name=name,
             description=description,
+        )
+
+    def to_domain_model(self):
+        if hasattr(self, "requirements"):
+            requirements = self.requirements.to_domain_model()
+        else:
+            requirements = None
+
+        items = [item.to_domain_model() for item in self.items.all()]
+
+        return menus.Menu(
+            id=self.id,
+            name=self.name,
+            description=self.description,
+            items=tuple(items),
+            requirements=requirements,
         )

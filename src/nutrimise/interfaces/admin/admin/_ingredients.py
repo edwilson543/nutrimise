@@ -3,8 +3,8 @@ from typing import Any
 from django import forms, http
 from django.contrib import admin
 
-from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
+from nutrimise.domain import constants
 
 
 @admin.register(ingredient_models.DietaryRequirement)

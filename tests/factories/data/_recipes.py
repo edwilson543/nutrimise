@@ -2,9 +2,9 @@ from typing import Any
 
 import factory
 
-from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.domain import constants
 
 from . import _auth, _ingredients
 

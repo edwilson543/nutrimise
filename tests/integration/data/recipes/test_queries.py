@@ -1,5 +1,6 @@
 import pytest
 
+from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import recipes
 from tests.factories import data as data_factories
 
@@ -8,14 +9,14 @@ class TestGetRecipe:
     def test_gets_recipe_when_exists(self):
         recipe = data_factories.Recipe()
 
-        result = recipes.get_recipe(recipe_id=recipe.id)
+        result = recipe_queries.get_recipe(recipe_id=recipe.id)
 
         assert isinstance(result, recipes.Recipe)
         assert result.id == recipe.id
 
     def test_raises_when_recipe_does_not_exist(self):
-        with pytest.raises(recipes.RecipeDoesNotExist) as exc:
-            recipes.get_recipe(recipe_id=123)
+        with pytest.raises(recipe_queries.RecipeDoesNotExist) as exc:
+            recipe_queries.get_recipe(recipe_id=123)
 
         assert exc.value.recipe_id == 123
 
@@ -25,7 +26,7 @@ class TestGetRecipes:
         data_factories.Recipe()
         data_factories.Recipe()
 
-        result = recipes.get_recipes()
+        result = recipe_queries.get_recipes()
 
         assert len(result) == 2
 
@@ -41,7 +42,9 @@ class TestGetRecipes:
             dietary_requirements=(data_factories.DietaryRequirement(),)
         )
 
-        result = recipes.get_recipes(dietary_requirement_ids=(dietary_requirement.id,))
+        result = recipe_queries.get_recipes(
+            dietary_requirement_ids=(dietary_requirement.id,)
+        )
 
         assert len(result) == 1
         assert result[0].id == matching_recipe.id
@@ -61,7 +64,7 @@ class TestGetRecipes:
             dietary_requirements=(gluten_free,)
         )
 
-        result = recipes.get_recipes(
+        result = recipe_queries.get_recipes(
             dietary_requirement_ids=(veggie.id, gluten_free.id)
         )
         data_factories.Recipe()
@@ -70,6 +73,6 @@ class TestGetRecipes:
         assert result[0].id == matching_recipe.id
 
     def test_gets_empty_tuple_when_there_are_no_recipes(self):
-        result = recipes.get_recipes()
+        result = recipe_queries.get_recipes()
 
         assert result == ()

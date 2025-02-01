@@ -2,7 +2,7 @@ import abc
 
 import attrs
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 
 @attrs.frozen

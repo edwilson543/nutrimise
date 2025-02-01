@@ -1,8 +1,7 @@
 import attrs
 
 from nutrimise.data.recipes import models as recipe_models
-
-from . import _model
+from nutrimise.domain.recipes import _model
 
 
 @attrs.frozen
@@ -15,7 +14,7 @@ def get_recipe(*, recipe_id: int) -> _model.Recipe:
         recipe = recipe_models.Recipe.objects.get(id=recipe_id)
     except recipe_models.Recipe.DoesNotExist as exc:
         raise RecipeDoesNotExist(recipe_id=recipe_id) from exc
-    return _model.Recipe.from_orm_model(recipe=recipe)
+    return recipe.to_domain_model()
 
 
 def get_recipes(
@@ -32,4 +31,4 @@ def get_recipes(
             recipes = recipes.filter(
                 ingredients__ingredient__dietary_requirements_satisfied=dietary_requirement_id
             )
-    return tuple(_model.Recipe.from_orm_model(recipe=recipe) for recipe in recipes)
+    return tuple(recipe.to_domain_model() for recipe in recipes)

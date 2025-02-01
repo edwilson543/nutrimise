@@ -1,7 +1,7 @@
 from django.db import models as django_models
 from pgvector import django as pgvector_django
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 from . import _recipe
 

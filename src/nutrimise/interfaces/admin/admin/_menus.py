@@ -5,8 +5,8 @@ from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
 
-from nutrimise.data import constants
 from nutrimise.data.menus import models as menu_models
+from nutrimise.domain import constants
 
 
 class _MenuRequirementsInline(admin.StackedInline):

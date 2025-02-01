@@ -2,9 +2,8 @@ from collections.abc import Iterable
 
 import factory
 
-from nutrimise.data import constants
+from nutrimise.domain import constants, recipes
 from nutrimise.domain import ingredients as ingredients_domain
-from nutrimise.domain import recipes
 
 from . import _ingredients
 

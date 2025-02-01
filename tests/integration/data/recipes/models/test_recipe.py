@@ -1,9 +1,8 @@
-from nutrimise.data import constants
-from nutrimise.domain import recipes
+from nutrimise.domain import constants
 from tests.factories import data as data_factories
 
 
-class TestRecipeFromOrmModel:
+class TestRecipeToDomainModel:
     def test_converts_recipe_orm_model_with_requirements_to_recipe_domain(self):
         meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
         orm_recipe = data_factories.Recipe(meal_times=meal_times)
@@ -13,7 +12,7 @@ class TestRecipeFromOrmModel:
         data_factories.IngredientNutritionalInformation(ingredient=ingredient)
         data_factories.RecipeIngredient(recipe=orm_recipe, ingredient=ingredient)
 
-        recipe = recipes.Recipe.from_orm_model(recipe=orm_recipe)
+        recipe = orm_recipe.to_domain_model()
 
         assert recipe.id == orm_recipe.id
         assert recipe.meal_times == tuple(meal_times)

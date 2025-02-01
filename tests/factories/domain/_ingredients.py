@@ -1,7 +1,6 @@
 import factory
 
-from nutrimise.data import constants
-from nutrimise.domain import ingredients
+from nutrimise.domain import constants, ingredients
 
 
 class Ingredient(factory.Factory):

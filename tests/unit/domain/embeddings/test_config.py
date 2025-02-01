@@ -2,7 +2,7 @@ import pytest
 
 from django.test import override_settings
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 from nutrimise.domain.embeddings import _vendors as embeddings_vendors
 from nutrimise.domain.embeddings import config as embeddings_config
 

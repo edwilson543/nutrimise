@@ -1,7 +1,7 @@
 import attrs
 import pulp as lp
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 from .. import inputs, variables
 from . import _nutrient, _random, _variety

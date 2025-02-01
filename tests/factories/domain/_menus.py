@@ -1,7 +1,6 @@
 import factory
 
-from nutrimise.data import constants
-from nutrimise.domain import menus
+from nutrimise.domain import constants, menus
 
 
 class MenuItem(factory.Factory):

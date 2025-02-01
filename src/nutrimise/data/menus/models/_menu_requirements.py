@@ -1,7 +1,7 @@
 from django.core import validators as django_validators
 from django.db import models as django_models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants, menus
 
 from . import _menu
 
@@ -31,6 +31,25 @@ class MenuRequirements(django_models.Model):
 
     def __str__(self) -> str:
         return f"Requirements for '{self.menu.name}'"
+
+    def to_domain_model(self):
+        nutrient_requirements = [
+            requirement.to_domain_model()
+            for requirement in self.nutrient_requirements.all()
+        ]
+        variety_requirements = [
+            requirement.to_domain_model()
+            for requirement in self.variety_requirements.all()
+        ]
+        dietary_requirement_ids = self.dietary_requirements.values_list("id", flat=True)
+
+        return menus.MenuRequirements(
+            optimisation_mode=constants.OptimisationMode(self.optimisation_mode),
+            nutrient_requirements=tuple(nutrient_requirements),
+            variety_requirements=tuple(variety_requirements),
+            maximum_occurrences_per_recipe=self.maximum_occurrences_per_recipe,
+            dietary_requirement_ids=tuple(dietary_requirement_ids),
+        )
 
 
 class NutrientRequirement(django_models.Model):
@@ -73,6 +92,18 @@ class NutrientRequirement(django_models.Model):
     def __str__(self) -> str:
         return f"{self.nutrient.name} requirements"
 
+    def to_domain_model(self):
+        return menus.NutrientRequirement(
+            nutrient_id=self.nutrient_id,
+            minimum_quantity=self.minimum_quantity,
+            maximum_quantity=self.maximum_quantity,
+            target_quantity=self.target_quantity,
+            units=constants.NutrientUnit(self.units),
+            enforcement_interval=constants.NutrientRequirementEnforcementInterval(
+                self.enforcement_interval
+            ),
+        )
+
 
 class VarietyRequirement(django_models.Model):
     """
@@ -109,3 +140,11 @@ class VarietyRequirement(django_models.Model):
 
     def __str__(self) -> str:
         return f"{self.ingredient_category.name} requirements"
+
+    def to_domain_model(self):
+        return menus.VarietyRequirement(
+            ingredient_category_id=self.ingredient_category_id,
+            minimum=self.minimum,
+            maximum=self.maximum,
+            target=self.target,
+        )

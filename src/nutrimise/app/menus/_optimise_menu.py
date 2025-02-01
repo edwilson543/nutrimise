@@ -2,10 +2,14 @@ import attrs
 
 from django.db import transaction
 
+from nutrimise.data.ingredients import queries as ingredient_queries
+from nutrimise.data.menus import operations as menu_operations
+from nutrimise.data.menus import queries as menu_queries
+from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import ingredients, menus, recipes
 
 
-MenuDoesNotExist = menus.MenuDoesNotExist
+MenuDoesNotExist = menu_queries.MenuDoesNotExist
 
 UnableToOptimiseMenu = menus.UnableToOptimiseMenu
 
@@ -34,11 +38,11 @@ def optimise_menu(*, menu_id: int) -> None:
         no ingredient variety targets have been set.
     """
 
-    menu = menus.get_menu(menu_id=menu_id)
+    menu = menu_queries.get_menu(menu_id=menu_id)
     if menu.requirements is None:
         raise MenuHasNoRequirements(menu_id=menu_id)
 
-    recipes_to_consider = recipes.get_recipes(
+    recipes_to_consider = recipe_queries.get_recipes(
         dietary_requirement_ids=menu.requirements.dietary_requirement_ids
     )
     # Only bother loading the ingredients if the menu has variety requirements.
@@ -58,7 +62,7 @@ def optimise_menu(*, menu_id: int) -> None:
             # For mypy. The solver will raise if a menu item couldn't be solved.
             assert menu_item.recipe_id
             if menu_item.optimiser_generated:
-                menus.update_menu_item_recipe(
+                menu_operations.update_menu_item_recipe(
                     menu_item_id=menu_item.id, recipe_id=menu_item.recipe_id
                 )
 
@@ -70,4 +74,4 @@ def _get_relevant_ingredients(
     for recipe in recipes_to_consider:
         for ingredient in recipe.ingredients:
             ingredient_ids.add(ingredient.ingredient_id)
-    return ingredients.get_ingredients(ingredient_ids=ingredient_ids)
+    return ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)

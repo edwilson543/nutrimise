@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.postgres import fields as pg_fields
 from django.db import migrations, models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 
 class Migration(migrations.Migration):

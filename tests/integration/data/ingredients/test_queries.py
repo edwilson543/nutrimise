@@ -1,7 +1,7 @@
 import pytest
 
-from nutrimise.data import constants
-from nutrimise.domain import ingredients
+from nutrimise.data.ingredients import queries as ingredient_queries
+from nutrimise.domain import constants, ingredients
 from tests.factories import data as data_factories
 
 
@@ -13,7 +13,7 @@ class TestGetIngredients:
         ]
         data_factories.Ingredient()  # Some other ingredient.
 
-        result = ingredients.get_ingredients(ingredient_ids=ingredient_ids)
+        result = ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)
 
         assert {ingredient.id for ingredient in result} == set(ingredient_ids)
 
@@ -57,21 +57,21 @@ class TestNutritionalInformationForMenuPerDay:
             recipe=beef_curry_ingredient.recipe,
         )
 
-        result = ingredients.get_nutritional_information_for_menu_per_day(
+        result = ingredient_queries.get_nutritional_information_for_menu_per_day(
             menu=menu, per_serving=False
         )
 
         assert result == {
             1: [
                 ingredients.NutritionalInformation(
-                    nutrient=ingredients.Nutrient.from_orm_model(nutrient=protein),
+                    nutrient=protein.to_domain_model(),
                     nutrient_quantity=80,  # Beef stew + beef lasagne.
                     units=constants.NutrientUnit.GRAMS,
                 )
             ],
             2: [
                 ingredients.NutritionalInformation(
-                    nutrient=ingredients.Nutrient.from_orm_model(nutrient=protein),
+                    nutrient=protein.to_domain_model(),
                     nutrient_quantity=20,  # Just beef curry.
                     units=constants.NutrientUnit.GRAMS,
                 )
@@ -108,7 +108,7 @@ class TestNutritionalInformationForRecipe:
             recipe=beef_pasta, ingredient=pasta, quantity=500
         )
 
-        result = ingredients.get_nutritional_information_for_recipe(
+        result = ingredient_queries.get_nutritional_information_for_recipe(
             recipe=beef_pasta, per_serving=False
         )
 
@@ -143,7 +143,7 @@ class TestNutritionalInformationForRecipe:
             recipe=beef_pasta, ingredient=pasta, quantity=500
         )
 
-        result = ingredients.get_nutritional_information_for_recipe(
+        result = ingredient_queries.get_nutritional_information_for_recipe(
             recipe=beef_pasta, per_serving=True
         )
 
