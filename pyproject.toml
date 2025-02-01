@@ -39,8 +39,9 @@ ci = [
     "webtest",
     # Linting / typing
     "django-stubs",
-    "ruff",
     "mypy",
+    "import-linter",
+    "ruff",
     # Needs relegating to `dev`
     "django-extensions",
 ]
@@ -79,6 +80,22 @@ allow_untyped_defs = true
 django_settings_module = "nutrimise.config.settings"
 strict_settings = false
 
+
+[tool.importlinter]
+root_package = "nutrimise"
+
+[[tool.importlinter.contracts]]
+name = "Top level layers"
+type = "layers"
+containers = "nutrimise"
+layers = [
+    "interfaces",
+    "app",
+    "domain",
+    "data",
+    "config",
+]
+exhaustive = true
 
 [tool.ruff]
 

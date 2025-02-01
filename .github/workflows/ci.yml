@@ -62,3 +62,7 @@ jobs:
       - name: Run ruff checker
         if: success() || failure()
         run: make ruff_check
+
+      - name: Run import linter
+        if: success() || failure()
+        run: make lint_imports

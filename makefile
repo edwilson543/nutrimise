@@ -87,7 +87,7 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy ruff_format ruff_check
+lint: mypy ruff_format ruff_check lint_imports
 
 .PHONY:mypy
 mypy:
@@ -100,6 +100,10 @@ ruff_format:
 .PHONY:ruff_check
 ruff_check:
 	ruff check --fix .
+
+.PHONY:lint_imports
+lint_imports:
+	lint-imports
 
 # Docker
 

@@ -12,6 +12,8 @@ beautifulsoup4==4.12.3
     # via webtest
 cfgv==3.4.0
     # via pre-commit
+click==8.1.8
+    # via import-linter
 distlib==0.3.8
     # via virtualenv
 django==5.0.4
@@ -37,10 +39,14 @@ faker==24.7.1
     # via factory-boy
 filelock==3.13.3
     # via virtualenv
+grimp==3.5
+    # via import-linter
 gunicorn==22.0.0
     # via nutrimise (pyproject.toml)
 identify==2.5.35
     # via pre-commit
+import-linter==2.1
+    # via nutrimise (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
 mypy==1.9.0
@@ -103,6 +109,8 @@ typing-extensions==4.11.0
     # via
     #   django-stubs
     #   django-stubs-ext
+    #   grimp
+    #   import-linter
     #   mypy
     #   psycopg
 virtualenv==20.25.1
