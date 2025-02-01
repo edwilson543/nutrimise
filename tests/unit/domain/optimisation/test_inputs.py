@@ -1,7 +1,7 @@
 import pytest
 
 from nutrimise.domain import ingredients, recipes
-from nutrimise.domain.menus._optimisation import inputs
+from nutrimise.domain.optimisation import _inputs
 from tests.factories import domain as domain_factories
 
 
@@ -10,7 +10,7 @@ def create_inputs(
     recipes_to_consider: tuple[recipes.Recipe, ...] = (),
     relevant_ingredients: tuple[ingredients.Ingredient, ...] = (),
 ):
-    return inputs.OptimiserInputs(
+    return _inputs.OptimiserInputs(
         menu=domain_factories.Menu(),
         recipes_to_consider=recipes_to_consider,
         relevant_ingredients=relevant_ingredients,
@@ -30,7 +30,7 @@ class TestOptimiserInputsLookUpRecipe:
         inputs_ = create_inputs(recipes_to_consider=())
         invalid_recipe_id = 123
 
-        with pytest.raises(inputs.RecipeNotProvidedInLookup) as exc:
+        with pytest.raises(_inputs.RecipeNotProvidedInLookup) as exc:
             inputs_.look_up_recipe(recipe_id=invalid_recipe_id)
 
         assert exc.value.recipe_id == invalid_recipe_id
@@ -49,7 +49,7 @@ class TestOptimiserInputsLookUpIngredient:
         inputs_ = create_inputs(relevant_ingredients=())
         invalid_ingredient_id = 123
 
-        with pytest.raises(inputs.IngredientNotProvidedInLookup) as exc:
+        with pytest.raises(_inputs.IngredientNotProvidedInLookup) as exc:
             inputs_.look_up_ingredient(ingredient_id=invalid_ingredient_id)
 
         assert exc.value.ingredient_id == invalid_ingredient_id

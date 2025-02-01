@@ -4,8 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.domain import menus
-
-from .. import expressions, inputs, variables
+from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 
 
 @attrs.frozen
@@ -41,8 +40,8 @@ class _NutrientObjectiveVariable:
 def add_nutrient_objective_to_problem(
     *,
     problem: lp.LpProblem,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
 ) -> lp.LpProblem:
     """
     Add an objective to the problem that forces the solution towards the nutrient targets.
@@ -82,15 +81,15 @@ def _get_nutrient_objective(
 
 def _yield_all_nutrient_objective_constraints(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
     nutrient_objective_variables: tuple[_NutrientObjectiveVariable, ...],
 ) -> Generator[lp.LpConstraint, None, None]:
     """
     Big M constraints on the objective's deviation from each nutrient target.
     """
     for variable in nutrient_objective_variables:
-        total_nutrient_quantity = expressions.total_nutrient_quantity_for_day(
+        total_nutrient_quantity = _expressions.total_nutrient_quantity_for_day(
             inputs=inputs,
             variables=variables,
             day=variable.day,
@@ -107,7 +106,7 @@ def _yield_all_nutrient_objective_constraints(
 
 
 def _get_nutrient_objective_variables(
-    *, inputs: inputs.OptimiserInputs
+    *, inputs: _inputs.OptimiserInputs
 ) -> tuple[_NutrientObjectiveVariable, ...]:
     variables = [
         _NutrientObjectiveVariable(requirement=requirement, day=day)

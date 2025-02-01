@@ -2,8 +2,8 @@ import attrs
 import pulp as lp
 
 from nutrimise.domain import constants
+from nutrimise.domain.optimisation import _inputs, _variables
 
-from .. import inputs, variables
 from . import _nutrient, _random, _variety
 
 
@@ -21,8 +21,8 @@ class NoTargetsSet(Exception):
 def add_objective_to_problem(
     *,
     problem: lp.LpProblem,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
 ) -> lp.LpProblem:
     """
     Return the LP problem with the objectives function(s) installed.
@@ -49,8 +49,8 @@ def add_objective_to_problem(
 def _add_everything_objective_to_problem(
     *,
     problem: lp.LpProblem,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
 ) -> lp.LpProblem:
     """
     Return the objective to use when optimising for 'everything'.

@@ -1,5 +1,5 @@
 from nutrimise.domain import constants
-from nutrimise.domain.menus._optimisation import inputs, variables
+from nutrimise.domain.optimisation import _inputs, _variables
 from tests.factories import domain as domain_factories
 
 
@@ -15,10 +15,10 @@ class TestFromSpecDecisionVariables:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
         )
-        variables_ = variables.Variables.from_inputs(inputs=inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 2
@@ -37,10 +37,10 @@ class TestFromSpecDecisionVariables:
 
         recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
         )
-        variables_ = variables.Variables.from_inputs(inputs=inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 1
@@ -59,10 +59,10 @@ class TestFromSpecDecisionVariables:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
         )
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
         )
-        variables_ = variables.Variables.from_inputs(inputs=inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs=inputs_)
 
         decision_variables = variables_.decision_variables
         assert len(decision_variables) == 1
@@ -77,12 +77,12 @@ class TestFromInclusionDependentVariables:
         )
         recipe = domain_factories.Recipe(ingredients=(recipe_ingredient,))
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=domain_factories.Menu(),
             recipes_to_consider=(recipe,),
             relevant_ingredients=(ingredient,),
         )
-        variables_ = variables.Variables.from_inputs(inputs=inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs=inputs_)
 
         ingredient_included_variables = (
             variables_.ingredient_included_dependent_variables
@@ -116,12 +116,12 @@ class TestFromInclusionDependentVariables:
         )
         menu = domain_factories.Menu(items=(unoptimised_selection,))
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(ingredient, other_ingredient),
         )
-        variables_ = variables.Variables.from_inputs(inputs=inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs=inputs_)
 
         # There should be no inclusion variable for `ingredient`, since it features in `recipe`.
         ingredient_included_variables = (

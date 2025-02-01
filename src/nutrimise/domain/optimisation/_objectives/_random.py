@@ -2,11 +2,11 @@ import random
 
 import pulp as lp
 
-from .. import variables
+from nutrimise.domain.optimisation import _variables
 
 
 def add_random_objective_to_problem(
-    *, problem: lp.LpProblem, variables: variables.Variables
+    *, problem: lp.LpProblem, variables: _variables.Variables
 ) -> lp.LpProblem:
     """
     Ensure the solution is random, while satisfying the requirements.

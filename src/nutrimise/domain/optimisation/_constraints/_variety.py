@@ -3,12 +3,11 @@ from typing import Generator
 import pulp as lp
 
 from nutrimise.domain import menus
-
-from .. import expressions, inputs, variables
+from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 
 
 def all_variety_requirements_are_met(
-    *, inputs: inputs.OptimiserInputs, variables: variables.Variables
+    *, inputs: _inputs.OptimiserInputs, variables: _variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
     yield from _ingredient_included_if_a_recipe_it_features_in_is_included(
         variables=variables
@@ -24,7 +23,7 @@ def all_variety_requirements_are_met(
 
 def _ingredient_included_if_a_recipe_it_features_in_is_included(
     *,
-    variables: variables.Variables,
+    variables: _variables.Variables,
 ) -> Generator[lp.LpConstraint, None, None]:
     for ingredient_inclusion_var in variables.ingredient_included_dependent_variables:
         for decision_variable in variables.decision_variables:
@@ -40,11 +39,11 @@ def _ingredient_included_if_a_recipe_it_features_in_is_included(
 
 def _ingredient_excluded_if_no_recipe_it_features_in_is_included(
     *,
-    variables: variables.Variables,
+    variables: _variables.Variables,
 ) -> Generator[lp.LpConstraint, None, None]:
     for ingredient_inclusion_var in variables.ingredient_included_dependent_variables:
         number_of_times_ingredient_features_across_menu = (
-            expressions.number_of_times_ingredient_features_across_menu(
+            _expressions.number_of_times_ingredient_features_across_menu(
                 variables=variables,
                 ingredient_id=ingredient_inclusion_var.ingredient.id,
             )
@@ -57,14 +56,14 @@ def _ingredient_excluded_if_no_recipe_it_features_in_is_included(
 
 def _variety_requirement_met_for_ingredient_category(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
     requirement: menus.VarietyRequirement,
 ) -> Generator[lp.LpConstraint, None, None]:
-    number_of_ingredients = expressions.number_of_ingredients_in_category_across_menu(
+    number_of_ingredients = _expressions.number_of_ingredients_in_category_across_menu(
         inputs=inputs,
         variables=variables,
-        ingedient_category_id=requirement.ingredient_category_id,
+        ingredient_category_id=requirement.ingredient_category_id,
     )
     if requirement.minimum is not None:
         yield number_of_ingredients >= requirement.minimum

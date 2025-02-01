@@ -6,12 +6,12 @@ from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import operations as menu_operations
 from nutrimise.data.menus import queries as menu_queries
 from nutrimise.data.recipes import queries as recipe_queries
-from nutrimise.domain import ingredients, menus, recipes
+from nutrimise.domain import ingredients, optimisation, recipes
 
 
 MenuDoesNotExist = menu_queries.MenuDoesNotExist
 
-UnableToOptimiseMenu = menus.UnableToOptimiseMenu
+UnableToOptimiseMenu = optimisation.UnableToOptimiseMenu
 
 
 @attrs.frozen
@@ -51,7 +51,7 @@ def optimise_menu(*, menu_id: int) -> None:
     else:
         relevant_ingredients = ()
 
-    solution = menus.optimise_recipes_for_menu(
+    solution = optimisation.optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=recipes_to_consider,
         relevant_ingredients=relevant_ingredients,

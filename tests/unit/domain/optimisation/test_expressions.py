@@ -1,5 +1,5 @@
 from nutrimise.domain import constants
-from nutrimise.domain.menus._optimisation import expressions, inputs, variables
+from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 from tests.factories import domain as domain_factories
 
 
@@ -40,14 +40,14 @@ class TestNutrientGramsForDay:
             meal_times=[constants.MealTime.LUNCH],
         )
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(),
         )
-        variables_ = variables.Variables.from_inputs(inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs_)
 
-        total_nutrient_quantity = expressions.total_nutrient_quantity_for_day(
+        total_nutrient_quantity = _expressions.total_nutrient_quantity_for_day(
             inputs=inputs_,
             variables=variables_,
             day=day_one_lunch.day,

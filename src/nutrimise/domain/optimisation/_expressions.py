@@ -1,10 +1,10 @@
 import pulp as lp
 
-from . import inputs, variables
+from . import _inputs, _variables
 
 
 def sum_all_variables_for_menu_item(
-    *, variables_: variables.Variables, menu_item_id: int
+    *, variables_: _variables.Variables, menu_item_id: int
 ) -> lp.LpAffineExpression:
     """
     Get the sum of all the decision variables for a menu item.
@@ -17,7 +17,7 @@ def sum_all_variables_for_menu_item(
 
 
 def number_of_occurrences_of_recipe(
-    *, inputs: inputs.OptimiserInputs, variables_: variables.Variables, recipe_id: int
+    *, inputs: _inputs.OptimiserInputs, variables_: _variables.Variables, recipe_id: int
 ) -> lp.LpAffineExpression:
     """
     Get the sum of all the decision variables for a recipe.
@@ -37,8 +37,8 @@ def number_of_occurrences_of_recipe(
 
 def total_nutrient_quantity_for_day(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
     day: int,
     nutrient_id: int,
 ) -> lp.LpAffineExpression:
@@ -64,29 +64,29 @@ def total_nutrient_quantity_for_day(
 
 def number_of_ingredients_in_category_across_menu(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
-    ingedient_category_id: int,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
+    ingredient_category_id: int,
 ) -> lp.LpAffineExpression:
     variable_contribution = lp.lpSum(
         [
             ingredient.lp_variable
             for ingredient in variables.ingredient_included_dependent_variables
-            if ingredient.ingredient.category_id == ingedient_category_id
+            if ingredient.ingredient.category_id == ingredient_category_id
         ]
     )
     fixed_contribution = len(
         [
             ingredient
             for ingredient in inputs.unoptimised_ingredient_selections
-            if ingredient.category_id == ingedient_category_id
+            if ingredient.category_id == ingredient_category_id
         ]
     )
     return variable_contribution + fixed_contribution
 
 
 def number_of_times_ingredient_features_across_menu(
-    *, variables: variables.Variables, ingredient_id: int
+    *, variables: _variables.Variables, ingredient_id: int
 ) -> lp.LpAffineExpression:
     # Note: ingredients in unoptimised recipe selections are already accounted for.
     return lp.lpSum(
@@ -100,7 +100,7 @@ def number_of_times_ingredient_features_across_menu(
 
 
 def _get_nutrient_quantity_for_decision_variable(
-    *, variable: variables.DecisionVariable, nutrient_id: int
+    *, variable: _variables.DecisionVariable, nutrient_id: int
 ) -> lp.LpAffineExpression:
     for nutritional_information in variable.recipe.nutritional_information_per_serving:
         if nutritional_information.nutrient.id == nutrient_id:
@@ -109,7 +109,7 @@ def _get_nutrient_quantity_for_decision_variable(
 
 
 def _get_unoptimised_nutrient_quantity_on_day(
-    *, inputs: inputs.OptimiserInputs, day: int, nutrient_id: int
+    *, inputs: _inputs.OptimiserInputs, day: int, nutrient_id: int
 ) -> float:
     total = 0.0
     for menu_item in inputs.menu.items:

@@ -1,6 +1,6 @@
 from nutrimise.domain import constants
-from nutrimise.domain.menus._optimisation import inputs, variables
-from nutrimise.domain.menus._optimisation.constraints import _nutrient
+from nutrimise.domain.optimisation import _inputs, _variables
+from nutrimise.domain.optimisation._constraints import _nutrient
 from tests.factories import domain as domain_factories
 
 
@@ -39,12 +39,12 @@ class TestNutrientConstraints:
             meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER],
         )
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(),
         )
-        variables_ = variables.Variables.from_inputs(inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs_)
 
         all_constraints = {
             str(constraint)

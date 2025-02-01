@@ -1,5 +1,5 @@
-from nutrimise.domain.menus._optimisation import inputs, variables
-from nutrimise.domain.menus._optimisation.constraints import _fulfillment
+from nutrimise.domain.optimisation import _inputs, _variables
+from nutrimise.domain.optimisation._constraints import _fulfillment
 from tests.factories import domain as domain_factories
 
 
@@ -16,12 +16,12 @@ class TestFulfillmentConstraints:
         recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
         other_recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(),
         )
-        variables_ = variables.Variables.from_inputs(inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs_)
 
         all_constraints = [
             str(constraint)
@@ -48,12 +48,12 @@ class TestFulfillmentConstraints:
         recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
         other_recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
 
-        inputs_ = inputs.OptimiserInputs(
+        inputs_ = _inputs.OptimiserInputs(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(),
         )
-        variables_ = variables.Variables.from_inputs(inputs_)
+        variables_ = _variables.Variables.from_inputs(inputs_)
 
         all_constraints = [
             str(constraint)

@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from nutrimise.domain import constants, menus, recipes
+from nutrimise.domain import constants, menus, optimisation, recipes
 from tests.factories import domain as domain_factories
 
 
@@ -33,7 +33,7 @@ class TestBasicRequirements:
         menu = domain_factories.Menu(items=[menu_item])
         recipe = domain_factories.Recipe(meal_times=[menu_item.meal_time])
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
         )
 
@@ -46,7 +46,7 @@ class TestBasicRequirements:
         lunch_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
         dinner_recipe = domain_factories.Recipe(meal_times=[constants.MealTime.DINNER])
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(lunch_recipe, dinner_recipe),
             relevant_ingredients=(),
@@ -60,8 +60,8 @@ class TestBasicRequirements:
         menu_item = domain_factories.MenuItem(recipe_id=None)
         menu = domain_factories.Menu(items=[menu_item])
 
-        with pytest.raises(menus.UnableToOptimiseMenu) as exc:
-            menus.optimise_recipes_for_menu(
+        with pytest.raises(optimisation.UnableToOptimiseMenu) as exc:
+            optimisation.optimise_recipes_for_menu(
                 menu=menu, recipes_to_consider=(), relevant_ingredients=()
             )
 
@@ -79,7 +79,7 @@ class TestMaximumRecipeOccurrencesPerRecipeConstraints:
         recipe = domain_factories.Recipe(meal_times=meal_times)
         other_recipe = domain_factories.Recipe(meal_times=meal_times)
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(recipe, other_recipe),
             relevant_ingredients=(),
@@ -102,7 +102,7 @@ class TestMaximumRecipeOccurrencesPerRecipeConstraints:
             requirements=requirements, lunch=pre_selected_recipe, dinner=None
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(pre_selected_recipe, other_recipe),
             relevant_ingredients=(),
@@ -135,7 +135,7 @@ class TestNutrientRequirements:
         )
         menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
             relevant_ingredients=(),
@@ -174,7 +174,7 @@ class TestNutrientRequirements:
             requirements=menu_requirements, lunch=lunch_recipe, dinner=None
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
             relevant_ingredients=(),
@@ -206,7 +206,7 @@ class TestNutrientRequirements:
         )
         menu = domain_factories.Menu(items=[menu_item], requirements=menu_requirements)
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(low_nutrition_recipe, high_nutrition_recipe),
             relevant_ingredients=(),
@@ -245,7 +245,7 @@ class TestNutrientRequirements:
             requirements=menu_requirements, lunch=lunch_recipe, dinner=None
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(lunch_recipe, ideal_dinner, suboptimal_dinner),
             relevant_ingredients=(),
@@ -280,7 +280,7 @@ class TestVarietyRequirements:
             ingredients=[ingredient], meal_times=[menu_item.meal_time]
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(
                 ideal_recipe,
@@ -314,7 +314,7 @@ class TestVarietyRequirements:
             )
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(
                 recipe_with_ingredient_in_category,
@@ -357,7 +357,7 @@ class TestVarietyRequirements:
         )
         only_recipe_meeting_requirement = recipes_to_consider[requirement]
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=recipes_to_consider,
             relevant_ingredients=relevant_ingredients,
@@ -393,7 +393,7 @@ class TestVarietyRequirements:
             requirements=menu_requirements, lunch=lunch_recipe
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(
                 lunch_recipe,
@@ -421,7 +421,7 @@ class TestRandomObjective:
         recipe = domain_factories.Recipe(meal_times=[item.meal_time])
         favoured_recipe = domain_factories.Recipe(meal_times=[item.meal_time])
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(recipe, favoured_recipe),
             relevant_ingredients=(),
@@ -460,7 +460,7 @@ class TestNutrientObjective:
             nutrient=nutrient, nutrient_quantity=target_quantity + suboptimal_deviation
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(optimal_recipe, suboptimal_recipe),
             relevant_ingredients=(),
@@ -478,8 +478,8 @@ class TestNutrientObjective:
 
         recipe = domain_factories.Recipe()
 
-        with pytest.raises(menus.NoNutrientTargetsSet) as exc:
-            menus.optimise_recipes_for_menu(
+        with pytest.raises(optimisation.NoNutrientTargetsSet) as exc:
+            optimisation.optimise_recipes_for_menu(
                 menu=menu,
                 recipes_to_consider=(recipe,),
                 relevant_ingredients=(),
@@ -516,7 +516,7 @@ class TestVarietyObjective:
             ingredients=[], meal_times=[item.meal_time]
         )
 
-        solution = menus.optimise_recipes_for_menu(
+        solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
             recipes_to_consider=(with_ingredient_recipe, without_ingredient_recipe),
             relevant_ingredients=(ingredient,),
@@ -537,8 +537,8 @@ class TestVarietyObjective:
 
         recipe = domain_factories.Recipe()
 
-        with pytest.raises(menus.NoVarietyTargetsSet) as exc:
-            menus.optimise_recipes_for_menu(
+        with pytest.raises(optimisation.NoVarietyTargetsSet) as exc:
+            optimisation.optimise_recipes_for_menu(
                 menu=menu,
                 recipes_to_consider=(recipe,),
                 relevant_ingredients=(),
@@ -557,8 +557,8 @@ class TestEverythingObjective:
 
         recipe = domain_factories.Recipe()
 
-        with pytest.raises(menus.NoTargetsSet) as exc:
-            menus.optimise_recipes_for_menu(
+        with pytest.raises(optimisation.NoTargetsSet) as exc:
+            optimisation.optimise_recipes_for_menu(
                 menu=menu,
                 recipes_to_consider=(recipe,),
                 relevant_ingredients=(),

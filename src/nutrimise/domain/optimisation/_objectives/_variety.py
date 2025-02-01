@@ -4,8 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.domain import menus
-
-from .. import expressions, inputs, variables
+from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 
 
 @attrs.frozen
@@ -40,8 +39,8 @@ class _VarietyObjectiveVariable:
 def add_variety_objective_to_problem(
     *,
     problem: lp.LpProblem,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
 ) -> lp.LpProblem:
     """
     Add an objective to the problem that forces the solution towards the variety targets.
@@ -81,8 +80,8 @@ def _get_variety_objective(
 
 def _yield_all_variety_objective_constraints(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables: _variables.Variables,
     variety_objective_variables: tuple[_VarietyObjectiveVariable, ...],
 ) -> Generator[lp.LpConstraint, None, None]:
     """
@@ -90,10 +89,10 @@ def _yield_all_variety_objective_constraints(
     """
     for variable in variety_objective_variables:
         number_of_ingredients = (
-            expressions.number_of_ingredients_in_category_across_menu(
+            _expressions.number_of_ingredients_in_category_across_menu(
                 inputs=inputs,
                 variables=variables,
-                ingedient_category_id=variable.category_id,
+                ingredient_category_id=variable.category_id,
             )
         )
         yield (
@@ -105,7 +104,7 @@ def _yield_all_variety_objective_constraints(
 
 
 def _get_variety_objective_variables(
-    *, inputs: inputs.OptimiserInputs
+    *, inputs: _inputs.OptimiserInputs
 ) -> tuple[_VarietyObjectiveVariable, ...]:
     variables = [
         _VarietyObjectiveVariable(requirement=requirement)

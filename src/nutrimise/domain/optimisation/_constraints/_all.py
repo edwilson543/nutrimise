@@ -2,14 +2,15 @@ from typing import Generator
 
 import pulp as lp
 
-from .. import inputs, variables
+from nutrimise.domain.optimisation import _inputs, _variables
+
 from . import _fulfillment, _nutrient, _variety
 
 
 def yield_all_constraints(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables_: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables_: _variables.Variables,
 ) -> Generator[lp.LpConstraint, None, None]:
     yield from _fulfillment.all_menu_items_are_assigned_a_recipe(
         inputs=inputs, variables_=variables_

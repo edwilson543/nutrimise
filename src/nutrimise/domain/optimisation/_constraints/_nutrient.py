@@ -4,8 +4,7 @@ import attrs
 import pulp as lp
 
 from nutrimise.domain import constants, menus
-
-from .. import expressions, inputs, variables
+from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 
 
 @attrs.frozen
@@ -14,7 +13,7 @@ class EnforcementIntervalNotImplemented(Exception):
 
 
 def all_nutrient_requirements_are_met(
-    *, inputs: inputs.OptimiserInputs, variables_: variables.Variables
+    *, inputs: _inputs.OptimiserInputs, variables_: _variables.Variables
 ) -> Generator[lp.LpConstraint, None, None]:
     for nutrient_requirement in inputs.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
@@ -32,13 +31,13 @@ def all_nutrient_requirements_are_met(
 
 def _daily_nutrient_requirements_are_met(
     *,
-    inputs: inputs.OptimiserInputs,
-    variables_: variables.Variables,
+    inputs: _inputs.OptimiserInputs,
+    variables_: _variables.Variables,
     requirement: menus.NutrientRequirement,
 ) -> Generator[lp.LpConstraint, None, None]:
     for day in inputs.menu.days:
         # TODO: ensure units are consistent.
-        total_nutrient_quantity_for_day = expressions.total_nutrient_quantity_for_day(
+        total_nutrient_quantity_for_day = _expressions.total_nutrient_quantity_for_day(
             inputs=inputs,
             variables=variables_,
             day=day,

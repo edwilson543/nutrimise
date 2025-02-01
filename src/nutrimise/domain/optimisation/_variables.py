@@ -5,7 +5,7 @@ import pulp as lp
 
 from nutrimise.domain import ingredients, menus, recipes
 
-from . import inputs
+from . import _inputs
 
 
 class DecisionVariable:
@@ -41,7 +41,7 @@ class Variables:
     ]
 
     @classmethod
-    def from_inputs(cls, inputs: inputs.OptimiserInputs) -> Variables:
+    def from_inputs(cls, inputs: _inputs.OptimiserInputs) -> Variables:
         return cls(
             decision_variables=cls._decision_variables_from_inputs(inputs),
             ingredient_included_dependent_variables=cls._ingredient_included_variables_from_inputs(
@@ -51,7 +51,7 @@ class Variables:
 
     @classmethod
     def _decision_variables_from_inputs(
-        cls, inputs: inputs.OptimiserInputs
+        cls, inputs: _inputs.OptimiserInputs
     ) -> tuple[DecisionVariable, ...]:
         decision_variables: list[DecisionVariable] = []
 
@@ -71,7 +71,7 @@ class Variables:
 
     @classmethod
     def _ingredient_included_variables_from_inputs(
-        cls, inputs: inputs.OptimiserInputs
+        cls, inputs: _inputs.OptimiserInputs
     ) -> tuple[IngredientIncludedDependentVariable, ...]:
         return tuple(
             IngredientIncludedDependentVariable(ingredient=ingredient)
