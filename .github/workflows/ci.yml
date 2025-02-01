@@ -55,13 +55,9 @@ jobs:
         if: success() || failure()
         run: make mypy
 
-      - name: Run ruff formatter
-        if: success() || failure()
-        run: make ruff_format
-
       - name: Run ruff checker
         if: success() || failure()
-        run: make ruff_check
+        run: make check
 
       - name: Run import linter
         if: success() || failure()

@@ -87,19 +87,21 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy ruff_format ruff_check lint_imports
+lint: mypy check lint_imports
 
 .PHONY:mypy
 mypy:
 	mypy .
 
-.PHONY:ruff_format
-ruff_format:
+.PHONY:format
+format:
 	ruff format .
+	ruff check . --fix
 
-.PHONY:ruff_check
-ruff_check:
-	ruff check --fix .
+.PHONY:check
+check:
+	ruff format . --check
+	ruff check .
 
 .PHONY:lint_imports
 lint_imports:
