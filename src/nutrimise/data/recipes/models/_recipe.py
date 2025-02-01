@@ -69,12 +69,13 @@ class Recipe(django_models.Model):
             recipe_ingredient.to_domain_model()
             for recipe_ingredient in self.ingredients.all()
         ]
+        meal_times = [constants.MealTime(meal_time) for meal_time in self.meal_times]
 
         return recipes.Recipe(
             id=self.id,
-            meal_times=tuple(
-                constants.MealTime(meal_time) for meal_time in self.meal_times
-            ),
+            name=self.name,
+            description=self.description,
+            meal_times=tuple(meal_times),
             nutritional_information_per_serving=tuple(nutritional_information),
             ingredients=tuple(ingredients),
         )

@@ -8,6 +8,8 @@ from nutrimise.domain import constants, ingredients
 @attrs.frozen
 class Recipe:
     id: int
+    name: str
+    description: str
     meal_times: tuple[constants.MealTime, ...]
     nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
     """
