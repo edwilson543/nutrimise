@@ -19,6 +19,8 @@ class RecipeEmbedding(django_models.Model):
 
     vector = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
 
+    embedded_content_hash = django_models.TextField()
+
     vendor = django_models.TextField(choices=embeddings.EmbeddingVendor.choices)
 
     model = django_models.TextField(choices=embeddings.EmbeddingModel.choices)

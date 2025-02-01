@@ -48,6 +48,7 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 class RecipeEmbedding(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
     vector = factory.LazyFunction(lambda: RecipeEmbedding.stub_vector())
+    embedded_content_hash = factory.Sequence(lambda n: n + 1)
     vendor = embeddings.EmbeddingVendor.FAKE.value
     model = embeddings.EmbeddingModel.FAKE.value
 
