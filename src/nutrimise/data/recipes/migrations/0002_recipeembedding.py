@@ -2,7 +2,6 @@
 
 import django.db.models.deletion
 import pgvector.django.vector
-
 from django.db import migrations, models
 
 from nutrimise.domain import constants

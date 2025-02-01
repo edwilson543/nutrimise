@@ -1,5 +1,4 @@
 import django.db.models.deletion
-
 from django.conf import settings
 from django.core import validators as django_validators
 from django.db import migrations, models

@@ -1,5 +1,4 @@
 import pytest
-
 from django.db import IntegrityError
 
 from tests.factories import data as data_factories

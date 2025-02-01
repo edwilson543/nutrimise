@@ -1,5 +1,4 @@
 import attrs
-
 from django.db import transaction
 
 from nutrimise.data.ingredients import queries as ingredient_queries

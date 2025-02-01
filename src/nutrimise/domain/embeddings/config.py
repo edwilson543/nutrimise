@@ -1,5 +1,4 @@
 import attrs
-
 from django.conf import settings
 
 from nutrimise.domain import constants

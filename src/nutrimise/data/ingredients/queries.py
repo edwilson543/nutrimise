@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import collections
-
 from collections import abc as collections_abc
 
 from nutrimise.data.ingredients import models as ingredient_models
