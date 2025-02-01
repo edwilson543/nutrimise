@@ -24,6 +24,6 @@ class EmbeddingModel(django_models.TextChoices):
 
 @attrs.frozen
 class Embedding:
-    embedding: list[float]
+    vector: list[float]
     vendor: EmbeddingVendor
     model: EmbeddingModel

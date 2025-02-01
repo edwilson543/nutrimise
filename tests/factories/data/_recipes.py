@@ -47,7 +47,7 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 
 class RecipeEmbedding(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
-    embedding = factory.LazyFunction(lambda: RecipeEmbedding.stub_embedding())
+    vector = factory.LazyFunction(lambda: RecipeEmbedding.stub_vector())
     vendor = embeddings.EmbeddingVendor.FAKE.value
     model = embeddings.EmbeddingModel.FAKE.value
 
@@ -55,5 +55,5 @@ class RecipeEmbedding(factory.django.DjangoModelFactory):
         model = recipe_models.RecipeEmbedding
 
     @staticmethod
-    def stub_embedding() -> list[float]:
+    def stub_vector() -> list[float]:
         return [1.0] + [0] * (embeddings.EMBEDDING_DIMENSIONS - 1)

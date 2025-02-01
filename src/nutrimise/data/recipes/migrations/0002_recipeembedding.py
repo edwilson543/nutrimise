@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name="RecipeEmbedding",
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("embedding", pgvector.django.vector.VectorField(dimensions=1024)),
+                ("vector", pgvector.django.vector.VectorField(dimensions=1024)),
                 (
                     "model",
                     models.TextField(choices=embeddings.EmbeddingModel.choices),

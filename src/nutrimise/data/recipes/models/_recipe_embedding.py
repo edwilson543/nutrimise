@@ -17,7 +17,7 @@ class RecipeEmbedding(django_models.Model):
         _recipe.Recipe, on_delete=django_models.CASCADE, related_name="embeddings"
     )
 
-    embedding = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
+    vector = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
 
     vendor = django_models.TextField(choices=embeddings.EmbeddingVendor.choices)
 
