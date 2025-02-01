@@ -12,7 +12,7 @@ class EmbeddingVendor(django_models.TextChoices):
     # Fakes.
     FAKE = "FAKE"
     FAKE_NO_SERVICE = "FAKE_NO_SERVICE"
-    FAKE_NO_MODEL = "FAKE_NO_MODEL"
+    BROKEN = "BROKEN"
 
 
 class EmbeddingModel(django_models.TextChoices):
@@ -25,7 +25,7 @@ class EmbeddingModel(django_models.TextChoices):
 
 @attrs.frozen
 class Embedding:
-    vector:np.ndarray = attrs.field(eq=attrs.cmp_using(eq=np.array_equal))
+    vector: np.ndarray = attrs.field(eq=attrs.cmp_using(eq=np.array_equal))
     embedded_content_hash: str
     vendor: EmbeddingVendor
     model: EmbeddingModel

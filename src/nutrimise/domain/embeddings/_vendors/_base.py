@@ -2,7 +2,7 @@ import abc
 
 import attrs
 
-from nutrimise.domain.embeddings import _embedding
+from nutrimise.domain.embeddings import _embedding, _helpers
 
 
 @attrs.frozen
@@ -25,3 +25,7 @@ class EmbeddingService(abc.ABC):
             for some reason.
         """
         raise NotImplementedError
+
+    @staticmethod
+    def _get_hash_for_text(text: str) -> str:
+        return _helpers.get_hash_for_text(text=text)

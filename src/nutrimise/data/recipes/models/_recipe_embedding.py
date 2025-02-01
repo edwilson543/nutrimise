@@ -31,3 +31,11 @@ class RecipeEmbedding(django_models.Model):
                 fields=["recipe", "model"], name="unique_recipe_embedding_per_model"
             )
         ]
+
+    def to_domain_model(self) -> embeddings.Embedding:
+        return embeddings.Embedding(
+            vector=self.vector,
+            embedded_content_hash=self.embedded_content_hash,
+            vendor=embeddings.EmbeddingVendor(self.vendor),
+            model=embeddings.EmbeddingModel(self.model),
+        )
