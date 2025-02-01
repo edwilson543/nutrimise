@@ -15,6 +15,7 @@ class Recipe(factory.Factory):
     meal_times = factory.LazyFunction(tuple)
     nutritional_information_per_serving = factory.LazyFunction(tuple)
     ingredients = factory.LazyFunction(tuple)
+    embeddings = factory.LazyFunction(tuple)
 
     class Meta:
         model = recipes.Recipe

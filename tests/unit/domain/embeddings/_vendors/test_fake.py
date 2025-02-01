@@ -1,3 +1,5 @@
+from numpy import testing as np_testing
+
 from nutrimise.domain import embeddings
 from nutrimise.domain.embeddings._vendors import _fake
 
@@ -12,5 +14,5 @@ class TestGetEmbedding:
 
         assert embedding.model == model
         assert embedding.vendor == vendor
-        assert embedding.vector == service.stub_vector
+        np_testing.assert_array_equal(embedding.vector, service.stub_vector)
         assert embedding.embedded_content_hash == "552e21cd4cd9918678e3c1a0df491bc3"

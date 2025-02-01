@@ -1,6 +1,7 @@
 from typing import Any
 
 import factory
+import numpy as np
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
@@ -48,7 +49,7 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 class RecipeEmbedding(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
     vector = factory.LazyFunction(lambda: RecipeEmbedding.stub_vector())
-    embedded_content_hash = factory.Sequence(lambda n: n + 1)
+    embedded_content_hash = factory.Sequence(lambda n: f"embedded-content-hash-{n}")
     vendor = embeddings.EmbeddingVendor.FAKE.value
     model = embeddings.EmbeddingModel.FAKE.value
 
@@ -56,5 +57,5 @@ class RecipeEmbedding(factory.django.DjangoModelFactory):
         model = recipe_models.RecipeEmbedding
 
     @staticmethod
-    def stub_vector() -> list[float]:
-        return [1.0] + [0] * (embeddings.EMBEDDING_DIMENSIONS - 1)
+    def stub_vector() -> np.ndarray:
+        return np.ones(embeddings.EMBEDDING_DIMENSIONS)

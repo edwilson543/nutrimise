@@ -1,4 +1,5 @@
 import attrs
+import numpy as np
 from django.db import models as django_models
 
 
@@ -24,6 +25,7 @@ class EmbeddingModel(django_models.TextChoices):
 
 @attrs.frozen
 class Embedding:
-    vector: list[float]
+    vector:np.ndarray = attrs.field(eq=attrs.cmp_using(eq=np.array_equal))
+    embedded_content_hash: str
     vendor: EmbeddingVendor
     model: EmbeddingModel

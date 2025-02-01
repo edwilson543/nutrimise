@@ -1,4 +1,5 @@
 import attrs
+import numpy as np
 
 from nutrimise.domain.embeddings import _embedding
 
@@ -11,8 +12,8 @@ class FakeEmbeddingService(_base.EmbeddingService):
     vendor: _embedding.EmbeddingVendor = _embedding.EmbeddingVendor.FAKE
 
     @property
-    def stub_vector(self) -> list[float]:
-        return [1.0] + [0] * (_embedding.EMBEDDING_DIMENSIONS - 1)
+    def stub_vector(self) -> np.ndarray:
+        return np.ones(_embedding.EMBEDDING_DIMENSIONS)
 
     def get_embedding(self, *, text: str) -> _embedding.Embedding:
         return _embedding.Embedding(

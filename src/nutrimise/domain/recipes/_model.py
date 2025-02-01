@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import attrs
 
-from nutrimise.domain import constants, ingredients
+from nutrimise.domain import constants, embeddings, ingredients
 
 
 @attrs.frozen
@@ -11,11 +11,10 @@ class Recipe:
     name: str
     description: str
     meal_times: tuple[constants.MealTime, ...]
+    # The absolute amount of each nutrient, per serving.
     nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
-    """
-    The absolute amount of each nutrient, per serving.
-    """
     ingredients: tuple[RecipeIngredient, ...]
+    embeddings: tuple[embeddings.Embedding, ...]
 
     # Queries
     def nutrient_quantity_per_serving(self, *, nutrient_id: int) -> float:

@@ -6,6 +6,7 @@ class TestRecipeToDomainModel:
     def test_converts_recipe_orm_model_with_requirements_to_recipe_domain(self):
         meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
         orm_recipe = data_factories.Recipe(meal_times=meal_times)
+        orm_embedding = data_factories.RecipeEmbedding(recipe=orm_recipe)
 
         # Make sure the recipe will have some nutritional information.
         ingredient = data_factories.Ingredient()
@@ -21,3 +22,7 @@ class TestRecipeToDomainModel:
         assert len(recipe.ingredients) == 1
         recipe_ingredient = recipe.ingredients[0]
         assert recipe_ingredient.ingredient_id == ingredient.id
+
+        assert len(recipe.embeddings) == 1
+        embedding = recipe.embeddings[0]
+        assert embedding == orm_embedding.to_domain_model()
