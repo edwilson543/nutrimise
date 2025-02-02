@@ -1,8 +1,14 @@
 import abc
 
 import attrs
+import numpy as np
 
 from nutrimise.domain.embeddings import _embedding, _helpers
+
+
+@attrs.frozen
+class EmbeddingServiceMisconfigured(Exception):
+    vendor: _embedding.EmbeddingVendor
 
 
 @attrs.frozen
@@ -25,6 +31,15 @@ class EmbeddingService(abc.ABC):
             for some reason.
         """
         raise NotImplementedError
+
+    def _init_embedding(self, *, text: str, vector: np.ndarray) -> _embedding.Embedding:
+        embedded_content_hash = _helpers.get_hash_for_text(text=text)
+        return _embedding.Embedding(
+            vector=vector,
+            embedded_content_hash=embedded_content_hash,
+            vendor=self.vendor,
+            model=self.model,
+        )
 
     @staticmethod
     def _get_hash_for_text(text: str) -> str:

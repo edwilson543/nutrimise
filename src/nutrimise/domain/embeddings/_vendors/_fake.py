@@ -16,12 +16,7 @@ class FakeEmbeddingService(_base.EmbeddingService):
     )
 
     def get_embedding(self, *, text: str) -> _embedding.Embedding:
-        embedding = _embedding.Embedding(
-            vector=self.stub_vector,
-            embedded_content_hash=self._get_hash_for_text(text=text),
-            vendor=self.vendor,
-            model=self.model,
-        )
+        embedding = self._init_embedding(text=text, vector=self.stub_vector)
         self._created_embeddings.append(embedding)
         return embedding
 

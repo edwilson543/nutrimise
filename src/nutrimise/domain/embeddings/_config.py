@@ -1,12 +1,6 @@
-import attrs
 from django.conf import settings
 
 from . import _embedding, _vendors
-
-
-@attrs.frozen
-class EmbeddingServiceMisconfigured(Exception):
-    vendor: _embedding.EmbeddingVendor
 
 
 def get_embedding_service() -> _vendors.EmbeddingService:
@@ -29,4 +23,4 @@ def _get_embedding_service_for_vendor(
         case vendor.BROKEN:
             return _vendors.BrokenEmbeddingService()
         case _:
-            raise EmbeddingServiceMisconfigured(vendor=vendor)
+            raise _vendors.EmbeddingServiceMisconfigured(vendor=vendor)

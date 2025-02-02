@@ -1,14 +1,13 @@
 from numpy import testing as np_testing
 
 from nutrimise.domain import embeddings
-from nutrimise.domain.embeddings._vendors import _fake
 
 
 class TestGetEmbedding:
     def tests_embedding_with_stub_vector_and_hashed_text(self):
         vendor = embeddings.EmbeddingVendor.FAKE
         model = embeddings.EmbeddingModel.FAKE
-        service = _fake.FakeEmbeddingService(vendor=vendor, model=model)
+        service = embeddings.FakeEmbeddingService(vendor=vendor, model=model)
 
         embedding = service.get_embedding(text="some text")
 
