@@ -18,6 +18,8 @@ def _get_embedding_service_for_vendor(
     vendor: _embedding.EmbeddingVendor,
 ) -> _vendors.EmbeddingService:
     match vendor:
+        case vendor.OPENAI:
+            return _vendors.OpenAIEmbeddingService()
         case vendor.FAKE:
             return _vendors.FakeEmbeddingService()
         case vendor.BROKEN:

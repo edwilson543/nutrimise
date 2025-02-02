@@ -6,5 +6,6 @@ from ._vendors import (
     EmbeddingService,
     EmbeddingServiceMisconfigured,
     FakeEmbeddingService,
+    OpenAIEmbeddingService,
     UnableToGetEmbedding,
 )

@@ -5,6 +5,16 @@ from nutrimise.domain import embeddings
 
 
 class TestGetEmbedding:
+    @override_settings(EMBEDDING_VENDOR="OPENAI")
+    def test_gets_openai_embedding_service_when_openai_embedding_service_installed(
+        self,
+    ):
+        service = embeddings.get_embedding_service()
+
+        assert isinstance(service, embeddings.OpenAIEmbeddingService)
+        assert service.vendor == embeddings.EmbeddingVendor.OPENAI
+        assert service.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+
     @override_settings(EMBEDDING_VENDOR="FAKE")
     def test_gets_fake_embedding_when_fake_embedding_service_installed(self):
         service = embeddings.get_embedding_service()
