@@ -7,20 +7,20 @@ EMBEDDING_DIMENSIONS = 1024
 
 
 class EmbeddingVendor(django_models.TextChoices):
-    OPENAI = "OPENAI"
+    OPENAI = "OPENAI", "OpenAI"
 
     # Fakes.
-    FAKE = "FAKE"
-    FAKE_NO_SERVICE = "FAKE_NO_SERVICE"
-    BROKEN = "BROKEN"
+    FAKE = "FAKE", "Fake"
+    FAKE_NO_SERVICE = "FAKE_NO_SERVICE", "Fake no service"
+    BROKEN = "BROKEN", "Broken"
 
 
 class EmbeddingModel(django_models.TextChoices):
     # OpenAI.
-    TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small"
+    TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small", "text-embedding-3-small"
 
     # Fakes.
-    FAKE = "fake"
+    FAKE = "fake", "fake"
 
 
 @attrs.frozen
