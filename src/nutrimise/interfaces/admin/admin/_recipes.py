@@ -2,10 +2,12 @@ from django import forms as django_forms
 from django import http as django_http
 from django import urls as django_urls
 from django.contrib import admin
+from django.db import models as django_models
 from django.utils import safestring
 
 from nutrimise.app import recipes as recipes_app
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings
 
 
@@ -17,6 +19,7 @@ class _RecipeIngredientInline(admin.TabularInline):
 @admin.register(recipe_models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "user_actions"]
+    list_display_links = ["name"]
     ordering = ["name"]
     search_fields = ["name"]
 
@@ -47,6 +50,30 @@ class RecipeAdmin(admin.ModelAdmin):
         recipes_app.create_or_update_recipe_embedding(
             recipe_id=obj.id, embedding_service=embeddings.get_embedding_service()
         )
+
+    def get_search_results(
+        self,
+        request: django_http.HttpRequest,
+        queryset: django_models.QuerySet[recipe_models.Recipe],
+        search_term: str,
+    ) -> tuple[django_models.QuerySet[recipe_models.Recipe], bool]:
+        """
+        Use embeddings to perform a semantic search of the recipe library.
+
+        raises UnableToGetEmbedding: If the service is unable to produce an embedding
+            for the search text some reason.
+        """
+        if not search_term:
+            return super().get_search_results(
+                request=request, queryset=queryset, search_term=search_term
+            )
+
+        embedding_service = embeddings.get_embedding_service()
+        search_embedding = embedding_service.get_embedding(text=search_term)
+        results = recipe_queries.get_recipes_closest_to_vector(
+            embedding=search_embedding, limit=5
+        )
+        return results, False
 
 
 @admin.register(recipe_models.RecipeIngredient)
