@@ -1,5 +1,14 @@
 ### Web app for optimising meal plans
 
+#### Features
+- Generate meal plans for any schedule (e.g. day, week, month) from your library of recipes
+- Set requirements for each meal plan, including:
+  - Minimum or maximum quantity of micro and macro nutrients
+  - Minimum or maximum number of different ingredients utilised in different categories (e.g. vegetables)
+- Optimise the meal plans across various objectives:
+  - Nutrition
+  - Variation
+
 ---
 
 ### System requirements:
