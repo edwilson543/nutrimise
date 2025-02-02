@@ -1,8 +1,12 @@
+from django import forms as django_forms
+from django import http as django_http
 from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
 
+from nutrimise.app import recipes as recipes_app
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.domain import embeddings
 
 
 class _RecipeIngredientInline(admin.TabularInline):
@@ -32,6 +36,18 @@ class RecipeAdmin(admin.ModelAdmin):
             f'<a href="{detail_url}"><b>View</b></a> | <a href="{edit_url}"><b>Edit</b></a>'
         )
 
+    def save_model(
+        self,
+        request: django_http.HttpRequest,
+        obj: recipe_models.Recipe,
+        form: django_forms.ModelForm,
+        change: bool,
+    ) -> None:
+        super().save_model(request=request, obj=obj, form=form, change=change)
+        recipes_app.create_or_update_recipe_embedding(
+            recipe_id=obj.id, embedding_service=embeddings.get_embedding_service()
+        )
+
 
 @admin.register(recipe_models.RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
@@ -53,7 +69,13 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 @admin.register(recipe_models.RecipeEmbedding)
 class RecipeEmbeddingAdmin(admin.ModelAdmin):
-    list_display = ["vendor", "model", "embedded_content_hash", "vector_length", "recipe_name"]
+    list_display = [
+        "vendor",
+        "model",
+        "embedded_content_hash",
+        "vector_length",
+        "recipe_name",
+    ]
     list_display_links = ["embedded_content_hash"]
     ordering = ["recipe__name"]
 
