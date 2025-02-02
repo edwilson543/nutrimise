@@ -18,6 +18,7 @@ dependencies = [
     "attrs",
     "django",
     "django-configurations",
+    "openai",
     "pgvector",
     "psycopg[binary]",
     "python-decouple",
