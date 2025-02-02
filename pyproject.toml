@@ -33,6 +33,7 @@ ci = [
     # Test framework
     "pytest",
     "pytest-django",
+    "pytest-httpx",
     # Test setup
     "factory_boy",
     # Functional testing

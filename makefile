@@ -66,8 +66,9 @@ install_ci_deps:
 	pip install -r requirements/ci-requirements.txt
 	pip install -e .
 
-.PHONY:install_dev_deps
-install_dev_deps:
+# Install all dependencies, for local dev.
+.PHONY:install_deps
+install_deps:
 	pip install -r requirements/dev-requirements.txt
 	pip install -e .
 
