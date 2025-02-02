@@ -6,7 +6,7 @@ from ._ingredients import (
     NutrientAdmin,
 )
 from ._menus import MenuAdmin, MenuItemAdmin
-from ._recipes import RecipeAdmin, RecipeIngredientAdmin
+from ._recipes import RecipeAdmin, RecipeEmbeddingAdmin, RecipeIngredientAdmin
 
 
 # Overrides

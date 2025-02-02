@@ -49,3 +49,18 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     @admin.display(description="Units")
     def units(self, ingredient: recipe_models.RecipeIngredient) -> str:
         return ingredient.ingredient.units or "No units"
+
+
+@admin.register(recipe_models.RecipeEmbedding)
+class RecipeEmbeddingAdmin(admin.ModelAdmin):
+    list_display = ["vendor", "model", "embedded_content_hash", "vector_length", "recipe_name"]
+    list_display_links = ["embedded_content_hash"]
+    ordering = ["recipe__name"]
+
+    @admin.display(description="Recipe name")
+    def recipe_name(self, embedding: recipe_models.RecipeEmbedding) -> str:
+        return embedding.recipe.name
+
+    @admin.display(description="Vector length")
+    def vector_length(self, embedding: recipe_models.RecipeEmbedding) -> int:
+        return len(embedding.vector)
