@@ -1,10 +1,9 @@
 import django.db.models.deletion
-
 from django.conf import settings
 from django.core import validators as django_validators
 from django.db import migrations, models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 
 class Migration(migrations.Migration):

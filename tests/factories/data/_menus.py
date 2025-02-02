@@ -1,8 +1,8 @@
 import factory
 
-from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
+from nutrimise.domain import constants
 
 from . import _auth, _ingredients, _recipes
 

@@ -1,6 +1,7 @@
 from django.db import models as django_models
 
 from nutrimise.data.ingredients import models as ingredient_models
+from nutrimise.domain import recipes
 
 from . import _recipe
 
@@ -35,9 +36,8 @@ class RecipeIngredient(django_models.Model):
     def __str__(self) -> str:
         return f"{self.ingredient.name} for {self.recipe.name}"
 
-    # ----------
-    # Queries
-    # ----------
+    def to_domain_model(self) -> recipes.RecipeIngredient:
+        return recipes.RecipeIngredient(ingredient_id=self.ingredient_id)
 
     def grams(self) -> float:
         return self.quantity * self.ingredient.grams_per_unit

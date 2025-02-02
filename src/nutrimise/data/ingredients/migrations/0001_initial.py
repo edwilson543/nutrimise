@@ -1,12 +1,12 @@
 from django.db import migrations, models
 
-from nutrimise.data import constants
+from nutrimise.domain import constants
 
 
 class Migration(migrations.Migration):
     initial = True
 
-    dependencies = []
+    dependencies = [("pgvector", "0001_enable_vector_extension")]
 
     operations = [
         migrations.CreateModel(

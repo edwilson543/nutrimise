@@ -1,10 +1,11 @@
 from typing import Any
 
 import factory
+import numpy as np
 
-from nutrimise.data import constants
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.domain import constants, embeddings
 
 from . import _auth, _ingredients
 
@@ -43,3 +44,18 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.RecipeIngredient
+
+
+class RecipeEmbedding(factory.django.DjangoModelFactory):
+    recipe = factory.SubFactory(Recipe)
+    vector = factory.LazyFunction(lambda: RecipeEmbedding.stub_vector())
+    embedded_content_hash = factory.Sequence(lambda n: f"embedded-content-hash-{n}")
+    vendor = embeddings.EmbeddingVendor.FAKE.value
+    model = embeddings.EmbeddingModel.FAKE.value
+
+    class Meta:
+        model = recipe_models.RecipeEmbedding
+
+    @staticmethod
+    def stub_vector() -> np.ndarray:
+        return np.ones(embeddings.EMBEDDING_DIMENSIONS)

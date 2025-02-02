@@ -3,8 +3,8 @@ from __future__ import annotations
 from django.core import validators as django_validators
 from django.db import models as django_models
 
-from nutrimise.data import constants
 from nutrimise.data.recipes import models as recipe_models
+from nutrimise.domain import constants, menus
 
 from . import _menu
 
@@ -54,6 +54,15 @@ class MenuItem(django_models.Model):
 
     def __str__(self) -> str:
         return f"Day {self.day} {self.meal_time.title()}"
+
+    def to_domain_model(self):
+        return menus.MenuItem(
+            id=self.id,
+            recipe_id=self.recipe_id,
+            day=self.day,
+            meal_time=constants.MealTime(self.meal_time),
+            optimiser_generated=self.optimiser_generated,
+        )
 
     # ----------
     # Mutators

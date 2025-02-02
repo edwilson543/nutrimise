@@ -1,5 +1,4 @@
 import pytest
-
 from django import db as django_db
 
 from tests.factories import data as data_factories

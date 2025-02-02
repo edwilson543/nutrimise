@@ -2,8 +2,8 @@ from typing import Any
 
 from django import http
 
+from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import ingredients
 
 from . import _base
 
@@ -25,7 +25,7 @@ class RecipeDetails(_base.AdminTemplateView):
         )
         context["recipe_ingredients"] = list(recipe_ingredients)
         context["nutritional_information"] = (
-            ingredients.get_nutritional_information_for_recipe(
+            ingredient_queries.get_nutritional_information_for_recipe(
                 recipe=self.recipe, per_serving=True
             )
         )

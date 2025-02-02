@@ -16,12 +16,13 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        image: pgvector/pgvector:pg16
         env:
           # Credentials required by postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
+          POSTGRES_EXTENSIONS: vector
         ports: [ '5432:5432' ]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
@@ -54,10 +55,10 @@ jobs:
         if: success() || failure()
         run: make mypy
 
-      - name: Run ruff formatter
-        if: success() || failure()
-        run: make ruff_format
-
       - name: Run ruff checker
         if: success() || failure()
-        run: make ruff_check
+        run: make check
+
+      - name: Run import linter
+        if: success() || failure()
+        run: make lint_imports

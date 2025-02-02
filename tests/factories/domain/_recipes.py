@@ -2,18 +2,20 @@ from collections.abc import Iterable
 
 import factory
 
-from nutrimise.data import constants
+from nutrimise.domain import constants, recipes
 from nutrimise.domain import ingredients as ingredients_domain
-from nutrimise.domain import recipes
 
 from . import _ingredients
 
 
 class Recipe(factory.Factory):
     id = factory.Sequence(lambda n: n)
+    name = factory.Sequence(lambda n: f"recipe-{n}")
+    description = factory.Sequence(lambda n: f"description-{n}")
     meal_times = factory.LazyFunction(tuple)
     nutritional_information_per_serving = factory.LazyFunction(tuple)
     ingredients = factory.LazyFunction(tuple)
+    embeddings = factory.LazyFunction(tuple)
 
     class Meta:
         model = recipes.Recipe

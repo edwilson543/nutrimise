@@ -1,5 +1,7 @@
 from django.db import models as django_models
 
+from nutrimise.domain import ingredients
+
 from . import _dietary_requirement
 
 
@@ -40,3 +42,10 @@ class Ingredient(django_models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} ({self.units})"
+
+    def to_domain_model(self) -> ingredients.Ingredient:
+        return ingredients.Ingredient(
+            id=self.id,
+            name=self.name,
+            category_id=self.category_id,
+        )

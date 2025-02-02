@@ -6,7 +6,7 @@ install: install_pre_commit env_file install_dev_deps db
 db: createdb migrate superuser
 
 .PHONY:new_db
-new_db: dropdb createdb migrate superuser
+new_db: dropdb createdb migrate superuser import_snapshot
 
 .PHONY:env_file
 env_file:
@@ -47,6 +47,10 @@ superuser:
 snapshot:
 	python manage.py dumpdata ingredients recipes menus auth.user --configuration=Settings --output=data/snapshot.json
 
+.PHONY:import_snapshot
+import_snapshot:
+	python manage.py loaddata data/snapshot.json
+
 .PHONY:load_example_data
 load_example_data:
 	python manage.py import_from_csv --dataset=example
@@ -55,6 +59,10 @@ load_example_data:
 load_target_data:
 	python manage.py import_from_csv --dataset=target
 
+.PHONY:recipe_embeddings
+recipe_embeddings:
+	python manage.py create_recipe_embeddings
+
 # Python environment
 
 .PHONY:install_ci_deps
@@ -62,14 +70,16 @@ install_ci_deps:
 	pip install -r requirements/ci-requirements.txt
 	pip install -e .
 
-.PHONY:install_dev_deps
-install_dev_deps:
+# Install all dependencies, for local dev.
+.PHONY:install_deps
+install_deps:
 	pip install -r requirements/dev-requirements.txt
 	pip install -e .
 
 
-.PHONY:lock_dependencies
-lock_dependencies:
+.PHONY:lock_deps
+lock_deps:
+	pip install pip-tools
 	pip-compile pyproject.toml -q --resolver=backtracking --output-file=requirements/app-requirements.txt
 	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --output-file=requirements/ci-requirements.txt
 	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --extra=dev --output-file=requirements/dev-requirements.txt
@@ -82,19 +92,25 @@ local_ci: test lint
 test:
 	pytest .
 
-lint: mypy ruff_format ruff_check
+lint: mypy check lint_imports
 
 .PHONY:mypy
 mypy:
 	mypy .
 
-.PHONY:ruff_format
-ruff_format:
+.PHONY:format
+format:
 	ruff format .
+	ruff check . --fix
 
-.PHONY:ruff_check
-ruff_check:
-	ruff check --fix .
+.PHONY:check
+check:
+	ruff format . --check
+	ruff check .
+
+.PHONY:lint_imports
+lint_imports:
+	lint-imports
 
 # Docker
 

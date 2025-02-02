@@ -32,6 +32,7 @@ class Settings(configurations.Configuration):
             "django.contrib.messages",
             "django.contrib.staticfiles",
             # Local
+            "nutrimise.data.pgvector",
             "nutrimise.data.ingredients",
             "nutrimise.data.menus",
             "nutrimise.data.recipes",
@@ -135,6 +136,14 @@ class Settings(configurations.Configuration):
 
     STATIC_URL = "static/"
     STATIC_ROOT = "static/"
+
+    # ----------
+    # Embeddings
+    # ----------
+
+    OPENAI_API_KEY = env.as_str("OPENAI_API_KEY")
+
+    EMBEDDING_VENDOR = env.as_str("EMBEDDING_VENDOR", default="OPENAI")
 
 
 class DevSettings(Settings):
