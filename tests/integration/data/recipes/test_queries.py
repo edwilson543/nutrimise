@@ -1,8 +1,9 @@
 import pytest
 
 from nutrimise.data.recipes import queries as recipe_queries
-from nutrimise.domain import recipes
+from nutrimise.domain import embeddings, recipes
 from tests.factories import data as data_factories
+from tests.factories import domain as domain_factories
 
 
 class TestGetRecipe:
@@ -76,3 +77,38 @@ class TestGetRecipes:
         result = recipe_queries.get_recipes()
 
         assert result == ()
+
+
+class TestGetRecipesOrderedByDistanceToVector:
+    def test_gets_recipes_with_embedding_closest_to_matching_vector(self):
+        padding = [0] * (embeddings.EMBEDDING_DIMENSIONS - 2)
+        embedding = domain_factories.Embedding(vector=[1, 0] + padding)
+
+        closest = data_factories.RecipeEmbedding(
+            vector=[1, 1] + padding,
+            vendor=embedding.vendor.value,
+            model=embedding.model.value,
+        )
+        next_closest = data_factories.RecipeEmbedding(
+            vector=[1, 2] + padding,
+            vendor=embedding.vendor.value,
+            model=embedding.model.value,
+        )
+
+        # Create an embedding for the correct vendor / model, but with a greater L2 distance.
+        data_factories.RecipeEmbedding(
+            vector=[1, 3] + padding,
+            vendor=embedding.vendor.value,
+            model=embedding.model.value,
+        )
+
+        # Create an embedding with the same vector as the test embedding but for the wrong vendor.
+        data_factories.RecipeEmbedding(
+            vector=embedding.vector, vendor="Some other vendor"
+        )
+
+        result = recipe_queries.get_recipes_closest_to_vector(
+            embedding=embedding, limit=2
+        )
+
+        assert list(result) == [closest.recipe, next_closest.recipe]
