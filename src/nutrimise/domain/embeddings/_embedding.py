@@ -7,7 +7,7 @@ EMBEDDING_DIMENSIONS = 1024
 
 
 class EmbeddingVendor(django_models.TextChoices):
-    OPEN_AI = "OPEN_AI"
+    OPENAI = "OPENAI"
 
     # Fakes.
     FAKE = "FAKE"

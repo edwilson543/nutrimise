@@ -141,7 +141,9 @@ class Settings(configurations.Configuration):
     # Embeddings
     # ----------
 
-    EMBEDDING_VENDOR = "OPEN_AI"
+    OPENAI_API_KEY = env.as_str("OPENAI_API_KEY")
+
+    EMBEDDING_VENDOR = env.as_str("EMBEDDING_VENDOR", default="OPENAI")
 
 
 class DevSettings(Settings):

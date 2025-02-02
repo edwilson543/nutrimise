@@ -22,7 +22,7 @@ class TestCreateOrUpdateRecipeEmbedding:
     def test_updates_existing_embedding_for_recipe_with_model(self):
         original_embedding = data_factories.RecipeEmbedding.create(
             vector=np.zeros(embeddings.EMBEDDING_DIMENSIONS),
-            vendor=embeddings.EmbeddingVendor.OPEN_AI.value,
+            vendor=embeddings.EmbeddingVendor.OPENAI.value,
             model=embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL,
         )
 
