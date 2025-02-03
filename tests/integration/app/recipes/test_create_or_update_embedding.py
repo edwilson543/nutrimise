@@ -3,7 +3,7 @@ import pytest
 from nutrimise.app.recipes import _create_or_update_recipe_embedding
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import embeddings
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 def test_creates_embedding_idempotently():

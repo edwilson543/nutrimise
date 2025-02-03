@@ -1,6 +1,6 @@
 from django import urls as django_urls
 
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 from tests.functional.admin import helpers
 
 

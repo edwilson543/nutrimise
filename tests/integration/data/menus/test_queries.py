@@ -2,7 +2,7 @@ import pytest
 
 from nutrimise.data.menus import queries as menu_queries
 from nutrimise.domain import menus
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 class TestGetMenu:

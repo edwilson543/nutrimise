@@ -1,5 +1,5 @@
 from nutrimise.domain import constants
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 class TestRecipeToDomainModel:

@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 from nutrimise.domain import constants, menus, optimisation, recipes
-from tests.factories import domain as domain_factories
+from testing.factories import domain as domain_factories
 
 
 def _lunch_and_dinner_menu(

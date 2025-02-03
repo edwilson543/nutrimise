@@ -4,7 +4,7 @@ from numpy import testing as np_testing
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import embeddings
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 @override_settings(EMBEDDING_VENDOR="FAKE")

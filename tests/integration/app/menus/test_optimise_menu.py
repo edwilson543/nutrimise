@@ -1,7 +1,7 @@
 import pytest
 
 from nutrimise.app import menus
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 def test_optimises_menu():

@@ -2,7 +2,7 @@ import pytest
 
 from nutrimise.domain import ingredients, recipes
 from nutrimise.domain.optimisation import _inputs
-from tests.factories import domain as domain_factories
+from testing.factories import domain as domain_factories
 
 
 def create_inputs(

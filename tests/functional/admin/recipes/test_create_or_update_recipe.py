@@ -2,7 +2,7 @@ from django import urls as django_urls
 from django.test import override_settings
 
 from nutrimise.data.recipes import models as recipe_models
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 @override_settings(EMBEDDING_VENDOR="FAKE")

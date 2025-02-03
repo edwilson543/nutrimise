@@ -3,8 +3,8 @@ import numpy as np
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.data.recipes import operations as recipe_operations
 from nutrimise.domain import embeddings
-from tests.factories import data as data_factories
-from tests.factories import domain as domain_factories
+from testing.factories import data as data_factories
+from testing.factories import domain as domain_factories
 
 
 class TestCreateOrUpdateRecipeEmbedding:

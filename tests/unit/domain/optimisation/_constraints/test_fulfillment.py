@@ -1,6 +1,6 @@
 from nutrimise.domain.optimisation import _inputs, _variables
 from nutrimise.domain.optimisation._constraints import _fulfillment
-from tests.factories import domain as domain_factories
+from testing.factories import domain as domain_factories
 
 
 class TestFulfillmentConstraints:

@@ -2,8 +2,8 @@ import pytest
 
 from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings, recipes
-from tests.factories import data as data_factories
-from tests.factories import domain as domain_factories
+from testing.factories import data as data_factories
+from testing.factories import domain as domain_factories
 
 
 class TestGetRecipe:
