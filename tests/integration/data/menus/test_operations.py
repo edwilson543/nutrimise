@@ -1,9 +1,10 @@
-from nutrimise.data.menus import operations as menu_operations
+import numpy as np
+
 from nutrimise.data.menus import models as menu_models
+from nutrimise.data.menus import operations as menu_operations
+from nutrimise.domain import embeddings
 from testing.factories import data as data_factories
 from testing.factories import domain as domain_factories
-from nutrimise.domain import embeddings
-import numpy as np
 
 
 class TestUpdateMenuItemRecipe:

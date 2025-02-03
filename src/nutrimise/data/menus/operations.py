@@ -1,5 +1,6 @@
-from . import models as menu_models
 from nutrimise.domain import embeddings
+
+from . import models as menu_models
 
 
 def update_menu_item_recipe(*, menu_item_id: int, recipe_id: int) -> None:

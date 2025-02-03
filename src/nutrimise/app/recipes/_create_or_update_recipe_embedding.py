@@ -41,7 +41,10 @@ def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
 
 
 def _has_recipe_already_been_embedded(
-    *, recipe: recipes.Recipe, prompt: str, embedding_service: embeddings.EmbeddingService
+    *,
+    recipe: recipes.Recipe,
+    prompt: str,
+    embedding_service: embeddings.EmbeddingService,
 ) -> bool:
     hashed_prompt = embeddings.get_hash_for_text(text=prompt)
 
