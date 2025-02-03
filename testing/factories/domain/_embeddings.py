@@ -5,7 +5,7 @@ from nutrimise.domain import embeddings
 
 
 class Embedding(factory.Factory):
-    vector = factory.LazyFunction(lambda: Embedding.stub_vector())
+    vector = factory.LazyFunction(embeddings.get_stub_vector_embedding)
     embedded_content_hash = factory.Sequence(lambda n: f"embedded-content-hash-{n}")
     vendor = embeddings.EmbeddingVendor.FAKE
     model = embeddings.EmbeddingModel.FAKE

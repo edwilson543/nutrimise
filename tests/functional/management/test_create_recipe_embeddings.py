@@ -17,7 +17,7 @@ def test_creates_embeddings_for_all_recipes():
     for recipe in recipes:
         embedding = recipe.embeddings.get()
         assert embedding.vendor == embeddings.EmbeddingVendor.FAKE
-        expected_vector = embeddings.FakeEmbeddingService().stub_vector
+        expected_vector = embeddings.get_stub_vector_embedding()
         np_testing.assert_array_equal(embedding.vector, expected_vector)
 
 
