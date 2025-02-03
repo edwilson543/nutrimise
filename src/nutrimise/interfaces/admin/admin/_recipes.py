@@ -99,11 +99,11 @@ class RecipeEmbeddingAdmin(admin.ModelAdmin):
     list_display = [
         "vendor",
         "model",
-        "embedded_content_hash",
+        "prompt_hash",
         "vector_length",
         "recipe_name",
     ]
-    list_display_links = ["embedded_content_hash"]
+    list_display_links = ["prompt_hash"]
     ordering = ["recipe__name"]
 
     @admin.display(description="Recipe name")

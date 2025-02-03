@@ -5,7 +5,7 @@ from ._ingredients import (
     IngredientNutritionalInformationAdmin,
     NutrientAdmin,
 )
-from ._menus import MenuAdmin, MenuItemAdmin, MenuEmbeddingAdmin
+from ._menus import MenuAdmin, MenuEmbeddingAdmin, MenuItemAdmin
 from ._recipes import RecipeAdmin, RecipeEmbeddingAdmin, RecipeIngredientAdmin
 
 

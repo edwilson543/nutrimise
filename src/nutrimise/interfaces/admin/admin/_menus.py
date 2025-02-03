@@ -144,11 +144,11 @@ class MenuEmbeddingAdmin(admin.ModelAdmin):
     list_display = [
         "vendor",
         "model",
-        "embedded_content_hash",
+        "prompt_hash",
         "vector_length",
         "menu_name",
     ]
-    list_display_links = ["embedded_content_hash"]
+    list_display_links = ["prompt_hash"]
     ordering = ["menu__name"]
 
     @admin.display(description="Menu name")

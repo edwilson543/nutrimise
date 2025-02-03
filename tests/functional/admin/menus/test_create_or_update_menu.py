@@ -48,4 +48,4 @@ def test_creates_menu_menu_items_menu_requirements_and_embeddings_using_create_f
     assert menu_embedding.vendor == "FAKE"
     assert menu_embedding.model == "fake"
     assert len(menu_embedding.vector) > 0
-    assert menu_embedding.embedded_content_hash == "9495b737ab7c2eddb6a2548e024ad50a"
+    assert menu_embedding.prompt_hash == "9495b737ab7c2eddb6a2548e024ad50a"

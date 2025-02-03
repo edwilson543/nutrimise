@@ -46,7 +46,7 @@ def _has_menu_already_been_embedded(
         if (
             embedding.vendor == embedding_service.vendor
             and embedding.model == embedding_service.model
-            and embedding.embedded_content_hash == hashed_text
+            and embedding.prompt_hash == hashed_text
         ):
             return True
 

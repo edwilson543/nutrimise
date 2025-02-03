@@ -52,7 +52,7 @@ def _has_recipe_already_been_embedded(
         if (
             embedding.vendor == embedding_service.vendor
             and embedding.model == embedding_service.model
-            and embedding.embedded_content_hash == hashed_prompt
+            and embedding.prompt_hash == hashed_prompt
         ):
             return True
 

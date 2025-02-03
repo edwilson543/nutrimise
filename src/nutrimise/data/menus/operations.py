@@ -17,6 +17,6 @@ def create_or_update_menu_embedding(
         vendor=embedding.vendor.value,
         defaults={
             "vector": embedding.vector,
-            "embedded_content_hash": embedding.embedded_content_hash,
+            "prompt_hash": embedding.prompt_hash,
         },
     )

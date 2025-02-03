@@ -42,7 +42,7 @@ class TestCreateOrUpdateMenuEmbedding:
 
         updated_embedding = embeddings.Embedding(
             vector=np.ones(embeddings.EMBEDDING_DIMENSIONS),
-            embedded_content_hash="ABC123",
+            prompt_hash="ABC123",
             vendor=embeddings.EmbeddingVendor(original_embedding.vendor),
             model=embeddings.EmbeddingModel(original_embedding.model),
         )

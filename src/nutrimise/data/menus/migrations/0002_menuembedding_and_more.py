@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("vector", pgvector.django.vector.VectorField(dimensions=1024)),
-                ("embedded_content_hash", models.TextField()),
+                ("prompt_hash", models.TextField()),
                 (
                     "vendor",
                     models.TextField(

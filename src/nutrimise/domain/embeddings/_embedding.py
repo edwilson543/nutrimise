@@ -26,6 +26,6 @@ class EmbeddingModel(django_models.TextChoices):
 @attrs.frozen
 class Embedding:
     vector: np.ndarray = attrs.field(eq=attrs.cmp_using(eq=np.array_equal))
-    embedded_content_hash: str
+    prompt_hash: str
     vendor: EmbeddingVendor
     model: EmbeddingModel

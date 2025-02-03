@@ -19,7 +19,7 @@ class MenuEmbedding(django_models.Model):
 
     vector = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
 
-    embedded_content_hash = django_models.TextField()
+    prompt_hash = django_models.TextField()
 
     vendor = django_models.TextField(choices=embeddings.EmbeddingVendor.choices)
 
@@ -35,7 +35,7 @@ class MenuEmbedding(django_models.Model):
     def to_domain_model(self) -> embeddings.Embedding:
         return embeddings.Embedding(
             vector=self.vector,
-            embedded_content_hash=self.embedded_content_hash,
+            prompt_hash=self.prompt_hash,
             vendor=embeddings.EmbeddingVendor(self.vendor),
             model=embeddings.EmbeddingModel(self.model),
         )

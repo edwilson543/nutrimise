@@ -16,4 +16,4 @@ class TestGetEmbedding:
 
         expected_vector = embeddings.get_stub_vector_embedding()
         np_testing.assert_array_equal(embedding.vector, expected_vector)
-        assert embedding.embedded_content_hash == "552e21cd4cd9918678e3c1a0df491bc3"
+        assert embedding.prompt_hash == "552e21cd4cd9918678e3c1a0df491bc3"
