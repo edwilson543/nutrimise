@@ -5,6 +5,7 @@ from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
 
+from nutrimise.app import menus as menus_app
 from nutrimise.data.menus import models as menu_models
 from nutrimise.domain import constants, embeddings, menus
 
@@ -136,3 +137,24 @@ class _VarietyRequirementInline(admin.TabularInline):
 @admin.register(menu_models.MenuRequirements)
 class MenuRequirementsAdmin(admin.ModelAdmin):
     inlines = [_NutrientRequirementInline, _VarietyRequirementInline]
+
+
+@admin.register(menu_models.MenuEmbedding)
+class MenuEmbeddingAdmin(admin.ModelAdmin):
+    list_display = [
+        "vendor",
+        "model",
+        "embedded_content_hash",
+        "vector_length",
+        "menu_name",
+    ]
+    list_display_links = ["embedded_content_hash"]
+    ordering = ["menu__name"]
+
+    @admin.display(description="Menu name")
+    def menu_name(self, embedding: menu_models.MenuEmbedding) -> str:
+        return embedding.menu.name
+
+    @admin.display(description="Vector length")
+    def vector_length(self, embedding: menu_models.MenuEmbedding) -> int:
+        return len(embedding.vector)
