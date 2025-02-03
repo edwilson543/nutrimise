@@ -16,36 +16,40 @@ def create_or_update_recipe_embedding(
         for some reason.
     """
     recipe = recipe_queries.get_recipe(recipe_id=recipe_id)
-    text = _get_text_from_recipe(recipe)
+    prompt = _get_embedding_prompt_for_recipe(recipe)
 
     if _has_recipe_already_been_embedded(
-        recipe=recipe, text=text, embedding_service=embedding_service
+        recipe=recipe, prompt=prompt, embedding_service=embedding_service
     ):
         return
 
-    embedding = embedding_service.get_embedding(text=text)
+    embedding = embedding_service.get_embedding(text=prompt)
     recipe_operations.create_or_update_recipe_embedding(
         recipe_id=recipe_id, embedding=embedding
     )
 
 
-def _get_text_from_recipe(recipe: recipes.Recipe) -> str:
-    text = f"Recipe: {recipe.name}"
+def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
+    prompt = """Create an embedding of this recipe that will be useful for:
+    - Sematic search
+    - Comparing it with the embeddings of meal plan requirements"""
+
+    prompt += f"Recipe name: {recipe.name}"
     if recipe.description:
-        text += f"\nDescription: {recipe.description}"
-    return text
+        prompt += f"\nRecipe description: {recipe.description}"
+    return prompt
 
 
 def _has_recipe_already_been_embedded(
-    *, recipe: recipes.Recipe, text: str, embedding_service: embeddings.EmbeddingService
+    *, recipe: recipes.Recipe, prompt: str, embedding_service: embeddings.EmbeddingService
 ) -> bool:
-    hashed_text = embeddings.get_hash_for_text(text=text)
+    hashed_prompt = embeddings.get_hash_for_text(text=prompt)
 
     for embedding in recipe.embeddings:
         if (
             embedding.vendor == embedding_service.vendor
             and embedding.model == embedding_service.model
-            and embedding.embedded_content_hash == hashed_text
+            and embedding.embedded_content_hash == hashed_prompt
         ):
             return True
 
