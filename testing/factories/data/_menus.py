@@ -2,7 +2,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, menus
+from nutrimise.domain import constants, embeddings, menus
 
 from . import _auth, _ingredients, _recipes
 
@@ -67,3 +67,14 @@ class VarietyRequirement(factory.django.DjangoModelFactory):
 
     class Meta:
         model = menu_models.VarietyRequirement
+
+
+class MenuEmbedding(factory.django.DjangoModelFactory):
+    menu = factory.SubFactory(Menu)
+    vector = factory.LazyFunction(embeddings.get_stub_vector_embedding)
+    embedded_content_hash = factory.Sequence(lambda n: f"embedded-content-hash-{n}")
+    vendor = embeddings.EmbeddingVendor.FAKE.value
+    model = embeddings.EmbeddingModel.FAKE.value
+
+    class Meta:
+        model = menu_models.MenuEmbedding

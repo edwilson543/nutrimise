@@ -7,6 +7,7 @@ from ._ingredients import (
 )
 from ._menus import (
     Menu,
+    MenuEmbedding,
     MenuItem,
     MenuRequirements,
     NutrientRequirement,
