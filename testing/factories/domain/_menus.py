@@ -31,6 +31,7 @@ class Menu(factory.Factory):
     description = "Some description"
     items = factory.LazyFunction(tuple)
     requirements = factory.SubFactory(MenuRequirements)
+    embeddings = factory.LazyFunction(tuple)
 
     class Meta:
         model = menus.Menu

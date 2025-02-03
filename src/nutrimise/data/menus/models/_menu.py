@@ -56,6 +56,9 @@ class Menu(django_models.Model):
             requirements = None
 
         items = [item.to_domain_model() for item in self.items.all()]
+        embeddings = [
+            embedding.to_domain_model() for embedding in self.embeddings.all()
+        ]
 
         return menus.Menu(
             id=self.id,
@@ -63,4 +66,5 @@ class Menu(django_models.Model):
             description=self.description,
             items=tuple(items),
             requirements=requirements,
+            embeddings=tuple(embeddings),
         )

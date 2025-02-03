@@ -31,3 +31,11 @@ class MenuEmbedding(django_models.Model):
                 fields=["menu", "model"], name="unique_menu_embedding_per_model"
             )
         ]
+
+    def to_domain_model(self) -> embeddings.Embedding:
+        return embeddings.Embedding(
+            vector=self.vector,
+            embedded_content_hash=self.embedded_content_hash,
+            vendor=embeddings.EmbeddingVendor(self.vendor),
+            model=embeddings.EmbeddingModel(self.model),
+        )
