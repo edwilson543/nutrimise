@@ -15,13 +15,6 @@ class MealTime(django_models.TextChoices):
         return ordering[self]  # type:ignore[index]
 
 
-class OptimisationMode(django_models.TextChoices):
-    RANDOM = "RANDOM", "Random"
-    NUTRIENT = "NUTRIENT", "Nutrient"
-    VARIETY = "VARIETY", "Ingredient variety"
-    EVERYTHING = "EVERYTHING", "Everything"
-
-
 class NutrientRequirementEnforcementInterval(django_models.TextChoices):
     DAILY = "DAILY", "Daily"
 

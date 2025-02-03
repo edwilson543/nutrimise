@@ -2,7 +2,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants
+from nutrimise.domain import constants, menus
 
 from . import _auth, _ingredients, _recipes
 
@@ -27,7 +27,7 @@ class MenuItem(factory.django.DjangoModelFactory):
 
 
 class MenuRequirements(factory.django.DjangoModelFactory):
-    optimisation_mode = constants.OptimisationMode.RANDOM.value
+    optimisation_mode = menus.OptimisationMode.RANDOM.value
     maximum_occurrences_per_recipe = 1
 
     class Meta:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import attrs
+from django.db import models as django_models
 
 from nutrimise.domain import constants
 
@@ -39,9 +40,16 @@ class MenuItem:
         self.recipe_id = recipe_id
 
 
+class OptimisationMode(django_models.TextChoices):
+    RANDOM = "RANDOM", "Random"
+    NUTRIENT = "NUTRIENT", "Nutrient"
+    VARIETY = "VARIETY", "Ingredient variety"
+    EVERYTHING = "EVERYTHING", "Everything"
+
+
 @attrs.frozen
 class MenuRequirements:
-    optimisation_mode: constants.OptimisationMode
+    optimisation_mode: OptimisationMode
     nutrient_requirements: tuple[NutrientRequirement, ...]
     variety_requirements: tuple[VarietyRequirement, ...]
     maximum_occurrences_per_recipe: int

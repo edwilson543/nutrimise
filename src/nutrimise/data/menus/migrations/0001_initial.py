@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core import validators as django_validators
 from django.db import migrations, models
 
-from nutrimise.domain import constants
+from nutrimise.domain import constants, menus
 
 
 class Migration(migrations.Migration):
@@ -101,7 +101,7 @@ class Migration(migrations.Migration):
                 (
                     "optimisation_mode",
                     models.TextField(
-                        choices=constants.OptimisationMode.choices,
+                        choices=menus.OptimisationMode.choices,
                     ),
                 ),
                 (
