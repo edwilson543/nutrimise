@@ -5,7 +5,7 @@ from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import operations as menu_operations
 from nutrimise.data.menus import queries as menu_queries
 from nutrimise.data.recipes import queries as recipe_queries
-from nutrimise.domain import ingredients, optimisation, recipes
+from nutrimise.domain import embeddings, ingredients, optimisation, recipes
 
 
 MenuDoesNotExist = menu_queries.MenuDoesNotExist
@@ -54,6 +54,7 @@ def optimise_menu(*, menu_id: int) -> None:
         menu=menu,
         recipes_to_consider=recipes_to_consider,
         relevant_ingredients=relevant_ingredients,
+        embedding_model=embeddings.get_embedding_service().model,
     )
 
     with transaction.atomic():

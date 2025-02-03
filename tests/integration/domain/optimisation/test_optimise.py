@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from nutrimise.domain import constants, menus, optimisation, recipes
+from nutrimise.domain import constants, embeddings, menus, optimisation, recipes
 from testing.factories import domain as domain_factories
 
 
@@ -545,6 +545,105 @@ class TestVarietyObjective:
             )
 
         assert exc.value.menu_id == menu.id
+
+
+class TestSemanticObjective:
+    def test_semantic_objective_decides_selected_recipe(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=menus.OptimisationMode.SEMANTIC
+        )
+        item = domain_factories.MenuItem()
+
+        padding = [0] * (embeddings.EMBEDDING_DIMENSIONS - 2)
+        menu_embedding = domain_factories.Embedding(vector=[1, 0] + padding)
+        menu = domain_factories.Menu(
+            items=(item,), requirements=requirements, embeddings=(menu_embedding,)
+        )
+
+        closest_recipe_embedding = domain_factories.Embedding(vector=[1, 1] + padding)
+        optimal_recipe = domain_factories.Recipe(
+            meal_times=[item.meal_time], embeddings=(closest_recipe_embedding,)
+        )
+
+        furthest_recipe_embedding = domain_factories.Embedding(vector=[1, 2] + padding)
+        suboptimal_recipe = domain_factories.Recipe(
+            meal_times=[item.meal_time], embeddings=(furthest_recipe_embedding,)
+        )
+
+        solution = optimisation.optimise_recipes_for_menu(
+            menu=menu,
+            recipes_to_consider=(optimal_recipe, suboptimal_recipe),
+            relevant_ingredients=(),
+            embedding_model=menu_embedding.model,
+        )
+
+        assert len(solution) == 1
+        assert solution[0].recipe_id == optimal_recipe.id
+
+    def test_raises_when_embedding_model_not_set(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=menus.OptimisationMode.SEMANTIC
+        )
+        menu = domain_factories.Menu(requirements=requirements)
+
+        with pytest.raises(optimisation.EmbeddingModelNotSet):
+            optimisation.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(),
+                relevant_ingredients=(),
+                embedding_model=None,
+            )
+
+    def test_raises_when_menu_does_not_have_embedding_for_model(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=menus.OptimisationMode.SEMANTIC
+        )
+
+        embedding_model = embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+        menu_embedding = domain_factories.Embedding(
+            model=embeddings.EmbeddingModel.FAKE
+        )
+        menu = domain_factories.Menu(
+            requirements=requirements, embeddings=(menu_embedding,)
+        )
+
+        with pytest.raises(optimisation.MenuEmbeddingMissing) as exc:
+            optimisation.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(),
+                relevant_ingredients=(),
+                embedding_model=embedding_model,
+            )
+
+        assert exc.value.menu_id == menu.id
+        assert exc.value.model == embedding_model
+
+    def test_raises_when_recipe_does_not_have_embedding_for_model(self):
+        requirements = domain_factories.MenuRequirements(
+            optimisation_mode=menus.OptimisationMode.SEMANTIC
+        )
+
+        embedding_model = embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+        menu_embedding = domain_factories.Embedding(model=embedding_model)
+        menu = domain_factories.Menu(
+            requirements=requirements, embeddings=(menu_embedding,)
+        )
+
+        recipe_embedding = domain_factories.Embedding(
+            model=embeddings.EmbeddingModel.FAKE
+        )
+        recipe = domain_factories.Recipe(embeddings=(recipe_embedding,))
+
+        with pytest.raises(optimisation.RecipeEmbeddingMissing) as exc:
+            optimisation.optimise_recipes_for_menu(
+                menu=menu,
+                recipes_to_consider=(recipe,),
+                relevant_ingredients=(),
+                embedding_model=embedding_model,
+            )
+
+        assert exc.value.recipe_id == recipe.id
+        assert exc.value.model == embedding_model
 
 
 class TestEverythingObjective:

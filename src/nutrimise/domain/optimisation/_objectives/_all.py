@@ -4,7 +4,7 @@ import pulp as lp
 from nutrimise.domain import menus
 from nutrimise.domain.optimisation import _inputs, _variables
 
-from . import _nutrient, _random, _variety
+from . import _nutrient, _random, _semantic, _variety
 
 
 @attrs.frozen
@@ -38,6 +38,10 @@ def add_objective_to_problem(
             )
         case menus.OptimisationMode.VARIETY:
             return _variety.add_variety_objective_to_problem(
+                problem=problem, inputs=inputs, variables=variables
+            )
+        case menus.OptimisationMode.SEMANTIC:
+            return _semantic.add_semantic_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
             )
         case menus.OptimisationMode.EVERYTHING:
