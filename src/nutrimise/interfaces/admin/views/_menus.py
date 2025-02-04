@@ -10,7 +10,7 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants
+from nutrimise.domain import constants, embeddings
 
 from . import _base
 
@@ -67,6 +67,7 @@ class OptimiseMenu(generic.FormView):
     def form_valid(
         self, form: OptimisationForm, *args: object, **kwargs: int
     ) -> http.HttpResponse:
+        self._embed_prompt(user_prompt=form.cleaned_data.get("prompt"))
         try:
             menus_app.optimise_menu(menu_id=self._menu_id)
         except Exception as exc:
@@ -74,6 +75,17 @@ class OptimiseMenu(generic.FormView):
         else:
             messages.success(self.request, "Menu has been optimised.")
         return super().form_valid(form=form)
+
+    def _embed_prompt(self, user_prompt: str | None) -> None:
+        if not user_prompt:
+            return
+
+        embedding_service = embeddings.get_embedding_service()
+        menus_app.create_or_update_menu_embedding(
+            menu_id=self._menu_id,
+            embedding_service=embedding_service,
+            user_prompt=user_prompt,
+        )
 
     def get_success_url(self) -> str:
         return django_urls.reverse("menu-details", kwargs={"menu_id": self._menu_id})

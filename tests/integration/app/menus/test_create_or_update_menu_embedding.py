@@ -49,6 +49,28 @@ def test_updates_existing_embedding_when_menu_name_changes():
     assert len(embedding_service.created_embeddings) == 1
 
 
+def test_updates_existing_embedding_when_prompt_given():
+    embedding_service = embeddings.FakeEmbeddingService()
+    menu = data_factories.Menu(name="Original name")
+
+    _create_or_update_menu_embedding.create_or_update_menu_embedding(
+        menu_id=menu.id, embedding_service=embedding_service
+    )
+
+    assert len(embedding_service.created_embeddings) == 1
+    embedding = menu_models.MenuEmbedding.objects.get()
+    assert embedding_service.created_embeddings[0] == embedding.to_domain_model()
+
+    # Calling the function again should create a new embedding.
+    embedding_service = embeddings.FakeEmbeddingService()
+    _create_or_update_menu_embedding.create_or_update_menu_embedding(
+        menu_id=menu.id,
+        embedding_service=embedding_service,
+        user_prompt="New information to embed",
+    )
+    assert len(embedding_service.created_embeddings) == 1
+
+
 def test_raises_when_embedding_service_is_unavailable():
     embedding_service = embeddings.BrokenEmbeddingService()
     menu = data_factories.Menu(name="Original name")

@@ -7,7 +7,10 @@ UnableToGetEmbedding = embeddings.UnableToGetEmbedding
 
 
 def create_or_update_menu_embedding(
-    *, menu_id: int, embedding_service: embeddings.EmbeddingService
+    *,
+    menu_id: int,
+    embedding_service: embeddings.EmbeddingService,
+    user_prompt: str | None = None,
 ) -> None:
     """
     Ensure the menu has an up-to-date embedding for the installed embedding service.
@@ -16,7 +19,7 @@ def create_or_update_menu_embedding(
         for some reason.
     """
     menu = menu_queries.get_menu(menu_id=menu_id)
-    prompt = _get_prompt_for_menu(menu=menu)
+    prompt = _get_prompt_for_menu(menu=menu, user_prompt=user_prompt)
 
     if _has_menu_already_been_embedded(
         menu=menu, prompt=prompt, embedding_service=embedding_service
@@ -29,11 +32,13 @@ def create_or_update_menu_embedding(
     )
 
 
-def _get_prompt_for_menu(menu: menus.Menu) -> str:
+def _get_prompt_for_menu(menu: menus.Menu, *, user_prompt: str | None) -> str:
     prompt = "Create an embedding of this menu that will be useful for comparing it with the embeddings of different recipes to see how well they match the requirements."
     prompt += f"\nMenu name: {menu.name}"
     if menu.description:
         prompt += f"\nMenu description: {menu.description}"
+    if user_prompt:
+        prompt += f"\nThe most important requirement is: {user_prompt}"
     return prompt
 
 

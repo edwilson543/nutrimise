@@ -31,8 +31,7 @@ def test_can_optimise_menu_from_details_view(admin_client):
 
 @override_settings(EMBEDDING_VENDOR="FAKE")
 def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
-    menu = data_factories.Menu()
-    data_factories.MenuEmbedding(menu=menu)
+    menu = data_factories.Menu(name="My menu")
     data_factories.MenuRequirements(
         menu=menu, optimisation_mode=menus.OptimisationMode.SEMANTIC.value
     )
@@ -53,3 +52,7 @@ def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
 
     menu_item.refresh_from_db()
     assert menu_item.recipe_id == recipe.id
+
+    # The menu and prompt should also have been embedded along the way.
+    embedding = menu.embeddings.get()
+    assert embedding.prompt_hash == "7e4708214bb86ae0a68c052390b29ea6"
