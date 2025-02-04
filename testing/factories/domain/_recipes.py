@@ -44,6 +44,7 @@ class Recipe(factory.Factory):
 
 class RecipeIngredient(factory.Factory):
     ingredient_id = factory.Sequence(lambda n: n)
+    ingredient_name = factory.Sequence(lambda n: f"ingredient-{n}")
 
     class Meta:
         model = recipes.RecipeIngredient

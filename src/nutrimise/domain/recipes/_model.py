@@ -31,3 +31,4 @@ class Recipe:
 @attrs.frozen
 class RecipeIngredient:
     ingredient_id: int
+    ingredient_name: str

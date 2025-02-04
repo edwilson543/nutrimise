@@ -37,6 +37,10 @@ def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
     prompt += f"Recipe name: {recipe.name}"
     if recipe.description:
         prompt += f"\nRecipe description: {recipe.description}"
+    if recipe.ingredients:
+        prompt += "\nRecipe ingredients: "
+        for ingredient in recipe.ingredients:
+            prompt += f"\n - {ingredient.ingredient_name}"
     return prompt
 
 
