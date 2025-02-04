@@ -1,6 +1,6 @@
 from nutrimise.domain import constants
 from nutrimise.domain.optimisation import _expressions, _inputs, _variables
-from tests.factories import domain as domain_factories
+from testing.factories import domain as domain_factories
 
 
 class TestNutrientGramsForDay:

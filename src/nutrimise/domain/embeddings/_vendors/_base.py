@@ -33,10 +33,10 @@ class EmbeddingService(abc.ABC):
         raise NotImplementedError
 
     def _init_embedding(self, *, text: str, vector: np.ndarray) -> _embedding.Embedding:
-        embedded_content_hash = _helpers.get_hash_for_text(text=text)
+        prompt_hash = _helpers.get_hash_for_text(text=text)
         return _embedding.Embedding(
             vector=vector,
-            embedded_content_hash=embedded_content_hash,
+            prompt_hash=prompt_hash,
             vendor=self.vendor,
             model=self.model,
         )

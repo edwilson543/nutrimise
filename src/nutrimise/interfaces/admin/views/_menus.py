@@ -1,6 +1,7 @@
 import collections
 from typing import Any
 
+from django import forms as django_forms
 from django import http
 from django import urls as django_urls
 from django.contrib import messages
@@ -9,7 +10,7 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants
+from nutrimise.domain import constants, embeddings
 
 from . import _base
 
@@ -53,19 +54,41 @@ class MenuDetails(_base.AdminTemplateView):
         return {key: meal_schedule[key] for key in ordered_keys}
 
 
-class OptimiseMenu(generic.View):
-    def post(
-        self, request: http.HttpRequest, *args: object, **kwargs: int
-    ) -> http.HttpResponseRedirect:
-        menu_id = kwargs["menu_id"]
+class OptimiseMenu(generic.FormView):
+    class OptimisationForm(django_forms.Form):
+        prompt = django_forms.CharField(required=False)
+
+    form_class = OptimisationForm
+
+    def setup(self, request: http.HttpRequest, *args: object, **kwargs: int) -> None:
+        super().setup(request, *args, **kwargs)
+        self._menu_id = kwargs["menu_id"]
+
+    def form_valid(
+        self, form: OptimisationForm, *args: object, **kwargs: int
+    ) -> http.HttpResponse:
+        self._embed_prompt(user_prompt=form.cleaned_data.get("prompt"))
         try:
-            menus_app.optimise_menu(menu_id=menu_id)
+            menus_app.optimise_menu(menu_id=self._menu_id)
         except Exception as exc:
-            messages.error(request, str(exc))
+            messages.error(self.request, str(exc))
         else:
-            messages.success(request, "Menu has been optimised.")
-        redirect_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu_id})
-        return http.HttpResponseRedirect(redirect_to=redirect_url)
+            messages.success(self.request, "Menu has been optimised.")
+        return super().form_valid(form=form)
+
+    def _embed_prompt(self, user_prompt: str | None) -> None:
+        if not user_prompt:
+            return
+
+        embedding_service = embeddings.get_embedding_service()
+        menus_app.create_or_update_menu_embedding(
+            menu_id=self._menu_id,
+            embedding_service=embedding_service,
+            user_prompt=user_prompt,
+        )
+
+    def get_success_url(self) -> str:
+        return django_urls.reverse("menu-details", kwargs={"menu_id": self._menu_id})
 
 
 class BaseLockUnlockMenuItem(generic.TemplateView):

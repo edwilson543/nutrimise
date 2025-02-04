@@ -3,5 +3,6 @@ from ._model import (
     MenuItem,
     MenuRequirements,
     NutrientRequirement,
+    OptimisationMode,
     VarietyRequirement,
 )

@@ -1,7 +1,7 @@
 import pytest
 from django import db as django_db
 
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 class TestMenuConstraints:
@@ -28,6 +28,7 @@ class TestMenuToDomainModel:
         orm_variety_requirement = data_factories.VarietyRequirement(
             menu_requirements=orm_requirements, minimum=0, maximum=10, target=None
         )
+        orm_embedding = data_factories.MenuEmbedding(menu=orm_menu)
 
         menu = orm_menu.to_domain_model()
 
@@ -81,6 +82,10 @@ class TestMenuToDomainModel:
         assert variety_requirement.minimum == orm_variety_requirement.minimum
         assert variety_requirement.maximum == orm_variety_requirement.maximum
         assert variety_requirement.target == orm_variety_requirement.target
+
+        assert len(menu.embeddings) == 1
+        embedding = menu.embeddings[0]
+        assert embedding == orm_embedding.to_domain_model()
 
     def test_converts_menu_orm_model_without_requirements_to_menu_domain(self):
         orm_menu = data_factories.Menu()

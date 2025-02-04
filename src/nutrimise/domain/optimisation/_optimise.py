@@ -3,7 +3,7 @@ from __future__ import annotations
 import attrs
 import pulp as lp
 
-from nutrimise.domain import ingredients, menus, recipes
+from nutrimise.domain import embeddings, ingredients, menus, recipes
 
 from . import _constraints, _inputs, _objectives, _variables
 
@@ -28,6 +28,7 @@ def optimise_recipes_for_menu(
     menu: menus.Menu,
     recipes_to_consider: tuple[recipes.Recipe, ...],
     relevant_ingredients: tuple[ingredients.Ingredient, ...],
+    embedding_model: embeddings.EmbeddingModel | None = None,
 ) -> tuple[menus.MenuItem, ...]:
     """
     Express and solve the menu optimisation as an integer programming problem.
@@ -45,6 +46,7 @@ def optimise_recipes_for_menu(
         menu=menu,
         recipes_to_consider=recipes_to_consider,
         relevant_ingredients=relevant_ingredients,
+        embedding_model=embedding_model,
     )
     variables = _variables.Variables.from_inputs(inputs_)
     for constraint in _constraints.yield_all_constraints(

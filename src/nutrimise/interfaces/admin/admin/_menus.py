@@ -5,8 +5,9 @@ from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
 
+from nutrimise.app import menus as menus_app
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants
+from nutrimise.domain import constants, embeddings, menus
 
 
 class _MenuRequirementsInline(admin.StackedInline):
@@ -56,6 +57,7 @@ class MenuAdmin(admin.ModelAdmin):
         "dietary_requirements",
         "user_actions",
     ]
+    list_display_links = ["name"]
     ordering = ["name"]
     search_fields = ["name"]
 
@@ -107,6 +109,11 @@ class MenuAdmin(admin.ModelAdmin):
             for meal_time in meal_times:
                 obj.items.get_or_create(day=day, meal_time=meal_time)
 
+        if obj.requirements.optimisation_mode == menus.OptimisationMode.SEMANTIC:
+            menus_app.create_or_update_menu_embedding(
+                menu_id=obj.id, embedding_service=embeddings.get_embedding_service()
+            )
+
 
 @admin.register(menu_models.MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
@@ -130,3 +137,24 @@ class _VarietyRequirementInline(admin.TabularInline):
 @admin.register(menu_models.MenuRequirements)
 class MenuRequirementsAdmin(admin.ModelAdmin):
     inlines = [_NutrientRequirementInline, _VarietyRequirementInline]
+
+
+@admin.register(menu_models.MenuEmbedding)
+class MenuEmbeddingAdmin(admin.ModelAdmin):
+    list_display = [
+        "vendor",
+        "model",
+        "prompt_hash",
+        "vector_length",
+        "menu_name",
+    ]
+    list_display_links = ["prompt_hash"]
+    ordering = ["menu__name"]
+
+    @admin.display(description="Menu name")
+    def menu_name(self, embedding: menu_models.MenuEmbedding) -> str:
+        return embedding.menu.name
+
+    @admin.display(description="Vector length")
+    def vector_length(self, embedding: menu_models.MenuEmbedding) -> int:
+        return len(embedding.vector)

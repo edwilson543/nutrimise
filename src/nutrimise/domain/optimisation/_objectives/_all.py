@@ -1,10 +1,10 @@
 import attrs
 import pulp as lp
 
-from nutrimise.domain import constants
+from nutrimise.domain import menus
 from nutrimise.domain.optimisation import _inputs, _variables
 
-from . import _nutrient, _random, _variety
+from . import _nutrient, _random, _semantic, _variety
 
 
 @attrs.frozen
@@ -28,19 +28,23 @@ def add_objective_to_problem(
     Return the LP problem with the objectives function(s) installed.
     """
     match inputs.requirements.optimisation_mode:
-        case constants.OptimisationMode.RANDOM:
+        case menus.OptimisationMode.RANDOM:
             return _random.add_random_objective_to_problem(
                 problem=problem, variables=variables
             )
-        case constants.OptimisationMode.NUTRIENT:
+        case menus.OptimisationMode.NUTRIENT:
             return _nutrient.add_nutrient_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
             )
-        case constants.OptimisationMode.VARIETY:
+        case menus.OptimisationMode.VARIETY:
             return _variety.add_variety_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
             )
-        case constants.OptimisationMode.EVERYTHING:
+        case menus.OptimisationMode.SEMANTIC:
+            return _semantic.add_semantic_objective_to_problem(
+                problem=problem, inputs=inputs, variables=variables
+            )
+        case menus.OptimisationMode.EVERYTHING:
             return _add_everything_objective_to_problem(
                 problem=problem, inputs=inputs, variables=variables
             )

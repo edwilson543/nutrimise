@@ -1,5 +1,5 @@
 from nutrimise.domain import constants, ingredients
-from tests.factories import domain as domain_factories
+from testing.factories import domain as domain_factories
 
 
 class TestNutritionalInformationSumByNutrient:

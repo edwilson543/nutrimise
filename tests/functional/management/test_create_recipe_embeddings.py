@@ -4,7 +4,7 @@ from numpy import testing as np_testing
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import embeddings
-from tests.factories import data as data_factories
+from testing.factories import data as data_factories
 
 
 @override_settings(EMBEDDING_VENDOR="FAKE")
@@ -17,7 +17,7 @@ def test_creates_embeddings_for_all_recipes():
     for recipe in recipes:
         embedding = recipe.embeddings.get()
         assert embedding.vendor == embeddings.EmbeddingVendor.FAKE
-        expected_vector = embeddings.FakeEmbeddingService().stub_vector
+        expected_vector = embeddings.get_stub_vector_embedding()
         np_testing.assert_array_equal(embedding.vector, expected_vector)
 
 

@@ -17,9 +17,7 @@ class MenuRequirements(django_models.Model):
         _menu.Menu, on_delete=django_models.CASCADE, related_name="requirements"
     )
 
-    optimisation_mode = django_models.TextField(
-        choices=constants.OptimisationMode.choices
-    )
+    optimisation_mode = django_models.TextField(choices=menus.OptimisationMode.choices)
 
     maximum_occurrences_per_recipe = django_models.SmallIntegerField(
         validators=[django_validators.MinValueValidator(limit_value=1)]
@@ -44,7 +42,7 @@ class MenuRequirements(django_models.Model):
         dietary_requirement_ids = self.dietary_requirements.values_list("id", flat=True)
 
         return menus.MenuRequirements(
-            optimisation_mode=constants.OptimisationMode(self.optimisation_mode),
+            optimisation_mode=menus.OptimisationMode(self.optimisation_mode),
             nutrient_requirements=tuple(nutrient_requirements),
             variety_requirements=tuple(variety_requirements),
             maximum_occurrences_per_recipe=self.maximum_occurrences_per_recipe,

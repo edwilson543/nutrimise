@@ -2,7 +2,7 @@ import functools
 
 import attrs
 
-from nutrimise.domain import ingredients, menus, recipes
+from nutrimise.domain import embeddings, ingredients, menus, recipes
 
 
 @attrs.frozen
@@ -24,6 +24,9 @@ class OptimiserInputs:
 
     # Ingredients are loaded to allow implementing the variety requirements.
     relevant_ingredients: tuple[ingredients.Ingredient, ...]
+
+    # The embedding model whose embeddings to use in the `SEMANTIC` optimisation mode.
+    embedding_model: embeddings.EmbeddingModel | None = None
 
     def look_up_recipe(self, *, recipe_id: int) -> recipes.Recipe:
         for recipe in self.recipes_to_consider:

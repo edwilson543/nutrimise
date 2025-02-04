@@ -12,6 +12,6 @@ def create_or_update_recipe_embedding(
         vendor=embedding.vendor.value,
         defaults={
             "vector": embedding.vector,
-            "embedded_content_hash": embedding.embedded_content_hash,
+            "prompt_hash": embedding.prompt_hash,
         },
     )

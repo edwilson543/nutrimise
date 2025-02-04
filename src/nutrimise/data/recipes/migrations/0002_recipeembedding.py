@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                         to="recipes.recipe",
                     ),
                 ),
-                ("embedded_content_hash", models.TextField()),
+                ("prompt_hash", models.TextField()),
             ],
         ),
         migrations.AddConstraint(

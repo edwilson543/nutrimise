@@ -41,7 +41,7 @@ class TestGetEmbedding:
         embedding = openai_service.get_embedding(text=text)
 
         np_testing.assert_array_equal(embedding.vector, self._stub_embedding)
-        assert embedding.embedded_content_hash == "7102d8d4aeaad1fa2b931d49d32a62dc"
+        assert embedding.prompt_hash == "7102d8d4aeaad1fa2b931d49d32a62dc"
         assert embedding.vendor == embeddings.EmbeddingVendor.OPENAI
         assert embedding.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
 

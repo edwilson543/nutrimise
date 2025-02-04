@@ -3,18 +3,18 @@ from pgvector import django as pgvector_django
 
 from nutrimise.domain import embeddings
 
-from . import _recipe
+from . import _menu
 
 
-class RecipeEmbedding(django_models.Model):
+class MenuEmbedding(django_models.Model):
     """
-    The vector representation of a recipe, produced by an embedding model.
+    The vector representation of a menu and its requirements, produced by an embedding model.
     """
 
     id = django_models.BigAutoField(primary_key=True)
 
-    recipe = django_models.ForeignKey(
-        _recipe.Recipe, on_delete=django_models.CASCADE, related_name="embeddings"
+    menu = django_models.ForeignKey(
+        _menu.Menu, on_delete=django_models.CASCADE, related_name="embeddings"
     )
 
     vector = pgvector_django.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)
@@ -28,7 +28,7 @@ class RecipeEmbedding(django_models.Model):
     class Meta:
         constraints = [
             django_models.UniqueConstraint(
-                fields=["recipe", "model"], name="unique_recipe_embedding_per_model"
+                fields=["menu", "model"], name="unique_menu_embedding_per_model"
             )
         ]
 
