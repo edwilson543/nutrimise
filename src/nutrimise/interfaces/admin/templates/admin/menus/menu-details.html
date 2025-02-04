@@ -39,10 +39,15 @@
 
         <form id="optimise-menu" action="{% url 'menu-optimise' menu_id=menu.id %}" method="post">
             {% csrf_token %}
-            <div class="submit-row">
-                <input type="submit" value="Optimise" class="default" name="_save" {% if not menu.requirements %}disabled{% endif %}>
-            </div>
+            {% if menu.requirements.optimisation_mode == 'SEMANTIC' %}
+                <div>
+                    <label for="id_prompt">Prompt:</label>
+                    <input type="text" name="prompt" maxlength="128" id="id_prompt" style="width: 100%">
+                </div>
+            {% endif %}
+            <input type="submit" value="Optimise" class="default" name="_save" {% if not menu.requirements %}disabled{% endif %}>
         </form>
+
         <table>
             <tr>
                 <th></th>
