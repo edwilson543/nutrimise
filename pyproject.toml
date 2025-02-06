@@ -106,7 +106,7 @@ name = "Domain layers"
 type = "layers"
 containers = "nutrimise.domain"
 layers = [
-    "optimisation",
+    "optimisation | image_extraction",
     "menus",
     "recipes",
     "ingredients",

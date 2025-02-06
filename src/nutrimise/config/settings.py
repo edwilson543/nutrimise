@@ -143,7 +143,9 @@ class Settings(configurations.Configuration):
 
     OPENAI_API_KEY = env.as_str("OPENAI_API_KEY")
 
-    EMBEDDING_VENDOR = env.as_str("EMBEDDING_VENDOR", default="OPENAI")
+    EMBEDDING_VENDOR = env.as_str("EMBEDDING_VENDOR", default="FAKE")
+
+    IMAGE_EXTRACTION_VENDOR = env.as_str("IMAGE_EXTRACTION_VENDOR", default="FAKE")
 
 
 class DevSettings(Settings):

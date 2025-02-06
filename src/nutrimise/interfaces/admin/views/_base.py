@@ -12,3 +12,13 @@ class AdminTemplateView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(admin.site.each_context(self.request))
         return context
+
+
+class AdminFormView(generic.FormView):
+    def get_context_data(self, **kwargs: object) -> dict[str, Any]:
+        """
+        Add the auto-generated Django admin context.
+        """
+        context = super().get_context_data(**kwargs)
+        context.update(admin.site.each_context(self.request))
+        return context

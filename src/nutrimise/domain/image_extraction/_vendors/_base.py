@@ -22,7 +22,9 @@ class ImageExtractionService(abc.ABC):
     vendor: _constants.ImageExtractionVendor
 
     @abc.abstractmethod
-    def extract_recipe_from_image(self, *, base64_image: str) -> _output_structure.Recipe:
+    def extract_recipe_from_image(
+        self, *, base64_image: str
+    ) -> _output_structure.Recipe:
         """
         Get an embedding for the passed text.
 

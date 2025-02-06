@@ -1,6 +1,7 @@
 import attrs
 import openai
 from django.conf import settings
+from openai.types import chat as openai_chat_types
 
 from nutrimise.domain.image_extraction import _constants, _output_structure
 
@@ -24,11 +25,11 @@ class OpenAIImageExtractService(_base.ImageExtractionService):
     def extract_recipe_from_image(
         self, *, base64_image: str
     ) -> _output_structure.Recipe:
-        system_prompt = {
+        system_prompt: openai_chat_types.ChatCompletionSystemMessageParam = {
             "role": "system",
             "content": "Extract the information from the given image in the specified format.",
         }
-        user_prompt = {
+        user_prompt: openai_chat_types.ChatCompletionUserMessageParam = {
             "role": "user",
             "content": [
                 {
