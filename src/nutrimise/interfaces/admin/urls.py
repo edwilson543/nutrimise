@@ -10,6 +10,11 @@ urlpatterns = [
         view=views.RecipeDetails.as_view(),
         name="recipe-details",
     ),
+    django_urls.path(
+        route="recipes/extract/",
+        view=views.TempExtractionView.as_view(),
+        name="recipe-extract",
+    ),
     # Menus.
     django_urls.path(
         route="menus/<int:menu_id>/",
