@@ -20,6 +20,7 @@ dependencies = [
     "django-configurations",
     "openai",
     "pgvector",
+    "Pillow",
     "psycopg[binary]",
     "python-decouple",
     "pulp",

@@ -48,6 +48,8 @@ packaging==24.0
     # via gunicorn
 pgvector==0.3.6
     # via nutrimise (pyproject.toml)
+pillow==11.1.0
+    # via nutrimise (pyproject.toml)
 psycopg[binary]==3.1.18
     # via nutrimise (pyproject.toml)
 psycopg-binary==3.1.18
