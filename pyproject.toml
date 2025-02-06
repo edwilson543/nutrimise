@@ -23,6 +23,7 @@ dependencies = [
     "psycopg[binary]",
     "python-decouple",
     "pulp",
+    "pydantic",
     # Production
     "gunicorn",
 ]
