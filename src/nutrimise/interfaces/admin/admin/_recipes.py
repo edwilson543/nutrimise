@@ -19,10 +19,27 @@ class _RecipeIngredientInline(admin.TabularInline):
     extra = 10
 
 
+@admin.register(recipe_models.RecipeAuthor)
+class RecipeAuthor(admin.ModelAdmin):
+    list_display = ["id", "name", "number_of_recipes"]
+    list_display_links = ["name"]
+    search_fields = ["first_name", "last_name"]
+    ordering = ["first_name"]
+
+    @admin.display(description="Name")
+    def name(self, author: recipe_models.RecipeAuthor) -> str:
+        return f"{author.first_name} {author.last_name}"
+
+    @admin.display(description="Number of recipes")
+    def number_of_recipes(self, author: recipe_models.RecipeAuthor) -> int:
+        return author.recipes.count()
+
+
 @admin.register(recipe_models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "author", "user_actions"]
     list_display_links = ["name"]
+    list_filter = ["author"]
     ordering = ["name"]
     search_fields = ["name"]
     add_form_template = "admin/recipes/recipe-change-form.html"
