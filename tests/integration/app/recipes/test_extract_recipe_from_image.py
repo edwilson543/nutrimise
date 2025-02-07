@@ -43,10 +43,9 @@ def test_extracts_recipe_using_fake_extraction_service():
     assert recipe.name == image_extraction_service.canned_recipe.name
     assert recipe.description == image_extraction_service.canned_recipe.description
 
-    # TODO.
-    # recipe_ingredient = recipe.ingredients.get()
-    # assert recipe_ingredient.ingredient_id == new_ingredient.id
-    # assert recipe_ingredient.quantity == 37.5
+    recipe_ingredient = recipe.ingredients.get()
+    assert recipe_ingredient.ingredient_id == new_ingredient.id
+    assert recipe_ingredient.quantity == recipe_ingredient.quantity
 
 
 def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_name():

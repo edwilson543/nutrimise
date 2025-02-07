@@ -2,12 +2,13 @@ import base64
 import io
 
 from django.contrib.auth import models as auth_models
+from django.db import transaction
 from PIL import Image
 
 from nutrimise.data.ingredients import operations as ingredient_operations
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import image_extraction, ingredients
+from nutrimise.domain import image_extraction, ingredients, recipes
 
 
 UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
@@ -29,29 +30,39 @@ def extract_recipe_from_image(
     base64_image = base64.b64encode(buffered.getvalue())
 
     existing_ingredients = _get_existing_ingredients()
-    recipe = image_extraction_service.extract_recipe_from_image(
+
+    extracted_recipe = image_extraction_service.extract_recipe_from_image(
         base64_image=base64_image.decode("utf-8"),
         existing_ingredients=existing_ingredients,
     )
 
-    _get_or_create_ingredients(recipe=recipe)
+    with transaction.atomic():
+        ingredients_ = _get_or_create_ingredients(recipe=extracted_recipe)
+        recipe_ingredients = [
+            recipes.RecipeIngredient(
+                ingredient=ingredients_[recipe_ingredient.ingredient.name],
+                quantity=recipe_ingredient.quantity,
+            )
+            for recipe_ingredient in extracted_recipe.ingredients
+        ]
 
-    recipe_id = recipe_operations.create_recipe(
-        author=author,
-        name=recipe.name,
-        description=recipe.description,
-        number_of_servings=recipe.number_of_servings,
-        meal_times=recipe.meal_times,
-    )
+        recipe_id = recipe_operations.create_recipe(
+            author=author,
+            name=extracted_recipe.name,
+            description=extracted_recipe.description,
+            number_of_servings=extracted_recipe.number_of_servings,
+            meal_times=extracted_recipe.meal_times,
+            recipe_ingredients=recipe_ingredients,
+        )
 
     return recipe_id
 
 
 def _get_existing_ingredients() -> list[image_extraction.Ingredient]:
-    ingredients = ingredient_queries.get_ingredients()
+    ingredients_ = ingredient_queries.get_ingredients()
     return [
         image_extraction.Ingredient.from_domain_model(ingredient=ingredient)
-        for ingredient in ingredients
+        for ingredient in ingredients_
     ]
 
 

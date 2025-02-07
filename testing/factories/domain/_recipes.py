@@ -1,3 +1,4 @@
+import random
 from collections.abc import Iterable
 
 import factory
@@ -44,7 +45,7 @@ class Recipe(factory.Factory):
 
 class RecipeIngredient(factory.Factory):
     ingredient = factory.SubFactory(_ingredients.Ingredient)
-    quantity = 2.5
+    quantity = factory.LazyFunction(lambda: random.uniform(1.0, 10.0))
 
     class Meta:
         model = recipes.RecipeIngredient

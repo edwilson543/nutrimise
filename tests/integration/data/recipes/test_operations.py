@@ -46,12 +46,23 @@ class TestCreateRecipe:
     def test_creates_recipe_with_unique_name_for_author(self):
         author = data_factories.User()
 
+        ingredient = data_factories.Ingredient()
+        recipe_ingredient = domain_factories.RecipeIngredient(
+            ingredient=ingredient.to_domain_model()
+        )
+
+        other_ingredient = data_factories.Ingredient()
+        other_recipe_ingredient = domain_factories.RecipeIngredient(
+            ingredient=other_ingredient.to_domain_model()
+        )
+
         recipe_id = recipe_operations.create_recipe(
             author=author,
             name="Chicken curry",
             description="Saagfest",
             meal_times=[constants.MealTime.LUNCH],
             number_of_servings=3,
+            recipe_ingredients=[recipe_ingredient, other_recipe_ingredient],
         )
 
         recipe = recipe_models.Recipe.objects.get()
@@ -62,8 +73,18 @@ class TestCreateRecipe:
         assert recipe.meal_times == ["LUNCH"]
         assert recipe.number_of_servings == 3
 
+        assert recipe.ingredients.count() == 2
+        first_ingredient = recipe.ingredients.get(ingredient_id=ingredient.id)
+        assert first_ingredient.quantity == recipe_ingredient.quantity
+        second_ingredient = recipe.ingredients.get(ingredient_id=other_ingredient.id)
+        assert second_ingredient.quantity == other_recipe_ingredient.quantity
+
     def test_creates_recipe_with_duplicate_name_for_author(self):
         recipe = data_factories.Recipe()
+        ingredient = data_factories.Ingredient()
+        recipe_ingredient = domain_factories.RecipeIngredient(
+            ingredient=ingredient.to_domain_model()
+        )
 
         new_recipe_id = recipe_operations.create_recipe(
             author=recipe.author,
@@ -71,12 +92,17 @@ class TestCreateRecipe:
             description="Saagfest",
             meal_times=[constants.MealTime.LUNCH],
             number_of_servings=3,
+            recipe_ingredients=[recipe_ingredient],
         )
 
         assert recipe_models.Recipe.objects.count() == 2
         new_recipe = recipe_models.Recipe.objects.exclude(id=recipe.id).get()
         assert new_recipe.id == new_recipe_id
         assert new_recipe.name.startswith(f"{recipe.name} (duplicate")
+
+        new_recipe_ingredient = new_recipe.ingredients.get()
+        assert new_recipe_ingredient.ingredient == ingredient
+        assert new_recipe_ingredient.quantity == recipe_ingredient.quantity
 
     def test_different_authors_can_have_duplicate_recipe_names(self):
         author = data_factories.User()
@@ -90,6 +116,7 @@ class TestCreateRecipe:
             description=recipe.description,
             meal_times=[constants.MealTime.LUNCH],
             number_of_servings=3,
+            recipe_ingredients=[],
         )
 
         assert recipe_models.Recipe.objects.count() == 2
