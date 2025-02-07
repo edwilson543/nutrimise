@@ -51,7 +51,7 @@ class TempExtractionView(_base.AdminFormView):
     def form_valid(self, form: ImageUpload) -> http.HttpResponse:
         service = image_extraction.get_image_extraction_service()
         uploaded_image = Image.open(form.cleaned_data["image"])
-        self._recipe_id = recipes_app.extract_image_from_recipe(
+        self._recipe_id = recipes_app.extract_recipe_from_image(
             uploaded_image=uploaded_image,
             image_extraction_service=service,
             author=self.request.user,

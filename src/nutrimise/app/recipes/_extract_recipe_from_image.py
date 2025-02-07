@@ -8,14 +8,22 @@ from nutrimise.data.recipes import operations as recipe_operations
 from nutrimise.domain import image_extraction
 
 
-def extract_image_from_recipe(
+UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
+
+
+def extract_recipe_from_image(
     *,
+    author: auth_models.User,
     uploaded_image: Image.Image,
     image_extraction_service: image_extraction.ImageExtractionService,
-    author: auth_models.User,
 ) -> int:
+    """
+    Extract a recipe and its components from an image and save it to the database.
+
+    :raises UnableToExtractRecipeFromImage: If the recipe could not be extracted for some reason.
+    """
     buffered = io.BytesIO()
-    uploaded_image.save(buffered, format="JPEG")
+    uploaded_image.save(buffered, format=uploaded_image.format)
     base64_image = base64.b64encode(buffered.getvalue())
 
     recipe = image_extraction_service.extract_recipe_from_image(
@@ -27,14 +35,3 @@ def extract_image_from_recipe(
     )
 
     return recipe_id
-
-
-if __name__ == "__main__":
-    uploaded_image = Image.open("download.jpeg")
-    print("Pillow image: ", uploaded_image)
-
-    buffered = io.BytesIO()
-    uploaded_image.save(buffered, format="JPEG")
-    base64_image = base64.b64encode(buffered.getvalue())
-
-    print("B64 image: ", str(base64_image))
