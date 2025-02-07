@@ -17,4 +17,13 @@ def get_or_create_ingredient(
     units: str | None,
     grams_per_unit: float,
 ) -> ingredients.Ingredient:
-    pass
+    ingredient, _ = ingredient_models.Ingredient.objects.get_or_create(
+        name__iexact=name,
+        defaults={
+            "name": name,
+            "category_id": category_id,
+            "units": units,
+            "grams_per_unit": grams_per_unit,
+        },
+    )
+    return ingredient.to_domain_model()
