@@ -17,6 +17,7 @@ class Ingredient:
     name: str
     category: IngredientCategory
     units: str | None
+    grams_per_unit: float
 
 
 @attrs.frozen

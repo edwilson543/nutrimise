@@ -52,4 +52,5 @@ class Ingredient(django_models.Model):
             name=self.name,
             category=self.category.to_domain_model(),
             units=self.units,
+            grams_per_unit=self.grams_per_unit,
         )
