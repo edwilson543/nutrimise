@@ -21,8 +21,8 @@ def test_extracts_recipe_using_fake_extraction_service():
 
     recipe = recipe_models.Recipe.objects.get()
     assert recipe.id == recipe_id
-    assert recipe.name == image_extraction_service._canned_recipe.name
-    assert recipe.description == image_extraction_service._canned_recipe.description
+    assert recipe.name == image_extraction_service.canned_recipe.name
+    assert recipe.description == image_extraction_service.canned_recipe.description
 
     # If we extract from the image again, we should get a new recipe rather than an error.
     _extract_recipe_from_image.extract_recipe_from_image(

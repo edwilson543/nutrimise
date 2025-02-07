@@ -4,5 +4,5 @@ from ._base import (
     UnableToExtractRecipeFromImage,
 )
 from ._broken import BrokenImageExtractionService
-from ._fake import FakeImageExtractionService
+from ._fake import FakeImageExtractionService, get_canned_recipe
 from ._openai import OpenAIImageExtractService

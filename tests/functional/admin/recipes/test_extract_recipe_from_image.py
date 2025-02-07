@@ -21,8 +21,8 @@ def test_extracts_image_and_creates_recipe(admin_client):
 
     recipe = recipe_models.Recipe.objects.get()
     fake_service = image_extraction_vendors.FakeImageExtractionService()
-    assert recipe.name == fake_service._canned_recipe.name
-    assert recipe.description == fake_service._canned_recipe.description
+    assert recipe.name == fake_service.canned_recipe.name
+    assert recipe.description == fake_service.canned_recipe.description
 
     assert submit_response.status_code == 302
     assert submit_response.location == django_urls.reverse(
