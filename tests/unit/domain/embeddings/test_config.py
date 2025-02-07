@@ -32,7 +32,7 @@ class TestGetEmbeddingService:
         assert service.model == embeddings.EmbeddingModel.FAKE
 
     @override_settings(EMBEDDING_VENDOR="FAKE_NO_SERVICE")
-    def test_raises_when_no_model_is_installed_for_vendor(self):
+    def test_raises_when_no_service_is_installed_for_vendor(self):
         with pytest.raises(embeddings.EmbeddingServiceMisconfigured) as exc:
             embeddings.get_embedding_service()
 
