@@ -45,6 +45,14 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
         model = recipe_models.RecipeIngredient
 
 
+class RecipeAuthor(factory.django.DjangoModelFactory):
+    first_name = factory.Sequence(lambda n: f"first-name-{n}")
+    last_name = factory.Sequence(lambda n: f"last-name-{n}")
+
+    class Meta:
+        model = recipe_models.RecipeAuthor
+
+
 class RecipeEmbedding(factory.django.DjangoModelFactory):
     recipe = factory.SubFactory(Recipe)
     vector = factory.LazyFunction(embeddings.get_stub_vector_embedding)

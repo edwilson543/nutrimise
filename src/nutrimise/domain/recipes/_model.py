@@ -32,3 +32,10 @@ class Recipe:
 class RecipeIngredient:
     ingredient: ingredients.Ingredient
     quantity: float
+
+
+@attrs.frozen
+class RecipeAuthor:
+    id: int
+    first_name: str
+    last_name: str

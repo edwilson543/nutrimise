@@ -4,18 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('recipes', '0002_recipeembedding'),
+        ("recipes", "0002_recipeembedding"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RecipeAuthor',
+            name="RecipeAuthor",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('first_name', models.TextField()),
-                ('last_name', models.TextField()),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("first_name", models.TextField()),
+                ("last_name", models.TextField()),
             ],
         ),
     ]
