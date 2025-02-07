@@ -24,6 +24,15 @@ def test_extracts_recipe_using_fake_extraction_service():
     assert recipe.name == image_extraction_service._canned_recipe.name
     assert recipe.description == image_extraction_service._canned_recipe.description
 
+    # If we extract from the image again, we should get a new recipe rather than an error.
+    _extract_recipe_from_image.extract_recipe_from_image(
+        author=author,
+        uploaded_image=image,
+        image_extraction_service=image_extraction_service,
+    )
+
+    assert recipe_models.Recipe.objects.count() == 2
+
 
 def test_raises_embedding_service_errors():
     author = data_factories.User()
