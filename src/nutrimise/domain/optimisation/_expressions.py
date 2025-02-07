@@ -72,14 +72,14 @@ def number_of_ingredients_in_category_across_menu(
         [
             ingredient.lp_variable
             for ingredient in variables.ingredient_included_dependent_variables
-            if ingredient.ingredient.category_id == ingredient_category_id
+            if ingredient.ingredient.category.id == ingredient_category_id
         ]
     )
     fixed_contribution = len(
         [
             ingredient
             for ingredient in inputs.unoptimised_ingredient_selections
-            if ingredient.category_id == ingredient_category_id
+            if ingredient.category.id == ingredient_category_id
         ]
     )
     return variable_contribution + fixed_contribution

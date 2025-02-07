@@ -13,7 +13,9 @@ from nutrimise.domain.ingredients import _model
 def get_ingredients(
     *, ingredient_ids: collections_abc.Iterable[int]
 ) -> tuple[_model.Ingredient, ...]:
-    ingredients = ingredient_models.Ingredient.objects.filter(id__in=ingredient_ids)
+    ingredients = ingredient_models.Ingredient.objects.filter(
+        id__in=ingredient_ids
+    ).select_related("category")
     return tuple(ingredient.to_domain_model() for ingredient in ingredients)
 
 

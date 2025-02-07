@@ -7,13 +7,17 @@ from testing.factories import data as data_factories
 
 class TestGetIngredients:
     @pytest.mark.parametrize("matching_ingredients", [0, 1, 2])
-    def test_gets_ingredients_with_passed_id_only(self, matching_ingredients: int):
+    def test_gets_ingredients_with_passed_id_only(
+        self, matching_ingredients: int, django_assert_num_queries
+    ):
         ingredient_ids = [
             data_factories.Ingredient().id for _ in range(0, matching_ingredients)
         ]
         data_factories.Ingredient()  # Some other ingredient.
 
-        result = ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)
+        expected_num_queries = min(matching_ingredients, 1)
+        with django_assert_num_queries(num=expected_num_queries):
+            result = ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)
 
         assert {ingredient.id for ingredient in result} == set(ingredient_ids)
 

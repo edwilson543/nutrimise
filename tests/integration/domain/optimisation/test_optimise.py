@@ -258,13 +258,13 @@ class TestNutrientRequirements:
 class TestVarietyRequirements:
     def test_respects_minimum_variety_requirement_constraint(self):
         # Create two ingredients in the same category.
-        category_id = 1
-        ingredient = domain_factories.Ingredient(category_id=category_id)
-        other_ingredient = domain_factories.Ingredient(category_id=category_id)
+        ingredient_category = domain_factories.IngredientCategory()
+        ingredient = domain_factories.Ingredient(category=ingredient_category)
+        other_ingredient = domain_factories.Ingredient(category=ingredient_category)
 
         # Create a menu needing a single recipe, with two ingredients in the given category.
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id, minimum=2
+            ingredient_category_id=ingredient.category.id, minimum=2
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -296,7 +296,7 @@ class TestVarietyRequirements:
         # Create a menu needing a single recipe selecting.
         ingredient = domain_factories.Ingredient()
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id, maximum=0
+            ingredient_category_id=ingredient.category.id, maximum=0
         )
         menu_requirements = domain_factories.MenuRequirements(
             variety_requirements=(variety_requirement,)
@@ -328,10 +328,10 @@ class TestVarietyRequirements:
 
     def test_respects_minimum_and_maximum_variety_requirement(self):
         # Create a menu needing a single recipe selecting.
-        ingredient_category_id = 123
+        ingredient_category = domain_factories.IngredientCategory()
         requirement = 2
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient_category_id,
+            ingredient_category_id=ingredient_category.id,
             minimum=requirement,
             maximum=requirement,
         )
@@ -344,7 +344,7 @@ class TestVarietyRequirements:
         # Create recipes with 0-3 ingredients in the required category.
         n_recipes_to_create = requirement + 1
         relevant_ingredients = tuple(
-            domain_factories.Ingredient(category_id=ingredient_category_id)
+            domain_factories.Ingredient(category=ingredient_category)
             for _ in range(0, n_recipes_to_create + 1)
         )
 
@@ -367,9 +367,9 @@ class TestVarietyRequirements:
         assert solution[0].recipe_id == only_recipe_meeting_requirement.id
 
     def test_unoptimised_recipe_selection_counts_towards_variety_requirement(self):
-        category_id = 1
-        ingredient = domain_factories.Ingredient(category_id=category_id)
-        other_ingredient = domain_factories.Ingredient(category_id=category_id)
+        ingredient_category = domain_factories.IngredientCategory()
+        ingredient = domain_factories.Ingredient(category=ingredient_category)
+        other_ingredient = domain_factories.Ingredient(category=ingredient_category)
 
         lunch_recipe = domain_factories.Recipe.with_ingredients(
             ingredients=[ingredient], meal_times=[constants.MealTime.LUNCH]
@@ -383,7 +383,7 @@ class TestVarietyRequirements:
 
         # Create a menu with lunch already selected, but requiring dinner selecting.
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=category_id,
+            ingredient_category_id=ingredient_category.id,
             minimum=2,
         )
         menu_requirements = domain_factories.MenuRequirements(
@@ -499,7 +499,7 @@ class TestVarietyObjective:
     ):
         ingredient = domain_factories.Ingredient()
         variety_requirement = domain_factories.VarietyRequirement(
-            ingredient_category_id=ingredient.category_id,
+            ingredient_category_id=ingredient.category.id,
             target=target,
         )
         requirements = domain_factories.MenuRequirements(

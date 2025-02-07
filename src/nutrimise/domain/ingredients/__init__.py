@@ -1,1 +1,1 @@
-from ._model import Ingredient, Nutrient, NutritionalInformation
+from ._model import Ingredient, IngredientCategory, Nutrient, NutritionalInformation
