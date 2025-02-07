@@ -12,6 +12,7 @@ def _get_canned_recipe() -> _output_structure.Recipe:
         description="Description for the fake recipe",
         meal_times=[constants.MealTime.DINNER],
         number_of_servings=3,
+        ingredients=[]
     )
 
 

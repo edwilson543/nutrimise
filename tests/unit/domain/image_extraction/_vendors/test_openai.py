@@ -47,6 +47,14 @@ class TestExtractRecipeFromImage:
         ]
         assert recipe.number_of_servings == 7
 
+        assert len(recipe.ingredients) == 1
+        recipe_ingredient = recipe.ingredients[0]
+        assert recipe_ingredient.quantity == 250.0
+        assert recipe_ingredient.ingredient.name == "Beef"
+        assert recipe_ingredient.ingredient.category_name == "Meat"
+        assert recipe_ingredient.ingredient.units == "Grams"
+        assert recipe_ingredient.ingredient.grams_per_unit == 1.0
+
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
         openai_service = _openai.OpenAIImageExtractService()
@@ -69,11 +77,18 @@ class TestExtractRecipeFromImage:
         OpenAI chat completion structure response output, per the docs.
         https://platform.openai.com/docs/guides/structured-outputs
         """
+        ingredient = {
+            "name": "Beef",
+            "category_name": "Meat",
+            "units": "Grams",
+            "grams_per_unit": 1.0,
+        }
         recipe = {
             "name": "Some recipe",
             "description": "Some recipe description.",
             "meal_times": ["LUNCH", "DINNER"],
             "number_of_servings": 7,
+            "ingredients": [{"ingredient": ingredient, "quantity": 250.0}],
         }
 
         return {
