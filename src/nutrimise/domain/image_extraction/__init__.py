@@ -4,5 +4,6 @@ from ._vendors import (
     FakeImageExtractService,
     ImageExtractionService,
     ImageExtractionServiceMisconfigured,
+    OpenAIImageExtractService,
     UnableToExtractRecipeFromImage,
 )
