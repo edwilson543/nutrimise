@@ -1,25 +1,33 @@
-import pytest
-
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.domain import constants, ingredients
 from testing.factories import data as data_factories
 
 
 class TestGetIngredients:
-    @pytest.mark.parametrize("matching_ingredients", [0, 1, 2])
-    def test_gets_ingredients_with_passed_id_only(
-        self, matching_ingredients: int, django_assert_num_queries
-    ):
-        ingredient_ids = [
-            data_factories.Ingredient().id for _ in range(0, matching_ingredients)
-        ]
+    def test_gets_all_ingredients_when_no_ids_given(self, django_assert_num_queries):
+        all_ingredient_ids = {data_factories.Ingredient().id for _ in range(0, 2)}
+
+        with django_assert_num_queries(num=1):
+            result = ingredient_queries.get_ingredients()
+
+        assert set(ingredient.id for ingredient in result) == all_ingredient_ids
+
+    def test_gets_ingredients_with_passed_id_only(self, django_assert_num_queries):
+        ingredient_ids = [data_factories.Ingredient().id for _ in range(0, 2)]
         data_factories.Ingredient()  # Some other ingredient.
 
-        expected_num_queries = min(matching_ingredients, 1)
-        with django_assert_num_queries(num=expected_num_queries):
+        with django_assert_num_queries(num=1):
             result = ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)
 
         assert {ingredient.id for ingredient in result} == set(ingredient_ids)
+
+    def test_gets_empty_list_when_no_ingredients_match_ids(self):
+        ingredient = data_factories.Ingredient()
+        ingredient_ids = [ingredient.id + 1]
+
+        result = ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)
+
+        assert result == ()
 
 
 class TestNutritionalInformationForMenuPerDay:
