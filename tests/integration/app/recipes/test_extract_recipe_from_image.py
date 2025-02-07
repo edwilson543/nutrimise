@@ -10,7 +10,7 @@ from testing.factories import domain as domain_factories
 from testing.factories import images as image_factories
 
 
-def test_extracts_recipe_using_fake_extraction_service():
+def test_extracts_recipe_with_author_using_fake_extraction_service():
     recipe_ingredient = image_extraction.RecipeIngredient.from_domain_model(
         domain_factories.RecipeIngredient()
     )
@@ -72,6 +72,21 @@ def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_nam
     )
 
     assert recipe_models.Recipe.objects.count() == 2
+
+
+def test_extracts_recipe_without_author_using_fake_extraction_service():
+    image = image_factories.get_image()
+    image_extraction_service = image_extraction_vendors.FakeImageExtractionService()
+
+    recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
+        author=None,
+        uploaded_image=image,
+        image_extraction_service=image_extraction_service,
+    )
+
+    recipe = recipe_models.Recipe.objects.get()
+    assert recipe.id == recipe_id
+    assert recipe.author_id is None
 
 
 def test_raises_embedding_service_errors():

@@ -5,11 +5,14 @@ from django.test import override_settings
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain.image_extraction import _vendors as image_extraction_vendors
+from testing.factories import data as data_factories
 from testing.factories import images as image_factories
 
 
 @override_settings(IMAGE_EXTRACTION_VENDOR="FAKE")
 def test_extracts_image_and_creates_recipe(admin_client):
+    author = data_factories.RecipeAuthor()
+
     add_recipe_url = django_urls.reverse("admin:recipes_recipe_add")
     response = admin_client.get(add_recipe_url)
 
@@ -17,12 +20,14 @@ def test_extracts_image_and_creates_recipe(admin_client):
 
     form = response.forms["upload-image"]
     form["image"] = image_factories.get_uploaded_image()
+    form["author"] = author.id
     submit_response = form.submit()
 
     recipe = recipe_models.Recipe.objects.get()
     fake_service = image_extraction_vendors.FakeImageExtractionService()
     assert recipe.name == fake_service.canned_recipe.name
     assert recipe.description == fake_service.canned_recipe.description
+    assert recipe.author_id == author.id
 
     assert submit_response.status_code == 302
     assert submit_response.location == django_urls.reverse(

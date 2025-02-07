@@ -68,7 +68,7 @@ class ExtractRecipeFromImage(_base.AdminFormView):
             self._recipe_id = recipes_app.extract_recipe_from_image(
                 uploaded_image=uploaded_image,
                 image_extraction_service=self._image_extraction_service,
-                author=None,
+                author=form.cleaned_data.get("author"),
             )
         except image_extraction.UnableToExtractRecipeFromImage:
             return self._error_response(
