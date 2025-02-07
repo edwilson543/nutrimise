@@ -1,9 +1,10 @@
+import json
 from typing import Any
 
 import pytest
 from django.test import override_settings
 
-from nutrimise.domain import image_extraction
+from nutrimise.domain import constants, image_extraction
 from nutrimise.domain.image_extraction._vendors import _openai
 
 
@@ -40,6 +41,11 @@ class TestExtractRecipeFromImage:
 
         assert recipe.name == "Some recipe"
         assert recipe.description == "Some recipe description."
+        assert recipe.meal_times == [
+            constants.MealTime.LUNCH,
+            constants.MealTime.DINNER,
+        ]
+        assert recipe.number_of_servings == 7
 
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
@@ -63,6 +69,13 @@ class TestExtractRecipeFromImage:
         OpenAI chat completion structure response output, per the docs.
         https://platform.openai.com/docs/guides/structured-outputs
         """
+        recipe = {
+            "name": "Some recipe",
+            "description": "Some recipe description.",
+            "meal_times": ["LUNCH", "DINNER"],
+            "number_of_servings": 7,
+        }
+
         return {
             "id": "chatcmpl-AyCk92plBjBPBOnrcpYQ4xVC7LPZd",
             "choices": [
@@ -71,16 +84,13 @@ class TestExtractRecipeFromImage:
                     "index": 0,
                     "logprobs": None,
                     "message": {
-                        "content": '{"name":"Some recipe","description":"Some recipe description."}',
+                        "content": json.dumps(recipe),
                         "refusal": None,
                         "role": "assistant",
                         "audio": None,
                         "function_call": None,
                         "tool_calls": [],
-                        "parsed": {
-                            "name": "Some recipe",
-                            "description": "Some recipe description.",
-                        },
+                        "parsed": recipe,
                     },
                 }
             ],

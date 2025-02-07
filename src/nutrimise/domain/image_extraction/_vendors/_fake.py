@@ -1,5 +1,6 @@
 import attrs
 
+from nutrimise.domain import constants
 from nutrimise.domain.image_extraction import _constants, _output_structure
 
 from . import _base
@@ -7,7 +8,10 @@ from . import _base
 
 def _get_canned_recipe() -> _output_structure.Recipe:
     return _output_structure.Recipe(
-        name="My fake recipe", description="Description for the fake recipe"
+        name="My fake recipe",
+        description="Description for the fake recipe",
+        meal_times=[constants.MealTime.DINNER],
+        number_of_servings=3,
     )
 
 

@@ -5,7 +5,7 @@ from django.contrib.auth import models as auth_models
 from PIL import Image
 
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import constants, image_extraction
+from nutrimise.domain import image_extraction
 
 
 UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
@@ -34,9 +34,8 @@ def extract_recipe_from_image(
         author=author,
         name=recipe.name,
         description=recipe.description,
-        # TODO - also extract these.
-        number_of_servings=2,
-        meal_times=[constants.MealTime.DINNER],
+        number_of_servings=recipe.number_of_servings,
+        meal_times=recipe.meal_times,
     )
 
     return recipe_id

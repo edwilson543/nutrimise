@@ -46,6 +46,7 @@ class OpenAIImageExtractService(_base.ImageExtractionService):
                 response_format=_output_structure.Recipe,
             )
         except openai.APIError as exc:
+            print(exc)
             raise _base.UnableToExtractRecipeFromImage(
                 vendor=self.vendor, model=self.model
             ) from exc
