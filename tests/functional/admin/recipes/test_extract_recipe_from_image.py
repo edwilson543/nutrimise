@@ -4,7 +4,7 @@ from django import urls as django_urls
 from django.test import override_settings
 
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import image_extraction
+from nutrimise.domain.image_extraction import _vendors as image_extraction_vendors
 
 
 TEST_IMAGE_PATH = pathlib.Path(__file__).parent / "test-image.jpeg"
@@ -23,7 +23,7 @@ def test_extracts_image_and_creates_recipe(admin_client):
     submit_response = form.submit()
 
     recipe = recipe_models.Recipe.objects.get()
-    fake_service = image_extraction.FakeImageExtractService()
+    fake_service = image_extraction_vendors.FakeImageExtractionService()
     assert recipe.name == fake_service._canned_recipe.name
     assert recipe.description == fake_service._canned_recipe.description
 

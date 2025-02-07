@@ -15,6 +15,8 @@ def _get_image_extraction_service_for_vendor(
         case vendor.OPENAI:
             return _vendors.OpenAIImageExtractService()
         case vendor.FAKE:
-            return _vendors.FakeImageExtractService()
+            return _vendors.FakeImageExtractionService()
+        case vendor.BROKEN:
+            return _vendors.BrokenImageExtractionService()
         case _:
             raise _vendors.ImageExtractionServiceMisconfigured(vendor=vendor)

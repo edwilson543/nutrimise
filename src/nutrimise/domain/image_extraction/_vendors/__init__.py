@@ -3,5 +3,6 @@ from ._base import (
     ImageExtractionServiceMisconfigured,
     UnableToExtractRecipeFromImage,
 )
-from ._fake import FakeImageExtractService
+from ._broken import BrokenImageExtractionService
+from ._fake import FakeImageExtractionService
 from ._openai import OpenAIImageExtractService

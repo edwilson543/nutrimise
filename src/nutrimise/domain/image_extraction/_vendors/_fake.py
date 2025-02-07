@@ -12,7 +12,7 @@ def _get_canned_recipe() -> _output_structure.Recipe:
 
 
 @attrs.frozen
-class FakeImageExtractService(_base.ImageExtractionService):
+class FakeImageExtractionService(_base.ImageExtractionService):
     model: _constants.ImageExtractionModel = _constants.ImageExtractionModel.FAKE
     vendor: _constants.ImageExtractionVendor = _constants.ImageExtractionVendor.FAKE
 
