@@ -23,7 +23,10 @@ class ImageExtractionService(abc.ABC):
 
     @abc.abstractmethod
     def extract_recipe_from_image(
-        self, *, base64_image: str
+        self,
+        *,
+        base64_image: str,
+        existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
         """
         Get an embedding for the passed text.

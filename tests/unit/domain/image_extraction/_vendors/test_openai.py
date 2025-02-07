@@ -27,8 +27,10 @@ class TestInstantiation:
 class TestExtractRecipeFromImage:
     @override_settings(OPENAI_API_KEY="some-key")
     def test_gets_output_structured_as_recipe(self, httpx_mock):
-        openai_service = _openai.OpenAIImageExtractService()
         base64_image = "My encoded image."
+        ingredient = image_extraction.Ingredient(
+            name="Brocoli", category_name="Vegetable", units="Grams", grams_per_unit=1.0
+        )
 
         httpx_mock.add_response(
             url="https://api.openai.com/v1/chat/completions",
@@ -37,7 +39,10 @@ class TestExtractRecipeFromImage:
             json=self._response_ok_json(),
         )
 
-        recipe = openai_service.extract_recipe_from_image(base64_image=base64_image)
+        openai_service = _openai.OpenAIImageExtractService()
+        recipe = openai_service.extract_recipe_from_image(
+            base64_image=base64_image, existing_ingredients=[ingredient]
+        )
 
         assert recipe.name == "Some recipe"
         assert recipe.description == "Some recipe description."
@@ -67,7 +72,9 @@ class TestExtractRecipeFromImage:
         )
 
         with pytest.raises(image_extraction.UnableToExtractRecipeFromImage) as exc:
-            openai_service.extract_recipe_from_image(base64_image=base64_image)
+            openai_service.extract_recipe_from_image(
+                base64_image=base64_image, existing_ingredients=[]
+            )
 
         assert exc.value.vendor == openai_service.vendor
         assert exc.value.model == openai_service.model

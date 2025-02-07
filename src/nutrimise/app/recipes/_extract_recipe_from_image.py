@@ -4,6 +4,7 @@ import io
 from django.contrib.auth import models as auth_models
 from PIL import Image
 
+from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import operations as recipe_operations
 from nutrimise.domain import image_extraction
 
@@ -26,8 +27,10 @@ def extract_recipe_from_image(
     uploaded_image.save(buffered, format=uploaded_image.format)
     base64_image = base64.b64encode(buffered.getvalue())
 
+    existing_ingredients = _get_existing_ingredients()
     recipe = image_extraction_service.extract_recipe_from_image(
-        base64_image=base64_image.decode("utf-8")
+        base64_image=base64_image.decode("utf-8"),
+        existing_ingredients=existing_ingredients,
     )
 
     recipe_id = recipe_operations.create_recipe(
@@ -38,4 +41,16 @@ def extract_recipe_from_image(
         meal_times=recipe.meal_times,
     )
 
+    print("Discarded ingredients: ")
+    for ingredient in recipe.ingredients:
+        print(ingredient)
+
     return recipe_id
+
+
+def _get_existing_ingredients() -> list[image_extraction.Ingredient]:
+    ingredients = ingredient_queries.get_ingredients()
+    return [
+        image_extraction.Ingredient.from_domain_model(ingredient=ingredient)
+        for ingredient in ingredients
+    ]
