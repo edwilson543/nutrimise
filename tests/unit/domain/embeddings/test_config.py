@@ -4,7 +4,7 @@ from django.test import override_settings
 from nutrimise.domain import embeddings
 
 
-class TestGetEmbedding:
+class TestGetEmbeddingService:
     @override_settings(EMBEDDING_VENDOR="OPENAI")
     def test_gets_openai_embedding_service_when_openai_embedding_service_installed(
         self,
