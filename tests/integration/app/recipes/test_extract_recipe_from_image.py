@@ -11,11 +11,8 @@ from testing.factories import images as image_factories
 
 
 def test_extracts_recipe_using_fake_extraction_service():
-    ingredient = image_extraction.Ingredient.from_domain_model(
-        domain_factories.Ingredient()
-    )
-    recipe_ingredient = image_extraction.RecipeIngredient(
-        ingredient=ingredient, quantity=37.5
+    recipe_ingredient = image_extraction.RecipeIngredient.from_domain_model(
+        domain_factories.RecipeIngredient()
     )
     canned_recipe = image_extraction_vendors.get_canned_recipe(
         ingredients=[recipe_ingredient]
@@ -34,12 +31,12 @@ def test_extracts_recipe_using_fake_extraction_service():
     )
 
     new_ingredient_category = ingredient_models.IngredientCategory.objects.get()
-    assert new_ingredient_category.name == ingredient.category_name
+    assert new_ingredient_category.name == recipe_ingredient.ingredient.category_name
 
     new_ingredient = ingredient_models.Ingredient.objects.get()
-    assert new_ingredient.name == ingredient.name
+    assert new_ingredient.name == recipe_ingredient.ingredient.name
     assert new_ingredient.category.id == new_ingredient_category.id
-    assert new_ingredient_category.name == ingredient.category_name
+    assert new_ingredient_category.name == recipe_ingredient.ingredient.category_name
 
     recipe = recipe_models.Recipe.objects.get()
     assert recipe.id == recipe_id

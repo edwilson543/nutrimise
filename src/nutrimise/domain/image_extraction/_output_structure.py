@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pydantic
 
-from nutrimise.domain import constants, ingredients
+from nutrimise.domain import constants, ingredients, recipes
 
 
 class Ingredient(pydantic.BaseModel):
@@ -24,6 +24,15 @@ class Ingredient(pydantic.BaseModel):
 class RecipeIngredient(pydantic.BaseModel):
     ingredient: Ingredient
     quantity: float
+
+    @classmethod
+    def from_domain_model(
+        cls, recipe_ingredient: recipes.RecipeIngredient
+    ) -> RecipeIngredient:
+        ingredient = Ingredient.from_domain_model(recipe_ingredient.ingredient)
+        return RecipeIngredient(
+            ingredient=ingredient, quantity=recipe_ingredient.quantity
+        )
 
 
 class Recipe(pydantic.BaseModel):

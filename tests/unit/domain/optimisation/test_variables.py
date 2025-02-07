@@ -72,9 +72,7 @@ class TestFromSpecDecisionVariables:
 class TestFromInclusionDependentVariables:
     def test_creates_inclusion_dependent_variable_for_recipe_and_ingredient(self):
         ingredient = domain_factories.Ingredient()
-        recipe_ingredient = domain_factories.RecipeIngredient(
-            ingredient_id=ingredient.id
-        )
+        recipe_ingredient = domain_factories.RecipeIngredient(ingredient=ingredient)
         recipe = domain_factories.Recipe(ingredients=(recipe_ingredient,))
 
         inputs_ = _inputs.OptimiserInputs(
@@ -97,16 +95,14 @@ class TestFromInclusionDependentVariables:
     ):
         ingredient = domain_factories.Ingredient()
         recipe = domain_factories.Recipe(
-            ingredients=(
-                domain_factories.RecipeIngredient(ingredient_id=ingredient.id),
-            )
+            ingredients=(domain_factories.RecipeIngredient(ingredient=ingredient),)
         )
 
         other_ingredient = domain_factories.Ingredient()
         other_recipe = domain_factories.Recipe(
             ingredients=(
-                domain_factories.RecipeIngredient(ingredient_id=ingredient.id),
-                domain_factories.RecipeIngredient(ingredient_id=other_ingredient.id),
+                domain_factories.RecipeIngredient(ingredient=ingredient),
+                domain_factories.RecipeIngredient(ingredient=other_ingredient),
             )
         )
 

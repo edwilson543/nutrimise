@@ -25,10 +25,10 @@ class Recipe:
 
     @property
     def unique_ingredient_ids(self) -> tuple[int, ...]:
-        return tuple({ingredient.ingredient_id for ingredient in self.ingredients})
+        return tuple({ingredient.ingredient.id for ingredient in self.ingredients})
 
 
 @attrs.frozen
 class RecipeIngredient:
-    ingredient_id: int
-    ingredient_name: str
+    ingredient: ingredients.Ingredient
+    quantity: float

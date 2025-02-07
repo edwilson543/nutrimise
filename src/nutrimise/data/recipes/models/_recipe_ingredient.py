@@ -37,9 +37,8 @@ class RecipeIngredient(django_models.Model):
         return f"{self.ingredient.name} for {self.recipe.name}"
 
     def to_domain_model(self) -> recipes.RecipeIngredient:
-        return recipes.RecipeIngredient(
-            ingredient_id=self.ingredient_id, ingredient_name=self.ingredient.name
-        )
+        ingredient = self.ingredient.to_domain_model()
+        return recipes.RecipeIngredient(ingredient=ingredient, quantity=self.quantity)
 
     def grams(self) -> float:
         return self.quantity * self.ingredient.grams_per_unit
