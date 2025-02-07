@@ -1,6 +1,5 @@
 from typing import Any
 
-import numpy as np
 import pytest
 from django.test import override_settings
 from numpy import testing as np_testing
@@ -30,17 +29,20 @@ class TestGetEmbedding:
     def test_gets_embedding_when_open_ai_api_response_ok(self, httpx_mock):
         openai_service = _openai.OpenAIEmbeddingService()
         text = "Some text to embed."
+        vector_embedding = embeddings.get_stub_vector_embedding()
 
         httpx_mock.add_response(
             url="https://api.openai.com/v1/embeddings",
             method="POST",
             status_code=200,
-            json=self._response_ok_json(),
+            json=self._response_ok_json(list(vector_embedding)),
         )
 
         embedding = openai_service.get_embedding(text=text)
 
-        np_testing.assert_array_equal(embedding.vector, self._stub_embedding)
+        np_testing.assert_array_equal(
+            embedding.vector, embeddings.get_stub_vector_embedding()
+        )
         assert embedding.prompt_hash == "7102d8d4aeaad1fa2b931d49d32a62dc"
         assert embedding.vendor == embeddings.EmbeddingVendor.OPENAI
         assert embedding.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
@@ -62,7 +64,7 @@ class TestGetEmbedding:
         assert exc.value.vendor == embeddings.EmbeddingVendor.OPENAI
         assert exc.value.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
 
-    def _response_ok_json(self) -> dict[str, Any]:
+    def _response_ok_json(self, vector_embedding: list[float]) -> dict[str, Any]:
         """
         OpenAI embeddings response object, per the docs.
         https://platform.openai.com/docs/api-reference/embeddings/create
@@ -73,13 +75,9 @@ class TestGetEmbedding:
                 {
                     "object": "embedding",
                     "index": 0,
-                    "embedding": list(self._stub_embedding),
+                    "embedding": vector_embedding,
                 }
             ],
             "model": "text-embedding-3-small",
             "usage": {"prompt_tokens": 5, "total_tokens": 5},
         }
-
-    @property
-    def _stub_embedding(self) -> np.ndarray:
-        return np.ones(embeddings.EMBEDDING_DIMENSIONS)

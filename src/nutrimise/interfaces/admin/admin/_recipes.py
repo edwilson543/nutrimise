@@ -1,3 +1,5 @@
+from typing import Any
+
 from django import forms as django_forms
 from django import http as django_http
 from django import urls as django_urls
@@ -9,6 +11,7 @@ from nutrimise.app import recipes as recipes_app
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings
+from nutrimise.interfaces.admin import forms
 
 
 class _RecipeIngredientInline(admin.TabularInline):
@@ -22,6 +25,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display_links = ["name"]
     ordering = ["name"]
     search_fields = ["name"]
+    add_form_template = "admin/recipes/recipe-change-form.html"
 
     inlines = [
         _RecipeIngredientInline,
@@ -74,6 +78,18 @@ class RecipeAdmin(admin.ModelAdmin):
             embedding=search_embedding, limit=5
         )
         return results, False
+
+    def add_view(
+        self,
+        request: django_http.HttpRequest,
+        form_url: str = "",
+        extra_context: dict[str, Any] | None = None,
+    ) -> django_http.HttpResponse:
+        extra_context = extra_context or {}
+        extra_context["image_upload_form"] = forms.ImageUpload()
+        return super().add_view(
+            request=request, form_url=form_url, extra_context=extra_context
+        )
 
 
 @admin.register(recipe_models.RecipeIngredient)

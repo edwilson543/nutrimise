@@ -1,3 +1,4 @@
+import random
 from collections.abc import Iterable
 
 import factory
@@ -37,14 +38,14 @@ class Recipe(factory.Factory):
         cls, *, ingredients: Iterable[ingredients_domain.Ingredient], **kwargs: object
     ) -> recipes.Recipe:
         recipe_ingredients = tuple(
-            RecipeIngredient(ingredient_id=ingredient.id) for ingredient in ingredients
+            RecipeIngredient(ingredient=ingredient) for ingredient in ingredients
         )
         return cls.create(ingredients=recipe_ingredients, **kwargs)
 
 
 class RecipeIngredient(factory.Factory):
-    ingredient_id = factory.Sequence(lambda n: n)
-    ingredient_name = factory.Sequence(lambda n: f"ingredient-{n}")
+    ingredient = factory.SubFactory(_ingredients.Ingredient)
+    quantity = factory.LazyFunction(lambda: random.uniform(1.0, 10.0))
 
     class Meta:
         model = recipes.RecipeIngredient

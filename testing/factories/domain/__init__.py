@@ -1,5 +1,10 @@
 from ._embeddings import Embedding
-from ._ingredients import Ingredient, Nutrient, NutritionalInformation
+from ._ingredients import (
+    Ingredient,
+    IngredientCategory,
+    Nutrient,
+    NutritionalInformation,
+)
 from ._menus import (
     Menu,
     MenuItem,

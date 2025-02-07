@@ -59,7 +59,7 @@ class OptimiserInputs:
     @functools.cached_property
     def unoptimised_ingredient_selections(self) -> tuple[ingredients.Ingredient, ...]:
         unique_ingredient_ids = {
-            recipe_ingredient.ingredient_id
+            recipe_ingredient.ingredient.id
             for recipe in self.unoptimised_recipe_selections
             for recipe_ingredient in recipe.ingredients
         }

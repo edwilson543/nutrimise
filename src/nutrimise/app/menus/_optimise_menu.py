@@ -72,6 +72,6 @@ def _get_relevant_ingredients(
 ) -> tuple[ingredients.Ingredient, ...]:
     ingredient_ids: set[int] = set()
     for recipe in recipes_to_consider:
-        for ingredient in recipe.ingredients:
-            ingredient_ids.add(ingredient.ingredient_id)
+        for recipe_ingredient in recipe.ingredients:
+            ingredient_ids.add(recipe_ingredient.ingredient.id)
     return ingredient_queries.get_ingredients(ingredient_ids=ingredient_ids)

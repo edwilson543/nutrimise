@@ -34,13 +34,13 @@ def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
     - Sematic search
     - Comparing it with the embeddings of meal plan requirements"""
 
-    prompt += f"Recipe name: {recipe.name}"
+    prompt += f"\nRecipe name: {recipe.name}"
     if recipe.description:
         prompt += f"\nRecipe description: {recipe.description}"
     if recipe.ingredients:
         prompt += "\nRecipe ingredients: "
         for ingredient in recipe.ingredients:
-            prompt += f"\n - {ingredient.ingredient_name}"
+            prompt += f"\n - {ingredient.ingredient.name}"
     return prompt
 
 

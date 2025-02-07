@@ -2,6 +2,7 @@ from ._auth import User
 from ._ingredients import (
     DietaryRequirement,
     Ingredient,
+    IngredientCategory,
     IngredientNutritionalInformation,
     Nutrient,
 )

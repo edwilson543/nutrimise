@@ -6,10 +6,18 @@ from nutrimise.domain import constants
 
 
 @attrs.frozen
+class IngredientCategory:
+    id: int
+    name: str
+
+
+@attrs.frozen
 class Ingredient:
     id: int
     name: str
-    category_id: int
+    category: IngredientCategory
+    units: str | None
+    grams_per_unit: float
 
 
 @attrs.frozen

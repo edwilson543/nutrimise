@@ -91,6 +91,8 @@ packaging==24.0
     #   pytest
 pgvector==0.3.6
     # via nutrimise (pyproject.toml)
+pillow==11.1.0
+    # via nutrimise (pyproject.toml)
 platformdirs==4.2.0
     # via virtualenv
 pluggy==1.4.0
@@ -104,7 +106,9 @@ psycopg-binary==3.1.18
 pulp==2.8.0
     # via nutrimise (pyproject.toml)
 pydantic==2.9.2
-    # via openai
+    # via
+    #   nutrimise (pyproject.toml)
+    #   openai
 pydantic-core==2.23.4
     # via pydantic
 pytest==8.1.1

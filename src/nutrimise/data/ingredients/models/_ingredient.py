@@ -17,6 +17,9 @@ class IngredientCategory(django_models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def to_domain_model(self):
+        return ingredients.IngredientCategory(id=self.id, name=self.name)
+
 
 class Ingredient(django_models.Model):
     """
@@ -47,5 +50,7 @@ class Ingredient(django_models.Model):
         return ingredients.Ingredient(
             id=self.id,
             name=self.name,
-            category_id=self.category_id,
+            category=self.category.to_domain_model(),
+            units=self.units,
+            grams_per_unit=self.grams_per_unit,
         )

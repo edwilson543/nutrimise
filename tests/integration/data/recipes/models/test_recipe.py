@@ -21,7 +21,7 @@ class TestRecipeToDomainModel:
 
         assert len(recipe.ingredients) == 1
         recipe_ingredient = recipe.ingredients[0]
-        assert recipe_ingredient.ingredient_id == ingredient.id
+        assert recipe_ingredient.ingredient.id == ingredient.id
 
         assert len(recipe.embeddings) == 1
         embedding = recipe.embeddings[0]

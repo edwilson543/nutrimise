@@ -36,4 +36,4 @@ def test_creates_recipe_using_create_form(admin_client):
     assert recipe_embedding.vendor == "FAKE"
     assert recipe_embedding.model == "fake"
     assert len(recipe_embedding.vector) > 0
-    assert recipe_embedding.prompt_hash == "1a4037270a336e77e4366104f1d356ff"
+    assert recipe_embedding.prompt_hash == "469509d8f71e8ae9ff4a4200fc53330b"
