@@ -1,7 +1,6 @@
 import base64
 import io
 
-from django.contrib.auth import models as auth_models
 from django.db import transaction
 from PIL import Image
 
@@ -16,7 +15,7 @@ UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
 
 def extract_recipe_from_image(
     *,
-    author: auth_models.User,
+    author: recipes.RecipeAuthor | None,
     uploaded_image: Image.Image,
     image_extraction_service: image_extraction.ImageExtractionService,
 ) -> int:

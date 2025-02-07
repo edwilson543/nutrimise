@@ -17,7 +17,7 @@ class RecipeAuthor(django_models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
-    def to_domain_model(self) -> recipes.RecipeAuthor:
+    def to_domain_model(self):
         return recipes.RecipeAuthor(
             id=self.id, first_name=self.first_name, last_name=self.last_name
         )

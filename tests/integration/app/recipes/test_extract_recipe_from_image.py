@@ -18,7 +18,7 @@ def test_extracts_recipe_using_fake_extraction_service():
         ingredients=[recipe_ingredient]
     )
 
-    author = data_factories.User()
+    author = data_factories.RecipeAuthor()
     image = image_factories.get_image()
     image_extraction_service = image_extraction_vendors.FakeImageExtractionService(
         canned_recipe=canned_recipe
@@ -49,7 +49,7 @@ def test_extracts_recipe_using_fake_extraction_service():
 
 
 def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_name():
-    author = data_factories.User()
+    author = data_factories.RecipeAuthor()
     image = image_factories.get_image()
     image_extraction_service = image_extraction_vendors.FakeImageExtractionService()
 
@@ -75,13 +75,12 @@ def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_nam
 
 
 def test_raises_embedding_service_errors():
-    author = data_factories.User()
     image = image_factories.get_image()
     image_extraction_service = image_extraction_vendors.BrokenImageExtractionService()
 
     with pytest.raises(image_extraction.UnableToExtractRecipeFromImage) as exc:
         _extract_recipe_from_image.extract_recipe_from_image(
-            author=author,
+            author=None,
             uploaded_image=image,
             image_extraction_service=image_extraction_service,
         )

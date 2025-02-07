@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from django.contrib.auth import models as auth_models
 from django.contrib.postgres import fields as pg_fields
 from django.db import models as django_models
 
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.domain import constants, recipes
+
+from . import _recipe_author
 
 
 class Recipe(django_models.Model):
@@ -15,7 +16,12 @@ class Recipe(django_models.Model):
 
     id = django_models.BigAutoField(primary_key=True)
 
-    author = django_models.ForeignKey(auth_models.User, on_delete=django_models.CASCADE)
+    author = django_models.ForeignKey(
+        _recipe_author.RecipeAuthor,
+        on_delete=django_models.CASCADE,
+        related_name="recipes",
+        null=True,
+    )
 
     name = django_models.CharField(max_length=128)
 
@@ -34,30 +40,12 @@ class Recipe(django_models.Model):
     class Meta:
         constraints = [
             django_models.UniqueConstraint(
-                "author", "name", name="users_can_only_have_one_recipe_per_name"
+                "author", "name", name="author_can_only_have_one_recipe_per_name"
             )
         ]
 
     def __str__(self) -> str:
         return self.name
-
-    @classmethod
-    def new(
-        cls,
-        *,
-        author: auth_models.User,
-        name: str,
-        description: str,
-        meal_times: list[constants.MealTime],
-        number_of_servings: int,
-    ) -> Recipe:
-        return cls.objects.create(
-            author=author,
-            name=name,
-            description=description,
-            meal_times=meal_times,
-            number_of_servings=number_of_servings,
-        )
 
     def to_domain_model(self):
         nutritional_information = (

@@ -6,11 +6,19 @@ from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import constants, embeddings
 
-from . import _auth, _ingredients
+from . import _ingredients
+
+
+class RecipeAuthor(factory.django.DjangoModelFactory):
+    first_name = factory.Sequence(lambda n: f"first-name-{n}")
+    last_name = factory.Sequence(lambda n: f"last-name-{n}")
+
+    class Meta:
+        model = recipe_models.RecipeAuthor
 
 
 class Recipe(factory.django.DjangoModelFactory):
-    author = factory.SubFactory(_auth.User)
+    author = factory.SubFactory(RecipeAuthor)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = "Some description"
     meal_times = [constants.MealTime.DINNER.value]
@@ -43,14 +51,6 @@ class RecipeIngredient(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.RecipeIngredient
-
-
-class RecipeAuthor(factory.django.DjangoModelFactory):
-    first_name = factory.Sequence(lambda n: f"first-name-{n}")
-    last_name = factory.Sequence(lambda n: f"last-name-{n}")
-
-    class Meta:
-        model = recipe_models.RecipeAuthor
 
 
 class RecipeEmbedding(factory.django.DjangoModelFactory):
