@@ -15,6 +15,7 @@ class Ingredient(factory.Factory):
     id = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: f"ingredient-{n}")
     category = factory.SubFactory(IngredientCategory)
+    units = factory.Sequence(lambda n: f"units-{n}")
 
     class Meta:
         model = ingredients.Ingredient

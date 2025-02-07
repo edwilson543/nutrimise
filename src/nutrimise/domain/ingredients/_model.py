@@ -16,6 +16,7 @@ class Ingredient:
     id: int
     name: str
     category: IngredientCategory
+    units: str | None
 
 
 @attrs.frozen

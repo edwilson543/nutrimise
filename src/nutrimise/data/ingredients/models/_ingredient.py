@@ -51,4 +51,5 @@ class Ingredient(django_models.Model):
             id=self.id,
             name=self.name,
             category=self.category.to_domain_model(),
+            units=self.units,
         )
