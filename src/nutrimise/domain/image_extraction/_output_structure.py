@@ -8,7 +8,7 @@ from nutrimise.domain import ingredients, recipes
 class Ingredient(pydantic.BaseModel):
     name: str
     category_name: str
-    units: str | None
+    units: str
     grams_per_unit: float
 
     @classmethod

@@ -14,7 +14,7 @@ def get_or_create_ingredient(
     *,
     name: str,
     category_id: int,
-    units: str | None,
+    units: str,
     grams_per_unit: float,
 ) -> ingredients.Ingredient:
     ingredient, _ = ingredient_models.Ingredient.objects.get_or_create(

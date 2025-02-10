@@ -15,7 +15,7 @@ class Ingredient:
     id: int
     name: str
     category: IngredientCategory
-    units: str | None
+    units: str
     grams_per_unit: float
 
 

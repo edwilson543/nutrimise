@@ -34,7 +34,7 @@ class Ingredient(django_models.Model):
         IngredientCategory, on_delete=django_models.PROTECT, related_name="ingredients"
     )
 
-    units = django_models.CharField(max_length=64, null=True, blank=True)
+    units = django_models.CharField(max_length=64)
 
     # Conversion factor (e.g. for calculating nutritional information per apple)
     grams_per_unit = django_models.FloatField()
