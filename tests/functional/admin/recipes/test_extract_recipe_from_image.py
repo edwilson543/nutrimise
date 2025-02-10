@@ -9,7 +9,7 @@ from testing.factories import data as data_factories
 from testing.factories import images as image_factories
 
 
-@override_settings(IMAGE_EXTRACTION_VENDOR="FAKE")
+@override_settings(IMAGE_EXTRACTION_VENDOR="FAKE", EMBEDDING_VENDOR="FAKE")
 def test_extracts_image_and_creates_recipe(admin_client):
     author = data_factories.RecipeAuthor()
 
@@ -35,7 +35,7 @@ def test_extracts_image_and_creates_recipe(admin_client):
     )
 
 
-@override_settings(IMAGE_EXTRACTION_VENDOR="BROKEN")
+@override_settings(IMAGE_EXTRACTION_VENDOR="BROKEN", EMBEDDING_VENDOR="FAKE")
 @mock.patch("django.contrib.messages.error")
 def test_handles_error_when_image_extraction_service_is_broken(
     mock_error_messages: mock.Mock, admin_client
@@ -59,7 +59,7 @@ def test_handles_error_when_image_extraction_service_is_broken(
     assert mock_error_messages.call_args_list[0].kwargs["message"] == expected_message
 
 
-@override_settings(IMAGE_EXTRACTION_VENDOR="FAKE_NO_SERVICE")
+@override_settings(IMAGE_EXTRACTION_VENDOR="FAKE_NO_SERVICE", EMBEDDING_VENDOR="FAKE")
 @mock.patch("django.contrib.messages.error")
 def test_handles_error_when_no_image_extraction_service_is_installed_for_vendor(
     mock_error_messages: mock.Mock, admin_client
@@ -79,5 +79,5 @@ def test_handles_error_when_no_image_extraction_service_is_installed_for_vendor(
     assert submit_response.location == add_recipe_url
 
     mock_error_messages.assert_called_once()
-    expected_message = "Image extraction is not configured."
+    expected_message = "Image extraction service is not configured."
     assert mock_error_messages.call_args_list[0].kwargs["message"] == expected_message

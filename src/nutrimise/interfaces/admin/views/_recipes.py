@@ -8,7 +8,7 @@ from PIL import Image
 from nutrimise.app import recipes as recipes_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import image_extraction
+from nutrimise.domain import embeddings, image_extraction
 from nutrimise.interfaces.admin import forms
 
 from . import _base, _types
@@ -46,6 +46,7 @@ class ExtractRecipeFromImage(_base.AdminFormView):
     request: _types.AuthenticatedHttpRequest
     _recipe_id: int
     _image_extraction_service: image_extraction.ImageExtractionService
+    _embedding_service: embeddings.EmbeddingService
 
     def dispatch(
         self, request: http.HttpRequest, *args: object, **kwargs: object
@@ -56,7 +57,14 @@ class ExtractRecipeFromImage(_base.AdminFormView):
             )
         except image_extraction.ImageExtractionServiceMisconfigured:
             return self._error_response(
-                error_message="Image extraction is not configured."
+                error_message="Image extraction service is not configured."
+            )
+
+        try:
+            self._embedding_service = embeddings.get_embedding_service()
+        except embeddings.EmbeddingServiceMisconfigured:
+            return self._error_response(
+                error_message="Embedding service is not configured."
             )
 
         return super().dispatch(request, *args, **kwargs)
@@ -66,9 +74,10 @@ class ExtractRecipeFromImage(_base.AdminFormView):
 
         try:
             self._recipe_id = recipes_app.extract_recipe_from_image(
+                author=form.cleaned_data.get("author"),
                 uploaded_image=uploaded_image,
                 image_extraction_service=self._image_extraction_service,
-                author=form.cleaned_data.get("author"),
+                embedding_service=self._embedding_service,
             )
         except image_extraction.UnableToExtractRecipeFromImage:
             return self._error_response(

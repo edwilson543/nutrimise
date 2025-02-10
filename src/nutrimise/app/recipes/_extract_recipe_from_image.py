@@ -7,7 +7,9 @@ from PIL import Image
 from nutrimise.data.ingredients import operations as ingredient_operations
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import image_extraction, ingredients, recipes
+from nutrimise.domain import embeddings, image_extraction, ingredients, recipes
+
+from . import _create_or_update_recipe_embedding
 
 
 UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
@@ -18,6 +20,7 @@ def extract_recipe_from_image(
     author: recipes.RecipeAuthor | None,
     uploaded_image: Image.Image,
     image_extraction_service: image_extraction.ImageExtractionService,
+    embedding_service: embeddings.EmbeddingService,
 ) -> int:
     """
     Extract a recipe and its components from an image and save it to the database.
@@ -53,6 +56,10 @@ def extract_recipe_from_image(
             meal_times=extracted_recipe.meal_times,
             recipe_ingredients=recipe_ingredients,
         )
+
+    _create_or_update_recipe_embedding.create_or_update_recipe_embedding(
+        recipe_id=recipe_id, embedding_service=embedding_service
+    )
 
     return recipe_id
 

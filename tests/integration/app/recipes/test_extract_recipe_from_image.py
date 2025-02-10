@@ -3,7 +3,7 @@ import pytest
 from nutrimise.app.recipes import _extract_recipe_from_image
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import image_extraction
+from nutrimise.domain import embeddings, image_extraction
 from nutrimise.domain.image_extraction import _vendors as image_extraction_vendors
 from testing.factories import data as data_factories
 from testing.factories import domain as domain_factories
@@ -11,23 +11,27 @@ from testing.factories import images as image_factories
 
 
 def test_extracts_recipe_with_author_using_fake_extraction_service():
+    author = data_factories.RecipeAuthor()
+    image = image_factories.get_image()
+
+    # Create a recipe for the fake image extraction service.
     recipe_ingredient = image_extraction.RecipeIngredient.from_domain_model(
         domain_factories.RecipeIngredient()
     )
     canned_recipe = image_extraction_vendors.get_canned_recipe(
         ingredients=[recipe_ingredient]
     )
-
-    author = data_factories.RecipeAuthor()
-    image = image_factories.get_image()
     image_extraction_service = image_extraction_vendors.FakeImageExtractionService(
         canned_recipe=canned_recipe
     )
+
+    embedding_service = embeddings.FakeEmbeddingService()
 
     recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
         author=author,
         uploaded_image=image,
         image_extraction_service=image_extraction_service,
+        embedding_service=embedding_service,
     )
 
     new_ingredient_category = ingredient_models.IngredientCategory.objects.get()
@@ -47,16 +51,21 @@ def test_extracts_recipe_with_author_using_fake_extraction_service():
     assert recipe_ingredient.ingredient_id == new_ingredient.id
     assert recipe_ingredient.quantity == recipe_ingredient.quantity
 
+    recipe_embedding = recipe.embeddings.get()
+    assert recipe_embedding.vendor == embedding_service.vendor.value
+
 
 def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_name():
     author = data_factories.RecipeAuthor()
     image = image_factories.get_image()
     image_extraction_service = image_extraction_vendors.FakeImageExtractionService()
+    embedding_service = embeddings.FakeEmbeddingService()
 
     recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
         author=author,
         uploaded_image=image,
         image_extraction_service=image_extraction_service,
+        embedding_service=embedding_service,
     )
 
     recipe = recipe_models.Recipe.objects.get()
@@ -69,6 +78,7 @@ def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_nam
         author=author,
         uploaded_image=image,
         image_extraction_service=image_extraction_service,
+        embedding_service=embedding_service,
     )
 
     assert recipe_models.Recipe.objects.count() == 2
@@ -82,6 +92,7 @@ def test_extracts_recipe_without_author_using_fake_extraction_service():
         author=None,
         uploaded_image=image,
         image_extraction_service=image_extraction_service,
+        embedding_service=embeddings.FakeEmbeddingService(),
     )
 
     recipe = recipe_models.Recipe.objects.get()
@@ -98,6 +109,7 @@ def test_raises_embedding_service_errors():
             author=None,
             uploaded_image=image,
             image_extraction_service=image_extraction_service,
+            embedding_service=embeddings.FakeEmbeddingService(),
         )
 
     assert exc.value.vendor == image_extraction_service.vendor
