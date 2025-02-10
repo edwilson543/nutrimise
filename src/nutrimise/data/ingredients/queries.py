@@ -6,7 +6,7 @@ from collections import abc as collections_abc
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 from nutrimise.domain.ingredients import _model
 
 
@@ -85,7 +85,7 @@ def get_nutritional_information_for_recipe(
         _model.NutritionalInformation(
             nutrient=nutrient,
             nutrient_quantity=value,
-            units=constants.NutrientUnit.GRAMS,
+            units=ingredients.NutrientUnit.GRAMS,
         )
         for nutrient, value in recipe_nutrition.items()
     )

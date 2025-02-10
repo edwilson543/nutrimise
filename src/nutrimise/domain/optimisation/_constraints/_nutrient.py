@@ -3,13 +3,13 @@ from typing import Generator
 import attrs
 import pulp as lp
 
-from nutrimise.domain import constants, menus
+from nutrimise.domain import menus
 from nutrimise.domain.optimisation import _expressions, _inputs, _variables
 
 
 @attrs.frozen
 class EnforcementIntervalNotImplemented(Exception):
-    interval: constants.NutrientRequirementEnforcementInterval
+    interval: menus.NutrientRequirementEnforcementInterval
 
 
 def all_nutrient_requirements_are_met(
@@ -17,7 +17,7 @@ def all_nutrient_requirements_are_met(
 ) -> Generator[lp.LpConstraint, None, None]:
     for nutrient_requirement in inputs.requirements.nutrient_requirements:
         match nutrient_requirement.enforcement_interval:
-            case constants.NutrientRequirementEnforcementInterval.DAILY:
+            case menus.NutrientRequirementEnforcementInterval.DAILY:
                 yield from _daily_nutrient_requirements_are_met(
                     inputs=inputs,
                     requirement=nutrient_requirement,

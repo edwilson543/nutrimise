@@ -14,4 +14,4 @@ from ._menus import (
     NutrientRequirement,
     VarietyRequirement,
 )
-from ._recipes import Recipe, RecipeEmbedding, RecipeIngredient
+from ._recipes import Recipe, RecipeAuthor, RecipeEmbedding, RecipeIngredient

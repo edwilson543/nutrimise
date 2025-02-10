@@ -7,7 +7,7 @@ from testing.factories import data as data_factories
 
 @override_settings(EMBEDDING_VENDOR="FAKE")
 def test_creates_recipe_using_create_form(admin_client):
-    author = data_factories.User()
+    author = data_factories.RecipeAuthor()
 
     url = django_urls.reverse("admin:recipes_recipe_add")
     response = admin_client.get(url)

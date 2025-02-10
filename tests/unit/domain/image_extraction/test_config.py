@@ -10,7 +10,7 @@ class TestGetImageExtractionService:
     def test_gets_openai_service_when_openai_vendor_installed(self):
         service = image_extraction.get_image_extraction_service()
 
-        assert isinstance(service, _vendors.OpenAIImageExtractService)
+        assert isinstance(service, _vendors.OpenAIImageExtractionService)
 
     @override_settings(IMAGE_EXTRACTION_VENDOR="FAKE")
     def test_gets_fake_service_when_fake_vendor_installed(self):

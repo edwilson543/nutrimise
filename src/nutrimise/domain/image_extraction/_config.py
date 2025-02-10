@@ -13,7 +13,7 @@ def _get_image_extraction_service_for_vendor(
 ) -> _vendors.ImageExtractionService:
     match vendor:
         case vendor.OPENAI:
-            return _vendors.OpenAIImageExtractService()
+            return _vendors.OpenAIImageExtractionService()
         case vendor.FAKE:
             return _vendors.FakeImageExtractionService()
         case vendor.BROKEN:

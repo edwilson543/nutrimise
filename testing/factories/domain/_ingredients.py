@@ -1,6 +1,6 @@
 import factory
 
-from nutrimise.domain import constants, ingredients
+from nutrimise.domain import ingredients
 
 
 class IngredientCategory(factory.Factory):
@@ -11,7 +11,7 @@ class IngredientCategory(factory.Factory):
         model = ingredients.IngredientCategory
 
 
-class Ingredient(factory.Factory):
+class Ingredient(factory.Factory[ingredients.Ingredient]):
     id = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: f"ingredient-{n}")
     category = factory.SubFactory(IngredientCategory)
@@ -33,7 +33,7 @@ class Nutrient(factory.Factory):
 class NutritionalInformation(factory.Factory):
     nutrient = factory.SubFactory(Nutrient)
     nutrient_quantity = 1
-    units = constants.NutrientUnit.GRAMS
+    units = ingredients.NutrientUnit.GRAMS
 
     class Meta:
         model = ingredients.NutritionalInformation

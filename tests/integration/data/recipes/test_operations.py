@@ -2,7 +2,7 @@ import numpy as np
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import embeddings, recipes
 from testing.factories import data as data_factories
 from testing.factories import domain as domain_factories
 
@@ -44,7 +44,7 @@ class TestCreateOrUpdateRecipeEmbedding:
 
 class TestCreateRecipe:
     def test_creates_recipe_with_unique_name_for_author(self):
-        author = data_factories.User()
+        author = data_factories.RecipeAuthor()
 
         ingredient = data_factories.Ingredient()
         recipe_ingredient = domain_factories.RecipeIngredient(
@@ -60,7 +60,7 @@ class TestCreateRecipe:
             author=author,
             name="Chicken curry",
             description="Saagfest",
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient, other_recipe_ingredient],
         )
@@ -90,7 +90,7 @@ class TestCreateRecipe:
             author=recipe.author,
             name=recipe.name,
             description="Saagfest",
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient],
         )
@@ -105,16 +105,16 @@ class TestCreateRecipe:
         assert new_recipe_ingredient.quantity == recipe_ingredient.quantity
 
     def test_different_authors_can_have_duplicate_recipe_names(self):
-        author = data_factories.User()
+        author = data_factories.RecipeAuthor()
         recipe = data_factories.Recipe(author=author)
 
-        other_author = data_factories.User()
+        other_author = data_factories.RecipeAuthor()
 
         new_recipe_id = recipe_operations.create_recipe(
             author=other_author,
             name=recipe.name,
             description=recipe.description,
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[],
         )

@@ -1,8 +1,6 @@
 import uuid
 
-from django.contrib.auth import models as auth_models
-
-from nutrimise.domain import constants, embeddings, recipes
+from nutrimise.domain import embeddings, recipes
 
 from . import models as recipe_models
 
@@ -23,18 +21,20 @@ def create_or_update_recipe_embedding(
 
 def create_recipe(
     *,
-    author: auth_models.User,
+    author: recipes.RecipeAuthor | None,
     name: str,
     description: str,
-    meal_times: list[constants.MealTime],
+    meal_times: list[recipes.MealTime],
     number_of_servings: int,
     recipe_ingredients: list[recipes.RecipeIngredient],
 ) -> int:
-    if recipe_models.Recipe.objects.filter(author_id=author.id, name=name).exists():
+    author_id = author.id if author else None
+
+    if recipe_models.Recipe.objects.filter(author_id=author_id, name=name).exists():
         name += f" (duplicate {uuid.uuid4()})"
 
     recipe = recipe_models.Recipe.objects.create(
-        author_id=author.id,
+        author_id=author_id,
         name=name,
         description=description,
         meal_times=meal_times,

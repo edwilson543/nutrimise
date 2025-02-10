@@ -1,1 +1,7 @@
-from ._model import Ingredient, IngredientCategory, Nutrient, NutritionalInformation
+from ._model import (
+    Ingredient,
+    IngredientCategory,
+    Nutrient,
+    NutrientUnit,
+    NutritionalInformation,
+)

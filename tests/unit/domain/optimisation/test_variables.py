@@ -1,4 +1,4 @@
-from nutrimise.domain import constants
+from nutrimise.domain import recipes
 from nutrimise.domain.optimisation import _inputs, _variables
 from testing.factories import domain as domain_factories
 
@@ -7,12 +7,12 @@ class TestFromSpecDecisionVariables:
     def test_creates_decision_variable_for_each_recipe_occurring_at_each_menu_item(
         self,
     ):
-        lunch = domain_factories.MenuItem(meal_time=constants.MealTime.LUNCH)
-        dinner = domain_factories.MenuItem(meal_time=constants.MealTime.DINNER)
+        lunch = domain_factories.MenuItem(meal_time=recipes.MealTime.LUNCH)
+        dinner = domain_factories.MenuItem(meal_time=recipes.MealTime.DINNER)
         menu = domain_factories.Menu(items=(lunch, dinner))
 
         recipe = domain_factories.Recipe(
-            meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
+            meal_times=[recipes.MealTime.LUNCH, recipes.MealTime.DINNER]
         )
 
         inputs_ = _inputs.OptimiserInputs(
@@ -31,11 +31,11 @@ class TestFromSpecDecisionVariables:
     def test_does_not_create_decision_variable_for_recipe_not_matching_menu_item_meal_time(
         self,
     ):
-        lunch = domain_factories.MenuItem(meal_time=constants.MealTime.LUNCH)
-        dinner = domain_factories.MenuItem(meal_time=constants.MealTime.DINNER)
+        lunch = domain_factories.MenuItem(meal_time=recipes.MealTime.LUNCH)
+        dinner = domain_factories.MenuItem(meal_time=recipes.MealTime.DINNER)
         menu = domain_factories.Menu(items=(lunch, dinner))
 
-        recipe = domain_factories.Recipe(meal_times=[constants.MealTime.LUNCH])
+        recipe = domain_factories.Recipe(meal_times=[recipes.MealTime.LUNCH])
 
         inputs_ = _inputs.OptimiserInputs(
             menu=menu, recipes_to_consider=(recipe,), relevant_ingredients=()
@@ -48,15 +48,15 @@ class TestFromSpecDecisionVariables:
 
     def test_does_not_create_decision_variable_for_menu_item_with_existing_recipe(self):
         lunch = domain_factories.MenuItem(
-            meal_time=constants.MealTime.LUNCH, optimiser_generated=False
+            meal_time=recipes.MealTime.LUNCH, optimiser_generated=False
         )
         dinner = domain_factories.MenuItem(
-            meal_time=constants.MealTime.DINNER, optimiser_generated=True
+            meal_time=recipes.MealTime.DINNER, optimiser_generated=True
         )
         menu = domain_factories.Menu(items=(lunch, dinner))
 
         recipe = domain_factories.Recipe(
-            meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER]
+            meal_times=[recipes.MealTime.LUNCH, recipes.MealTime.DINNER]
         )
 
         inputs_ = _inputs.OptimiserInputs(

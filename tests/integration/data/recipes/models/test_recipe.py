@@ -1,10 +1,10 @@
-from nutrimise.domain import constants
+from nutrimise.domain import recipes
 from testing.factories import data as data_factories
 
 
 class TestRecipeToDomainModel:
     def test_converts_recipe_orm_model_with_requirements_to_recipe_domain(self):
-        meal_times = [constants.MealTime.LUNCH, constants.MealTime.DINNER]
+        meal_times = [recipes.MealTime.LUNCH, recipes.MealTime.DINNER]
         orm_recipe = data_factories.Recipe(meal_times=meal_times)
         orm_embedding = data_factories.RecipeEmbedding(recipe=orm_recipe)
 

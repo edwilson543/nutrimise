@@ -1,7 +1,7 @@
 from django.core import management as django_management
 
 from nutrimise.data.ingredients import models as ingredient_models
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 
 
 def test_example_dataset_can_be_imported():
@@ -28,4 +28,4 @@ def test_example_dataset_can_be_imported():
     assert nutritional_information.ingredient == ingredient
     assert nutritional_information.nutrient == nutrient
     assert nutritional_information.quantity_per_gram == 0.03
-    assert nutritional_information.units == constants.NutrientUnit.GRAMS
+    assert nutritional_information.units == ingredients.NutrientUnit.GRAMS

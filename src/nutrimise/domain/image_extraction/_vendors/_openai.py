@@ -17,7 +17,7 @@ def _get_client() -> openai.Client:
 
 
 @attrs.frozen
-class OpenAIImageExtractService(_base.ImageExtractionService):
+class OpenAIImageExtractionService(_base.ImageExtractionService):
     model: _constants.ImageExtractionModel = _constants.ImageExtractionModel.GPT_4O
     vendor: _constants.ImageExtractionVendor = _constants.ImageExtractionVendor.OPENAI
     _client: openai.Client = attrs.field(factory=_get_client, init=False)

@@ -1,22 +1,33 @@
-# Pull official base image.
-FROM python:3.11-slim-buster
+# Use a Python image with uv pre-installed
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-# Set environment variables.
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=nutrimise.config.settings
-ENV DJANGO_CONFIGURATION=Settings
-
-# Copy over files.
+# Install the project into `/app`
 WORKDIR /app
-COPY ./requirements/app-requirements.txt requirements.txt
+
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
+
+# Copy from the cache instead of linking since it's a mounted volume
+ENV UV_LINK_MODE=copy
+
+# Install the project's dependencies using the lockfile and settings
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project --no-dev
+
+# Then, add the rest of the project source code and install it
+# Installing separately from its dependencies allows optimal layer caching
+WORKDIR /app
 COPY deployment/entrypoint.sh ./entrypoint.sh
-COPY pyproject.toml manage.py .env ./
+COPY uv.lock pyproject.toml manage.py .env ./
 COPY src ./src
 
-# Install dependencies.
-RUN pip install --upgrade pip
-RUN pip install -e .
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
 
 # Add a non-root 'app' user to group 'app'.
 RUN groupadd app
@@ -29,6 +40,9 @@ RUN chown -R app:app .
 # Change user to the app user.
 USER app
 
-# Run WSGI server using Gunicorn.
+# Connect to local postgres server
+ENV DH_HOST="172.17.0.0/16"
+
+# Reset the entrypoint, don't invoke `uv`
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]

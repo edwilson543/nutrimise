@@ -3,8 +3,8 @@ from collections.abc import Iterable
 
 import factory
 
-from nutrimise.domain import constants, recipes
 from nutrimise.domain import ingredients as ingredients_domain
+from nutrimise.domain import recipes
 
 from . import _ingredients
 
@@ -30,7 +30,7 @@ class Recipe(factory.Factory):
         )
         return cls.create(
             nutritional_information_per_serving=(high_nutrition,),
-            meal_times=[meal_time for meal_time in constants.MealTime],
+            meal_times=[meal_time for meal_time in recipes.MealTime],
         )
 
     @classmethod

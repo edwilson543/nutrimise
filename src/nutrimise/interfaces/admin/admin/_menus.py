@@ -7,7 +7,7 @@ from django.utils import safestring
 
 from nutrimise.app import menus as menus_app
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, embeddings, menus
+from nutrimise.domain import embeddings, menus, recipes
 
 
 class _MenuRequirementsInline(admin.StackedInline):
@@ -29,7 +29,7 @@ class _MenuItemInline(admin.TabularInline):
 
 class _MenuChangeForm(forms.ModelForm):
     number_of_days = forms.IntegerField(min_value=1)
-    meal_times = forms.MultipleChoiceField(choices=constants.MealTime.choices)
+    meal_times = forms.MultipleChoiceField(choices=recipes.MealTime.choices)
 
     class Meta:
         model = menu_models.Menu

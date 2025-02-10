@@ -1,8 +1,23 @@
 from __future__ import annotations
 
 import attrs
+from django.db import models as django_models
 
-from nutrimise.domain import constants, embeddings, ingredients
+from nutrimise.domain import embeddings, ingredients
+
+
+class MealTime(django_models.TextChoices):
+    BREAKFAST = "BREAKFAST", "Breakfast"
+    LUNCH = "LUNCH", "Lunch"
+    DINNER = "DINNER", "Dinner"
+
+    def order(self) -> int:
+        ordering = {
+            self.BREAKFAST: 0,
+            self.LUNCH: 1,
+            self.DINNER: 2,
+        }
+        return ordering[self]  # type:ignore[index]
 
 
 @attrs.frozen
@@ -10,7 +25,7 @@ class Recipe:
     id: int
     name: str
     description: str
-    meal_times: tuple[constants.MealTime, ...]
+    meal_times: tuple[MealTime, ...]
     # The absolute amount of each nutrient, per serving.
     nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
     ingredients: tuple[RecipeIngredient, ...]
@@ -32,3 +47,10 @@ class Recipe:
 class RecipeIngredient:
     ingredient: ingredients.Ingredient
     quantity: float
+
+
+@attrs.frozen
+class RecipeAuthor:
+    id: int
+    first_name: str
+    last_name: str
