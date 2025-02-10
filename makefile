@@ -67,22 +67,17 @@ recipe_embeddings:
 
 .PHONY:install_ci_deps
 install_ci_deps:
-	pip install -r requirements/ci-requirements.txt
-	pip install -e .
+	uv sync --group ci
 
 # Install all dependencies, for local dev.
 .PHONY:install_deps
 install_deps:
-	pip install -r requirements/dev-requirements.txt
-	pip install -e .
+	uv sync --all-groups
 
 
 .PHONY:lock_deps
 lock_deps:
-	pip install pip-tools
-	pip-compile pyproject.toml -q --resolver=backtracking --output-file=requirements/app-requirements.txt
-	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --output-file=requirements/ci-requirements.txt
-	pip-compile pyproject.toml -q --resolver=backtracking --extra=ci --extra=dev --output-file=requirements/dev-requirements.txt
+	uv lock
 
 # CI checks
 
@@ -90,27 +85,27 @@ local_ci: test lint
 
 .PHONY:test
 test:
-	pytest .
+	uv run pytest .
 
 lint: mypy check lint_imports
 
 .PHONY:mypy
 mypy:
-	mypy .
+	uv run mypy .
 
 .PHONY:format
 format:
-	ruff format .
-	ruff check . --fix
+	uv run ruff format .
+	uv run ruff check . --fix
 
 .PHONY:check
 check:
-	ruff format . --check
-	ruff check .
+	uv run ruff format . --check
+	uv run ruff check .
 
 .PHONY:lint_imports
 lint_imports:
-	lint-imports
+	uv run lint-imports
 
 # Docker
 

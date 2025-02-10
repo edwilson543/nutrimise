@@ -11,7 +11,7 @@ def create_inputs(
     relevant_ingredients: tuple[ingredients.Ingredient, ...] = (),
 ):
     return _inputs.OptimiserInputs(
-        menu=domain_factories.Menu(),
+        menu=domain_factories.Menu.create(),
         recipes_to_consider=recipes_to_consider,
         relevant_ingredients=relevant_ingredients,
     )

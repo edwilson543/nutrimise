@@ -12,19 +12,21 @@ def _lunch_and_dinner_menu(
     lunch: recipes.Recipe | None = None,
     dinner: recipes.Recipe | None = None,
 ):
-    lunch = domain_factories.MenuItem(
+    lunch_item = domain_factories.MenuItem(
         meal_time=recipes.MealTime.LUNCH,
         recipe_id=lunch.id if lunch else None,
         optimiser_generated=lunch is None,
     )
-    dinner = dinner or domain_factories.MenuItem(
-        day=lunch.day,
+    dinner_item = domain_factories.MenuItem(
+        day=lunch_item.day,
         meal_time=recipes.MealTime.DINNER,
         recipe_id=dinner.id if dinner else None,
         optimiser_generated=dinner is None,
     )
-    requirements = requirements or domain_factories.MenuRequirements()
-    return domain_factories.Menu(items=(lunch, dinner), requirements=requirements)
+    requirements = requirements or domain_factories.MenuRequirements.create()
+    return domain_factories.Menu(
+        items=(lunch_item, dinner_item), requirements=requirements
+    )
 
 
 class TestBasicRequirements:
@@ -414,12 +416,12 @@ class TestRandomObjective:
             optimisation_mode=menus.OptimisationMode.RANDOM
         )
         item = domain_factories.MenuItem()
-        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+        menu = domain_factories.Menu.create(items=(item,), requirements=requirements)
 
         # `random.random` is mocked to favour the latter recipe (the second mock
         # value is lower, order is preserved, and the optimisation sense is minimise).
-        recipe = domain_factories.Recipe(meal_times=[item.meal_time])
-        favoured_recipe = domain_factories.Recipe(meal_times=[item.meal_time])
+        recipe = domain_factories.Recipe.create(meal_times=[item.meal_time])
+        favoured_recipe = domain_factories.Recipe.create(meal_times=[item.meal_time])
 
         solution = optimisation.optimise_recipes_for_menu(
             menu=menu,
@@ -441,7 +443,7 @@ class TestNutrientObjective:
     def test_nutrient_objective_forces_recipe_selection_with_target_nutrient_content(
         self, suboptimal_deviation: int, optimisation_mode: menus.OptimisationMode
     ):
-        nutrient = domain_factories.Nutrient()
+        nutrient = domain_factories.Nutrient.create()
         target_quantity = 10
         nutrient_requirement = domain_factories.NutrientRequirement(
             nutrient_id=nutrient.id, target_quantity=target_quantity
@@ -451,7 +453,7 @@ class TestNutrientObjective:
             nutrient_requirements=(nutrient_requirement,),
         )
         item = domain_factories.MenuItem()
-        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+        menu = domain_factories.Menu.create(items=(item,), requirements=requirements)
 
         optimal_recipe = domain_factories.Recipe.any_meal_time_with_nutrient(
             nutrient=nutrient, nutrient_quantity=target_quantity
@@ -497,7 +499,7 @@ class TestVarietyObjective:
     def test_variety_objective_forces_selection_of_recipe_containing_ingredient(
         self, optimisation_mode: menus.OptimisationMode, target: int
     ):
-        ingredient = domain_factories.Ingredient()
+        ingredient = domain_factories.Ingredient.create()
         variety_requirement = domain_factories.VarietyRequirement(
             ingredient_category_id=ingredient.category.id,
             target=target,
@@ -507,7 +509,7 @@ class TestVarietyObjective:
             variety_requirements=(variety_requirement,),
         )
         item = domain_factories.MenuItem()
-        menu = domain_factories.Menu(items=(item,), requirements=requirements)
+        menu = domain_factories.Menu.create(items=(item,), requirements=requirements)
 
         with_ingredient_recipe = domain_factories.Recipe.with_ingredients(
             ingredients=[ingredient], meal_times=[item.meal_time]

@@ -36,10 +36,10 @@ class Recipe(factory.django.DjangoModelFactory):
         """
         Create a recipe whose only ingredient satisfied the requirements.
         """
-        ingredient = _ingredients.Ingredient()
+        ingredient = _ingredients.Ingredient.create()
         ingredient.dietary_requirements_satisfied.add(*dietary_requirements)
 
-        recipe = cls(**kwargs)
+        recipe = cls.create(**kwargs)
         RecipeIngredient(recipe=recipe, ingredient=ingredient)
         return recipe
 
