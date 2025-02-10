@@ -2,7 +2,7 @@ import numpy as np
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import embeddings, recipes
 from testing.factories import data as data_factories
 from testing.factories import domain as domain_factories
 
@@ -60,7 +60,7 @@ class TestCreateRecipe:
             author=author,
             name="Chicken curry",
             description="Saagfest",
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient, other_recipe_ingredient],
         )
@@ -90,7 +90,7 @@ class TestCreateRecipe:
             author=recipe.author,
             name=recipe.name,
             description="Saagfest",
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient],
         )
@@ -114,7 +114,7 @@ class TestCreateRecipe:
             author=other_author,
             name=recipe.name,
             description=recipe.description,
-            meal_times=[constants.MealTime.LUNCH],
+            meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[],
         )

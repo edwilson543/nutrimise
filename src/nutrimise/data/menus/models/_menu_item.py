@@ -4,7 +4,7 @@ from django.core import validators as django_validators
 from django.db import models as django_models
 
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import constants, menus
+from nutrimise.domain import menus, recipes
 
 from . import _menu
 
@@ -32,9 +32,7 @@ class MenuItem(django_models.Model):
         validators=[django_validators.MinValueValidator(limit_value=1)]
     )
 
-    meal_time = django_models.CharField(
-        max_length=16, choices=constants.MealTime.choices
-    )
+    meal_time = django_models.CharField(max_length=16, choices=recipes.MealTime.choices)
 
     optimiser_generated = django_models.BooleanField(default=True)
 
@@ -60,7 +58,7 @@ class MenuItem(django_models.Model):
             id=self.id,
             recipe_id=self.recipe_id,
             day=self.day,
-            meal_time=constants.MealTime(self.meal_time),
+            meal_time=recipes.MealTime(self.meal_time),
             optimiser_generated=self.optimiser_generated,
         )
 

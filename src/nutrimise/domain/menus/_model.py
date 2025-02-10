@@ -3,7 +3,7 @@ from __future__ import annotations
 import attrs
 from django.db import models as django_models
 
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import constants, embeddings, recipes
 
 
 @attrs.frozen
@@ -20,8 +20,8 @@ class Menu:
         return tuple(sorted(set(item.day for item in self.items)))
 
     @property
-    def meal_schedule(self) -> dict[constants.MealTime, dict[int, MenuItem]]:
-        schedule: dict[constants.MealTime, dict[int, MenuItem]] = {}
+    def meal_schedule(self) -> dict[recipes.MealTime, dict[int, MenuItem]]:
+        schedule: dict[recipes.MealTime, dict[int, MenuItem]] = {}
         for item in self.items:
             schedule[item.meal_time][item.day] = item
         return schedule
@@ -32,7 +32,7 @@ class MenuItem:
     id: int
     recipe_id: int | None
     day: int
-    meal_time: constants.MealTime
+    meal_time: recipes.MealTime
     optimiser_generated: bool
 
     # Mutators

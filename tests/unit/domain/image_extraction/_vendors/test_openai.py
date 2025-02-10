@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 from django.test import override_settings
 
-from nutrimise.domain import constants, image_extraction
+from nutrimise.domain import image_extraction, recipes
 from nutrimise.domain.image_extraction._vendors import _openai
 
 
@@ -47,8 +47,8 @@ class TestExtractRecipeFromImage:
         assert recipe.name == "Some recipe"
         assert recipe.description == "Some recipe description."
         assert recipe.meal_times == [
-            constants.MealTime.LUNCH,
-            constants.MealTime.DINNER,
+            recipes.MealTime.LUNCH,
+            recipes.MealTime.DINNER,
         ]
         assert recipe.number_of_servings == 7
 

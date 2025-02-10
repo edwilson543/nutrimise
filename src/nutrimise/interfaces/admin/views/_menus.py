@@ -10,7 +10,7 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import embeddings, recipes
 
 from . import _base
 
@@ -41,15 +41,15 @@ class MenuDetails(_base.AdminTemplateView):
 
     def get_meal_schedule(
         self,
-    ) -> dict[constants.MealTime, dict[int, menu_models.MenuItem]]:
+    ) -> dict[recipes.MealTime, dict[int, menu_models.MenuItem]]:
         """
         Get the menu items in a way that's easy to construct an HTML table from.
         """
-        meal_schedule: dict[constants.MealTime, dict[int, menu_models.MenuItem]] = (
+        meal_schedule: dict[recipes.MealTime, dict[int, menu_models.MenuItem]] = (
             collections.defaultdict(dict)
         )
         for item in list(self.menu.items.order_by("day")):
-            meal_schedule[constants.MealTime(item.meal_time)][item.day] = item
+            meal_schedule[recipes.MealTime(item.meal_time)][item.day] = item
         ordered_keys = sorted(meal_schedule, key=lambda meal_time: meal_time.order())
         return {key: meal_schedule[key] for key in ordered_keys}
 

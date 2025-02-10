@@ -1,4 +1,4 @@
-from nutrimise.domain import constants
+from nutrimise.domain import recipes
 from nutrimise.domain.optimisation import _inputs, _variables
 from nutrimise.domain.optimisation._constraints import _nutrient
 from testing.factories import domain as domain_factories
@@ -12,9 +12,9 @@ class TestNutrientConstraints:
         )
 
         # Creat a menu consisting of lunch & dinner on the same day.
-        lunch = domain_factories.MenuItem(meal_time=constants.MealTime.LUNCH)
+        lunch = domain_factories.MenuItem(meal_time=recipes.MealTime.LUNCH)
         dinner = domain_factories.MenuItem(
-            day=lunch.day, meal_time=constants.MealTime.DINNER
+            day=lunch.day, meal_time=recipes.MealTime.DINNER
         )
         requirements = domain_factories.MenuRequirements(
             maximum_occurrences_per_recipe=1,
@@ -28,7 +28,7 @@ class TestNutrientConstraints:
         )
         recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(nutritional_information,),
-            meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER],
+            meal_times=[recipes.MealTime.LUNCH, recipes.MealTime.DINNER],
         )
 
         other_nutritional_information = domain_factories.NutritionalInformation(
@@ -36,7 +36,7 @@ class TestNutrientConstraints:
         )
         other_recipe = domain_factories.Recipe(
             nutritional_information_per_serving=(other_nutritional_information,),
-            meal_times=[constants.MealTime.LUNCH, constants.MealTime.DINNER],
+            meal_times=[recipes.MealTime.LUNCH, recipes.MealTime.DINNER],
         )
 
         inputs_ = _inputs.OptimiserInputs(

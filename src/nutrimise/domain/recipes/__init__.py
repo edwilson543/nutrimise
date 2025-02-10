@@ -1,1 +1,1 @@
-from ._model import Recipe, RecipeAuthor, RecipeIngredient
+from ._model import MealTime, Recipe, RecipeAuthor, RecipeIngredient

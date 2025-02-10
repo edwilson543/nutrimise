@@ -1,5 +1,5 @@
 from nutrimise.data.ingredients import queries as ingredient_queries
-from nutrimise.domain import constants, ingredients
+from nutrimise.domain import constants, ingredients, recipes
 from testing.factories import data as data_factories
 
 
@@ -53,19 +53,19 @@ class TestNutritionalInformationForMenuPerDay:
         data_factories.MenuItem(
             menu=menu,
             day=1,
-            meal_time=constants.MealTime.LUNCH,
+            meal_time=recipes.MealTime.LUNCH,
             recipe=beef_stew_ingredient.recipe,
         )
         data_factories.MenuItem(
             menu=menu,
             day=1,
-            meal_time=constants.MealTime.DINNER,
+            meal_time=recipes.MealTime.DINNER,
             recipe=beef_lasagne_ingredient.recipe,
         )
         data_factories.MenuItem(
             menu=menu,
             day=2,
-            meal_time=constants.MealTime.LUNCH,
+            meal_time=recipes.MealTime.LUNCH,
             recipe=beef_curry_ingredient.recipe,
         )
 

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.postgres import fields as pg_fields
 from django.db import migrations, models
 
-from nutrimise.domain import constants
+from nutrimise.domain import recipes
 
 
 class Migration(migrations.Migration):
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 (
                     "meal_times",
                     pg_fields.ArrayField(
-                        base_field=models.TextField(choices=constants.MealTime.choices)
+                        base_field=models.TextField(choices=recipes.MealTime.choices)
                     ),
                 ),
                 ("number_of_servings", models.PositiveSmallIntegerField()),

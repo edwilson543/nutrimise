@@ -4,7 +4,7 @@ from django.contrib.postgres import fields as pg_fields
 from django.db import models as django_models
 
 from nutrimise.data.ingredients import queries as ingredient_queries
-from nutrimise.domain import constants, recipes
+from nutrimise.domain import recipes
 
 from . import _recipe_author
 
@@ -28,7 +28,7 @@ class Recipe(django_models.Model):
     description = django_models.TextField(blank=True)
 
     meal_times = pg_fields.ArrayField(
-        base_field=django_models.TextField(choices=constants.MealTime.choices)
+        base_field=django_models.TextField(choices=recipes.MealTime.choices)
     )
 
     number_of_servings = django_models.PositiveSmallIntegerField()
@@ -57,7 +57,7 @@ class Recipe(django_models.Model):
             recipe_ingredient.to_domain_model()
             for recipe_ingredient in self.ingredients.all()
         ]
-        meal_times = [constants.MealTime(meal_time) for meal_time in self.meal_times]
+        meal_times = [recipes.MealTime(meal_time) for meal_time in self.meal_times]
         embeddings = [
             embedding.to_domain_model() for embedding in self.embeddings.all()
         ]

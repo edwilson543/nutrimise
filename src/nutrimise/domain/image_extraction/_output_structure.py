@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pydantic
 
-from nutrimise.domain import constants, ingredients, recipes
+from nutrimise.domain import ingredients, recipes
 
 
 class Ingredient(pydantic.BaseModel):
@@ -39,5 +39,5 @@ class Recipe(pydantic.BaseModel):
     name: str
     description: str
     number_of_servings: int
-    meal_times: list[constants.MealTime]
+    meal_times: list[recipes.MealTime]
     ingredients: list[RecipeIngredient]

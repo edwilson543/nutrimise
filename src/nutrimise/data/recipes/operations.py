@@ -1,6 +1,6 @@
 import uuid
 
-from nutrimise.domain import constants, embeddings, recipes
+from nutrimise.domain import embeddings, recipes
 
 from . import models as recipe_models
 
@@ -24,7 +24,7 @@ def create_recipe(
     author: recipes.RecipeAuthor | None,
     name: str,
     description: str,
-    meal_times: list[constants.MealTime],
+    meal_times: list[recipes.MealTime],
     number_of_servings: int,
     recipe_ingredients: list[recipes.RecipeIngredient],
 ) -> int:

@@ -4,7 +4,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import embeddings, recipes
 
 from . import _ingredients
 
@@ -21,7 +21,7 @@ class Recipe(factory.django.DjangoModelFactory):
     author = factory.SubFactory(RecipeAuthor)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = "Some description"
-    meal_times = [constants.MealTime.DINNER.value]
+    meal_times = [recipes.MealTime.DINNER.value]
     number_of_servings = 2
 
     class Meta:

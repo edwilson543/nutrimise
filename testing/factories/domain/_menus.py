@@ -1,13 +1,13 @@
 import factory
 
-from nutrimise.domain import constants, menus
+from nutrimise.domain import constants, menus, recipes
 
 
 class MenuItem(factory.Factory):
     id = factory.Sequence(lambda n: n)
     recipe_id = None
     day = factory.Sequence(lambda n: n + 1)
-    meal_time = constants.MealTime.LUNCH
+    meal_time = recipes.MealTime.LUNCH
     optimiser_generated = True
 
     class Meta:

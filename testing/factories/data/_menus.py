@@ -2,7 +2,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, embeddings, menus
+from nutrimise.domain import constants, embeddings, menus, recipes
 
 from . import _auth, _ingredients, _recipes
 
@@ -19,7 +19,7 @@ class Menu(factory.django.DjangoModelFactory):
 class MenuItem(factory.django.DjangoModelFactory):
     menu = factory.SubFactory(Menu)
     recipe = factory.SubFactory(_recipes.Recipe)
-    meal_time = constants.MealTime.LUNCH
+    meal_time = recipes.MealTime.LUNCH
     day = factory.Sequence(lambda n: n + 1)
 
     class Meta:
