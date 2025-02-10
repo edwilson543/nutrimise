@@ -1,6 +1,6 @@
 import factory
 
-from nutrimise.domain import constants, ingredients, menus, recipes
+from nutrimise.domain import ingredients, menus, recipes
 
 
 class MenuItem(factory.Factory):
@@ -43,7 +43,7 @@ class NutrientRequirement(factory.Factory):
     maximum_quantity = None
     target_quantity = None
     units = ingredients.NutrientUnit.GRAMS
-    enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
+    enforcement_interval = menus.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:
         model = menus.NutrientRequirement

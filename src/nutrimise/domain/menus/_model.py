@@ -3,7 +3,7 @@ from __future__ import annotations
 import attrs
 from django.db import models as django_models
 
-from nutrimise.domain import constants, embeddings, ingredients, recipes
+from nutrimise.domain import embeddings, ingredients, recipes
 
 
 @attrs.frozen
@@ -58,6 +58,10 @@ class MenuRequirements:
     dietary_requirement_ids: tuple[int, ...]
 
 
+class NutrientRequirementEnforcementInterval(django_models.TextChoices):
+    DAILY = "DAILY", "Daily"
+
+
 @attrs.frozen
 class NutrientRequirement:
     nutrient_id: int
@@ -65,7 +69,7 @@ class NutrientRequirement:
     maximum_quantity: float | None
     target_quantity: float | None
     units: ingredients.NutrientUnit
-    enforcement_interval: constants.NutrientRequirementEnforcementInterval
+    enforcement_interval: NutrientRequirementEnforcementInterval
 
 
 @attrs.frozen

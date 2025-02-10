@@ -110,7 +110,7 @@ layers = [
     "menus",
     "recipes",
     "ingredients",
-    "constants | embeddings",
+    "embeddings",
 ]
 exhaustive = true
 

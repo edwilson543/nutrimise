@@ -2,7 +2,7 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, embeddings, ingredients, menus, recipes
+from nutrimise.domain import embeddings, ingredients, menus, recipes
 
 from . import _auth, _ingredients, _recipes
 
@@ -53,7 +53,7 @@ class NutrientRequirement(factory.django.DjangoModelFactory):
     maximum_quantity = None
     target_quantity = None
     units = ingredients.NutrientUnit.GRAMS
-    enforcement_interval = constants.NutrientRequirementEnforcementInterval.DAILY
+    enforcement_interval = menus.NutrientRequirementEnforcementInterval.DAILY
 
     class Meta:
         model = menu_models.NutrientRequirement
