@@ -3,6 +3,7 @@
 fixtures/*.json
 data/target/*.csv
 data/snapshot*.json
+data/images/
 
 # Certification
 cert.pem
