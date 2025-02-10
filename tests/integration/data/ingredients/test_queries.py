@@ -1,5 +1,5 @@
 from nutrimise.data.ingredients import queries as ingredient_queries
-from nutrimise.domain import constants, ingredients, recipes
+from nutrimise.domain import ingredients, recipes
 from testing.factories import data as data_factories
 
 
@@ -78,14 +78,14 @@ class TestNutritionalInformationForMenuPerDay:
                 ingredients.NutritionalInformation(
                     nutrient=protein.to_domain_model(),
                     nutrient_quantity=80,  # Beef stew + beef lasagne.
-                    units=constants.NutrientUnit.GRAMS,
+                    units=ingredients.NutrientUnit.GRAMS,
                 )
             ],
             2: [
                 ingredients.NutritionalInformation(
                     nutrient=protein.to_domain_model(),
                     nutrient_quantity=20,  # Just beef curry.
-                    units=constants.NutrientUnit.GRAMS,
+                    units=ingredients.NutrientUnit.GRAMS,
                 )
             ],
         }
@@ -128,12 +128,12 @@ class TestNutritionalInformationForRecipe:
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
                 nutrient_quantity=375.0,
-                units=constants.NutrientUnit.GRAMS,
+                units=ingredients.NutrientUnit.GRAMS,
             ),
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
                 nutrient_quantity=75.0,
-                units=constants.NutrientUnit.GRAMS,
+                units=ingredients.NutrientUnit.GRAMS,
             ),
         ]
 
@@ -163,11 +163,11 @@ class TestNutritionalInformationForRecipe:
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
                 nutrient_quantity=175.0,
-                units=constants.NutrientUnit.GRAMS,
+                units=ingredients.NutrientUnit.GRAMS,
             ),
             ingredients.NutritionalInformation(
                 nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
                 nutrient_quantity=12.5,
-                units=constants.NutrientUnit.GRAMS,
+                units=ingredients.NutrientUnit.GRAMS,
             ),
         ]

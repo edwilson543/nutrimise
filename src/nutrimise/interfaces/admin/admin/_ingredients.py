@@ -4,7 +4,7 @@ from django import forms, http
 from django.contrib import admin
 
 from nutrimise.data.ingredients import models as ingredient_models
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 
 
 @admin.register(ingredient_models.DietaryRequirement)
@@ -30,7 +30,7 @@ class _IngredientNutritionalInformationInline(admin.TabularInline):
         def __init__(self, *args: Any, **kwargs: Any):
             nutrients = ingredient_models.Nutrient.objects.order_by("name")
             kwargs["initial"] = [
-                {"nutrient": nutrient, "units": constants.NutrientUnit.GRAMS.value}
+                {"nutrient": nutrient, "units": ingredients.NutrientUnit.GRAMS.value}
                 for nutrient in nutrients
             ]
             super().__init__(*args, **kwargs)

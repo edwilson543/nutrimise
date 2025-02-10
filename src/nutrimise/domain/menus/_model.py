@@ -3,7 +3,7 @@ from __future__ import annotations
 import attrs
 from django.db import models as django_models
 
-from nutrimise.domain import constants, embeddings, recipes
+from nutrimise.domain import constants, embeddings, ingredients, recipes
 
 
 @attrs.frozen
@@ -64,7 +64,7 @@ class NutrientRequirement:
     minimum_quantity: float | None
     maximum_quantity: float | None
     target_quantity: float | None
-    units: constants.NutrientUnit
+    units: ingredients.NutrientUnit
     enforcement_interval: constants.NutrientRequirementEnforcementInterval
 
 

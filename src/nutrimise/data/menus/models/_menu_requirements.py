@@ -1,7 +1,7 @@
 from django.core import validators as django_validators
 from django.db import models as django_models
 
-from nutrimise.domain import constants, menus
+from nutrimise.domain import constants, ingredients, menus
 
 from . import _menu
 
@@ -73,7 +73,7 @@ class NutrientRequirement(django_models.Model):
 
     target_quantity = django_models.FloatField(null=True, blank=True)
 
-    units = django_models.TextField(choices=constants.NutrientUnit.choices)
+    units = django_models.TextField(choices=ingredients.NutrientUnit.choices)
 
     enforcement_interval = django_models.TextField(
         choices=constants.NutrientRequirementEnforcementInterval.choices
@@ -96,7 +96,7 @@ class NutrientRequirement(django_models.Model):
             minimum_quantity=self.minimum_quantity,
             maximum_quantity=self.maximum_quantity,
             target_quantity=self.target_quantity,
-            units=constants.NutrientUnit(self.units),
+            units=ingredients.NutrientUnit(self.units),
             enforcement_interval=constants.NutrientRequirementEnforcementInterval(
                 self.enforcement_interval
             ),

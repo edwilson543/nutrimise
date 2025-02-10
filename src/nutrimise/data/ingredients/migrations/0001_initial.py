@@ -1,6 +1,6 @@
 from django.db import migrations, models
 
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 
 
 class Migration(migrations.Migration):
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("quantity_per_gram", models.FloatField()),
-                ("units", models.TextField(choices=constants.NutrientUnit.choices)),
+                ("units", models.TextField(choices=ingredients.NutrientUnit.choices)),
                 (
                     "ingredient",
                     models.ForeignKey(

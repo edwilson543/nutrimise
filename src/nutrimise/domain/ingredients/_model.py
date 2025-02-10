@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import attrs
-
-from nutrimise.domain import constants
+from django.db import models as django_models
 
 
 @attrs.frozen
@@ -26,6 +25,11 @@ class Nutrient:
     name: str
 
 
+class NutrientUnit(django_models.TextChoices):
+    GRAMS = "GRAMS", "Grams"
+    KCAL = "KCAL", "kcal"
+
+
 @attrs.frozen
 class NutritionalInformation:
     """
@@ -34,7 +38,7 @@ class NutritionalInformation:
 
     nutrient: Nutrient
     nutrient_quantity: float
-    units: constants.NutrientUnit
+    units: NutrientUnit
 
     def __add__(self, other: NutritionalInformation) -> NutritionalInformation:
         if self.nutrient == other.nutrient and self.units == other.units:
@@ -54,7 +58,7 @@ class NutritionalInformation:
         cls,
         *,
         nutrient: Nutrient,
-        units: constants.NutrientUnit = constants.NutrientUnit.GRAMS,
+        units: NutrientUnit = NutrientUnit.GRAMS,
     ) -> NutritionalInformation:
         return cls(
             nutrient=nutrient,

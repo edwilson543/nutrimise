@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core import validators as django_validators
 from django.db import migrations, models
 
-from nutrimise.domain import constants, menus
+from nutrimise.domain import ingredients, menus
 
 
 class Migration(migrations.Migration):
@@ -121,7 +121,7 @@ class Migration(migrations.Migration):
                 ("minimum_quantity", models.FloatField(null=True, blank=True)),
                 ("maximum_quantity", models.FloatField(null=True, blank=True)),
                 ("target_quantity", models.FloatField(null=True, blank=True)),
-                ("units", models.TextField(choices=constants.NutrientUnit.choices)),
+                ("units", models.TextField(choices=ingredients.NutrientUnit.choices)),
                 (
                     "enforcement_interval",
                     models.TextField(choices=[("DAILY", "Daily")]),

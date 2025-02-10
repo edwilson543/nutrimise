@@ -1,4 +1,4 @@
-from nutrimise.domain import constants, ingredients
+from nutrimise.domain import ingredients
 from testing.factories import domain as domain_factories
 
 
@@ -8,7 +8,7 @@ class TestNutritionalInformationSumByNutrient:
     ):
         nutrient = domain_factories.Nutrient()
         other_nutrient = domain_factories.Nutrient()
-        units = constants.NutrientUnit.GRAMS
+        units = ingredients.NutrientUnit.GRAMS
 
         unaggregated_list = [
             domain_factories.NutritionalInformation(
@@ -40,7 +40,7 @@ class TestNutritionalInformationSumByNutrient:
         self,
     ):
         nutrient = domain_factories.Nutrient()
-        units = constants.NutrientUnit.GRAMS
+        units = ingredients.NutrientUnit.GRAMS
 
         aggregated_list = ingredients.NutritionalInformation.sum_by_nutrient(
             nutritional_information=[], nutrients=[nutrient]
