@@ -11,6 +11,7 @@ from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
 from nutrimise.domain import embeddings, recipes
+from nutrimise.interfaces.admin import forms
 
 from . import _base
 
@@ -37,6 +38,10 @@ class MenuDetails(_base.AdminTemplateView):
                 menu=self.menu, per_serving=True
             )
         )
+
+        context["optimise_form"] = forms.OptimiseMenu(
+            initial={"optimisation_mode": self.menu.requirements.optimisation_mode}
+        )
         return context
 
     def get_meal_schedule(
@@ -55,19 +60,17 @@ class MenuDetails(_base.AdminTemplateView):
 
 
 class OptimiseMenu(generic.FormView):
-    class OptimisationForm(django_forms.Form):
-        prompt = django_forms.CharField(required=False)
-
-    form_class = OptimisationForm
+    form_class = forms.OptimiseMenu
 
     def setup(self, request: http.HttpRequest, *args: object, **kwargs: int) -> None:
         super().setup(request, *args, **kwargs)
         self._menu_id = kwargs["menu_id"]
 
     def form_valid(
-        self, form: OptimisationForm, *args: object, **kwargs: int
+        self, form: forms.OptimiseMenu, *args: object, **kwargs: int
     ) -> http.HttpResponse:
         self._embed_prompt(user_prompt=form.cleaned_data.get("prompt"))
+
         try:
             menus_app.optimise_menu(menu_id=self._menu_id)
         except Exception as exc:

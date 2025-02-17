@@ -17,9 +17,8 @@ def test_can_optimise_menu_from_details_view(admin_client):
     menu_detail_view = admin_client.get(menu_details_url)
 
     optimise_form = menu_detail_view.forms["optimise-menu"]
-    assert (
-        optimise_form.fields.get("prompt") is None
-    )  # Since the optimisation mode is not `SEMANTIC`
+    # The optimisation mode should be pre-populated from the menu requirements.
+    assert optimise_form["optimisation_mode"].value == "RANDOM"
     optimise_response = optimise_form.submit()
 
     assert optimise_response.status_code == 302
@@ -44,6 +43,7 @@ def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
     menu_detail_view = admin_client.get(menu_details_url)
 
     optimise_form = menu_detail_view.forms["optimise-menu"]
+    optimise_form["optimisation_mode"] = "SEMANTIC"
     optimise_form["prompt"] = "Pick me the lean and mean recipes!"
     optimise_response = optimise_form.submit()
 

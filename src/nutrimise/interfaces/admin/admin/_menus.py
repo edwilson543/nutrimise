@@ -1,6 +1,7 @@
 from typing import Any
 
-from django import forms, http
+from django import forms as django_forms
+from django import http
 from django import urls as django_urls
 from django.contrib import admin
 from django.utils import safestring
@@ -27,9 +28,9 @@ class _MenuItemInline(admin.TabularInline):
         return f"Day {menu_item.day}"
 
 
-class _MenuChangeForm(forms.ModelForm):
-    number_of_days = forms.IntegerField(min_value=1)
-    meal_times = forms.MultipleChoiceField(choices=recipes.MealTime.choices)
+class _MenuChangeForm(django_forms.ModelForm):
+    number_of_days = django_forms.IntegerField(min_value=1)
+    meal_times = django_forms.MultipleChoiceField(choices=recipes.MealTime.choices)
 
     class Meta:
         model = menu_models.Menu
