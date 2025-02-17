@@ -51,19 +51,24 @@ class _MenuChangeForm(forms.ModelForm):
 class MenuAdmin(admin.ModelAdmin):
     list_display = [
         "id",
-        "name",
+        "name_",
         "author",
         "meals",
         "dietary_requirements",
         "user_actions",
     ]
-    list_display_links = ["name"]
+    list_display_links = ["name_"]
     ordering = ["name"]
     search_fields = ["name"]
 
     form = _MenuChangeForm
 
     inlines = [_MenuRequirementsInline, _MenuItemInline]
+
+    @admin.display(description="Name")
+    def name_(self, menu: menu_models.Menu) -> safestring.SafeString:
+        detail_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu.id})
+        return safestring.mark_safe(f'<a href="{detail_url}"><b>{menu.name}</b></a>')
 
     @admin.display(description="Actions")
     def user_actions(self, menu: menu_models.Menu) -> safestring.SafeString:
@@ -72,7 +77,7 @@ class MenuAdmin(admin.ModelAdmin):
             "admin:menus_menu_change", kwargs={"object_id": menu.id}
         )
         return safestring.mark_safe(
-            f'<a href="{detail_url}"><b>View</b></a> | <a href="{edit_url}"><b>Edit</b></a>'
+            f'<a href="{detail_url}"><b>Optimise</b></a> | <a href="{edit_url}"><b>Edit</b></a>'
         )
 
     @admin.display()
