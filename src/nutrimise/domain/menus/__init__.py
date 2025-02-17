@@ -3,6 +3,7 @@ from ._model import (
     MenuItem,
     MenuRequirements,
     NutrientRequirement,
+    NutrientRequirementEnforcementInterval,
     OptimisationMode,
     VarietyRequirement,
 )

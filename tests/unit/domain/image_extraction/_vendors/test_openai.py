@@ -4,14 +4,14 @@ from typing import Any
 import pytest
 from django.test import override_settings
 
-from nutrimise.domain import constants, image_extraction
+from nutrimise.domain import image_extraction, recipes
 from nutrimise.domain.image_extraction._vendors import _openai
 
 
 class TestInstantiation:
     def tests_instantiates_service_when_api_key_set(self):
         with override_settings(OPENAI_API_KEY="some-key"):
-            _openai.OpenAIImageExtractService()
+            _openai.OpenAIImageExtractionService()
 
     @pytest.mark.parametrize("api_key", ["", None])
     def test_raises_configuration_error_when_api_key_not_set(self, api_key: str | None):
@@ -19,7 +19,7 @@ class TestInstantiation:
             override_settings(OPENAI_API_KEY=api_key),
             pytest.raises(image_extraction.ImageExtractionServiceMisconfigured) as exc,
         ):
-            _openai.OpenAIImageExtractService()
+            _openai.OpenAIImageExtractionService()
 
         assert exc.value.vendor == image_extraction.ImageExtractionVendor.OPENAI
 
@@ -39,7 +39,7 @@ class TestExtractRecipeFromImage:
             json=self._response_ok_json(),
         )
 
-        openai_service = _openai.OpenAIImageExtractService()
+        openai_service = _openai.OpenAIImageExtractionService()
         recipe = openai_service.extract_recipe_from_image(
             base64_image=base64_image, existing_ingredients=[ingredient]
         )
@@ -47,8 +47,8 @@ class TestExtractRecipeFromImage:
         assert recipe.name == "Some recipe"
         assert recipe.description == "Some recipe description."
         assert recipe.meal_times == [
-            constants.MealTime.LUNCH,
-            constants.MealTime.DINNER,
+            recipes.MealTime.LUNCH,
+            recipes.MealTime.DINNER,
         ]
         assert recipe.number_of_servings == 7
 
@@ -62,7 +62,7 @@ class TestExtractRecipeFromImage:
 
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
-        openai_service = _openai.OpenAIImageExtractService()
+        openai_service = _openai.OpenAIImageExtractionService()
         base64_image = "My encoded image."
 
         httpx_mock.add_response(

@@ -1,6 +1,6 @@
 from django.db import models as django_models
 
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 
 from . import _ingredient, _nutrient
 
@@ -24,7 +24,7 @@ class IngredientNutritionalInformation(django_models.Model):
 
     quantity_per_gram = django_models.FloatField()
 
-    units = django_models.TextField(choices=constants.NutrientUnit.choices)
+    units = django_models.TextField(choices=ingredients.NutrientUnit.choices)
 
     class Meta:
         constraints = [

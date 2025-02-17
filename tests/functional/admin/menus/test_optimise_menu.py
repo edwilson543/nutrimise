@@ -17,9 +17,8 @@ def test_can_optimise_menu_from_details_view(admin_client):
     menu_detail_view = admin_client.get(menu_details_url)
 
     optimise_form = menu_detail_view.forms["optimise-menu"]
-    assert (
-        optimise_form.fields.get("prompt") is None
-    )  # Since the optimisation mode is not `SEMANTIC`
+    # The optimisation mode should be pre-populated from the menu requirements.
+    assert optimise_form["optimisation_mode"].value == "RANDOM"
     optimise_response = optimise_form.submit()
 
     assert optimise_response.status_code == 302
@@ -32,8 +31,8 @@ def test_can_optimise_menu_from_details_view(admin_client):
 @override_settings(EMBEDDING_VENDOR="FAKE")
 def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
     menu = data_factories.Menu(name="My menu")
-    data_factories.MenuRequirements(
-        menu=menu, optimisation_mode=menus.OptimisationMode.SEMANTIC.value
+    menu_requirements = data_factories.MenuRequirements(
+        menu=menu, optimisation_mode=menus.OptimisationMode.RANDOM.value
     )
     menu_item = data_factories.MenuItem(menu=menu, recipe=None)
 
@@ -44,6 +43,7 @@ def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
     menu_detail_view = admin_client.get(menu_details_url)
 
     optimise_form = menu_detail_view.forms["optimise-menu"]
+    optimise_form["optimisation_mode"] = "SEMANTIC"
     optimise_form["prompt"] = "Pick me the lean and mean recipes!"
     optimise_response = optimise_form.submit()
 
@@ -56,3 +56,7 @@ def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
     # The menu and prompt should also have been embedded along the way.
     embedding = menu.embeddings.get()
     assert embedding.prompt_hash == "7e4708214bb86ae0a68c052390b29ea6"
+
+    # The menu requirements should have been updated.
+    menu_requirements.refresh_from_db()
+    assert menu_requirements.optimisation_mode == menus.OptimisationMode.SEMANTIC.value

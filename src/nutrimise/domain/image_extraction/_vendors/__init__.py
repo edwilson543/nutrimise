@@ -5,4 +5,4 @@ from ._base import (
 )
 from ._broken import BrokenImageExtractionService
 from ._fake import FakeImageExtractionService, get_canned_recipe
-from ._openai import OpenAIImageExtractService
+from ._openai import OpenAIImageExtractionService

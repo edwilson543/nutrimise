@@ -1,7 +1,7 @@
 import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
-from nutrimise.domain import constants
+from nutrimise.domain import ingredients
 
 
 class DietaryRequirement(factory.django.DjangoModelFactory):
@@ -38,7 +38,7 @@ class IngredientNutritionalInformation(factory.django.DjangoModelFactory):
     ingredient = factory.SubFactory(Ingredient)
     nutrient = factory.SubFactory(Nutrient)
     quantity_per_gram = 0.5
-    units = constants.NutrientUnit
+    units = ingredients.NutrientUnit
 
     class Meta:
         model = ingredient_models.IngredientNutritionalInformation

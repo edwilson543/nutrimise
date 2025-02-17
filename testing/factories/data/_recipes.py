@@ -4,16 +4,24 @@ import factory
 
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import constants, embeddings
+from nutrimise.domain import embeddings, recipes
 
-from . import _auth, _ingredients
+from . import _ingredients
+
+
+class RecipeAuthor(factory.django.DjangoModelFactory):
+    first_name = factory.Sequence(lambda n: f"first-name-{n}")
+    last_name = factory.Sequence(lambda n: f"last-name-{n}")
+
+    class Meta:
+        model = recipe_models.RecipeAuthor
 
 
 class Recipe(factory.django.DjangoModelFactory):
-    author = factory.SubFactory(_auth.User)
+    author = factory.SubFactory(RecipeAuthor)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = "Some description"
-    meal_times = [constants.MealTime.DINNER.value]
+    meal_times = [recipes.MealTime.DINNER.value]
     number_of_servings = 2
 
     class Meta:
@@ -28,10 +36,10 @@ class Recipe(factory.django.DjangoModelFactory):
         """
         Create a recipe whose only ingredient satisfied the requirements.
         """
-        ingredient = _ingredients.Ingredient()
+        ingredient = _ingredients.Ingredient.create()
         ingredient.dietary_requirements_satisfied.add(*dietary_requirements)
 
-        recipe = cls(**kwargs)
+        recipe = cls.create(**kwargs)
         RecipeIngredient(recipe=recipe, ingredient=ingredient)
         return recipe
 

@@ -42,7 +42,7 @@ class TestGetOrCreateIngredient:
 
     @pytest.mark.parametrize("name", ["brocoli", "Brocoli", "BROCOLI"])
     def test_gets_existing_ingredient_matching_name(self, name: str):
-        existing_ingredient = data_factories.Ingredient(name=name.lower())
+        existing_ingredient = data_factories.Ingredient.create(name=name.lower())
 
         result = ingredient_operations.get_or_create_ingredient(
             name=name,

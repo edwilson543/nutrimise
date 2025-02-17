@@ -3,6 +3,7 @@
 fixtures/*.json
 data/target/*.csv
 data/snapshot*.json
+data/images/
 
 # Certification
 cert.pem
@@ -176,7 +177,7 @@ celerybeat.pid
 # Environments
 .env*
 env/
-/venv
+.venv/
 ENV/
 env.bak/
 venv.bak/

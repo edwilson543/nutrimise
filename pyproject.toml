@@ -29,7 +29,7 @@ dependencies = [
     "gunicorn",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 
 ci = [
     # Test framework
@@ -50,7 +50,7 @@ ci = [
     "django-extensions",
 ]
 
-dev = [
+local = [
     # Git
     "pre-commit",
     # Pytest plugins for assisting local dev (but not used in CI)
@@ -110,7 +110,7 @@ layers = [
     "menus",
     "recipes",
     "ingredients",
-    "constants | embeddings",
+    "embeddings",
 ]
 exhaustive = true
 

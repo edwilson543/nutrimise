@@ -1,7 +1,6 @@
 import collections
 from typing import Any
 
-from django import forms as django_forms
 from django import http
 from django import urls as django_urls
 from django.contrib import messages
@@ -10,7 +9,9 @@ from django.views import generic
 from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
-from nutrimise.domain import constants, embeddings
+from nutrimise.data.menus import operations as menu_operations
+from nutrimise.domain import embeddings, menus, recipes
+from nutrimise.interfaces.admin import forms
 
 from . import _base
 
@@ -37,37 +38,48 @@ class MenuDetails(_base.AdminTemplateView):
                 menu=self.menu, per_serving=True
             )
         )
+
+        context["optimise_form"] = self._get_optimise_form()
         return context
 
     def get_meal_schedule(
         self,
-    ) -> dict[constants.MealTime, dict[int, menu_models.MenuItem]]:
+    ) -> dict[recipes.MealTime, dict[int, menu_models.MenuItem]]:
         """
         Get the menu items in a way that's easy to construct an HTML table from.
         """
-        meal_schedule: dict[constants.MealTime, dict[int, menu_models.MenuItem]] = (
+        meal_schedule: dict[recipes.MealTime, dict[int, menu_models.MenuItem]] = (
             collections.defaultdict(dict)
         )
         for item in list(self.menu.items.order_by("day")):
-            meal_schedule[constants.MealTime(item.meal_time)][item.day] = item
+            meal_schedule[recipes.MealTime(item.meal_time)][item.day] = item
         ordered_keys = sorted(meal_schedule, key=lambda meal_time: meal_time.order())
         return {key: meal_schedule[key] for key in ordered_keys}
 
+    def _get_optimise_form(self) -> forms.OptimiseMenu:
+        if hasattr(self.menu, "requirements"):
+            optimisation_mode = self.menu.requirements.optimisation_mode
+        else:
+            optimisation_mode = None
+
+        return forms.OptimiseMenu(initial={"optimisation_mode": optimisation_mode})
+
 
 class OptimiseMenu(generic.FormView):
-    class OptimisationForm(django_forms.Form):
-        prompt = django_forms.CharField(required=False)
-
-    form_class = OptimisationForm
+    form_class = forms.OptimiseMenu
 
     def setup(self, request: http.HttpRequest, *args: object, **kwargs: int) -> None:
         super().setup(request, *args, **kwargs)
         self._menu_id = kwargs["menu_id"]
 
     def form_valid(
-        self, form: OptimisationForm, *args: object, **kwargs: int
+        self, form: forms.OptimiseMenu, *args: object, **kwargs: int
     ) -> http.HttpResponse:
         self._embed_prompt(user_prompt=form.cleaned_data.get("prompt"))
+        self._update_optimisation_mode(
+            optimisation_mode=form.cleaned_data["optimisation_mode"]
+        )
+
         try:
             menus_app.optimise_menu(menu_id=self._menu_id)
         except Exception as exc:
@@ -85,6 +97,12 @@ class OptimiseMenu(generic.FormView):
             menu_id=self._menu_id,
             embedding_service=embedding_service,
             user_prompt=user_prompt,
+        )
+
+    def _update_optimisation_mode(self, optimisation_mode: str) -> None:
+        menu_operations.update_menu_requirements(
+            menu_id=self._menu_id,
+            optimisation_mode=menus.OptimisationMode(optimisation_mode),
         )
 
     def get_success_url(self) -> str:
