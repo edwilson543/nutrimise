@@ -3,7 +3,7 @@ from testing.factories import data as data_factories
 
 
 class TestRecipeToDomainModel:
-    def test_converts_recipe_orm_model_with_requirements_to_recipe_domain(self):
+    def test_converts_recipe_orm_model_with_nutritional_information_to_recipe_domain(self):
         meal_times = [recipes.MealTime.LUNCH, recipes.MealTime.DINNER]
         orm_recipe = data_factories.Recipe(meal_times=meal_times)
         orm_embedding = data_factories.RecipeEmbedding(recipe=orm_recipe)
@@ -17,6 +17,8 @@ class TestRecipeToDomainModel:
 
         assert recipe.id == orm_recipe.id
         assert recipe.meal_times == tuple(meal_times)
+        assert recipe.description == orm_recipe.description
+        assert recipe.methodology == orm_recipe.methodology
         assert len(recipe.nutritional_information_per_serving) > 0
 
         assert len(recipe.ingredients) == 1

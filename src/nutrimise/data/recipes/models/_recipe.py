@@ -68,6 +68,7 @@ class Recipe(django_models.Model):
             id=self.id,
             name=self.name,
             description=self.description,
+            methodology=self.methodology,
             meal_times=tuple(meal_times),
             nutritional_information_per_serving=tuple(nutritional_information),
             ingredients=tuple(ingredients),

@@ -25,6 +25,7 @@ class Recipe:
     id: int
     name: str
     description: str
+    methodology: str
     meal_times: tuple[MealTime, ...]
     # The absolute amount of each nutrient, per serving.
     nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
