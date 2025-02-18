@@ -52,6 +52,7 @@ def extract_recipe_from_image(
             author=author,
             name=extracted_recipe.name,
             description=extracted_recipe.description,
+            methodology=extracted_recipe.methodology,
             number_of_servings=extracted_recipe.number_of_servings,
             meal_times=extracted_recipe.meal_times,
             recipe_ingredients=recipe_ingredients,

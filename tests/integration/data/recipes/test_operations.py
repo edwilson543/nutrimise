@@ -60,6 +60,7 @@ class TestCreateRecipe:
             author=author,
             name="Chicken curry",
             description="Saagfest",
+            methodology="Put saag in fest",
             meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient, other_recipe_ingredient],
@@ -70,6 +71,7 @@ class TestCreateRecipe:
         assert recipe.author_id == author.id
         assert recipe.name == "Chicken curry"
         assert recipe.description == "Saagfest"
+        assert recipe.methodology == "Put saag in fest"
         assert recipe.meal_times == ["LUNCH"]
         assert recipe.number_of_servings == 3
 
@@ -90,6 +92,7 @@ class TestCreateRecipe:
             author=recipe.author,
             name=recipe.name,
             description="Saagfest",
+            methodology="Put saag in fest",
             meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[recipe_ingredient],
@@ -114,6 +117,7 @@ class TestCreateRecipe:
             author=other_author,
             name=recipe.name,
             description=recipe.description,
+            methodology=recipe.methodology,
             meal_times=[recipes.MealTime.LUNCH],
             number_of_servings=3,
             recipe_ingredients=[],

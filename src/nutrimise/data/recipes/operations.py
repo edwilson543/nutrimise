@@ -24,6 +24,7 @@ def create_recipe(
     author: recipes.RecipeAuthor | None,
     name: str,
     description: str,
+    methodology: str,
     meal_times: list[recipes.MealTime],
     number_of_servings: int,
     recipe_ingredients: list[recipes.RecipeIngredient],
@@ -37,6 +38,7 @@ def create_recipe(
         author_id=author_id,
         name=name,
         description=description,
+        methodology=methodology,
         meal_times=meal_times,
         number_of_servings=number_of_servings,
     )

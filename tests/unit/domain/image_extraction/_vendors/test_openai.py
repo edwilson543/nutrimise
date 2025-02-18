@@ -46,6 +46,7 @@ class TestExtractRecipeFromImage:
 
         assert recipe.name == "Some recipe"
         assert recipe.description == "Some recipe description."
+        assert recipe.methodology == "Some recipe methodology."
         assert recipe.meal_times == [
             recipes.MealTime.LUNCH,
             recipes.MealTime.DINNER,
@@ -93,6 +94,7 @@ class TestExtractRecipeFromImage:
         recipe = {
             "name": "Some recipe",
             "description": "Some recipe description.",
+            "methodology": "Some recipe methodology.",
             "meal_times": ["LUNCH", "DINNER"],
             "number_of_servings": 7,
             "ingredients": [{"ingredient": ingredient, "quantity": 250.0}],

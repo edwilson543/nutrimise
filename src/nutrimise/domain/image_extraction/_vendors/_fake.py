@@ -12,6 +12,7 @@ def get_canned_recipe(
     return _output_structure.Recipe(
         name="My fake recipe",
         description="Description for the fake recipe",
+        methodology="Boil em mash em stick em in a stew.",
         meal_times=[recipes.MealTime.DINNER],
         number_of_servings=3,
         ingredients=ingredients or [],
