@@ -54,3 +54,12 @@ def create_recipe(
     recipe_models.RecipeIngredient.objects.bulk_create(recipe_ingredients_to_create)
 
     return recipe.id
+
+
+def get_or_create_recipe_author(*, first_name: str, last_name: str) -> int:
+    author, _ = recipe_models.RecipeAuthor.objects.get_or_create(
+        first_name__iexact=first_name,
+        last_name__iexact=last_name,
+        defaults={"first_name": first_name, "last_name": last_name},
+    )
+    return author.id

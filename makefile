@@ -59,6 +59,10 @@ load_example_data:
 load_target_data:
 	python manage.py import_from_csv --dataset=target
 
+.PHONY:extract_recipes
+extract_recipes:
+	python manage.py extract_recipes_from_images
+
 .PHONY:recipe_embeddings
 recipe_embeddings:
 	python manage.py create_recipe_embeddings

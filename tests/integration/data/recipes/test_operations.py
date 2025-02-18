@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.data.recipes import operations as recipe_operations
@@ -127,3 +128,41 @@ class TestCreateRecipe:
         new_recipe = recipe_models.Recipe.objects.exclude(id=recipe.id).get()
         assert new_recipe.id == new_recipe_id
         assert new_recipe.name == recipe.name
+
+
+class TestGetOrCreateRecipeAuthor:
+    @pytest.mark.parametrize(
+        "first_name,last_name",
+        [
+            ("WES", "HOOLAHAN"),
+            ("wes", "hoolahan"),
+            ("WES", "hoolahan"),
+            ("wes", "HOOLAHAN"),
+        ],
+    )
+    def test_gets_recipe_author(self, first_name: str, last_name: str):
+        author = data_factories.RecipeAuthor.create(
+            first_name=first_name, last_name=last_name
+        )
+
+        author_id = recipe_operations.get_or_create_recipe_author(
+            first_name=author.first_name.lower(),
+            last_name=author.last_name.lower(),
+        )
+
+        assert author.id == author_id
+
+    def test_creates_recipe_author(self):
+        existing_author = data_factories.RecipeAuthor(
+            first_name="Wes", last_name="Hoolahan"
+        )
+
+        author_id = recipe_operations.get_or_create_recipe_author(
+            first_name="Wes",
+            last_name="Carewlaland",
+        )
+
+        assert existing_author.id != author_id
+        new_author = recipe_models.RecipeAuthor.objects.get(id=author_id)
+        assert new_author.first_name == "Wes"
+        assert new_author.last_name == "Carewlaland"
