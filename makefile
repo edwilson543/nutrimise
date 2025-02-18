@@ -45,11 +45,11 @@ superuser:
 
 .PHONY:snapshot
 snapshot:
-	python manage.py dumpdata ingredients recipes menus auth.user --configuration=Settings --output=data/snapshot.json
+	python manage.py dumpdata ingredients recipes menus auth.user --configuration=Settings --output=data/snapshots/snapshot.json
 
 .PHONY:import_snapshot
 import_snapshot:
-	python manage.py loaddata data/snapshot.json
+	python manage.py loaddata data/snapshots/snapshot.json
 
 .PHONY:load_example_data
 load_example_data:

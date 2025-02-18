@@ -1,8 +1,8 @@
 # Specific files
 *TODO*.txt
 fixtures/*.json
-data/target/*.csv
-data/snapshot*.json
+data/ingredients-csvs/target/
+data/snapshots/
 data/images/
 
 # Certification
