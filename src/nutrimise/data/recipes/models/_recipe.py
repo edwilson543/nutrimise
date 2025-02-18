@@ -27,6 +27,8 @@ class Recipe(django_models.Model):
 
     description = django_models.TextField(blank=True)
 
+    methodology = django_models.TextField(blank=True)
+
     meal_times = pg_fields.ArrayField(
         base_field=django_models.TextField(choices=recipes.MealTime.choices)
     )

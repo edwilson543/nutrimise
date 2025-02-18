@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
+                ("methodology", models.TextField(blank=True)),
                 (
                     "meal_times",
                     django.contrib.postgres.fields.ArrayField(
