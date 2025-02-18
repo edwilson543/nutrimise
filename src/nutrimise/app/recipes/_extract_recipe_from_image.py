@@ -18,7 +18,7 @@ UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
 def extract_recipe_from_image(
     *,
     author: recipes.RecipeAuthor | None,
-    uploaded_image: Image.Image,
+    image: Image.Image,
     image_extraction_service: image_extraction.ImageExtractionService,
     embedding_service: embeddings.EmbeddingService,
 ) -> int:
@@ -28,7 +28,7 @@ def extract_recipe_from_image(
     :raises UnableToExtractRecipeFromImage: If the recipe could not be extracted for some reason.
     """
     buffered = io.BytesIO()
-    uploaded_image.save(buffered, format=uploaded_image.format)
+    image.save(buffered, format=image.format)
     base64_image = base64.b64encode(buffered.getvalue())
 
     existing_ingredients = _get_existing_ingredients()

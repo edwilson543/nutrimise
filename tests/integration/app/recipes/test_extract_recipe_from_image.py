@@ -29,7 +29,7 @@ def test_extracts_recipe_with_author_using_fake_extraction_service():
 
     recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
         author=author,
-        uploaded_image=image,
+        image=image,
         image_extraction_service=image_extraction_service,
         embedding_service=embedding_service,
     )
@@ -63,7 +63,7 @@ def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_nam
 
     recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
         author=author,
-        uploaded_image=image,
+        image=image,
         image_extraction_service=image_extraction_service,
         embedding_service=embedding_service,
     )
@@ -76,7 +76,7 @@ def test_creates_duplicate_recipe_if_image_extraction_model_returns_existing_nam
     # If we extract from the image again, we should get a new recipe rather than an error.
     _extract_recipe_from_image.extract_recipe_from_image(
         author=author,
-        uploaded_image=image,
+        image=image,
         image_extraction_service=image_extraction_service,
         embedding_service=embedding_service,
     )
@@ -90,7 +90,7 @@ def test_extracts_recipe_without_author_using_fake_extraction_service():
 
     recipe_id = _extract_recipe_from_image.extract_recipe_from_image(
         author=None,
-        uploaded_image=image,
+        image=image,
         image_extraction_service=image_extraction_service,
         embedding_service=embeddings.FakeEmbeddingService(),
     )
@@ -107,7 +107,7 @@ def test_raises_embedding_service_errors():
     with pytest.raises(image_extraction.UnableToExtractRecipeFromImage) as exc:
         _extract_recipe_from_image.extract_recipe_from_image(
             author=None,
-            uploaded_image=image,
+            image=image,
             image_extraction_service=image_extraction_service,
             embedding_service=embeddings.FakeEmbeddingService(),
         )

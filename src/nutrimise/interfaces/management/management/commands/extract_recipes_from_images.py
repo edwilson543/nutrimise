@@ -48,12 +48,17 @@ class Command(django_management.BaseCommand):
         self, *, filepath: pathlib.Path, author: recipes.RecipeAuthor | None
     ) -> None:
         with Image.open(filepath) as image:
-            recipes_app.extract_recipe_from_image(
-                author=author,
-                uploaded_image=image,
-                image_extraction_service=self._image_extraction_service,
-                embedding_service=self._embedding_service,
-            )
+            try:
+                recipes_app.extract_recipe_from_image(
+                    author=author,
+                    image=image,
+                    image_extraction_service=self._image_extraction_service,
+                    embedding_service=self._embedding_service,
+                )
+            except Exception as exc:
+                self.stderr.write(f"Errored when extracting recipe from: {filepath.name}")
+                self.stderr.write(str(exc))
+
         self.stdout.write(f"Extracted recipe from: {filepath.name}")
 
 
