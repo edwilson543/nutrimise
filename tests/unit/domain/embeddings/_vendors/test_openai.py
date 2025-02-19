@@ -45,7 +45,7 @@ class TestGetEmbedding:
         )
         assert embedding.prompt_hash == "7102d8d4aeaad1fa2b931d49d32a62dc"
         assert embedding.vendor == embeddings.EmbeddingVendor.OPENAI
-        assert embedding.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+        assert embedding.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_LARGE
 
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
@@ -62,7 +62,7 @@ class TestGetEmbedding:
             openai_service.get_embedding(text=text)
 
         assert exc.value.vendor == embeddings.EmbeddingVendor.OPENAI
-        assert exc.value.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+        assert exc.value.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_LARGE
 
     def _response_ok_json(self, vector_embedding: list[float]) -> dict[str, Any]:
         """
