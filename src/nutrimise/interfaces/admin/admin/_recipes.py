@@ -37,7 +37,7 @@ class RecipeAuthor(admin.ModelAdmin):
 
 @admin.register(recipe_models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "author", "user_actions"]
+    list_display = ["id", "name", "author", "number_of_ingredients", "user_actions"]
     list_display_links = ["name"]
     list_filter = ["author"]
     ordering = ["name"]
@@ -47,6 +47,10 @@ class RecipeAdmin(admin.ModelAdmin):
     inlines = [
         _RecipeIngredientInline,
     ]
+
+    @admin.display(description="Number of ingredients")
+    def number_of_ingredients(self, recipe: recipe_models.Recipe) -> int:
+        return recipe.ingredients.count()
 
     @admin.display(description="Actions")
     def user_actions(self, recipe: recipe_models.Recipe) -> safestring.SafeString:
