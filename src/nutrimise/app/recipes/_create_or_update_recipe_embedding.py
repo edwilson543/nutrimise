@@ -30,15 +30,18 @@ def create_or_update_recipe_embedding(
 
 
 def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
-    prompt = """Create an embedding of this recipe that will be useful for:
+    prompt = f"""Create an embedding of this recipe that will be useful for:
     - Sematic search
-    - Comparing it with the embeddings of meal plan requirements"""
+    - Comparing it with the embeddings of meal plan requirements
+    
+    Name: {recipe.name}"""
 
-    prompt += f"\nRecipe name: {recipe.name}"
     if recipe.description:
-        prompt += f"\nRecipe description: {recipe.description}"
+        prompt += f"\nDescription: {recipe.description}"
+    if recipe.methodology:
+        prompt += f"\nMethodology: {recipe.methodology}"
     if recipe.ingredients:
-        prompt += "\nRecipe ingredients: "
+        prompt += "\nIngredients: "
         for ingredient in recipe.ingredients:
             prompt += f"\n - {ingredient.ingredient.name}"
     return prompt
