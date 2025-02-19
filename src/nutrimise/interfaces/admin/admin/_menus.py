@@ -142,6 +142,8 @@ class _VarietyRequirementInline(admin.TabularInline):
 
 @admin.register(menu_models.MenuRequirements)
 class MenuRequirementsAdmin(admin.ModelAdmin):
+    list_display = ["requirements", "menu_details"]
+    list_display_links = ["requirements"]
     inlines = [_NutrientRequirementInline, _VarietyRequirementInline]
 
     @admin.display(description="Requirements")
