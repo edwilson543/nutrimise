@@ -13,7 +13,8 @@ class SemanticOptimisationError(Exception):
 
 @attrs.frozen
 class EmbeddingModelNotSet(SemanticOptimisationError):
-    pass
+    def __str__(self) -> str:
+        return "Semantic optimisation is not available because no embedding model is configured."
 
 
 @attrs.frozen

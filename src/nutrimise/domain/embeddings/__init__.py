@@ -9,4 +9,3 @@ from ._vendors import (
     OpenAIEmbeddingService,
     UnableToGetEmbedding,
 )
-from ._prompts.render import get_prompt_for_recipe_embedding

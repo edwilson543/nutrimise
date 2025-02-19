@@ -1,7 +1,8 @@
-from nutrimise.domain.embeddings._prompts import render as render_prompts
+from nutrimise.app.recipes import _create_or_update_recipe_embedding
 from testing.factories import domain as domain_factories
 
 
+# SLightly unconventional to test a private function, but the prompt is quite important.
 class TestGetPromptForRecipeEmbedding:
     def test_gets_prompt_for_recipe_with_all_fields_set(self):
         ingredient = domain_factories.Ingredient(name="Chicken")
@@ -14,7 +15,9 @@ class TestGetPromptForRecipeEmbedding:
             ingredients=(recipe_ingredient,),
         )
 
-        prompt = render_prompts.get_prompt_for_recipe_embedding(recipe=recipe)
+        prompt = _create_or_update_recipe_embedding._get_prompt_for_recipe_embedding(
+            recipe=recipe
+        )
 
         expected_prompt = """Create an embedding of this recipe that will be useful for:
 - Sematic search
@@ -32,7 +35,9 @@ Ingredients:
             name="Chicken curry", description="", methodology="", ingredients=()
         )
 
-        prompt = render_prompts.get_prompt_for_recipe_embedding(recipe=recipe)
+        prompt = _create_or_update_recipe_embedding._get_prompt_for_recipe_embedding(
+            recipe=recipe
+        )
 
         expected_prompt = """Create an embedding of this recipe that will be useful for:
 - Sematic search

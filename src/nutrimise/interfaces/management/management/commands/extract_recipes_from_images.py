@@ -56,7 +56,9 @@ class Command(django_management.BaseCommand):
                     embedding_service=self._embedding_service,
                 )
             except Exception as exc:
-                self.stderr.write(f"Errored when extracting recipe from: {filepath.name}")
+                self.stderr.write(
+                    f"Errored when extracting recipe from: {filepath.name}"
+                )
                 self.stderr.write(str(exc))
 
         self.stdout.write(f"Extracted recipe from: {filepath.name}")

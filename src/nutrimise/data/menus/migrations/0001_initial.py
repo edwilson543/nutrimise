@@ -41,7 +41,12 @@ class Migration(migrations.Migration):
             name="MenuEmbedding",
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("vector", pgvector.django.vector.VectorField(dimensions=embeddings.EMBEDDING_DIMENSIONS)),
+                (
+                    "vector",
+                    pgvector.django.vector.VectorField(
+                        dimensions=embeddings.EMBEDDING_DIMENSIONS
+                    ),
+                ),
                 ("prompt_hash", models.TextField()),
                 (
                     "vendor",

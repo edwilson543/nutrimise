@@ -1,3 +1,5 @@
+from django import template as django_template
+
 from nutrimise.data.recipes import operations as recipe_operations
 from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings, recipes
@@ -16,7 +18,7 @@ def create_or_update_recipe_embedding(
         for some reason.
     """
     recipe = recipe_queries.get_recipe(recipe_id=recipe_id)
-    prompt = _get_embedding_prompt_for_recipe(recipe)
+    prompt = _get_prompt_for_recipe_embedding(recipe=recipe)
 
     if _has_recipe_already_been_embedded(
         recipe=recipe, prompt=prompt, embedding_service=embedding_service
@@ -27,24 +29,6 @@ def create_or_update_recipe_embedding(
     recipe_operations.create_or_update_recipe_embedding(
         recipe_id=recipe_id, embedding=embedding
     )
-
-
-def _get_embedding_prompt_for_recipe(recipe: recipes.Recipe) -> str:
-    prompt = f"""Create an embedding of this recipe that will be useful for:
-    - Sematic search
-    - Comparing it with the embeddings of meal plan requirements
-    
-    Name: {recipe.name}"""
-
-    if recipe.description:
-        prompt += f"\nDescription: {recipe.description}"
-    if recipe.methodology:
-        prompt += f"\nMethodology: {recipe.methodology}"
-    if recipe.ingredients:
-        prompt += "\nIngredients: "
-        for ingredient in recipe.ingredients:
-            prompt += f"\n - {ingredient.ingredient.name}"
-    return prompt
 
 
 def _has_recipe_already_been_embedded(
@@ -64,3 +48,21 @@ def _has_recipe_already_been_embedded(
             return True
 
     return False
+
+
+def _get_prompt_for_recipe_embedding(*, recipe: recipes.Recipe) -> str:
+    template = django_template.Template(template_string=_PROMPT_TEMPLATE)
+    context = django_template.Context({"recipe": recipe})
+    return template.render(context=context).rstrip()
+
+
+_PROMPT_TEMPLATE = """Create an embedding of this recipe that will be useful for:
+- Sematic search
+- Comparing it with the embeddings of meal plan requirements
+
+Name: {{ recipe.name }}
+{% if recipe.description %}Description: {{ recipe.description }}{% endif %}
+{% if recipe.methodology %}Methodology: {{ recipe.methodology }}{% endif %}
+{% for ingredient in recipe.ingredients %}{% if forloop.first %}Ingredients:{% endif %}
+- {{ ingredient.ingredient.name }}
+{% endfor %}"""

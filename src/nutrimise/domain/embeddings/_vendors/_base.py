@@ -40,7 +40,3 @@ class EmbeddingService(abc.ABC):
             vendor=self.vendor,
             model=self.model,
         )
-
-    @staticmethod
-    def _get_hash_for_text(text: str) -> str:
-        return _helpers.get_hash_for_text(text=text)
