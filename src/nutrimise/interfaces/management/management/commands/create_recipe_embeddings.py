@@ -18,5 +18,6 @@ class Command(django_management.BaseCommand):
                 recipes_app.create_or_update_recipe_embedding(
                     recipe_id=recipe_id, embedding_service=embedding_service
                 )
+                self.stdout.write(f"Created embedding for recipe {recipe_id}")
             except recipes_app.UnableToGetEmbedding:
-                continue
+                self.stderr.write(f"Unable to get embedding for recipe {recipe_id}")

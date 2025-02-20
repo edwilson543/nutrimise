@@ -13,7 +13,7 @@ class TestGetEmbeddingService:
 
         assert isinstance(service, embeddings.OpenAIEmbeddingService)
         assert service.vendor == embeddings.EmbeddingVendor.OPENAI
-        assert service.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+        assert service.model == embeddings.EmbeddingModel.TEXT_EMBEDDING_3_LARGE
 
     @override_settings(EMBEDDING_VENDOR="FAKE")
     def test_gets_fake_embedding_when_fake_embedding_service_installed(self):

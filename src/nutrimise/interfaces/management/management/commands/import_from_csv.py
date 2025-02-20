@@ -11,7 +11,9 @@ from django.db import transaction
 from . import _forms
 
 
-DATA_IMPORT_PATH = pathlib.Path(settings.BASE_DIR).parents[1] / "data"
+DATA_IMPORT_PATH = (
+    pathlib.Path(settings.BASE_DIR).parents[1] / "data" / "ingredients-csvs"
+)
 
 
 class FileName(enum.Enum):

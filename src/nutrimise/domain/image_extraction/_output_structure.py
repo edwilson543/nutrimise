@@ -38,6 +38,7 @@ class RecipeIngredient(pydantic.BaseModel):
 class Recipe(pydantic.BaseModel):
     name: str
     description: str
+    methodology: str
     number_of_servings: int
     meal_times: list[recipes.MealTime]
     ingredients: list[RecipeIngredient]

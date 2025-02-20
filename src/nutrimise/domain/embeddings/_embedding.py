@@ -3,7 +3,7 @@ import numpy as np
 from django.db import models as django_models
 
 
-EMBEDDING_DIMENSIONS = 1024
+EMBEDDING_DIMENSIONS = 3072
 
 
 class EmbeddingVendor(django_models.TextChoices):
@@ -18,6 +18,7 @@ class EmbeddingVendor(django_models.TextChoices):
 class EmbeddingModel(django_models.TextChoices):
     # OpenAI.
     TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small", "text-embedding-3-small"
+    TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large", "text-embedding-3-large"
 
     # Fake models.
     FAKE = "fake", "fake"

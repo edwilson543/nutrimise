@@ -25,6 +25,7 @@ class Recipe:
     id: int
     name: str
     description: str
+    methodology: str
     meal_times: tuple[MealTime, ...]
     # The absolute amount of each nutrient, per serving.
     nutritional_information_per_serving: tuple[ingredients.NutritionalInformation, ...]
@@ -54,3 +55,7 @@ class RecipeAuthor:
     id: int
     first_name: str
     last_name: str
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"

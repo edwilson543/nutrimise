@@ -6,6 +6,8 @@ import pgvector.django.vector
 from django.conf import settings
 from django.db import migrations, models
 
+from nutrimise.domain import embeddings
+
 
 class Migration(migrations.Migration):
     initial = True
@@ -39,7 +41,12 @@ class Migration(migrations.Migration):
             name="MenuEmbedding",
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("vector", pgvector.django.vector.VectorField(dimensions=1024)),
+                (
+                    "vector",
+                    pgvector.django.vector.VectorField(
+                        dimensions=embeddings.EMBEDDING_DIMENSIONS
+                    ),
+                ),
                 ("prompt_hash", models.TextField()),
                 (
                     "vendor",

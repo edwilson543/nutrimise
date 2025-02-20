@@ -10,5 +10,5 @@ from ._recipes import RecipeAdmin, RecipeEmbeddingAdmin, RecipeIngredientAdmin
 
 
 # Overrides
-admin.site.site_header = "nutrimise admin"
+admin.site.site_header = "nutrimise"
 admin.site.site_title = "nutrimise"

@@ -13,7 +13,8 @@ class SemanticOptimisationError(Exception):
 
 @attrs.frozen
 class EmbeddingModelNotSet(SemanticOptimisationError):
-    pass
+    def __str__(self) -> str:
+        return "Semantic optimisation is not available because no embedding model is configured."
 
 
 @attrs.frozen
@@ -21,11 +22,17 @@ class MenuEmbeddingMissing(SemanticOptimisationError):
     menu_id: int
     model: embeddings.EmbeddingModel
 
+    def __str__(self) -> str:
+        return f"Menu {self.menu_id} has no embedding for model {self.model.value}"
+
 
 @attrs.frozen
 class RecipeEmbeddingMissing(SemanticOptimisationError):
     recipe_id: int
     model: embeddings.EmbeddingModel
+
+    def __str__(self) -> str:
+        return f"Recipe {self.recipe_id} has no embedding for model {self.model.value}"
 
 
 def add_semantic_objective_to_problem(

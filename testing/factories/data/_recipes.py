@@ -20,7 +20,8 @@ class RecipeAuthor(factory.django.DjangoModelFactory):
 class Recipe(factory.django.DjangoModelFactory):
     author = factory.SubFactory(RecipeAuthor)
     name = factory.Sequence(lambda n: f"recipe-{n}")
-    description = "Some description"
+    description = factory.Sequence(lambda n: f"description-{n}")
+    methodology = factory.Sequence(lambda n: f"methodology-{n}")
     meal_times = [recipes.MealTime.DINNER.value]
     number_of_servings = 2
 

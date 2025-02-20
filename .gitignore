@@ -1,9 +1,8 @@
 # Specific files
 *TODO*.txt
-fixtures/*.json
-data/target/*.csv
-data/snapshot*.json
-data/images/
+data/ingredients-csvs/target/
+data/images/target/
+data/snapshots/
 
 # Certification
 cert.pem

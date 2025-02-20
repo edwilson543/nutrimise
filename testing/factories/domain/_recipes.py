@@ -13,6 +13,7 @@ class Recipe(factory.Factory):
     id = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: f"recipe-{n}")
     description = factory.Sequence(lambda n: f"description-{n}")
+    methodology = factory.Sequence(lambda n: f"methodology-{n}")
     meal_times = factory.LazyFunction(tuple)
     nutritional_information_per_serving = factory.LazyFunction(tuple)
     ingredients = factory.LazyFunction(tuple)

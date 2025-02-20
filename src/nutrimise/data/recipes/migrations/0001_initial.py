@@ -5,6 +5,8 @@ import django.db.models.deletion
 import pgvector.django.vector
 from django.db import migrations, models
 
+from nutrimise.domain import embeddings
+
 
 class Migration(migrations.Migration):
     initial = True
@@ -28,6 +30,7 @@ class Migration(migrations.Migration):
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.CharField(max_length=128)),
                 ("description", models.TextField(blank=True)),
+                ("methodology", models.TextField(blank=True)),
                 (
                     "meal_times",
                     django.contrib.postgres.fields.ArrayField(
@@ -59,7 +62,12 @@ class Migration(migrations.Migration):
             name="RecipeEmbedding",
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
-                ("vector", pgvector.django.vector.VectorField(dimensions=1024)),
+                (
+                    "vector",
+                    pgvector.django.vector.VectorField(
+                        dimensions=embeddings.EMBEDDING_DIMENSIONS
+                    ),
+                ),
                 ("prompt_hash", models.TextField()),
                 (
                     "vendor",

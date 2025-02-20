@@ -18,7 +18,7 @@ def _get_client() -> openai.Client:
 
 @attrs.frozen
 class OpenAIEmbeddingService(_base.EmbeddingService):
-    model: _embedding.EmbeddingModel = _embedding.EmbeddingModel.TEXT_EMBEDDING_3_SMALL
+    model: _embedding.EmbeddingModel = _embedding.EmbeddingModel.TEXT_EMBEDDING_3_LARGE
     vendor: _embedding.EmbeddingVendor = _embedding.EmbeddingVendor.OPENAI
     _client: openai.Client = attrs.field(factory=_get_client, init=False)
 

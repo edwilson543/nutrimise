@@ -66,14 +66,14 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(ingredient_models.Nutrient)
 class NutrientAdmin(admin.ModelAdmin):
-    list_display = ["id", "name"]
+    list_display = ["id", "name", "units"]
     list_display_links = ["name"]
     ordering = ["name"]
 
 
 @admin.register(ingredient_models.IngredientNutritionalInformation)
 class IngredientNutritionalInformationAdmin(admin.ModelAdmin):
-    list_display = ["id", "ingredient_name", "nutrient_name", "quantity_per_gram"]
+    list_display = ["id", "ingredient_name", "nutrient_name", "nutrient_quantity"]
     list_display_links = ["ingredient_name"]
     ordering = ["ingredient__name"]
 
@@ -90,3 +90,13 @@ class IngredientNutritionalInformationAdmin(admin.ModelAdmin):
         nutritional_information: ingredient_models.IngredientNutritionalInformation,
     ) -> str:
         return nutritional_information.nutrient.name
+
+    @admin.display(description="Nutrient")
+    def nutrient_quantity(
+        self,
+        nutritional_information: ingredient_models.IngredientNutritionalInformation,
+    ) -> str:
+        nutrient_units = ingredients.NutrientUnit(
+            nutritional_information.nutrient.units
+        )
+        return f"{nutritional_information.quantity_per_gram} {nutrient_units}"

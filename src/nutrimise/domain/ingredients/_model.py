@@ -19,15 +19,26 @@ class Ingredient:
     grams_per_unit: float
 
 
+class NutrientUnit(django_models.TextChoices):
+    GRAMS = "GRAMS", "g"
+    MILLIGRAM = "MILLIGRAM", "mg"
+    MICROGRAM = "MICROGRAM", "μg"
+    MICROGRAM_RETINOL_ACTIVITY_EQUIVALENT = (
+        "MICROGRAM_RETINOL_ACTIVITY_EQUIVALENT",
+        "µg RAE",
+    )
+    MICROGRAM_DIETARY_FOLATE_EQUIVALENT = (
+        "MICROGRAM_DIETARY_FOLATE_EQUIVALENT",
+        "µg DFE",
+    )
+    KCAL = "KCAL", "kcal"
+
+
 @attrs.frozen
 class Nutrient:
     id: int
     name: str
-
-
-class NutrientUnit(django_models.TextChoices):
-    GRAMS = "GRAMS", "Grams"
-    KCAL = "KCAL", "kcal"
+    units: NutrientUnit
 
 
 @attrs.frozen
@@ -38,15 +49,13 @@ class NutritionalInformation:
 
     nutrient: Nutrient
     nutrient_quantity: float
-    units: NutrientUnit
 
     def __add__(self, other: NutritionalInformation) -> NutritionalInformation:
-        if self.nutrient == other.nutrient and self.units == other.units:
+        if self.nutrient == other.nutrient:
             nutrient_quantity = self.nutrient_quantity + other.nutrient_quantity
             return NutritionalInformation(
                 nutrient=self.nutrient,
                 nutrient_quantity=nutrient_quantity,
-                units=self.units,
             )
         else:
             raise ValueError(
@@ -54,17 +63,8 @@ class NutritionalInformation:
             )
 
     @classmethod
-    def zero(
-        cls,
-        *,
-        nutrient: Nutrient,
-        units: NutrientUnit = NutrientUnit.GRAMS,
-    ) -> NutritionalInformation:
-        return cls(
-            nutrient=nutrient,
-            units=units,
-            nutrient_quantity=0.0,
-        )
+    def zero(cls, *, nutrient: Nutrient) -> NutritionalInformation:
+        return cls(nutrient=nutrient, nutrient_quantity=0.0)
 
     @classmethod
     def sum_by_nutrient(

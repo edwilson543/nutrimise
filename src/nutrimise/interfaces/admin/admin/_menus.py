@@ -142,7 +142,21 @@ class _VarietyRequirementInline(admin.TabularInline):
 
 @admin.register(menu_models.MenuRequirements)
 class MenuRequirementsAdmin(admin.ModelAdmin):
+    list_display = ["requirements", "menu_details"]
+    list_display_links = ["requirements"]
     inlines = [_NutrientRequirementInline, _VarietyRequirementInline]
+
+    @admin.display(description="Requirements")
+    def requirements(self, menu_requirements: menu_models.MenuRequirements) -> str:
+        return str(menu_requirements)
+
+    @admin.display(description="Menu")
+    def menu_details(
+        self, menu_requirements: menu_models.MenuRequirements
+    ) -> safestring.SafeString:
+        menu = menu_requirements.menu
+        menu_url = django_urls.reverse("menu-details", kwargs={"menu_id": menu.id})
+        return safestring.mark_safe(f'<a href="{menu_url}">{menu.name}</a>')
 
 
 @admin.register(menu_models.MenuEmbedding)

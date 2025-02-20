@@ -66,7 +66,10 @@ class Settings(configurations.Configuration):
     TEMPLATES = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [BASE_DIR / "interfaces" / "admin" / "templates"],
+            "DIRS": [
+                BASE_DIR / "interfaces" / "admin" / "templates",
+                BASE_DIR / "domain" / "embeddings" / "_prompts" / "templates",
+            ],
             "APP_DIRS": True,
             "OPTIONS": {
                 "context_processors": [

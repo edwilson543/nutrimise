@@ -6,7 +6,6 @@ from collections import abc as collections_abc
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.menus import models as menu_models
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import ingredients
 from nutrimise.domain.ingredients import _model
 
 
@@ -60,8 +59,8 @@ def get_nutritional_information_for_recipe(
     Return a list of all the nutrients in a recipe and their quantities.
     """
 
-    recipe_nutrition: collections.defaultdict[_model.Nutrient, float] = (
-        collections.defaultdict(float)
+    recipe_nutrition: collections.defaultdict[int, float] = collections.defaultdict(
+        float
     )
     per_serving_denominator = recipe.number_of_servings if per_serving else 1
 
@@ -75,18 +74,20 @@ def get_nutritional_information_for_recipe(
                 * ingredient_nutrition.quantity_per_gram
                 / per_serving_denominator
             )
-            nutrient = _model.Nutrient(
-                id=ingredient_nutrition.nutrient.id,
-                name=ingredient_nutrition.nutrient.name,
-            )
-            recipe_nutrition[nutrient] += nutrient_quantity
 
-    nutritional_information = (
-        _model.NutritionalInformation(
-            nutrient=nutrient,
-            nutrient_quantity=value,
-            units=ingredients.NutrientUnit.GRAMS,
+            recipe_nutrition[ingredient_nutrition.nutrient_id] += nutrient_quantity
+
+    nutrients: dict[int, _model.Nutrient] = {
+        nutrient.id: nutrient.to_domain_model()
+        for nutrient in ingredient_models.Nutrient.objects.filter(
+            id__in=recipe_nutrition.keys()
         )
-        for nutrient, value in recipe_nutrition.items()
-    )
+    }
+
+    nutritional_information = [
+        _model.NutritionalInformation(
+            nutrient=nutrients[nutrient_id], nutrient_quantity=value
+        )
+        for nutrient_id, value in recipe_nutrition.items()
+    ]
     return sorted(nutritional_information, key=lambda n: n.nutrient.name)

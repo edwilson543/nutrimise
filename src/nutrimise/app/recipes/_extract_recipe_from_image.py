@@ -13,12 +13,13 @@ from . import _create_or_update_recipe_embedding
 
 
 UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
+RecipeAlreadyExists = recipe_operations.RecipeAlreadyExists
 
 
 def extract_recipe_from_image(
     *,
     author: recipes.RecipeAuthor | None,
-    uploaded_image: Image.Image,
+    image: Image.Image,
     image_extraction_service: image_extraction.ImageExtractionService,
     embedding_service: embeddings.EmbeddingService,
 ) -> int:
@@ -26,9 +27,11 @@ def extract_recipe_from_image(
     Extract a recipe and its components from an image and save it to the database.
 
     :raises UnableToExtractRecipeFromImage: If the recipe could not be extracted for some reason.
+    :raises RecipeAlreadyExists: If a recipe with the extracted name already exists for the
+        author.
     """
     buffered = io.BytesIO()
-    uploaded_image.save(buffered, format=uploaded_image.format)
+    image.save(buffered, format=image.format)
     base64_image = base64.b64encode(buffered.getvalue())
 
     existing_ingredients = _get_existing_ingredients()
@@ -52,6 +55,7 @@ def extract_recipe_from_image(
             author=author,
             name=extracted_recipe.name,
             description=extracted_recipe.description,
+            methodology=extracted_recipe.methodology,
             number_of_servings=extracted_recipe.number_of_servings,
             meal_times=extracted_recipe.meal_times,
             recipe_ingredients=recipe_ingredients,
