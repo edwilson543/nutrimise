@@ -55,7 +55,7 @@ def test_can_optimise_menu_and_provide_prompt_from_details_view(admin_client):
 
     # The menu and prompt should also have been embedded along the way.
     embedding = menu.embeddings.get()
-    assert embedding.prompt_hash == "7e4708214bb86ae0a68c052390b29ea6"
+    assert embedding.prompt_hash == "fbc49157eb6a5b7bfe8c56e59429e4e2"
 
     # The menu requirements should have been updated.
     menu_requirements.refresh_from_db()
