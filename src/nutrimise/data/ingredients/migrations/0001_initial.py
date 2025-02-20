@@ -3,6 +3,8 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
+from nutrimise.domain import ingredients
+
 
 class Migration(migrations.Migration):
     initial = True
@@ -29,6 +31,10 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.TextField(unique=True)),
+                (
+                    "units",
+                    models.TextField(choices=ingredients.NutrientUnit.choices),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -61,10 +67,6 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("quantity_per_gram", models.FloatField()),
-                (
-                    "units",
-                    models.TextField(choices=[("GRAMS", "Grams"), ("KCAL", "kcal")]),
-                ),
                 (
                     "ingredient",
                     models.ForeignKey(

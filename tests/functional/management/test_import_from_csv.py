@@ -11,6 +11,7 @@ def test_example_dataset_can_be_imported():
 
     nutrient = ingredient_models.Nutrient.objects.get()
     assert nutrient.name == "Protein"
+    assert nutrient.units == ingredients.NutrientUnit.GRAMS
 
     ingredient_category = ingredient_models.IngredientCategory.objects.get()
     assert ingredient_category.name == "Vegetable"
@@ -28,4 +29,3 @@ def test_example_dataset_can_be_imported():
     assert nutritional_information.ingredient == ingredient
     assert nutritional_information.nutrient == nutrient
     assert nutritional_information.quantity_per_gram == 0.03
-    assert nutritional_information.units == ingredients.NutrientUnit.GRAMS

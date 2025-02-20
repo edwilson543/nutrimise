@@ -1,31 +1,31 @@
-﻿name
-Protein
-Fat
-Carbohydrate
-kcal
-Sugars
-Fibre
-Fatty acids
-Saturated fat
-Trans fat
-Sodium
-Potassium
-Calcium
-Magnesium
-Phosphorus
-Iron
-Zinc
-Selenium
-Iodine
-Vitamin D
-Vitamin E
-Vitamin K1
-Vitamin B1
-Vitamin B2
-Vitamin B3
-Vitamin B6
-Vitamin B12
-Vitamin B9
-Vitamin B5
-Vitamin B7
-Vitamin C
+﻿name,units
+Protein,GRAMS
+Fat,GRAMS
+Carbohydrate,GRAMS
+kcal,KCAL
+Sugars,GRAMS
+Fibre,GRAMS
+Fatty acids,GRAMS
+Saturated fat,GRAMS
+Trans fat,GRAMS
+Sodium,GRAMS
+Potassium,GRAMS
+Calcium,GRAMS
+Magnesium,GRAMS
+Phosphorus,GRAMS
+Iron,GRAMS
+Zinc,GRAMS
+Selenium,GRAMS
+Iodine,GRAMS
+Vitamin D,GRAMS
+Vitamin E,GRAMS
+Vitamin K1,GRAMS
+Vitamin B1,GRAMS
+Vitamin B2,GRAMS
+Vitamin B3,GRAMS
+Vitamin B6,GRAMS
+Vitamin B12,GRAMS
+Vitamin B9,GRAMS
+Vitamin B5,GRAMS
+Vitamin B7,GRAMS
+Vitamin C,GRAMS

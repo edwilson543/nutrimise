@@ -78,14 +78,12 @@ class TestNutritionalInformationForMenuPerDay:
                 ingredients.NutritionalInformation(
                     nutrient=protein.to_domain_model(),
                     nutrient_quantity=80,  # Beef stew + beef lasagne.
-                    units=ingredients.NutrientUnit.GRAMS,
                 )
             ],
             2: [
                 ingredients.NutritionalInformation(
                     nutrient=protein.to_domain_model(),
                     nutrient_quantity=20,  # Just beef curry.
-                    units=ingredients.NutrientUnit.GRAMS,
                 )
             ],
         }
@@ -126,14 +124,10 @@ class TestNutritionalInformationForRecipe:
 
         assert result == [
             ingredients.NutritionalInformation(
-                nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
-                nutrient_quantity=375.0,
-                units=ingredients.NutrientUnit.GRAMS,
+                nutrient=carbs.to_domain_model(), nutrient_quantity=375.0
             ),
             ingredients.NutritionalInformation(
-                nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
-                nutrient_quantity=75.0,
-                units=ingredients.NutrientUnit.GRAMS,
+                nutrient=protein.to_domain_model(), nutrient_quantity=75.0
             ),
         ]
 
@@ -161,13 +155,9 @@ class TestNutritionalInformationForRecipe:
 
         assert result == [
             ingredients.NutritionalInformation(
-                nutrient=ingredients.Nutrient(id=carbs.id, name=carbs.name),
-                nutrient_quantity=175.0,
-                units=ingredients.NutrientUnit.GRAMS,
+                nutrient=carbs.to_domain_model(), nutrient_quantity=175.0
             ),
             ingredients.NutritionalInformation(
-                nutrient=ingredients.Nutrient(id=protein.id, name=protein.name),
-                nutrient_quantity=12.5,
-                units=ingredients.NutrientUnit.GRAMS,
+                nutrient=protein.to_domain_model(), nutrient_quantity=12.5
             ),
         ]
