@@ -1,22 +1,24 @@
-import uuid
+import attrs
 
 from nutrimise.domain import embeddings, recipes
 
 from . import models as recipe_models
 
 
-def create_or_update_recipe_embedding(
-    *, recipe_id: int, embedding: embeddings.Embedding
-) -> None:
-    recipe_models.RecipeEmbedding.objects.update_or_create(
-        recipe_id=recipe_id,
-        model=embedding.model.value,
-        vendor=embedding.vendor.value,
-        defaults={
-            "vector": embedding.vector,
-            "prompt_hash": embedding.prompt_hash,
-        },
-    )
+@attrs.frozen
+class RecipeAlreadyExists(Exception):
+    name: str
+    author_id: int | None
+
+    def __str__(self) -> str:
+        if self.author_id:
+            return (
+                f"Author {self.author_id} already has a recipe with name '{self.name}'"
+            )
+        else:
+            return (
+                f"Recipe with name '{self.name}' and anonymous author already exists."
+            )
 
 
 def create_recipe(
@@ -31,8 +33,10 @@ def create_recipe(
 ) -> int:
     author_id = author.id if author else None
 
-    if recipe_models.Recipe.objects.filter(author_id=author_id, name=name).exists():
-        name += f" (duplicate {uuid.uuid4()})"
+    if recipe_models.Recipe.objects.filter(
+        author_id=author_id, name__iexact=name
+    ).exists():
+        raise RecipeAlreadyExists(name=name, author_id=author_id)
 
     recipe = recipe_models.Recipe.objects.create(
         author_id=author_id,
@@ -54,6 +58,20 @@ def create_recipe(
     recipe_models.RecipeIngredient.objects.bulk_create(recipe_ingredients_to_create)
 
     return recipe.id
+
+
+def create_or_update_recipe_embedding(
+    *, recipe_id: int, embedding: embeddings.Embedding
+) -> None:
+    recipe_models.RecipeEmbedding.objects.update_or_create(
+        recipe_id=recipe_id,
+        model=embedding.model.value,
+        vendor=embedding.vendor.value,
+        defaults={
+            "vector": embedding.vector,
+            "prompt_hash": embedding.prompt_hash,
+        },
+    )
 
 
 def get_or_create_recipe_author(*, first_name: str, last_name: str) -> int:
