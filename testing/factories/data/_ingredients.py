@@ -29,6 +29,7 @@ class Ingredient(factory.django.DjangoModelFactory):
 
 class Nutrient(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f"nutrient-{n}")
+    category = ingredients.NutrientCategory.MACRO.value
     units = ingredients.NutrientUnit.GRAMS.value
 
     class Meta:

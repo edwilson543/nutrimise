@@ -1,2 +1,2 @@
-name,units
-Protein,GRAMS
+name,category,units
+Protein,MACRO,GRAMS

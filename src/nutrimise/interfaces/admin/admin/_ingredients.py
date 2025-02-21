@@ -66,9 +66,10 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(ingredient_models.Nutrient)
 class NutrientAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "units"]
+    list_display = ["id", "name", "category", "units"]
     list_display_links = ["name"]
-    ordering = ["name"]
+    list_filter = ["category"]
+    ordering = ["category", "name"]
 
 
 @admin.register(ingredient_models.IngredientNutritionalInformation)

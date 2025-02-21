@@ -25,6 +25,7 @@ class Ingredient(factory.Factory[ingredients.Ingredient]):
 class Nutrient(factory.Factory):
     id = factory.Sequence(lambda n: n)
     name = factory.Sequence(lambda n: f"nutrient-{n}")
+    category = ingredients.NutrientCategory.MACRO
     units = ingredients.NutrientUnit.GRAMS
 
     class Meta:
