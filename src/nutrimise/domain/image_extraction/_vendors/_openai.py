@@ -28,13 +28,9 @@ class OpenAIImageExtractionService(_base.ImageExtractionService):
         base64_image: str,
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
-        messages: list[openai_chat_types.ChatCompletionMessageParam] = [
-            self._get_system_prompt(),
-            self._get_ingredients_system_prompt(
-                existing_ingredients=existing_ingredients
-            ),
-            self._get_user_prompt(base64_image=base64_image),
-        ]
+        messages = _get_image_extraction_prompt(
+            base64_image=base64_image, existing_ingredients=existing_ingredients
+        )
 
         try:
             response = self._client.beta.chat.completions.parse(
@@ -54,14 +50,18 @@ class OpenAIImageExtractionService(_base.ImageExtractionService):
 
         return recipe
 
-    @staticmethod
+
+def _get_image_extraction_prompt(
+    *,
+    base64_image: str,
+    existing_ingredients: list[_output_structure.Ingredient],
+) -> list[openai_chat_types.ChatCompletionMessageParam]:
     def _get_system_prompt() -> openai_chat_types.ChatCompletionSystemMessageParam:
         return {
             "role": "system",
             "content": "Extract the information from the given image in the specified format.",
         }
 
-    @staticmethod
     def _get_ingredients_system_prompt(
         *, existing_ingredients: list[_output_structure.Ingredient]
     ) -> openai_chat_types.ChatCompletionSystemMessageParam:
@@ -78,7 +78,6 @@ class OpenAIImageExtractionService(_base.ImageExtractionService):
 
         return {"role": "system", "content": prompt}
 
-    @staticmethod
     def _get_user_prompt(
         *, base64_image: str
     ) -> openai_chat_types.ChatCompletionUserMessageParam:
@@ -91,3 +90,9 @@ class OpenAIImageExtractionService(_base.ImageExtractionService):
                 },
             ],
         }
+
+    return [
+        _get_system_prompt(),
+        _get_ingredients_system_prompt(existing_ingredients=existing_ingredients),
+        _get_user_prompt(base64_image=base64_image),
+    ]
