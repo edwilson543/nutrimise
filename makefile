@@ -67,6 +67,10 @@ extract_recipes:
 recipe_embeddings:
 	python manage.py create_recipe_embeddings
 
+.PHONY:nutritional_info
+nutritional_info:
+	python manage.py gather_ingredient_nutritional_information
+
 # Python environment
 
 .PHONY:install_ci_deps

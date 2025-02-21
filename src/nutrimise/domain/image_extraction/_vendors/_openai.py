@@ -50,6 +50,34 @@ class OpenAIImageExtractionService(_base.ImageExtractionService):
 
         return recipe
 
+    def extract_ingredient_nutritional_information(
+        self,
+        *,
+        ingredients: list[_output_structure.Ingredient],
+        nutrients: list[_output_structure.Nutrient],
+    ) -> list[_output_structure.IngredientNutritionalInformation]:
+        messages = _get_nutritional_info_extraction_prompt(
+            ingredients=ingredients, nutrients=nutrients
+        )
+
+        try:
+            response = self._client.beta.chat.completions.parse(
+                model=self.model.value,
+                messages=messages,
+                response_format=_output_structure.IngredientNutritionalInformationList,
+            )
+        except openai.APIError as exc:
+            raise _base.UnableToExtractIngredientNutritionalInformation(
+                vendor=self.vendor, model=self.model
+            ) from exc
+
+        if not (info_list := response.choices[0].message.parsed):
+            raise _base.UnableToExtractIngredientNutritionalInformation(
+                vendor=self.vendor, model=self.model
+            )
+
+        return info_list.data
+
 
 def _get_image_extraction_prompt(
     *,
@@ -95,4 +123,32 @@ def _get_image_extraction_prompt(
         _get_system_prompt(),
         _get_ingredients_system_prompt(existing_ingredients=existing_ingredients),
         _get_user_prompt(base64_image=base64_image),
+    ]
+
+
+def _get_nutritional_info_extraction_prompt(
+    *,
+    ingredients: list[_output_structure.Ingredient],
+    nutrients: list[_output_structure.Nutrient],
+) -> list[openai_chat_types.ChatCompletionMessageParam]:
+    ingredients_json = [ingredient.model_dump_json() for ingredient in ingredients]
+    nutrients_json = [nutrient.model_dump_json() for nutrient in nutrients]
+
+    prompt = f"""You are given the follow data:
+    - A list of ingredients, in JSON format: {ingredients_json}
+    - A list of nutrients, in JSON format: {nutrients_json}
+    
+    Task:
+    For every ingredient:
+    - Determine the quantity of every nutrient in one gram of that ingredient.  
+    - Ensure that the quantity of the nutrient is specified in terms of the nutrient units provided.  
+    - If a nutrient is not present in an ingredient or if no data is available, return a quantity of `0`.
+    """
+
+    return [
+        {
+            "role": "system",
+            "content": "Extract the ingredient nutritional information in the specified format.",
+        },
+        {"role": "user", "content": prompt},
     ]

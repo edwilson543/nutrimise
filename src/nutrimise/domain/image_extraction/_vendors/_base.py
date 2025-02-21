@@ -17,6 +17,12 @@ class UnableToExtractRecipeFromImage(Exception):
 
 
 @attrs.frozen
+class UnableToExtractIngredientNutritionalInformation(Exception):
+    vendor: _constants.ImageExtractionVendor
+    model: _constants.ImageExtractionModel
+
+
+@attrs.frozen
 class ImageExtractionService(abc.ABC):
     model: _constants.ImageExtractionModel
     vendor: _constants.ImageExtractionVendor
@@ -33,5 +39,20 @@ class ImageExtractionService(abc.ABC):
 
         :raises UnableToExtractRecipeFromImage: If the service is unable to extract the image
             for some reason.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def extract_ingredient_nutritional_information(
+        self,
+        *,
+        ingredients: list[_output_structure.Ingredient],
+        nutrients: list[_output_structure.Nutrient],
+    ) -> list[_output_structure.IngredientNutritionalInformation]:
+        """
+        Get the quantity of each nutrient in each ingredient.
+
+        :raises UnableToExtractIngredientNutritionalInformation: If the service is unable
+            to extract the information for some reason.
         """
         raise NotImplementedError

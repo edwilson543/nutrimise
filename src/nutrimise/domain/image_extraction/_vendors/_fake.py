@@ -33,3 +33,23 @@ class FakeImageExtractionService(_base.ImageExtractionService):
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
         return self.canned_recipe
+
+    def extract_ingredient_nutritional_information(
+        self,
+        *,
+        ingredients: list[_output_structure.Ingredient],
+        nutrients: list[_output_structure.Nutrient],
+    ) -> list[_output_structure.IngredientNutritionalInformation]:
+        info_list: list[_output_structure.IngredientNutritionalInformation] = []
+
+        for ingredient in ingredients:
+            for nutrient in nutrients:
+                assert ingredient.id is not None  # For mypy.
+                info = _output_structure.IngredientNutritionalInformation(
+                    ingredient_id=ingredient.id,
+                    nutrient_id=nutrient.id,
+                    nutrient_quantity_per_gram_of_ingredient=1.0,
+                )
+                info_list.append(info)
+
+        return info_list

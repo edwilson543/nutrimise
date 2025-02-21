@@ -17,3 +17,13 @@ class BrokenImageExtractionService(_base.ImageExtractionService):
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
         raise _base.UnableToExtractRecipeFromImage(vendor=self.vendor, model=self.model)
+
+    def extract_ingredient_nutritional_information(
+        self,
+        *,
+        ingredients: list[_output_structure.Ingredient],
+        nutrients: list[_output_structure.Nutrient],
+    ) -> list[_output_structure.IngredientNutritionalInformation]:
+        raise _base.UnableToExtractIngredientNutritionalInformation(
+            vendor=self.vendor, model=self.model
+        )
