@@ -53,7 +53,9 @@ class ShoppingList:
     def items_by_ingredient_category(
         self,
     ) -> dict[ingredients.IngredientCategory, tuple[ShoppingListItem, ...]]:
-        categorised = defaultdict(tuple)
+        categorised: defaultdict[
+            ingredients.IngredientCategory, tuple[ShoppingListItem, ...]
+        ] = defaultdict(tuple)
 
         for item in self.items:
             categorised[item.ingredient.category] += (item,)

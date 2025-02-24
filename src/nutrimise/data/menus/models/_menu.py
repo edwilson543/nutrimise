@@ -68,3 +68,10 @@ class Menu(django_models.Model):
             requirements=requirements,
             embeddings=tuple(embeddings),
         )
+
+    def recipe_ids(self) -> set[int]:
+        return {
+            menu_item.recipe_id
+            for menu_item in self.items.all()
+            if menu_item.recipe_id is not None
+        }

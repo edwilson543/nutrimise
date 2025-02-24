@@ -15,3 +15,4 @@ def test_can_view_menu_details(admin_client):
     assert response.context["menu"]
     assert response.context["meal_schedule"]
     assert response.context["days"]
+    assert response.context["shopping_list"]

@@ -74,6 +74,24 @@
         </table>
     </div>
 
+    {% if shopping_list.items %}
+        <div id="shopping-list" class="module">
+            <h2>Shopping list</h2>
+            <ul>
+                {% for category, items in shopping_list.items_by_ingredient_category.items %}
+                        <li>
+                            {{ category.name }}
+                            <ul>
+                                {% for item in items %}
+                                    <li>{{ item.ingredient.name }} - {{item.quantity}} {{ item.ingredient.units }}</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     <div id="menu-requirements" class="module">
         <h2>Requirements</h2>
         {% if not menu.requirements %}
