@@ -18,6 +18,22 @@ def get_ingredients(
     return tuple(ingredient.to_domain_model() for ingredient in ingredients)
 
 
+def get_nutrients() -> tuple[_model.Nutrient, ...]:
+    nutrients = ingredient_models.Nutrient.objects.all()
+    return tuple(nutrient.to_domain_model() for nutrient in nutrients)
+
+
+def get_ingredient_nutritional_information(
+    *, ingredient_id: int
+) -> tuple[_model.NutritionalInformation, ...]:
+    nutritional_info = (
+        ingredient_models.IngredientNutritionalInformation.objects.filter(
+            ingredient_id=ingredient_id
+        ).select_related("nutrient")
+    )
+    return tuple(info.to_domain_model() for info in nutritional_info)
+
+
 def get_nutritional_information_for_menu_per_day(
     *, menu: menu_models.Menu, per_serving: bool
 ) -> dict[int, list[_model.NutritionalInformation]]:

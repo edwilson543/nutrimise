@@ -29,7 +29,11 @@ class TestExtractRecipeFromImage:
     def test_gets_output_structured_as_recipe(self, httpx_mock):
         base64_image = "My encoded image."
         ingredient = image_extraction.Ingredient(
-            name="Brocoli", category_name="Vegetable", units="Grams", grams_per_unit=1.0
+            id=1,
+            name="Brocoli",
+            category_name="Vegetable",
+            units="Grams",
+            grams_per_unit=1.0,
         )
 
         httpx_mock.add_response(
@@ -86,6 +90,7 @@ class TestExtractRecipeFromImage:
         https://platform.openai.com/docs/guides/structured-outputs
         """
         ingredient = {
+            "id": 1,
             "name": "Beef",
             "category_name": "Meat",
             "units": "Grams",
@@ -106,21 +111,83 @@ class TestExtractRecipeFromImage:
                 {
                     "finish_reason": "stop",
                     "index": 0,
-                    "logprobs": None,
                     "message": {
                         "content": json.dumps(recipe),
+                        "role": "assistant",
+                        "parsed": recipe,
+                        "refusal": None,
+                    },
+                }
+            ],
+        }
+
+
+class TestExtractIngredientNutritionalInformation:
+    @override_settings(OPENAI_API_KEY="some-key")
+    def test_gets_output_structured_as_list_of_ingredient_nutritional_information(
+        self, httpx_mock
+    ):
+        ingredient = image_extraction.Ingredient(
+            id=1,
+            name="Brocoli",
+            category_name="Vegetable",
+            units="Grams",
+            grams_per_unit=1.0,
+        )
+        nutrient = image_extraction.Nutrient(
+            id=2, name="Protein", category="MACRO", units="GRAMS"
+        )
+
+        httpx_mock.add_response(
+            url="https://api.openai.com/v1/chat/completions",
+            method="POST",
+            status_code=200,
+            json=self._response_ok_json(
+                ingredient_id=ingredient.id, nutrient_id=nutrient.id
+            ),
+        )
+
+        openai_service = _openai.OpenAIImageExtractionService()
+        ingredient_nutritional_information = (
+            openai_service.extract_ingredient_nutritional_information(
+                ingredients=[ingredient], nutrients=[nutrient]
+            )
+        )
+
+        assert len(ingredient_nutritional_information) == 1
+        info = ingredient_nutritional_information[0]
+        assert info.ingredient_id == ingredient.id
+        assert info.nutrient_id == nutrient.id
+        assert info.nutrient_quantity_per_gram_of_ingredient == 31.1
+
+    @staticmethod
+    def _response_ok_json(ingredient_id: int, nutrient_id: int) -> dict[str, Any]:
+        """
+        OpenAI chat completion structure response output, per the docs.
+        https://platform.openai.com/docs/guides/structured-outputs
+        """
+        ingredient_nutritional_information = {
+            "ingredient_id": ingredient_id,
+            "nutrient_id": nutrient_id,
+            "nutrient_quantity_per_gram_of_ingredient": 31.1,
+        }
+        parsed_data = {"data": [ingredient_nutritional_information]}
+
+        return {
+            "id": "chatcmpl-AyCk92plBjBPBOnrcpYQ4xVC7LPZd",
+            "choices": [
+                {
+                    "finish_reason": "stop",
+                    "index": 0,
+                    "message": {
+                        "content": json.dumps(parsed_data),
                         "refusal": None,
                         "role": "assistant",
                         "audio": None,
                         "function_call": None,
                         "tool_calls": [],
-                        "parsed": recipe,
+                        "parsed": parsed_data,
                     },
                 }
             ],
-            "created": 1738912029,
-            "model": "gpt-4o-2024-08-06",
-            "object": "chat.completion",
-            "service_tier": "default",
-            "system_fingerprint": "fp_4691090a87",
         }

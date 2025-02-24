@@ -32,6 +32,10 @@ class Migration(migrations.Migration):
                 ("id", models.BigAutoField(primary_key=True, serialize=False)),
                 ("name", models.TextField(unique=True)),
                 (
+                    "category",
+                    models.TextField(choices=ingredients.NutrientCategory.choices),
+                ),
+                (
                     "units",
                     models.TextField(choices=ingredients.NutrientUnit.choices),
                 ),

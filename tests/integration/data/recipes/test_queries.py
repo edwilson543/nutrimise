@@ -31,6 +31,14 @@ class TestGetRecipes:
 
         assert len(result) == 2
 
+    def test_only_gets_recipe_matching_passed_ids(self):
+        recipe = data_factories.Recipe()
+        data_factories.Recipe()
+
+        result = recipe_queries.get_recipes(recipe_ids=(recipe.id,))
+
+        assert result == (recipe.to_domain_model(),)
+
     def test_only_gets_recipes_meeting_single_dietary_requirement(self):
         dietary_requirement = data_factories.DietaryRequirement()
         matching_recipe = data_factories.Recipe.create_to_satisfy_dietary_requirements(

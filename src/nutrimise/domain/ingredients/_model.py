@@ -19,6 +19,15 @@ class Ingredient:
     grams_per_unit: float
 
 
+class NutrientCategory(django_models.TextChoices):
+    MACRO = "MACRO", "Macro"
+    VITAMIN_FAT_SOLUBLE = "VITAMIN_FAT_SOLUBLE", "Vitamin (fat-soluble)"
+    VITAMIN_WATER_SOLUBLE = "VITAMIN_WATER_SOLUBLE", "Vitamin (water-soluble)"
+    MINERAL_MAJOR = "MINERAL_MAJOR", "Mineral (major)"
+    MINERAL_TRACE = "MINERAL_TRACE", "Mineral (trace)"
+    OTHER = "OTHER", "Other"
+
+
 class NutrientUnit(django_models.TextChoices):
     GRAMS = "GRAMS", "g"
     MILLIGRAM = "MILLIGRAM", "mg"
@@ -38,6 +47,7 @@ class NutrientUnit(django_models.TextChoices):
 class Nutrient:
     id: int
     name: str
+    category: NutrientCategory
     units: NutrientUnit
 
 

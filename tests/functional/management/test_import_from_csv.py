@@ -11,6 +11,7 @@ def test_example_dataset_can_be_imported():
 
     nutrient = ingredient_models.Nutrient.objects.get()
     assert nutrient.name == "Protein"
+    assert nutrient.category == ingredients.NutrientCategory.MACRO
     assert nutrient.units == ingredients.NutrientUnit.GRAMS
 
     ingredient_category = ingredient_models.IngredientCategory.objects.get()

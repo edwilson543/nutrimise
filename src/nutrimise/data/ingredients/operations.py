@@ -27,3 +27,16 @@ def get_or_create_ingredient(
         },
     )
     return ingredient.to_domain_model()
+
+
+def create_ingredient_nutritional_information(
+    *,
+    ingredient_id: int,
+    nutrient_id: int,
+    nutrient_quantity_per_gram_of_ingredient: float,
+) -> None:
+    ingredient_models.IngredientNutritionalInformation.objects.create(
+        ingredient_id=ingredient_id,
+        nutrient_id=nutrient_id,
+        quantity_per_gram=nutrient_quantity_per_gram_of_ingredient,
+    )

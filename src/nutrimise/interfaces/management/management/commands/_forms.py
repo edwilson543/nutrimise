@@ -15,7 +15,7 @@ class DietaryRequirement(django_forms.ModelForm):
 class Nutrient(django_forms.ModelForm):
     class Meta:
         model = ingredient_models.Nutrient
-        fields = ["name", "units"]
+        fields = ["name", "category", "units"]
 
 
 class IngredientCategory(django_forms.ModelForm):

@@ -10,6 +10,7 @@ from nutrimise.app import menus as menus_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.menus import models as menu_models
 from nutrimise.data.menus import operations as menu_operations
+from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings, menus, recipes
 from nutrimise.interfaces.admin import forms
 
@@ -38,6 +39,7 @@ class MenuDetails(_base.AdminTemplateView):
                 menu=self.menu, per_serving=True
             )
         )
+        context["shopping_list"] = self._get_shopping_list()
 
         context["optimise_form"] = self._get_optimise_form()
         return context
@@ -63,6 +65,14 @@ class MenuDetails(_base.AdminTemplateView):
             optimisation_mode = None
 
         return forms.OptimiseMenu(initial={"optimisation_mode": optimisation_mode})
+
+    def _get_shopping_list(self) -> menus.ShoppingList:
+        recipes_ = recipe_queries.get_recipes(recipe_ids=tuple(self.menu.recipe_ids()))
+        recipe_lookup = {recipe.id: recipe for recipe in recipes_}
+
+        return menus.get_shopping_list(
+            menu=self.menu.to_domain_model(), recipe_lookup=recipe_lookup
+        )
 
 
 class OptimiseMenu(generic.FormView):
