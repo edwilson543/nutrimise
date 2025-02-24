@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 import attrs
 
 from nutrimise.domain import ingredients, recipes
@@ -46,6 +48,20 @@ class ShoppingList:
             if shopping_list_item.ingredient.id == item.id:
                 return shopping_list_item
         raise KeyError(f"Ingredient {item.id} is not in the shopping list.")
+
+    @property
+    def items_by_ingredient_category(
+        self,
+    ) -> dict[ingredients.IngredientCategory, tuple[ShoppingListItem, ...]]:
+        categorised = defaultdict(tuple)
+
+        for item in self.items:
+            categorised[item.ingredient.category] += (item,)
+
+        return {
+            category: tuple(sorted(items, key=lambda item: item.ingredient.name))
+            for category, items in categorised.items()
+        }
 
 
 def get_shopping_list(

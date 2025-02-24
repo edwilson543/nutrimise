@@ -4,6 +4,31 @@ from nutrimise.domain import menus
 from testing.factories import domain as domain_factories
 
 
+class TestShoppingListByIngredientCategory:
+    def test_groups_ingredients_into_categories(self):
+        meat = domain_factories.IngredientCategory(name="meat")
+        chicken = domain_factories.Ingredient(category=meat)
+        pork = domain_factories.Ingredient(category=meat)
+
+        vegetable = domain_factories.IngredientCategory(name="vegetable")
+        brocoli = domain_factories.Ingredient(category=vegetable)
+        carrot = domain_factories.Ingredient(category=vegetable)
+
+        items = (
+            menus.ShoppingListItem(ingredient=pork, quantity=1.0),
+            menus.ShoppingListItem(ingredient=carrot, quantity=1.0),
+            menus.ShoppingListItem(ingredient=chicken, quantity=1.0),
+            menus.ShoppingListItem(ingredient=brocoli, quantity=1.0),
+        )
+
+        shopping_list = menus.ShoppingList(items=items)
+        items_by_category = shopping_list.items_by_ingredient_category
+
+        assert len(items_by_category) == 2
+        assert items_by_category[meat] == (items[2], items[0])
+        assert items_by_category[vegetable] == (items[3], items[1])
+
+
 class TestGetShoppingList:
     def test_combines_all_ingredients_for_all_menu_items_to_make_shopping_list(self):
         ingredient = domain_factories.Ingredient()
