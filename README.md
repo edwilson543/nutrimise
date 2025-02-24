@@ -1,25 +1,20 @@
-### Web app for generating meal plans
+### AI and linear optimisation powered meal planning application
 
 #### Features
-- Manage recipes and meal plans using a slick UI (the Django admin but purple)
-- Generate meal plans using a linear optimiser 
-- Impose various constraints on your meal plan:
-  - Intake of micro and macro nutrients per meal / day / week etc.
-  - Number of different ingredients used in the plan
-  - Number of different recipes used in the plan
-- Optimise meal plans for various objectives:
-  - Randomness
-  - Maximise or minimise the intake of certain nutrients
-  - Maximise or minimise the number of different ingredients used
-  - Maximise semantic matching between a prompt and the chosen recipes
-- Semantic search for recipes using word embeddings
+- Extract recipes from images of cookbooks, recipe cards or even handwritten recipes
+- Create meal plans that are optimised by, and or satisfy constraints on:
+    - Semantic similarity to a prompt
+    - Intake of micro and macro nutrients per meal, day or week
+    - Number of different ingredients used in the plan
+    - Number of different recipes used in the plan
+- Get the shopping list for your meal plan
 
 ---
 
 ### System requirements:
 - Python 3.11
 - postgres 15.1
-- mkcert 1.4.4 (optional)
+- uv
 
 ---
 
@@ -31,17 +26,12 @@ source .venv/bin/activate
 make install
 ```
 
----
+Verify the installation:
+```bash
+make local_ci
+```
 
-### Run the development server:
-With HTTP:
+And then run the development server:
 ```bash
 make server
 ```
-
-With HTTPS:
-```bash
-make server_https
-```
-
----
