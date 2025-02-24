@@ -21,13 +21,16 @@ def get_recipe(*, recipe_id: int) -> _model.Recipe:
 
 
 def get_recipes(
-    *, dietary_requirement_ids: tuple[int, ...] = ()
+    *, recipe_ids: tuple[int, ...] = (), dietary_requirement_ids: tuple[int, ...] = ()
 ) -> tuple[_model.Recipe, ...]:
     recipes = recipe_models.Recipe.objects.prefetch_related(
         "ingredients",
         "ingredients__ingredient",
         "ingredients__ingredient__nutritional_information",
     ).all()
+
+    if recipe_ids:
+        recipes = recipes.filter(id__in=recipe_ids)
 
     if dietary_requirement_ids:
         for dietary_requirement_id in dietary_requirement_ids:
