@@ -4,36 +4,33 @@ from typing import Any
 import pytest
 from django.test import override_settings
 
-from nutrimise.domain import image_extraction, recipes
-from nutrimise.domain.image_extraction._vendors import _openai
+from nutrimise.domain import data_extraction, recipes
+from nutrimise.domain.data_extraction._vendors import _openai
+from testing.factories import domain as domain_factories
 
 
 class TestInstantiation:
     def tests_instantiates_service_when_api_key_set(self):
         with override_settings(OPENAI_API_KEY="some-key"):
-            _openai.OpenAIImageExtractionService()
+            _openai.OpenAIDataExtractionService()
 
     @pytest.mark.parametrize("api_key", ["", None])
     def test_raises_configuration_error_when_api_key_not_set(self, api_key: str | None):
         with (
             override_settings(OPENAI_API_KEY=api_key),
-            pytest.raises(image_extraction.ImageExtractionServiceMisconfigured) as exc,
+            pytest.raises(data_extraction.DataExtractionServiceMisconfigured) as exc,
         ):
-            _openai.OpenAIImageExtractionService()
+            _openai.OpenAIDataExtractionService()
 
-        assert exc.value.vendor == image_extraction.ImageExtractionVendor.OPENAI
+        assert exc.value.vendor == data_extraction.DataExtractionVendor.OPENAI
 
 
 class TestExtractRecipeFromImage:
     @override_settings(OPENAI_API_KEY="some-key")
     def test_gets_output_structured_as_recipe(self, httpx_mock):
         base64_image = "My encoded image."
-        ingredient = image_extraction.Ingredient(
-            id=1,
-            name="Brocoli",
-            category_name="Vegetable",
-            units="Grams",
-            grams_per_unit=1.0,
+        ingredient = data_extraction.Ingredient.from_domain_model(
+            domain_factories.Ingredient()
         )
 
         httpx_mock.add_response(
@@ -43,7 +40,7 @@ class TestExtractRecipeFromImage:
             json=self._response_ok_json(),
         )
 
-        openai_service = _openai.OpenAIImageExtractionService()
+        openai_service = _openai.OpenAIDataExtractionService()
         recipe = openai_service.extract_recipe_from_image(
             base64_image=base64_image, existing_ingredients=[ingredient]
         )
@@ -60,14 +57,14 @@ class TestExtractRecipeFromImage:
         assert len(recipe.ingredients) == 1
         recipe_ingredient = recipe.ingredients[0]
         assert recipe_ingredient.quantity == 250.0
-        assert recipe_ingredient.ingredient.name == "Beef"
-        assert recipe_ingredient.ingredient.category_name == "Meat"
-        assert recipe_ingredient.ingredient.units == "Grams"
-        assert recipe_ingredient.ingredient.grams_per_unit == 1.0
+        assert recipe_ingredient.ingredient.name == ingredient.name
+        assert recipe_ingredient.ingredient.category_name == ingredient.category_name
+        assert recipe_ingredient.ingredient.units == ingredient.units
+        assert recipe_ingredient.ingredient.grams_per_unit == ingredient.grams_per_unit
 
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
-        openai_service = _openai.OpenAIImageExtractionService()
+        openai_service = _openai.OpenAIDataExtractionService()
         base64_image = "My encoded image."
 
         httpx_mock.add_response(
@@ -76,7 +73,7 @@ class TestExtractRecipeFromImage:
             status_code=401,
         )
 
-        with pytest.raises(image_extraction.UnableToExtractRecipeFromImage) as exc:
+        with pytest.raises(data_extraction.UnableToExtractRecipeFromImage) as exc:
             openai_service.extract_recipe_from_image(
                 base64_image=base64_image, existing_ingredients=[]
             )
@@ -127,14 +124,14 @@ class TestExtractIngredientNutritionalInformation:
     def test_gets_output_structured_as_list_of_ingredient_nutritional_information(
         self, httpx_mock
     ):
-        ingredient = image_extraction.Ingredient(
+        ingredient = data_extraction.Ingredient(
             id=1,
             name="Brocoli",
             category_name="Vegetable",
             units="Grams",
             grams_per_unit=1.0,
         )
-        nutrient = image_extraction.Nutrient(
+        nutrient = data_extraction.Nutrient(
             id=2, name="Protein", category="MACRO", units="GRAMS"
         )
 
@@ -147,7 +144,7 @@ class TestExtractIngredientNutritionalInformation:
             ),
         )
 
-        openai_service = _openai.OpenAIImageExtractionService()
+        openai_service = _openai.OpenAIDataExtractionService()
         ingredient_nutritional_information = (
             openai_service.extract_ingredient_nutritional_information(
                 ingredients=[ingredient], nutrients=[nutrient]

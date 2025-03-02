@@ -7,7 +7,7 @@ from PIL import Image
 
 from nutrimise.app import recipes as recipes_app
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import embeddings, image_extraction, recipes
+from nutrimise.domain import data_extraction, embeddings, recipes
 
 
 IMAGES_DIRECTORY = pathlib.Path(settings.BASE_DIR).parents[1] / "data" / "images"
@@ -21,7 +21,7 @@ class Command(django_management.BaseCommand):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-        self._image_extraction_service = image_extraction.get_image_extraction_service()
+        self._data_extraction_service = data_extraction.get_data_extraction_service()
         self._embedding_service = embeddings.get_embedding_service()
 
     def add_arguments(self, parser: django_management.CommandParser) -> None:
@@ -52,7 +52,7 @@ class Command(django_management.BaseCommand):
                 recipes_app.extract_recipe_from_image(
                     author=author,
                     image=image,
-                    image_extraction_service=self._image_extraction_service,
+                    data_extraction_service=self._data_extraction_service,
                     embedding_service=self._embedding_service,
                 )
             except Exception as exc:

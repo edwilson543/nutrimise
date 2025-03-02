@@ -148,7 +148,7 @@ class Settings(configurations.Configuration):
 
     EMBEDDING_VENDOR = env.as_str("EMBEDDING_VENDOR", default="FAKE")
 
-    IMAGE_EXTRACTION_VENDOR = env.as_str("IMAGE_EXTRACTION_VENDOR", default="FAKE")
+    DATA_EXTRACTION_VENDOR = env.as_str("DATA_EXTRACTION_VENDOR", default="FAKE")
 
 
 class DevSettings(Settings):

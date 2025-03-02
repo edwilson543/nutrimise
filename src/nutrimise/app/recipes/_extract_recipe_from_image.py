@@ -7,12 +7,12 @@ from PIL import Image
 from nutrimise.data.ingredients import operations as ingredient_operations
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import operations as recipe_operations
-from nutrimise.domain import embeddings, image_extraction, ingredients, recipes
+from nutrimise.domain import data_extraction, embeddings, ingredients, recipes
 
 from . import _create_or_update_recipe_embedding
 
 
-UnableToExtractRecipeFromImage = image_extraction.UnableToExtractRecipeFromImage
+UnableToExtractRecipeFromImage = data_extraction.UnableToExtractRecipeFromImage
 RecipeAlreadyExists = recipe_operations.RecipeAlreadyExists
 
 
@@ -20,7 +20,7 @@ def extract_recipe_from_image(
     *,
     author: recipes.RecipeAuthor | None,
     image: Image.Image,
-    image_extraction_service: image_extraction.ImageExtractionService,
+    data_extraction_service: data_extraction.DataExtractionService,
     embedding_service: embeddings.EmbeddingService,
 ) -> int:
     """
@@ -36,7 +36,7 @@ def extract_recipe_from_image(
 
     existing_ingredients = _get_existing_ingredients()
 
-    extracted_recipe = image_extraction_service.extract_recipe_from_image(
+    extracted_recipe = data_extraction_service.extract_recipe_from_image(
         base64_image=base64_image.decode("utf-8"),
         existing_ingredients=existing_ingredients,
     )
@@ -68,16 +68,16 @@ def extract_recipe_from_image(
     return recipe_id
 
 
-def _get_existing_ingredients() -> list[image_extraction.Ingredient]:
+def _get_existing_ingredients() -> list[data_extraction.Ingredient]:
     ingredients_ = ingredient_queries.get_ingredients()
     return [
-        image_extraction.Ingredient.from_domain_model(ingredient=ingredient)
+        data_extraction.Ingredient.from_domain_model(ingredient=ingredient)
         for ingredient in ingredients_
     ]
 
 
 def _get_or_create_ingredients(
-    *, recipe: image_extraction.Recipe
+    *, recipe: data_extraction.Recipe
 ) -> dict[str, ingredients.Ingredient]:
     """
     Create any ingredients and categories extracted from the recipe that aren't in the database yet.

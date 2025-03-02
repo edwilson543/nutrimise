@@ -8,7 +8,7 @@ from PIL import Image
 from nutrimise.app import recipes as recipes_app
 from nutrimise.data.ingredients import queries as ingredient_queries
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import embeddings, image_extraction
+from nutrimise.domain import data_extraction, embeddings
 from nutrimise.interfaces.admin import forms
 
 from . import _base, _types
@@ -45,17 +45,17 @@ class ExtractRecipeFromImage(_base.AdminFormView):
     # Instance attributes.
     request: _types.AuthenticatedHttpRequest
     _recipe_id: int
-    _image_extraction_service: image_extraction.ImageExtractionService
+    _data_extraction_service: data_extraction.DataExtractionService
     _embedding_service: embeddings.EmbeddingService
 
     def dispatch(
         self, request: http.HttpRequest, *args: object, **kwargs: object
     ) -> http.HttpResponseBase:
         try:
-            self._image_extraction_service = (
-                image_extraction.get_image_extraction_service()
+            self._data_extraction_service = (
+                data_extraction.get_data_extraction_service()
             )
-        except image_extraction.ImageExtractionServiceMisconfigured:
+        except data_extraction.DataExtractionServiceMisconfigured:
             return self._error_response(
                 error_message="Image extraction service is not configured."
             )
@@ -76,10 +76,10 @@ class ExtractRecipeFromImage(_base.AdminFormView):
             self._recipe_id = recipes_app.extract_recipe_from_image(
                 author=form.cleaned_data.get("author"),
                 image=uploaded_image,
-                image_extraction_service=self._image_extraction_service,
+                data_extraction_service=self._data_extraction_service,
                 embedding_service=self._embedding_service,
             )
-        except image_extraction.UnableToExtractRecipeFromImage:
+        except data_extraction.UnableToExtractRecipeFromImage:
             return self._error_response(
                 error_message="Unexpected error extracting image from recipe."
             )

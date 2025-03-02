@@ -1,7 +1,7 @@
 import attrs
 
 from nutrimise.domain import recipes
-from nutrimise.domain.image_extraction import _constants, _output_structure
+from nutrimise.domain.data_extraction import _constants, _output_structure
 
 from . import _base
 
@@ -20,9 +20,9 @@ def get_canned_recipe(
 
 
 @attrs.frozen
-class FakeImageExtractionService(_base.ImageExtractionService):
-    model: _constants.ImageExtractionModel = _constants.ImageExtractionModel.FAKE
-    vendor: _constants.ImageExtractionVendor = _constants.ImageExtractionVendor.FAKE
+class FakeDataExtractionService(_base.DataExtractionService):
+    model: _constants.DataExtractionModel = _constants.DataExtractionModel.FAKE
+    vendor: _constants.DataExtractionVendor = _constants.DataExtractionVendor.FAKE
 
     canned_recipe: _output_structure.Recipe = attrs.field(factory=get_canned_recipe)
 

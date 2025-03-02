@@ -1,5 +1,5 @@
-from ._config import get_image_extraction_service
-from ._constants import ImageExtractionModel, ImageExtractionVendor
+from ._config import get_data_extraction_service
+from ._constants import DataExtractionModel, DataExtractionVendor
 from ._output_structure import (
     Ingredient,
     IngredientNutritionalInformation,
@@ -8,7 +8,7 @@ from ._output_structure import (
     RecipeIngredient,
 )
 from ._vendors import (
-    ImageExtractionService,
-    ImageExtractionServiceMisconfigured,
+    DataExtractionService,
+    DataExtractionServiceMisconfigured,
     UnableToExtractRecipeFromImage,
 )

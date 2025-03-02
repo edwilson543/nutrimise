@@ -2,30 +2,30 @@ import abc
 
 import attrs
 
-from nutrimise.domain.image_extraction import _constants, _output_structure
+from nutrimise.domain.data_extraction import _constants, _output_structure
 
 
 @attrs.frozen
-class ImageExtractionServiceMisconfigured(Exception):
-    vendor: _constants.ImageExtractionVendor
+class DataExtractionServiceMisconfigured(Exception):
+    vendor: _constants.DataExtractionVendor
 
 
 @attrs.frozen
 class UnableToExtractRecipeFromImage(Exception):
-    vendor: _constants.ImageExtractionVendor
-    model: _constants.ImageExtractionModel
+    vendor: _constants.DataExtractionVendor
+    model: _constants.DataExtractionModel
 
 
 @attrs.frozen
 class UnableToExtractIngredientNutritionalInformation(Exception):
-    vendor: _constants.ImageExtractionVendor
-    model: _constants.ImageExtractionModel
+    vendor: _constants.DataExtractionVendor
+    model: _constants.DataExtractionModel
 
 
 @attrs.frozen
-class ImageExtractionService(abc.ABC):
-    model: _constants.ImageExtractionModel
-    vendor: _constants.ImageExtractionVendor
+class DataExtractionService(abc.ABC):
+    model: _constants.DataExtractionModel
+    vendor: _constants.DataExtractionVendor
 
     @abc.abstractmethod
     def extract_recipe_from_image(

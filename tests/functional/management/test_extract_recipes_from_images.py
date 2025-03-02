@@ -4,7 +4,7 @@ from django.test import override_settings
 from nutrimise.data.recipes import models as recipe_models
 
 
-@override_settings(IMAGE_EXTRACTION_VENDOR="FAKE", EMBEDDING_VENDOR="FAKE")
+@override_settings(DATA_EXTRACTION_VENDOR="FAKE", EMBEDDING_VENDOR="FAKE")
 def test_extracts_recipes_from_test_dataset():
     django_management.call_command("extract_recipes_from_images", dataset="test")
 
