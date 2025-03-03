@@ -27,6 +27,7 @@ dependencies = [
     "pydantic",
     # Production
     "gunicorn",
+    "bs4>=0.0.2",
 ]
 
 [dependency-groups]
