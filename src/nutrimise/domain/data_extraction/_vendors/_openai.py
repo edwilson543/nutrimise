@@ -168,7 +168,9 @@ def _get_system_prompt_for_extracting_recipe(
         prompt = f"""Consider the following list of ingredients:
         {ingredients_json}
         For each ingredient you extract from the recipe image:
-        - If the ingredient is already in the list, ensure your response exactly matches the details provided (including name, category, units, and grams per unit).
+        - If the ingredient is already in the list:
+            - Ensure your response exactly matches the details provided (including name, category, units, and grams per unit).
+            - Convert the extracted ingredient's units to the existing ingredient's units (for example, if there is an existing ingredient 'Aubergine' with units 'whole', but the recipe uses 500g of aubergines, then the recipe ingredient should be 2 'whole' aubergines).
         - If the ingredient is not in the list, you may include it as a new ingredient in your response while maintaining consistency in format."
         """
 
