@@ -12,7 +12,7 @@ from nutrimise.domain import data_extraction, embeddings, ingredients, recipes
 from . import _create_or_update_recipe_embedding
 
 
-UnableToExtractRecipeFromImage = data_extraction.UnableToExtractRecipeFromImage
+UnableToExtractRecipe = data_extraction.UnableToExtractRecipe
 RecipeAlreadyExists = recipe_operations.RecipeAlreadyExists
 
 
@@ -26,7 +26,7 @@ def extract_recipe_from_image(
     """
     Extract a recipe and its components from an image and save it to the database.
 
-    :raises UnableToExtractRecipeFromImage: If the recipe could not be extracted for some reason.
+    :raises UnableToExtractRecipe: If the recipe could not be extracted for some reason.
     :raises RecipeAlreadyExists: If a recipe with the extracted name already exists for the
         author.
     """

@@ -73,7 +73,7 @@ class TestExtractRecipeFromImage:
             status_code=401,
         )
 
-        with pytest.raises(data_extraction.UnableToExtractRecipeFromImage) as exc:
+        with pytest.raises(data_extraction.UnableToExtractRecipe) as exc:
             openai_service.extract_recipe_from_image(
                 base64_image=base64_image, existing_ingredients=[]
             )

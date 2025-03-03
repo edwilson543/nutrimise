@@ -1,7 +1,7 @@
 from ._base import (
     DataExtractionService,
     DataExtractionServiceMisconfigured,
-    UnableToExtractRecipeFromImage,
+    UnableToExtractRecipe,
 )
 from ._broken import BrokenDataExtractionService
 from ._fake import FakeDataExtractionService, get_canned_recipe

@@ -96,7 +96,7 @@ def test_raises_embedding_service_errors():
     image = image_factories.get_image()
     data_extraction_service = data_extraction_vendors.BrokenDataExtractionService()
 
-    with pytest.raises(data_extraction.UnableToExtractRecipeFromImage) as exc:
+    with pytest.raises(data_extraction.UnableToExtractRecipe) as exc:
         _extract_recipe_from_image.extract_recipe_from_image(
             author=None,
             image=image,

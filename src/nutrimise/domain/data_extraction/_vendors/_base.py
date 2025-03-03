@@ -11,7 +11,7 @@ class DataExtractionServiceMisconfigured(Exception):
 
 
 @attrs.frozen
-class UnableToExtractRecipeFromImage(Exception):
+class UnableToExtractRecipe(Exception):
     vendor: _constants.DataExtractionVendor
     model: _constants.DataExtractionModel
 
@@ -35,9 +35,9 @@ class DataExtractionService(abc.ABC):
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
         """
-        Get an embedding for the passed text.
+        Extract structured recipe data from the passed image.
 
-        :raises UnableToExtractRecipeFromImage: If the service is unable to extract the image
+        :raises UnableToExtractRecipe: If the service is unable to extract the image
             for some reason.
         """
         raise NotImplementedError

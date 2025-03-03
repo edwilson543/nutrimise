@@ -16,7 +16,7 @@ class BrokenDataExtractionService(_base.DataExtractionService):
         base64_image: str,
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
-        raise _base.UnableToExtractRecipeFromImage(vendor=self.vendor, model=self.model)
+        raise _base.UnableToExtractRecipe(vendor=self.vendor, model=self.model)
 
     def extract_ingredient_nutritional_information(
         self,

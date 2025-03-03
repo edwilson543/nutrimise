@@ -10,5 +10,5 @@ from ._output_structure import (
 from ._vendors import (
     DataExtractionService,
     DataExtractionServiceMisconfigured,
-    UnableToExtractRecipeFromImage,
+    UnableToExtractRecipe,
 )

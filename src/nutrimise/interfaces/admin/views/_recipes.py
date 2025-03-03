@@ -79,7 +79,7 @@ class ExtractRecipeFromImage(_base.AdminFormView):
                 data_extraction_service=self._data_extraction_service,
                 embedding_service=self._embedding_service,
             )
-        except data_extraction.UnableToExtractRecipeFromImage:
+        except data_extraction.UnableToExtractRecipe:
             return self._error_response(
                 error_message="Unexpected error extracting image from recipe."
             )

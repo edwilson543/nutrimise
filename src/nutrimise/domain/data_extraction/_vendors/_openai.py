@@ -41,12 +41,12 @@ class OpenAIDataExtractionService(_base.DataExtractionService):
                 response_format=_output_structure.Recipe,
             )
         except openai.APIError as exc:
-            raise _base.UnableToExtractRecipeFromImage(
+            raise _base.UnableToExtractRecipe(
                 vendor=self.vendor, model=self.model
             ) from exc
 
         if not (recipe := response.choices[0].message.parsed):
-            raise _base.UnableToExtractRecipeFromImage(
+            raise _base.UnableToExtractRecipe(
                 vendor=self.vendor, model=self.model
             )
 
