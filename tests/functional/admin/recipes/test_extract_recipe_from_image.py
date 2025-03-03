@@ -18,7 +18,7 @@ def test_extracts_image_and_creates_recipe(admin_client):
 
     assert response.status_code == 200
 
-    form = response.forms["upload-image"]
+    form = response.forms["extract-recipe-from-image-form"]
     form["image"] = image_factories.get_uploaded_image()
     form["author"] = author.id
     submit_response = form.submit()
@@ -45,7 +45,7 @@ def test_handles_error_when_data_extraction_service_is_broken(
 
     assert response.status_code == 200
 
-    form = response.forms["upload-image"]
+    form = response.forms["extract-recipe-from-image-form"]
     form["image"] = image_factories.get_uploaded_image()
     submit_response = form.submit()
 
@@ -69,7 +69,7 @@ def test_handles_error_when_no_data_extraction_service_is_installed_for_vendor(
 
     assert response.status_code == 200
 
-    form = response.forms["upload-image"]
+    form = response.forms["extract-recipe-from-image-form"]
     form["image"] = image_factories.get_uploaded_image()
     submit_response = form.submit()
 

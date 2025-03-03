@@ -107,7 +107,7 @@ class RecipeAdmin(admin.ModelAdmin):
         extra_context: dict[str, Any] | None = None,
     ) -> django_http.HttpResponse:
         extra_context = extra_context or {}
-        extra_context["image_upload_form"] = forms.ImageUpload()
+        extra_context["image_upload_form"] = forms.ExtractRecipeFromImage()
         return super().add_view(
             request=request, form_url=form_url, extra_context=extra_context
         )

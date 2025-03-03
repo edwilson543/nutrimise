@@ -39,7 +39,7 @@ class RecipeDetails(_base.AdminTemplateView):
 
 
 class ExtractRecipeFromImage(_base.AdminFormView):
-    form_class = forms.ImageUpload
+    form_class = forms.ExtractRecipeFromImage
     http_method_names = ["post"]
 
     # Instance attributes.
@@ -69,7 +69,7 @@ class ExtractRecipeFromImage(_base.AdminFormView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form: forms.ImageUpload) -> http.HttpResponse:
+    def form_valid(self, form: forms.ExtractRecipeFromImage) -> http.HttpResponse:
         uploaded_image = Image.open(form.cleaned_data["image"])
 
         try:
@@ -89,7 +89,7 @@ class ExtractRecipeFromImage(_base.AdminFormView):
 
         return super().form_valid(form=form)
 
-    def form_invalid(self, form: forms.ImageUpload) -> http.HttpResponse:
+    def form_invalid(self, form: forms.ExtractRecipeFromImage) -> http.HttpResponse:
         return self._error_response(error_message=form.errors.as_text())
 
     def get_success_url(self) -> str:
