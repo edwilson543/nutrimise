@@ -7,3 +7,4 @@ from ._exceptions import (
     UnableToGetEmbedding,
 )
 from ._extract_recipe_from_image import extract_recipe_from_image
+from ._extract_recipe_from_url import extract_recipe_from_url
