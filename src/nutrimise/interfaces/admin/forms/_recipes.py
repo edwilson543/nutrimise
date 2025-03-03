@@ -9,3 +9,7 @@ class ExtractRecipeFromImage(django_forms.Form):
         queryset=recipe_models.RecipeAuthor.objects.order_by("first_name"),
         required=False,
     )
+
+
+class ExtractRecipeFromURL(django_forms.Form):
+    url = django_forms.URLField(widget=django_forms.TextInput(attrs={"style": "width: 50%;"}))

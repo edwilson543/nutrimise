@@ -15,6 +15,11 @@ urlpatterns = [
         view=views.ExtractRecipeFromImage.as_view(),
         name="extract-recipe-from-image",
     ),
+    django_urls.path(
+        route="recipes/extract-from-url/",
+        view=views.ExtractRecipeFromURL.as_view(),
+        name="extract-recipe-from-url",
+    ),
     # Menus.
     django_urls.path(
         route="menus/<int:menu_id>/",

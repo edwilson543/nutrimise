@@ -4,4 +4,4 @@ from ._menus import (
     OptimiseMenu,
     UnlockMenuItemForOptimiser,
 )
-from ._recipes import ExtractRecipeFromImage, RecipeDetails
+from ._recipes import ExtractRecipeFromImage, ExtractRecipeFromURL, RecipeDetails
