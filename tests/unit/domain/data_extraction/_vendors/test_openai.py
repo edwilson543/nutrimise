@@ -37,7 +37,7 @@ class TestExtractRecipeFromImage:
             url="https://api.openai.com/v1/chat/completions",
             method="POST",
             status_code=200,
-            json=self._response_ok_json(),
+            json=_extracted_recipe_response_json(ingredient=ingredient),
         )
 
         openai_service = _openai.OpenAIDataExtractionService()
@@ -81,42 +81,131 @@ class TestExtractRecipeFromImage:
         assert exc.value.vendor == openai_service.vendor
         assert exc.value.model == openai_service.model
 
-    def _response_ok_json(self) -> dict[str, Any]:
-        """
-        OpenAI chat completion structure response output, per the docs.
-        https://platform.openai.com/docs/guides/structured-outputs
-        """
-        ingredient = {
-            "id": 1,
-            "name": "Beef",
-            "category_name": "Meat",
-            "units": "Grams",
-            "grams_per_unit": 1.0,
-        }
-        recipe = {
-            "name": "Some recipe",
-            "description": "Some recipe description.",
-            "methodology": "Some recipe methodology.",
-            "meal_times": ["LUNCH", "DINNER"],
-            "number_of_servings": 7,
-            "ingredients": [{"ingredient": ingredient, "quantity": 250.0}],
-        }
 
-        return {
-            "id": "chatcmpl-AyCk92plBjBPBOnrcpYQ4xVC7LPZd",
-            "choices": [
-                {
-                    "finish_reason": "stop",
-                    "index": 0,
-                    "message": {
-                        "content": json.dumps(recipe),
-                        "role": "assistant",
-                        "parsed": recipe,
-                        "refusal": None,
-                    },
-                }
-            ],
-        }
+class TestExtractRecipeFromURL:
+    @override_settings(OPENAI_API_KEY="some-key")
+    def test_gets_output_structured_as_recipe(self, httpx_mock):
+        recipe_url = "https://recipes.com/some-recipe/"
+        ingredient = data_extraction.Ingredient.from_domain_model(
+            domain_factories.Ingredient()
+        )
+
+        # Mock the response to download the recipe's raw content.
+        httpx_mock.add_response(
+            url=recipe_url,
+            method="GET",
+            status_code=200,
+            html="<main>Some recipe to extract</main>",
+        )
+
+        # Mock the response from OpenAI to process the recipe content.
+        httpx_mock.add_response(
+            url="https://api.openai.com/v1/chat/completions",
+            method="POST",
+            status_code=200,
+            json=_extracted_recipe_response_json(ingredient=ingredient),
+        )
+
+        openai_service = _openai.OpenAIDataExtractionService()
+        recipe = openai_service.extract_recipe_from_url(
+            url=recipe_url, existing_ingredients=[ingredient]
+        )
+
+        assert recipe.name == "Some recipe"
+        assert recipe.description == "Some recipe description."
+        assert recipe.methodology == "Some recipe methodology."
+        assert recipe.meal_times == [
+            recipes.MealTime.LUNCH,
+            recipes.MealTime.DINNER,
+        ]
+        assert recipe.number_of_servings == 7
+
+        assert len(recipe.ingredients) == 1
+        recipe_ingredient = recipe.ingredients[0]
+        assert recipe_ingredient.quantity == 250.0
+        assert recipe_ingredient.ingredient.name == ingredient.name
+        assert recipe_ingredient.ingredient.category_name == ingredient.category_name
+        assert recipe_ingredient.ingredient.units == ingredient.units
+        assert recipe_ingredient.ingredient.grams_per_unit == ingredient.grams_per_unit
+
+    @override_settings(OPENAI_API_KEY="some-key")
+    def test_raises_when_unable_to_access_recipe_url(self, httpx_mock):
+        recipe_url = "https://recipes.com/some-recipe/"
+        httpx_mock.add_response(url=recipe_url, method="GET", status_code=404)
+        openai_service = _openai.OpenAIDataExtractionService()
+
+        with pytest.raises(data_extraction.UnableToExtractRecipe) as exc:
+            openai_service.extract_recipe_from_url(
+                url=recipe_url, existing_ingredients=[]
+            )
+
+        assert exc.value.url == recipe_url
+
+    @override_settings(OPENAI_API_KEY="some-key")
+    def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
+        recipe_url = "https://recipes.com/some-recipe/"
+        openai_service = _openai.OpenAIDataExtractionService()
+
+        httpx_mock.add_response(
+            url=recipe_url,
+            method="GET",
+            status_code=200,
+            html="<main>Some recipe to extract</main>",
+        )
+
+        httpx_mock.add_response(
+            url="https://api.openai.com/v1/chat/completions",
+            method="POST",
+            status_code=401,
+        )
+
+        with pytest.raises(data_extraction.UnableToExtractRecipe) as exc:
+            openai_service.extract_recipe_from_url(
+                url=recipe_url, existing_ingredients=[]
+            )
+
+        assert exc.value.vendor == openai_service.vendor
+        assert exc.value.model == openai_service.model
+
+
+def _extracted_recipe_response_json(
+    *, ingredient: data_extraction.Ingredient
+) -> dict[str, Any]:
+    """
+    OpenAI chat completion structure response output, per the docs.
+    https://platform.openai.com/docs/guides/structured-outputs
+    """
+    ingredient_json = {
+        "id": ingredient.id,
+        "name": ingredient.name,
+        "category_name": ingredient.category_name,
+        "units": ingredient.units,
+        "grams_per_unit": ingredient.grams_per_unit,
+    }
+    recipe = {
+        "name": "Some recipe",
+        "description": "Some recipe description.",
+        "methodology": "Some recipe methodology.",
+        "meal_times": ["LUNCH", "DINNER"],
+        "number_of_servings": 7,
+        "ingredients": [{"ingredient": ingredient_json, "quantity": 250.0}],
+    }
+
+    return {
+        "id": "chatcmpl-AyCk92plBjBPBOnrcpYQ4xVC7LPZd",
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "index": 0,
+                "message": {
+                    "content": json.dumps(recipe),
+                    "role": "assistant",
+                    "parsed": recipe,
+                    "refusal": None,
+                },
+            }
+        ],
+    }
 
 
 class TestExtractIngredientNutritionalInformation:

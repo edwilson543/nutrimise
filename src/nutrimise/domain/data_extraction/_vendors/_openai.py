@@ -19,6 +19,14 @@ def _get_client() -> openai.Client:
 
 
 @attrs.frozen
+class UnableToAccessRecipe(_base.UnableToExtractRecipe):
+    url: str
+
+    def __str__(self) -> str:
+        return f"Unable to access the recipe at url: {self.url}"
+
+
+@attrs.frozen
 class OpenAIDataExtractionService(_base.DataExtractionService):
     model: _constants.DataExtractionModel = _constants.DataExtractionModel.GPT_4O
     vendor: _constants.DataExtractionVendor = _constants.DataExtractionVendor.OPENAI
@@ -30,9 +38,19 @@ class OpenAIDataExtractionService(_base.DataExtractionService):
         base64_image: str,
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
-        messages = _get_data_extraction_prompt(
-            base64_image=base64_image, existing_ingredients=existing_ingredients
+        messages = _get_system_prompt_for_extracting_recipe(
+            existing_ingredients=existing_ingredients
         )
+        user_prompt: openai_chat_types.ChatCompletionMessageParam = {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                }
+            ],
+        }
+        messages.append(user_prompt)
 
         try:
             response = self._client.beta.chat.completions.parse(
@@ -46,9 +64,37 @@ class OpenAIDataExtractionService(_base.DataExtractionService):
             ) from exc
 
         if not (recipe := response.choices[0].message.parsed):
+            raise _base.UnableToExtractRecipe(vendor=self.vendor, model=self.model)
+
+        return recipe
+
+    def extract_recipe_from_url(
+        self, *, url: str, existing_ingredients: list[_output_structure.Ingredient]
+    ) -> _output_structure.Recipe:
+        text = self._get_raw_recipe_text_from_url(url=url)
+
+        messages = _get_system_prompt_for_extracting_recipe(
+            existing_ingredients=existing_ingredients
+        )
+        user_prompt: openai_chat_types.ChatCompletionUserMessageParam = {
+            "role": "user",
+            "content": text,
+        }
+        messages.append(user_prompt)
+
+        try:
+            response = self._client.beta.chat.completions.parse(
+                model=self.model.value,
+                messages=messages,
+                response_format=_output_structure.Recipe,
+            )
+        except openai.APIError as exc:
             raise _base.UnableToExtractRecipe(
                 vendor=self.vendor, model=self.model
-            )
+            ) from exc
+
+        if not (recipe := response.choices[0].message.parsed):
+            raise _base.UnableToExtractRecipe(vendor=self.vendor, model=self.model)
 
         return recipe
 
@@ -80,16 +126,36 @@ class OpenAIDataExtractionService(_base.DataExtractionService):
 
         return info_list.data
 
+    def _get_raw_recipe_text_from_url(self, *, url: str) -> str:
+        error = UnableToAccessRecipe(url=url, vendor=self.vendor, model=self.model)
 
-def _get_data_extraction_prompt(
-    *,
-    base64_image: str,
-    existing_ingredients: list[_output_structure.Ingredient],
+        try:
+            response = httpx.get(url)
+        except httpx.RequestError as exc:
+            raise error from exc
+
+        if response.status_code != 200:
+            raise error
+
+        recipe_soup = bs4.BeautifulSoup(response.text, "html.parser")
+        if not (recipe_soup_main := recipe_soup.main):
+            raise error
+
+        recipe_text = [
+            text
+            for tag in recipe_soup_main.find_all(string=True)
+            if (text := tag.text.strip())
+        ]
+        return "\n".join(chunk for chunk in recipe_text)
+
+
+def _get_system_prompt_for_extracting_recipe(
+    *, existing_ingredients: list[_output_structure.Ingredient]
 ) -> list[openai_chat_types.ChatCompletionMessageParam]:
     def _get_system_prompt() -> openai_chat_types.ChatCompletionSystemMessageParam:
         return {
             "role": "system",
-            "content": "Extract the information from the given image in the specified format.",
+            "content": "Extract information about the recipe in the specified structure.",
         }
 
     def _get_ingredients_system_prompt(
@@ -108,23 +174,9 @@ def _get_data_extraction_prompt(
 
         return {"role": "system", "content": prompt}
 
-    def _get_user_prompt(
-        *, base64_image: str
-    ) -> openai_chat_types.ChatCompletionUserMessageParam:
-        return {
-            "role": "user",
-            "content": [
-                {
-                    "type": "image_url",
-                    "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
-                },
-            ],
-        }
-
     return [
         _get_system_prompt(),
         _get_ingredients_system_prompt(existing_ingredients=existing_ingredients),
-        _get_user_prompt(base64_image=base64_image),
     ]
 
 

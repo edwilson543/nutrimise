@@ -1,6 +1,6 @@
 import pytest
 
-from nutrimise.app.recipes import _extract_recipe_from_image
+from nutrimise.app.recipes import _exceptions, _extract_recipe_from_image
 from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import data_extraction, embeddings
@@ -80,7 +80,7 @@ def test_creates_raises_if_extracted_recipe_is_not_unique_for_author():
     canned_recipe = data_extraction_service.canned_recipe
     data_factories.Recipe(name=canned_recipe.name, author=author)
 
-    with pytest.raises(_extract_recipe_from_image.RecipeAlreadyExists) as exc:
+    with pytest.raises(_exceptions.RecipeAlreadyExists) as exc:
         _extract_recipe_from_image.extract_recipe_from_image(
             author=author,
             image=image,

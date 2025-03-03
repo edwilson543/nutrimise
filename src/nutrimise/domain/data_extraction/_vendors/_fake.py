@@ -34,6 +34,11 @@ class FakeDataExtractionService(_base.DataExtractionService):
     ) -> _output_structure.Recipe:
         return self.canned_recipe
 
+    def extract_recipe_from_url(
+        self, *, url: str, existing_ingredients: list[_output_structure.Ingredient]
+    ) -> _output_structure.Recipe:
+        return self.canned_recipe
+
     def extract_ingredient_nutritional_information(
         self,
         *,

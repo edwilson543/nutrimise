@@ -1,6 +1,6 @@
 import pytest
 
-from nutrimise.app.recipes import _create_or_update_recipe_embedding
+from nutrimise.app.recipes import _create_or_update_recipe_embedding, _exceptions
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import embeddings
 from testing.factories import data as data_factories
@@ -53,7 +53,7 @@ def test_raises_when_embedding_service_is_unavailable():
     embedding_service = embeddings.BrokenEmbeddingService()
     recipe = data_factories.Recipe(name="Original name")
 
-    with pytest.raises(_create_or_update_recipe_embedding.UnableToGetEmbedding) as exc:
+    with pytest.raises(_exceptions.UnableToGetEmbedding) as exc:
         _create_or_update_recipe_embedding.create_or_update_recipe_embedding(
             recipe_id=recipe.id, embedding_service=embedding_service
         )

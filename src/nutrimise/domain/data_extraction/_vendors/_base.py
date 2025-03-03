@@ -43,6 +43,21 @@ class DataExtractionService(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def extract_recipe_from_url(
+        self,
+        *,
+        url: str,
+        existing_ingredients: list[_output_structure.Ingredient],
+    ) -> _output_structure.Recipe:
+        """
+        Extract structure recipe data from the webpage at the given URL.
+
+        :raises UnableToExtractRecipe: If the service is unable to access or extract
+            the data for some reason.
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def extract_ingredient_nutritional_information(
         self,
         *,
