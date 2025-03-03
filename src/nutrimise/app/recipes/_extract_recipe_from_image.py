@@ -12,10 +12,6 @@ from nutrimise.domain import data_extraction, embeddings, ingredients, recipes
 from . import _create_or_update_recipe_embedding
 
 
-UnableToExtractRecipe = data_extraction.UnableToExtractRecipe
-RecipeAlreadyExists = recipe_operations.RecipeAlreadyExists
-
-
 def extract_recipe_from_image(
     *,
     author: recipes.RecipeAuthor | None,
