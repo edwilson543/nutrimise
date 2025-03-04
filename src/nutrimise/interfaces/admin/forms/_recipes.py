@@ -12,4 +12,6 @@ class ExtractRecipeFromImage(django_forms.Form):
 
 
 class ExtractRecipeFromURL(django_forms.Form):
-    url = django_forms.URLField(widget=django_forms.TextInput(attrs={"style": "width: 50%;"}))
+    url = django_forms.URLField(
+        widget=django_forms.TextInput(attrs={"style": "width: 50%;"})
+    )

@@ -7,7 +7,9 @@ from . import _base
 
 
 def get_canned_recipe(
-    *, ingredients: list[_output_structure.RecipeIngredient] | None = None
+    *,
+    ingredients: list[_output_structure.RecipeIngredient] | None = None,
+    author: _output_structure.RecipeAuthor | None = None,
 ) -> _output_structure.Recipe:
     return _output_structure.Recipe(
         name="My fake recipe",
@@ -16,6 +18,7 @@ def get_canned_recipe(
         meal_times=[recipes.MealTime.DINNER],
         number_of_servings=3,
         ingredients=ingredients or [],
+        author=author,
     )
 
 

@@ -74,7 +74,9 @@ def create_or_update_recipe_embedding(
     )
 
 
-def get_or_create_recipe_author(*, first_name: str, last_name: str) -> recipes.RecipeAuthor:
+def get_or_create_recipe_author(
+    *, first_name: str, last_name: str
+) -> recipes.RecipeAuthor:
     author, _ = recipe_models.RecipeAuthor.objects.get_or_create(
         first_name__iexact=first_name,
         last_name__iexact=last_name,

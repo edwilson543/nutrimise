@@ -27,6 +27,9 @@ def persist_extracted_recipe(
             for recipe_ingredient in extracted_recipe.ingredients
         ]
 
+        if not author and extracted_recipe.author:
+            author = _get_or_create_recipe_author(author=extracted_recipe.author)
+
         return recipe_operations.create_recipe(
             author=author,
             name=extracted_recipe.name,
@@ -36,6 +39,15 @@ def persist_extracted_recipe(
             meal_times=extracted_recipe.meal_times,
             recipe_ingredients=recipe_ingredients,
         )
+
+
+def _get_or_create_recipe_author(
+    *, author: data_extraction.RecipeAuthor
+) -> recipes.RecipeAuthor:
+    return recipe_operations.get_or_create_recipe_author(
+        first_name=author.first_name,
+        last_name=author.last_name,
+    )
 
 
 def _get_or_create_ingredients(

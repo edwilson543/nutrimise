@@ -13,8 +13,11 @@ def test_extracts_recipe_with_author_using_fake_extraction_service():
     recipe_ingredient = data_extraction.RecipeIngredient.from_domain_model(
         domain_factories.RecipeIngredient()
     )
+    recipe_author = data_extraction.RecipeAuthor.from_domain_model(
+        domain_factories.RecipeAuthor()
+    )
     canned_recipe = data_extraction_vendors.get_canned_recipe(
-        ingredients=[recipe_ingredient]
+        ingredients=[recipe_ingredient], author=recipe_author
     )
     data_extraction_service = data_extraction_vendors.FakeDataExtractionService(
         canned_recipe=canned_recipe
@@ -36,10 +39,15 @@ def test_extracts_recipe_with_author_using_fake_extraction_service():
     assert new_ingredient.category.id == new_ingredient_category.id
     assert new_ingredient_category.name == recipe_ingredient.ingredient.category_name
 
+    new_author = recipe_models.RecipeAuthor.objects.get()
+    assert new_author.first_name == recipe_author.first_name
+    assert new_author.last_name == recipe_author.last_name
+
     recipe = recipe_models.Recipe.objects.get()
     assert recipe.id == recipe_id
     assert recipe.name == data_extraction_service.canned_recipe.name
     assert recipe.description == data_extraction_service.canned_recipe.description
+    assert recipe.author_id == new_author.id
 
     recipe_ingredient = recipe.ingredients.get()
     assert recipe_ingredient.ingredient_id == new_ingredient.id

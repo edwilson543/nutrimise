@@ -50,3 +50,12 @@ class RecipeIngredient(factory.Factory):
 
     class Meta:
         model = recipes.RecipeIngredient
+
+
+class RecipeAuthor(factory.Factory):
+    id = factory.Sequence(lambda n: n)
+    first_name = factory.Sequence(lambda n: f"first-name-{n}")
+    last_name = factory.Sequence(lambda n: f"last-name-{n}")
+
+    class Meta:
+        model = recipes.RecipeAuthor

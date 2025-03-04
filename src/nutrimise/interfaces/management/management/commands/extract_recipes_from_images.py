@@ -69,9 +69,6 @@ def _get_author_from_directory(directory: pathlib.Path) -> recipes.RecipeAuthor:
     first_name = names[0].title()
     last_name = names[1].title()
 
-    author_id = recipe_operations.get_or_create_recipe_author(
+    return recipe_operations.get_or_create_recipe_author(
         first_name=first_name, last_name=last_name
-    )
-    return recipes.RecipeAuthor(
-        id=author_id, first_name=first_name, last_name=last_name
     )

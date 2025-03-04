@@ -62,6 +62,9 @@ class TestExtractRecipeFromImage:
         assert recipe_ingredient.ingredient.units == ingredient.units
         assert recipe_ingredient.ingredient.grams_per_unit == ingredient.grams_per_unit
 
+        assert recipe.author.first_name == "Jamie"
+        assert recipe.author.last_name == "Oliver"
+
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_open_ai_api_response_bad(self, httpx_mock):
         openai_service = _openai.OpenAIDataExtractionService()
@@ -128,6 +131,9 @@ class TestExtractRecipeFromURL:
         assert recipe_ingredient.ingredient.units == ingredient.units
         assert recipe_ingredient.ingredient.grams_per_unit == ingredient.grams_per_unit
 
+        assert recipe.author.first_name == "Jamie"
+        assert recipe.author.last_name == "Oliver"
+
     @override_settings(OPENAI_API_KEY="some-key")
     def test_raises_when_unable_to_access_recipe_url(self, httpx_mock):
         recipe_url = "https://recipes.com/some-recipe/"
@@ -189,6 +195,7 @@ def _extracted_recipe_response_json(
         "meal_times": ["LUNCH", "DINNER"],
         "number_of_servings": 7,
         "ingredients": [{"ingredient": ingredient_json, "quantity": 250.0}],
+        "author": {"first_name": "Jamie", "last_name": "Oliver"},
     }
 
     return {

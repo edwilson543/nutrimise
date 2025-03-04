@@ -5,6 +5,7 @@ from ._output_structure import (
     IngredientNutritionalInformation,
     Nutrient,
     Recipe,
+    RecipeAuthor,
     RecipeIngredient,
 )
 from ._vendors import (
