@@ -1,21 +1,21 @@
 from nutrimise.data.ingredients import operations as ingredient_operations
 from nutrimise.data.ingredients import queries as ingredient_queries
-from nutrimise.domain import image_extraction
+from nutrimise.domain import data_extraction
 
 
 def gather_ingredient_nutritional_information(
     *,
-    extraction_service: image_extraction.ImageExtractionService,
+    extraction_service: data_extraction.DataExtractionService,
 ) -> None:
     """
     Ask an AI for the quantity of every nutrient in every ingredient, and save it in the DB.
     """
     all_ingredients = [
-        image_extraction.Ingredient.from_domain_model(ingredient)
+        data_extraction.Ingredient.from_domain_model(ingredient)
         for ingredient in ingredient_queries.get_ingredients()
     ]
     nutrients = [
-        image_extraction.Nutrient.from_domain_model(nutrient)
+        data_extraction.Nutrient.from_domain_model(nutrient)
         for nutrient in ingredient_queries.get_nutrients()
     ]
 
@@ -29,9 +29,9 @@ def gather_ingredient_nutritional_information(
 
 def _gather_nutritional_information_for_ingredient(
     *,
-    ingredient: image_extraction.Ingredient,
-    nutrients: list[image_extraction.Nutrient],
-    extraction_service: image_extraction.ImageExtractionService,
+    ingredient: data_extraction.Ingredient,
+    nutrients: list[data_extraction.Nutrient],
+    extraction_service: data_extraction.DataExtractionService,
 ) -> None:
     assert ingredient.id  # For mypy.
 

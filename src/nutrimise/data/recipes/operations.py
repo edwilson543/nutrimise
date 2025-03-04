@@ -74,10 +74,12 @@ def create_or_update_recipe_embedding(
     )
 
 
-def get_or_create_recipe_author(*, first_name: str, last_name: str) -> int:
+def get_or_create_recipe_author(
+    *, first_name: str, last_name: str
+) -> recipes.RecipeAuthor:
     author, _ = recipe_models.RecipeAuthor.objects.get_or_create(
         first_name__iexact=first_name,
         last_name__iexact=last_name,
         defaults={"first_name": first_name, "last_name": last_name},
     )
-    return author.id
+    return author.to_domain_model()

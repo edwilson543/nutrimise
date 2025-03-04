@@ -23,6 +23,17 @@ class Ingredient(pydantic.BaseModel):
         )
 
 
+class RecipeAuthor(pydantic.BaseModel):
+    first_name: str
+    last_name: str
+
+    @classmethod
+    def from_domain_model(cls, recipe_author: recipes.RecipeAuthor) -> RecipeAuthor:
+        return cls(
+            first_name=recipe_author.first_name, last_name=recipe_author.last_name
+        )
+
+
 class RecipeIngredient(pydantic.BaseModel):
     ingredient: Ingredient
     quantity: float
@@ -44,6 +55,7 @@ class Recipe(pydantic.BaseModel):
     number_of_servings: int
     meal_times: list[recipes.MealTime]
     ingredients: list[RecipeIngredient]
+    author: RecipeAuthor | None
 
 
 # Nutritional information.

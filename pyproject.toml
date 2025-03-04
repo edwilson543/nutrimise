@@ -27,6 +27,7 @@ dependencies = [
     "pydantic",
     # Production
     "gunicorn",
+    "bs4>=0.0.2",
 ]
 
 [dependency-groups]
@@ -106,7 +107,7 @@ name = "Domain layers"
 type = "layers"
 containers = "nutrimise.domain"
 layers = [
-    "optimisation | image_extraction",
+    "optimisation | data_extraction",
     "menus",
     "recipes",
     "ingredients",

@@ -5,9 +5,6 @@ from nutrimise.data.recipes import queries as recipe_queries
 from nutrimise.domain import embeddings, recipes
 
 
-UnableToGetEmbedding = embeddings.UnableToGetEmbedding
-
-
 def create_or_update_recipe_embedding(
     *, recipe_id: int, embedding_service: embeddings.EmbeddingService
 ) -> None:

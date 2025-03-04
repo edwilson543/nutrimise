@@ -1,5 +1,5 @@
 from nutrimise.app import ingredients as ingredients_app
-from nutrimise.domain.image_extraction import _vendors as image_extraction_vendors
+from nutrimise.domain.data_extraction import _vendors as data_extraction_vendors
 from testing.factories import data as data_factories
 
 
@@ -10,7 +10,7 @@ def test_gathers_nutritional_information_for_all_ingredients():
     nutrient = data_factories.Nutrient()
     other_nutrient = data_factories.Nutrient()
 
-    extraction_service = image_extraction_vendors.FakeImageExtractionService()
+    extraction_service = data_extraction_vendors.FakeDataExtractionService()
 
     ingredients_app.gather_ingredient_nutritional_information(
         extraction_service=extraction_service
@@ -31,7 +31,7 @@ def test_skips_gathering_nutritional_information_for_ingredient_with_info():
         ingredient=ingredient, nutrient=nutrient, quantity_per_gram=39.1
     )
 
-    extraction_service = image_extraction_vendors.FakeImageExtractionService()
+    extraction_service = data_extraction_vendors.FakeDataExtractionService()
 
     ingredients_app.gather_ingredient_nutritional_information(
         extraction_service=extraction_service

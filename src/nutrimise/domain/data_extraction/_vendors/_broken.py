@@ -1,14 +1,14 @@
 import attrs
 
-from nutrimise.domain.image_extraction import _constants, _output_structure
+from nutrimise.domain.data_extraction import _constants, _output_structure
 
 from . import _base
 
 
 @attrs.frozen
-class BrokenImageExtractionService(_base.ImageExtractionService):
-    model: _constants.ImageExtractionModel = _constants.ImageExtractionModel.FAKE
-    vendor: _constants.ImageExtractionVendor = _constants.ImageExtractionVendor.BROKEN
+class BrokenDataExtractionService(_base.DataExtractionService):
+    model: _constants.DataExtractionModel = _constants.DataExtractionModel.FAKE
+    vendor: _constants.DataExtractionVendor = _constants.DataExtractionVendor.BROKEN
 
     def extract_recipe_from_image(
         self,
@@ -16,7 +16,12 @@ class BrokenImageExtractionService(_base.ImageExtractionService):
         base64_image: str,
         existing_ingredients: list[_output_structure.Ingredient],
     ) -> _output_structure.Recipe:
-        raise _base.UnableToExtractRecipeFromImage(vendor=self.vendor, model=self.model)
+        raise _base.UnableToExtractRecipe(vendor=self.vendor, model=self.model)
+
+    def extract_recipe_from_url(
+        self, *, url: str, existing_ingredients: list[_output_structure.Ingredient]
+    ) -> _output_structure.Recipe:
+        raise _base.UnableToExtractRecipe(vendor=self.vendor, model=self.model)
 
     def extract_ingredient_nutritional_information(
         self,

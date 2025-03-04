@@ -1,6 +1,7 @@
 ### AI and linear optimisation powered meal planning application
 
 #### Features
+- Extract recipes (including ingredients and authorship) from URLs
 - Extract recipes from images of cookbooks, recipe cards or even handwritten recipes
 - Create meal plans that are optimised by, and or satisfy constraints on:
     - Semantic similarity to a prompt
