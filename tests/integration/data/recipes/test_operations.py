@@ -154,24 +154,24 @@ class TestGetOrCreateRecipeAuthor:
             first_name=first_name, last_name=last_name
         )
 
-        author_id = recipe_operations.get_or_create_recipe_author(
+        new_author = recipe_operations.get_or_create_recipe_author(
             first_name=author.first_name.lower(),
             last_name=author.last_name.lower(),
         )
 
-        assert author.id == author_id
+        assert author.id == new_author.id
 
     def test_creates_recipe_author(self):
         existing_author = data_factories.RecipeAuthor(
             first_name="Wes", last_name="Hoolahan"
         )
 
-        author_id = recipe_operations.get_or_create_recipe_author(
+        new_author = recipe_operations.get_or_create_recipe_author(
             first_name="Wes",
             last_name="Carewlaland",
         )
 
-        assert existing_author.id != author_id
-        new_author = recipe_models.RecipeAuthor.objects.get(id=author_id)
+        assert existing_author.id != new_author
+        new_author = recipe_models.RecipeAuthor.objects.get(id=new_author.id)
         assert new_author.first_name == "Wes"
         assert new_author.last_name == "Carewlaland"
