@@ -54,11 +54,11 @@
                 <th>Quantity</th>
                 <th>Units</th>
             </tr>
-            {% for nutrient in nutritional_information %}
+            {% for nutritional_information in nutritional_information %}
                 <tr>
-                    <td>{{ nutrient.nutrient.name }}</td>
-                    <td>{{ nutrient.nutrient_quantity | floatformat:"1" }}</td>
-                    <td>{{ nutrient.units | title }}</td>
+                    <td>{{ nutritional_information.nutrient.name }}</td>
+                    <td>{{ nutritional_information.nutrient_quantity | floatformat:"1" }}</td>
+                    <td>{{ nutritional_information.nutrient.units.label }}</td>
                 </tr>
             {% endfor %}
         </table>
