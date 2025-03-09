@@ -46,7 +46,7 @@ class _IngredientNutritionalInformationInline(admin.TabularInline):
 
 @admin.register(ingredient_models.Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "category_name", "units"]
+    list_display = ["id", "name", "category_name", "units", "number_of_recipes"]
     list_display_links = ["name"]
     list_filter = ["category"]
     ordering = ["name"]
@@ -63,6 +63,10 @@ class IngredientAdmin(admin.ModelAdmin):
     @admin.display(description="Units")
     def units(self, ingredient: ingredient_models.Ingredient) -> str:
         return ingredient.units or "-"
+
+    @admin.display(description="Number of recipes")
+    def number_of_recipes(self, ingredient: ingredient_models.Ingredient) -> int:
+        return ingredient.recipe_ingredients.count()
 
 
 @admin.register(ingredient_models.Nutrient)
