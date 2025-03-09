@@ -48,6 +48,7 @@ class _IngredientNutritionalInformationInline(admin.TabularInline):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "category_name", "units"]
     list_display_links = ["name"]
+    list_filter = ["category"]
     ordering = ["name"]
     search_fields = ["name"]
 
