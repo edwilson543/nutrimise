@@ -55,7 +55,9 @@ def create_recipe(
         )
         for recipe_ingredient in recipe_ingredients
     ]
-    recipe_models.RecipeIngredient.objects.bulk_create(recipe_ingredients_to_create)
+    recipe_models.RecipeIngredient.objects.bulk_create(
+        recipe_ingredients_to_create, ignore_conflicts=True
+    )
 
     return recipe.id
 
