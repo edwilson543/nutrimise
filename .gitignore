@@ -1,8 +1,8 @@
 # Specific files
 *TODO*.txt
-data/ingredients-csvs/target/
-data/images/target/
-data/snapshots/
+backend/data/ingredients-csvs/target/
+backend/data/images/target/
+backend/data/snapshots/
 
 # Certification
 cert.pem
