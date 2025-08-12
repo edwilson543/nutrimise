@@ -1,3 +1,13 @@
+# Services
+.PHONY:server
+server:
+	make snapshot
+	python manage.py runserver 8000 --configuration=Settings
+
+.PHONY:api
+api:
+	python src/nutrimise/config/asgi.py
+
 # Installation
 
 install: install_pre_commit env_file install_dev_deps db
@@ -25,11 +35,6 @@ install_pre_commit:
 	pre-commit install
 
 # Django management commands
-
-.PHONY:server
-server:
-	make snapshot
-	python manage.py runserver 8000 --configuration=Settings
 
 .PHONY:migrate
 migrate:
