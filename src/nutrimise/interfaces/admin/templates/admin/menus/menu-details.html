@@ -29,8 +29,13 @@
         <p>{{menu.description}}</p>
         <p>
             <a href="{% url 'admin:menus_menu_change' object_id=menu.id %}" target="_blank" class="changelink">
-                Edit
+                Details
             </a>
+            {% if menu.requirements.id %}
+                <a href="{% url 'admin:menus_menurequirements_change' object_id=menu.requirements.id %}" target="_blank" class="changelink">
+                    Requirements
+                </a>
+            {% endif %}
         </p>
     </div>
 
@@ -176,7 +181,7 @@
                 <tr>
                     <td><b>Day {{ day }}</b></td>
                     {% for info in info_list %}
-                        <td>{{ info.nutrient_quantity }}</td>
+                        <td>{{ info.nutrient_quantity | floatformat:"0" }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}

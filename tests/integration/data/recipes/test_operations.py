@@ -103,6 +103,30 @@ class TestCreateRecipe:
         assert new_recipe.id == new_recipe_id
         assert new_recipe.name == recipe.name
 
+    def test_ignores_conflicting_ingredients(self):
+        ingredient = data_factories.Ingredient()
+        recipe_ingredient = domain_factories.RecipeIngredient(
+            ingredient=ingredient, quantity=10.0
+        )
+        other_recipe_ingredient = domain_factories.RecipeIngredient(
+            ingredient=ingredient, quantity=20.0
+        )
+
+        recipe_operations.create_recipe(
+            author=None,
+            name="Some name",
+            description="Some description",
+            methodology="",
+            meal_times=[recipes.MealTime.DINNER],
+            number_of_servings=3,
+            recipe_ingredients=[recipe_ingredient, other_recipe_ingredient],
+        )
+
+        recipe = recipe_models.Recipe.objects.get()
+        created_ingredient = recipe.ingredients.get()
+        assert created_ingredient.ingredient_id == ingredient.id
+        assert created_ingredient.quantity == recipe_ingredient.quantity
+
 
 class TestCreateOrUpdateRecipeEmbedding:
     def test_creates_new_embedding_for_recipe_with_model(self):
