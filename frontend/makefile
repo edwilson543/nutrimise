@@ -1,4 +1,3 @@
-# Services
 .PHONY:ui
 ui:
 	npm run dev
@@ -6,3 +5,7 @@ ui:
 .PHONY:lint
 lint:
 	npm run lint
+
+.PHONY:client
+client:
+	npm run openapi-ts
