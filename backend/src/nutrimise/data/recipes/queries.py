@@ -3,8 +3,7 @@ from django.db import models as django_models
 from pgvector import django as pgvector_django
 
 from nutrimise.data.recipes import models as recipe_models
-from nutrimise.domain import embeddings
-from nutrimise.domain.recipes import _model
+from nutrimise.domain import embeddings, recipes
 
 
 @attrs.frozen
@@ -12,7 +11,7 @@ class RecipeDoesNotExist(Exception):
     recipe_id: int
 
 
-def get_recipe(*, recipe_id: int) -> _model.Recipe:
+def get_recipe(*, recipe_id: int) -> recipes.Recipe:
     try:
         recipe = recipe_models.Recipe.objects.get(id=recipe_id)
     except recipe_models.Recipe.DoesNotExist as exc:
@@ -22,22 +21,22 @@ def get_recipe(*, recipe_id: int) -> _model.Recipe:
 
 def get_recipes(
     *, recipe_ids: tuple[int, ...] = (), dietary_requirement_ids: tuple[int, ...] = ()
-) -> tuple[_model.Recipe, ...]:
-    recipes = recipe_models.Recipe.objects.prefetch_related(
+) -> tuple[recipes.Recipe, ...]:
+    recipes_ = recipe_models.Recipe.objects.prefetch_related(
         "ingredients",
         "ingredients__ingredient",
         "ingredients__ingredient__nutritional_information",
     ).all()
 
     if recipe_ids:
-        recipes = recipes.filter(id__in=recipe_ids)
+        recipes_ = recipes_.filter(id__in=recipe_ids)
 
     if dietary_requirement_ids:
         for dietary_requirement_id in dietary_requirement_ids:
-            recipes = recipes.filter(
+            recipes_ = recipes_.filter(
                 ingredients__ingredient__dietary_requirements_satisfied=dietary_requirement_id
             )
-    return tuple(recipe.to_domain_model() for recipe in recipes)
+    return tuple(recipe.to_domain_model() for recipe in recipes_)
 
 
 def get_recipes_closest_to_vector(

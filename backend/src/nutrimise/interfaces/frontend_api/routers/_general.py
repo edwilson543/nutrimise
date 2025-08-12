@@ -1,12 +1,11 @@
 from importlib.metadata import version
 
-import fastapi
-from fastapi import responses
+from fastapi import responses, routing
 
 from nutrimise.interfaces.frontend_api import schemas
 
 
-general_router = fastapi.APIRouter()
+general_router = routing.APIRouter()
 
 
 @general_router.get("/health")
