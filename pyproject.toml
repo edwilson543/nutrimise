@@ -28,6 +28,7 @@ dependencies = [
     # Production
     "gunicorn",
     "bs4>=0.0.2",
+    "fastapi[standard]>=0.116.1",
 ]
 
 [dependency-groups]
@@ -94,11 +95,11 @@ name = "Top level layers"
 type = "layers"
 containers = "nutrimise"
 layers = [
+    "config",
     "interfaces",
     "app",
     "data",
     "domain",
-    "config",
 ]
 exhaustive = true
 
