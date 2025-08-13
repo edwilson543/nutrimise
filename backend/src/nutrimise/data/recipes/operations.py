@@ -1,4 +1,5 @@
 import attrs
+from django_integrity import conversion
 
 from nutrimise.domain import embeddings, recipes
 
@@ -85,3 +86,46 @@ def get_or_create_recipe_author(
         defaults={"first_name": first_name, "last_name": last_name},
     )
     return author.to_domain_model()
+
+
+class _RecipeAlreadySaved(Exception): ...
+
+
+class _RecipeDoesNotExist(Exception): ...
+
+
+class _UserDoesNotExist(Exception): ...
+
+
+def save_recipe(*, user_id: int, recipe_id: int) -> None:
+    """
+    Mark a particular recipe as saved for a user.
+    """
+    conversion_rules = [
+        (
+            conversion.Unique(recipe_models.SavedRecipe, ("user_id", "recipe_id")),
+            _RecipeAlreadySaved,
+        ),
+        (
+            conversion.ForeignKey(recipe_models.SavedRecipe, "recipe_id"),
+            _RecipeDoesNotExist,
+        ),
+        (
+            conversion.ForeignKey(recipe_models.SavedRecipe, "user_id"),
+            _UserDoesNotExist,
+        ),
+    ]
+
+    try:
+        with conversion.refine_integrity_error(conversion_rules):
+            recipe_models.SavedRecipe.objects.create(
+                user_id=user_id, recipe_id=recipe_id
+            )
+    except _RecipeAlreadySaved:
+        return None
+
+
+def unsave_recipe(*, user_id: int, recipe_id: int) -> None:
+    recipe_models.SavedRecipe.objects.filter(
+        user_id=user_id, recipe_id=recipe_id
+    ).delete()

@@ -27,10 +27,11 @@ class _Recipe(pydantic.BaseModel):
             id=recipe.id,
             name=recipe.name,
             description=recipe.description,
-            media_url=_random_media_url()
+            media_url=_random_media_url(recipe.id),
         )
 
-def _random_media_url() -> str:
+
+def _random_media_url(recipe_id: int) -> str:
     images = [
         "https://ichef.bbc.co.uk/ace/standard/1600/food/recipes/how_to_make_fish_pie_56143_16x9.jpg.webp",
         "https://feelgoodfoodie.net/wp-content/uploads/2025/06/Spaghetti-and-Meatballs-09.jpg",

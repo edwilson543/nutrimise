@@ -199,3 +199,51 @@ class TestGetOrCreateRecipeAuthor:
         new_author = recipe_models.RecipeAuthor.objects.get(id=new_author.id)
         assert new_author.first_name == "Wes"
         assert new_author.last_name == "Carewlaland"
+
+
+@pytest.mark.django_db(transaction=True)
+class TestSaveRecipe:
+    def test_user_can_save_recipe_idempotently(self):
+        user = data_factories.User()
+        recipe = data_factories.Recipe()
+        data_factories.Recipe()
+
+        recipe_operations.save_recipe(user_id=user.id, recipe_id=recipe.id)
+
+        assert user.saved_recipes.get().recipe == recipe
+
+        recipe_operations.save_recipe(user_id=user.id, recipe_id=recipe.id)
+
+        assert user.saved_recipes.get().recipe == recipe
+
+    def test_saving_invalid_recipe_for_valid_user_raises_error(self):
+        user = data_factories.User()
+
+        with pytest.raises(recipe_operations._RecipeDoesNotExist):
+            recipe_operations.save_recipe(user_id=user.id, recipe_id=123)
+
+    def test_saving_valid_recipe_for_invalid_user_raises_error(self):
+        recipe = data_factories.Recipe()
+
+        with pytest.raises(recipe_operations._UserDoesNotExist):
+            recipe_operations.save_recipe(user_id=123, recipe_id=recipe.id)
+
+
+class TestUnsaveRecipe:
+    def test_user_can_unsave_recipe(self):
+        saved_recipe = data_factories.SavedRecipe()
+        data_factories.SavedRecipe(user_id=saved_recipe.user_id)
+        data_factories.SavedRecipe(recipe_id=saved_recipe.recipe_id)
+
+        recipe_operations.unsave_recipe(
+            user_id=saved_recipe.user_id, recipe_id=saved_recipe.recipe_id
+        )
+
+        assert recipe_models.SavedRecipe.objects.count() == 2
+        assert not recipe_models.SavedRecipe.objects.filter(
+            user_id=saved_recipe.id, recipe_id=saved_recipe.id
+        ).exists()
+
+        recipe_operations.unsave_recipe(
+            user_id=saved_recipe.user_id, recipe_id=saved_recipe.recipe_id
+        )

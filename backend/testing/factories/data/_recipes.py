@@ -6,7 +6,7 @@ from nutrimise.data.ingredients import models as ingredient_models
 from nutrimise.data.recipes import models as recipe_models
 from nutrimise.domain import embeddings, recipes
 
-from . import _ingredients
+from . import _auth, _ingredients
 
 
 class RecipeAuthor(factory.django.DjangoModelFactory):
@@ -63,3 +63,11 @@ class RecipeEmbedding(factory.django.DjangoModelFactory):
 
     class Meta:
         model = recipe_models.RecipeEmbedding
+
+
+class SavedRecipe(factory.django.DjangoModelFactory):
+    recipe = factory.SubFactory(Recipe)
+    user = factory.SubFactory(_auth.User)
+
+    class Meta:
+        model = recipe_models.SavedRecipe
