@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RecipeCard } from "@/components/RecipeCard";
+import {useRecipeList} from "@/hooks/queries/useRecipeList.ts";
 
 const diets = ["all", "vegan", "vegetarian", "keto", "pescatarian", "omnivore"] as const;
 
@@ -15,17 +16,7 @@ export default function RecipesPage() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Recipe | null>(null);
 
-  const recipes = useMemo(() => {
-    return allRecipes.filter((r) => {
-      const matchesSearch = [r.title, r.description, r.tags.join(" "), r.cuisine, r.diet]
-        .join(" ")
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesDiet = diet === "all" || r.diet === diet || (diet === "keto" && r.tags.includes("keto"));
-      const matchesTime = maxTime === "any" || r.timeMinutes <= parseInt(maxTime);
-      return matchesSearch && matchesDiet && matchesTime;
-    });
-  }, [search, diet, maxTime]);
+  const {data: recipes, isLoading} = useRecipeList();
 
   const onOpen = (recipe: Recipe) => {
     setSelected(recipe);
@@ -66,7 +57,7 @@ export default function RecipesPage() {
 
       <section className="px-4 mt-6 pb-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {recipes.map((r) => (
+            {isLoading ? <div>Loading</div> : recipes.map((r) => (
             <RecipeCard key={r.id} recipe={r} onOpen={onOpen} />
           ))}
         </div>
