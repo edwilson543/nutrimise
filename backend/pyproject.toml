@@ -29,6 +29,7 @@ dependencies = [
     "gunicorn",
     "bs4>=0.0.2",
     "fastapi[standard]>=0.116.1",
+    "django-integrity>=0.2.0",
 ]
 
 [dependency-groups]

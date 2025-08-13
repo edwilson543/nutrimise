@@ -167,6 +167,15 @@ wheels = [
 ]
 
 [[package]]
+name = "django-integrity"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/15/42/51158206450c032f5b6fbd00fe5d798b683062815c7de69df5261438b3c8/django_integrity-0.2.0.tar.gz", hash = "sha256:6b7cd3779f7c06d3fbdfeb90f94bbf8b40d17a1c15b30362febab36506dc1cab", size = 10934 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f5/57/5e16edf77b493ed8fdba9e03bb62fb2dea078695248dbf6f7600979f463c/django_integrity-0.2.0-py3-none-any.whl", hash = "sha256:95f5b3d41d81046c3075282dd6338d38a03c9f009b9fa17d6d49be371cf4d949", size = 9221 },
+]
+
+[[package]]
 name = "django-stubs"
 version = "5.1.3"
 source = { registry = "https://pypi.org/simple" }
@@ -748,6 +757,7 @@ dependencies = [
     { name = "bs4" },
     { name = "django" },
     { name = "django-configurations" },
+    { name = "django-integrity" },
     { name = "fastapi", extra = ["standard"] },
     { name = "gunicorn" },
     { name = "openai" },
@@ -785,6 +795,7 @@ requires-dist = [
     { name = "bs4", specifier = ">=0.0.2" },
     { name = "django" },
     { name = "django-configurations" },
+    { name = "django-integrity", specifier = ">=0.2.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.116.1" },
     { name = "gunicorn" },
     { name = "openai" },
