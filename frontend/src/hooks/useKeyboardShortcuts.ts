@@ -1,13 +1,14 @@
 import {useEffect} from "react";
 
 /**
- * Execute a callback whenever some key is pressed
+ * Execute a callback whenever some key is pressed.
  * */
-export const useKeyPress = (key: string, callback: () => void) => {
+export const useKeyboardShortcuts = (shortcuts: Record<string, () => void>) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === key) {
-                callback();
+            if (shortcuts[event.key]) {
+                event.preventDefault();
+                shortcuts[event.key]();
             }
         };
 
@@ -16,5 +17,5 @@ export const useKeyPress = (key: string, callback: () => void) => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [key, callback]);
+    }, [shortcuts]);
 }
