@@ -1,6 +1,7 @@
 import {Button} from "@/components/ui/button.tsx";
 import {ArrowLeft} from "lucide-react";
 import type {Recipe} from "@/lib/client/types.gen.ts";
+import {useKeyboardShortcuts} from "@/hooks/useKeyboardShortcuts.ts";
 
 
 type Props = {
@@ -10,6 +11,8 @@ type Props = {
 
 export const RecipeDetails = (props: Props) => {
     const {recipe, onBack} = props;
+
+    useKeyboardShortcuts({'Escape': onBack})
 
     return (
         <main className="min-h-screen bg-background">
