@@ -26,7 +26,7 @@ const App = () => (
               <SidebarInset>
                 <header className="h-14 flex items-center border-b px-3 gap-2 sticky top-0 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                   <SidebarTrigger />
-                  <span className="font-semibold tracking-wide">NutriPlan</span>
+                  <span className="font-semibold tracking-wide">NutriMise</span>
                 </header>
                 <Routes>
                   <Route path="/" element={<Navigate to="/recipes" replace />} />

@@ -17,8 +17,8 @@ function startOfWeek(d = new Date()) {
   return date;
 }
 
-const TARGETS_KEY = "nutriplan:targets";
-const EXTRAS_KEY = "nutriplan:extras"; // Record<dateKey, {calories,protein,carbs,fat}[]>
+const TARGETS_KEY = "nutrimise:targets";
+const EXTRAS_KEY = "nutrimise:extras"; // Record<dateKey, {calories,protein,carbs,fat}[]>
 
 type Macros = { calories: number; protein: number; carbs: number; fat: number };
 
@@ -195,7 +195,7 @@ export default function NutritionPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Nutrition targets and tracking",
-          description: "Set your macro targets and track your weekly intake with NutriPlan.",
+          description: "Set your macro targets and track your weekly intake with NutriMise.",
           potentialAction: {
             "@type": "Action",
             name: "Update nutrition targets"

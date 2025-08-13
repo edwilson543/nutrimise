@@ -36,7 +36,7 @@ export function AppSidebar() {
         <div className="flex items-center justify-between px-2 py-1">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-md" style={{ backgroundImage: "var(--gradient-primary)" }} />
-            <span className="text-sm font-semibold tracking-wide">NutriPlan</span>
+            <span className="text-sm font-semibold tracking-wide">NutriMise</span>
           </div>
           <SidebarTrigger className="self-end" />
         </div>

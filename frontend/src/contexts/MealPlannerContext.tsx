@@ -15,8 +15,8 @@ type MealPlannerContextType = {
 
 const MealPlannerContext = createContext<MealPlannerContextType | null>(null);
 
-const SAVED_KEY = "nutriplan:saved";
-const PLANS_KEY = "nutriplan:plans";
+const SAVED_KEY = "nutrimise:saved";
+const PLANS_KEY = "nutrimise:plans";
 
 export const MealPlannerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [saved, setSaved] = useState<Set<string>>(new Set());
