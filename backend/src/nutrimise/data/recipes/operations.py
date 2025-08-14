@@ -1,4 +1,5 @@
 import attrs
+from django.contrib.auth import models as auth_models
 from django_integrity import conversion
 
 from nutrimise.domain import embeddings, recipes
@@ -91,10 +92,10 @@ def get_or_create_recipe_author(
 class _RecipeAlreadySaved(Exception): ...
 
 
-class _RecipeDoesNotExist(Exception): ...
+class _RecipeDoesNotExist(recipe_models.Recipe.DoesNotExist): ...
 
 
-class _UserDoesNotExist(Exception): ...
+class _UserDoesNotExist(auth_models.User.DoesNotExist): ...
 
 
 def save_recipe(*, user_id: int, recipe_id: int) -> None:
