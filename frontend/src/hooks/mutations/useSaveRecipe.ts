@@ -6,7 +6,7 @@ import * as queryKeys from "@/hooks/queries/query-keys.ts";
 export const useSaveRecipe = (recipeId: number) => {
     const queryClient = useQueryClient()
 
-    useMutation(
+    return useMutation(
         {
             mutationFn: () => saveRecipeRecipesRecipeIdSavePut({path: {recipe_id: recipeId}}),
             onSuccess: () => {
@@ -19,7 +19,7 @@ export const useSaveRecipe = (recipeId: number) => {
 export const useUnsaveRecipe = (recipeId: number) => {
     const queryClient = useQueryClient()
 
-    useMutation(
+    return useMutation(
         {
             mutationFn: () => unsaveRecipeRecipesRecipeIdUnsavePut({path: {recipe_id: recipeId}}),
             onSuccess: () => {
