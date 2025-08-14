@@ -68,10 +68,6 @@ export type Recipe = {
      * Media Url
      */
     media_url: string;
-    /**
-     * Is Saved
-     */
-    is_saved: boolean;
 };
 
 export type GetHealthGeneralHealthGetData = {
@@ -119,6 +115,23 @@ export type ListRecipesRecipesGetResponses = {
 };
 
 export type ListRecipesRecipesGetResponse = ListRecipesRecipesGetResponses[keyof ListRecipesRecipesGetResponses];
+
+export type ListSavedRecipesRecipesSavedGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/recipes/saved';
+};
+
+export type ListSavedRecipesRecipesSavedGetResponses = {
+    /**
+     * Response List Saved Recipes Recipes Saved Get
+     * Successful Response
+     */
+    200: Array<number>;
+};
+
+export type ListSavedRecipesRecipesSavedGetResponse = ListSavedRecipesRecipesSavedGetResponses[keyof ListSavedRecipesRecipesSavedGetResponses];
 
 export type SaveRecipeRecipesRecipeIdSavePutData = {
     body?: never;

@@ -1,4 +1,3 @@
-from django.db import models as django_models
 from fastapi import routing
 
 from nutrimise.data.recipes import models as recipe_models
@@ -10,15 +9,17 @@ recipe_router = routing.APIRouter()
 
 
 @recipe_router.get("/")
-def list_recipes(user: auth.AuthenticatedUser) -> schemas.RecipeList:
-    recipes = recipe_models.Recipe.objects.annotate(
-        is_saved=django_models.Case(
-            django_models.When(saves__user_id=user.id, then=True),
-            default=False,
-            output_field=django_models.BooleanField()
-        )
-    ).distinct().order_by("name")
+def list_recipes() -> schemas.RecipeList:
+    recipes = recipe_models.Recipe.objects.order_by("name")
     return schemas.RecipeList.from_orm(recipes)
+
+
+@recipe_router.get("/saved")
+def list_saved_recipes(user: auth.AuthenticatedUser) -> list[int]:
+    recipes = recipe_models.SavedRecipe.objects.filter(user_id=user.id).values_list(
+        "recipe_id", flat=True
+    )
+    return list(recipes)
 
 
 @recipe_router.put("/{recipe_id}/save")

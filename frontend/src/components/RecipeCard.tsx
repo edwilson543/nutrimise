@@ -3,6 +3,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import type {Recipe} from "@/lib/client/types.gen.ts";
 import {useSaveRecipe, useUnsaveRecipe} from "@/hooks/mutations/useSaveRecipe.ts";
+import {useKeyboardShortcuts} from "@/hooks/useKeyboardShortcuts.ts";
 
 type Props = {
     recipe: Recipe;
@@ -24,6 +25,7 @@ export const RecipeCard = (props: Props) => {
         return recipe.is_saved ? onUnsaveRecipe.mutate() : onSaveRecipe.mutate();
     }
 
+    useKeyboardShortcuts({'s': () => isFocused ? onToggleSaved() : undefined})
 
     return (
         <Card
