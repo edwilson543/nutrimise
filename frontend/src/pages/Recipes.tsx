@@ -8,6 +8,7 @@ import {RecipeDetails} from "@/components/recipes/RecipeDetails.tsx";
 import {useKeyboardShortcuts} from "@/hooks/useKeyboardShortcuts.ts";
 
 const diets = ["all", "vegan", "vegetarian", "keto", "pescatarian", "omnivore"] as const;
+const savedFilters = ["all", "saved", "unsaved"] as const;
 
 export default function RecipesPage() {
   const [search, setSearch] = useState("");
@@ -17,11 +18,19 @@ export default function RecipesPage() {
   const lastMousePosition = useRef<{ x: number; y: number } | null>(null);
   const hasMouseMoved = useRef<boolean>(false);
 
+  const [savedFilter, setSavedFilter] = useState<(typeof savedFilters)[number]>("all");
+
   // TODO -> unused state.
   const [diet, setDiet] = useState<(typeof diets)[number]>("all");
   const [maxTime, setMaxTime] = useState<string>("any");
 
-  const {data: recipes, isLoading} = useRecipeList();
+  const {data: allRecipes, isLoading} = useRecipeList();
+  
+  const recipes = allRecipes?.filter((recipe) => {
+    if (savedFilter === "saved") return recipe.isSaved;
+    if (savedFilter === "unsaved") return !recipe.isSaved;
+    return true;
+  }) || undefined;
 
   const gridColumns = {
     sm: 2,
@@ -115,7 +124,7 @@ export default function RecipesPage() {
     }
   };
 
-  // If a recipe is selected, show full-screen view
+  // If a recipe is selected, show full-screen view.
   if (selectedRecipe) {
     return <RecipeDetails recipe={selectedRecipe} onBack={() => setSelectedRecipe(null)}/>
   }
@@ -130,10 +139,18 @@ export default function RecipesPage() {
       </header>
 
       <section className="px-4 mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
           <div className="md:col-span-3">
             <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search recipes, cuisines, tags..." aria-label="Search recipes" />
           </div>
+          <Select value={savedFilter} onValueChange={(v) => setSavedFilter(v as any)}>
+            <SelectTrigger aria-label="Filter by saved status"><SelectValue placeholder="Saved" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All recipes</SelectItem>
+              <SelectItem value="saved">Saved only</SelectItem>
+              <SelectItem value="unsaved">Unsaved only</SelectItem>
+            </SelectContent>
+          </Select>
           <Select value={diet} onValueChange={(v) => setDiet(v as any)}>
             <SelectTrigger aria-label="Filter by diet"><SelectValue placeholder="Diet" /></SelectTrigger>
             <SelectContent>
