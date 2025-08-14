@@ -1,0 +1,1 @@
+export const RECIPE_LIST = 'use-recipe-list';
