@@ -18,11 +18,10 @@ type Props = {
 export const RecipeCard = (props: Props) => {
     const {recipe, onOpen, onBook, onHover, isFocused = false} = props;
 
-    const isSaved = true; // TODO -> make dynamic.
     const onSaveRecipe = useSaveRecipe(recipe.id);
     const onUnsaveRecipe = useUnsaveRecipe(recipe.id);
     const onToggleSaved = () => {
-        return isSaved ? onSaveRecipe.mutate() : onUnsaveRecipe.mutate()
+        return recipe.is_saved ? onUnsaveRecipe.mutate() : onSaveRecipe.mutate();
     }
 
 
@@ -61,11 +60,11 @@ export const RecipeCard = (props: Props) => {
                                     aria-label="Add to meal plan">
                                 Book
                             </Button>
-                            <Button variant={isSaved ? "secondary" : "outline"} size="sm"
-                                    onClick={onToggleSaved} aria-pressed={isSaved}
-                                    aria-label={isSaved ? "Unsave recipe" : "Save recipe"}>
-                                <Heart className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`}/>
-                                {isSaved ? "Saved" : "Save"}
+                            <Button variant={recipe.is_saved ? "secondary" : "outline"} size="sm"
+                                    onClick={onToggleSaved} aria-pressed={recipe.is_saved}
+                                    aria-label={recipe.is_saved ? "Unsave recipe" : "Save recipe"}>
+                                <Heart className={`h-4 w-4 ${recipe.is_saved ? "fill-current" : ""}`}/>
+                                {recipe.is_saved ? "Saved" : "Save"}
                             </Button>
                         </div>
                     </div>

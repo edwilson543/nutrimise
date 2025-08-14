@@ -68,6 +68,10 @@ export type Recipe = {
      * Media Url
      */
     media_url: string;
+    /**
+     * Is Saved
+     */
+    is_saved: boolean;
 };
 
 export type GetHealthGeneralHealthGetData = {

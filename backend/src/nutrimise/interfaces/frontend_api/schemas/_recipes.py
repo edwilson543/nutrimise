@@ -20,6 +20,7 @@ class _Recipe(pydantic.BaseModel):
     name: str
     description: str
     media_url: str
+    is_saved: bool
 
     @classmethod
     def from_orm(cls, recipe: recipe_models.Recipe) -> _Recipe:
@@ -28,6 +29,7 @@ class _Recipe(pydantic.BaseModel):
             name=recipe.name,
             description=recipe.description,
             media_url=_random_media_url(recipe.id),
+            is_saved=bool(recipe.is_saved),
         )
 
 
