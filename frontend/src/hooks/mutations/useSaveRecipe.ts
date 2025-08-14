@@ -10,7 +10,7 @@ export const useSaveRecipe = (recipeId: number) => {
         {
             mutationFn: () => saveRecipeRecipesRecipeIdSavePut({path: {recipe_id: recipeId}}),
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [queryKeys.RECIPE_LIST]})
+                queryClient.invalidateQueries({queryKey: [queryKeys.SAVED_RECIPE_LIST]})
             }
         }
     )
@@ -23,7 +23,7 @@ export const useUnsaveRecipe = (recipeId: number) => {
         {
             mutationFn: () => unsaveRecipeRecipesRecipeIdUnsavePut({path: {recipe_id: recipeId}}),
             onSuccess: () => {
-                queryClient.invalidateQueries({queryKey: [queryKeys.RECIPE_LIST]})
+                queryClient.invalidateQueries({queryKey: [queryKeys.SAVED_RECIPE_LIST]})
             }
         }
     )

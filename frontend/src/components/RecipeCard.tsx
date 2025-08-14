@@ -1,7 +1,7 @@
 import {Heart, Clock} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import type {Recipe} from "@/lib/client/types.gen.ts";
+import {Recipe} from "@/hooks/queries/types.ts";
 import {useSaveRecipe, useUnsaveRecipe} from "@/hooks/mutations/useSaveRecipe.ts";
 import {useKeyboardShortcuts} from "@/hooks/useKeyboardShortcuts.ts";
 
@@ -22,7 +22,7 @@ export const RecipeCard = (props: Props) => {
     const onSaveRecipe = useSaveRecipe(recipe.id);
     const onUnsaveRecipe = useUnsaveRecipe(recipe.id);
     const onToggleSaved = () => {
-        return recipe.is_saved ? onUnsaveRecipe.mutate() : onSaveRecipe.mutate();
+        return recipe.isSaved ? onUnsaveRecipe.mutate() : onSaveRecipe.mutate();
     }
 
     useKeyboardShortcuts({'s': () => isFocused ? onToggleSaved() : undefined})
@@ -38,7 +38,7 @@ export const RecipeCard = (props: Props) => {
         >
             <button className="w-full text-left" onClick={() => onOpen(recipe)} aria-label={`Open ${recipe.name}`}>
                 <div className="aspect-[3/2] w-full overflow-hidden">
-                    <img src={recipe.media_url} alt={`${recipe.name} healthy recipe`}
+                    <img src={recipe.mediaUrl} alt={`${recipe.name} healthy recipe`}
                          className="h-full w-full object-cover" loading="lazy"/>
                 </div>
             </button>
@@ -62,11 +62,11 @@ export const RecipeCard = (props: Props) => {
                                     aria-label="Add to meal plan">
                                 Book
                             </Button>
-                            <Button variant={recipe.is_saved ? "secondary" : "outline"} size="sm"
-                                    onClick={onToggleSaved} aria-pressed={recipe.is_saved}
-                                    aria-label={recipe.is_saved ? "Unsave recipe" : "Save recipe"}>
-                                <Heart className={`h-4 w-4 ${recipe.is_saved ? "fill-current" : ""}`}/>
-                                {recipe.is_saved ? "Saved" : "Save"}
+                            <Button variant={recipe.isSaved ? "secondary" : "outline"} size="sm"
+                                    onClick={onToggleSaved} aria-pressed={recipe.isSaved}
+                                    aria-label={recipe.isSaved ? "Unsave recipe" : "Save recipe"}>
+                                <Heart className={`h-4 w-4 ${recipe.isSaved ? "fill-current" : ""}`}/>
+                                {recipe.isSaved ? "Saved" : "Save"}
                             </Button>
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type {Recipe} from "@/lib/client/types.gen.ts";
+import {Recipe} from "@/hooks/queries/types.ts";
 import { RecipeCard } from "@/components/RecipeCard";
 import {useRecipeList} from "@/hooks/queries/useRecipeList.ts";
 import {RecipeDetails} from "@/components/RecipeDetails.tsx";
@@ -91,11 +91,6 @@ export default function RecipesPage() {
   }, [handleMouseMove]);
 
   useEffect(() => {
-    setFocusedIndex(0);
-    cardRefs.current = cardRefs.current.slice(0, recipes?.length || 0);
-  }, [recipes]);
-
-  useEffect(() => {
     if (cardRefs.current[focusedIndex]) {
       cardRefs.current[focusedIndex]?.scrollIntoView({
         behavior: 'smooth',
@@ -119,8 +114,6 @@ export default function RecipesPage() {
       setFocusedIndex(index);
     }
   };
-
-
 
   // If a recipe is selected, show full-screen view
   if (selectedRecipe) {
@@ -163,13 +156,13 @@ export default function RecipesPage() {
 
       <section className="px-4 mt-6 pb-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {isLoading ? <div>Loading</div> : recipes.map((r, index) => (
+            {isLoading ? <div>Loading</div> : recipes.map((recipe, index) => (
             <div
-              key={r.id}
+              key={recipe.id}
               ref={(el) => cardRefs.current[index] = el}
             >
               <RecipeCard
-                recipe={r}
+                recipe={recipe}
                 onOpen={onOpen}
                 onBook={onBook}
                 onHover={() => onHover(index)}
