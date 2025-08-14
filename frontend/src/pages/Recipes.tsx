@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {Recipe} from "@/hooks/queries/types.ts";
-import { RecipeCard } from "@/components/RecipeCard";
+import { RecipeCard } from "@/components/recipes/RecipeCard";
 import {useRecipeList} from "@/hooks/queries/useRecipeList.ts";
-import {RecipeDetails} from "@/components/RecipeDetails.tsx";
+import {RecipeDetails} from "@/components/recipes/RecipeDetails.tsx";
 import {useKeyboardShortcuts} from "@/hooks/useKeyboardShortcuts.ts";
 
 const diets = ["all", "vegan", "vegetarian", "keto", "pescatarian", "omnivore"] as const;
