@@ -22,7 +22,8 @@
 ### Installation:
 
 ```bash
-uv venv --python 3.12
+cd backend
+uv venv .venv --python 3.12
 source .venv/bin/activate
 make install
 ```
