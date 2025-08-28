@@ -35,6 +35,9 @@ class Recipe(django_models.Model):
 
     number_of_servings = django_models.PositiveSmallIntegerField()
 
+    # If more than one image / recipe is needed, normalise.
+    image_url = django_models.TextField()
+
     created_at = django_models.DateTimeField(auto_now_add=True)
 
     updated_at = django_models.DateTimeField(auto_now=True)

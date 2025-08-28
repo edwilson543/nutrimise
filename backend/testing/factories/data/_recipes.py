@@ -24,6 +24,7 @@ class Recipe(factory.django.DjangoModelFactory):
     methodology = factory.Sequence(lambda n: f"methodology-{n}")
     meal_times = [recipes.MealTime.DINNER.value]
     number_of_servings = 2
+    image_url = "https://ichef.bbc.co.uk/ace/standard/1600/food/recipes/one-pan_chicken_68593_16x9.jpg.webp"
 
     class Meta:
         model = recipe_models.Recipe

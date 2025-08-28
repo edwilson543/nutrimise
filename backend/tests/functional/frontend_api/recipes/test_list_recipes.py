@@ -14,4 +14,3 @@ def test_lists_all_recipes_when_no_filters_given(frontend_api_client):
 
     recipes = response.json()["recipes"]
     assert [recipe["id"] for recipe in recipes] == [recipe.id, other_recipe.id]
-

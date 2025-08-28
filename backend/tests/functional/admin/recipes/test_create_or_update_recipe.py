@@ -19,6 +19,7 @@ def test_creates_recipe_using_create_form(admin_client):
     create_form["name"] = "Chicken pasta"
     create_form["meal_times"] = "DINNER"
     create_form["number_of_servings"] = 3
+    create_form["image_url"] = "some-url"
     create_response = create_form.submit()
 
     assert create_response.status_code == 302
@@ -31,6 +32,7 @@ def test_creates_recipe_using_create_form(admin_client):
     assert recipe.name == "Chicken pasta"
     assert recipe.meal_times == ["DINNER"]
     assert recipe.number_of_servings == 3
+    assert recipe.image_url == "some-url"
 
     recipe_embedding = recipe.embeddings.get()
     assert recipe_embedding.vendor == "FAKE"
