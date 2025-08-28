@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {Recipe} from "@/hooks/queries/types.ts";
@@ -15,8 +15,6 @@ export default function RecipesPage() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const lastMousePosition = useRef<{ x: number; y: number } | null>(null);
-  const hasMouseMoved = useRef<boolean>(false);
 
   const [savedFilter, setSavedFilter] = useState<(typeof savedFilters)[number]>("all");
 
@@ -26,7 +24,7 @@ export default function RecipesPage() {
 
   const {data: allRecipes, isLoading} = useRecipeList();
   
-  const recipes = allRecipes?.filter((recipe) => {
+  const displayedRecipes = allRecipes?.filter((recipe) => {
     if (savedFilter === "saved") return recipe.isSaved;
     if (savedFilter === "unsaved") return !recipe.isSaved;
     return true;
@@ -41,63 +39,32 @@ export default function RecipesPage() {
   const currentCols = window.innerWidth >= 1280 ? gridColumns.xl :
                        window.innerWidth >= 1024 ? gridColumns.lg : gridColumns.sm;
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    const currentPosition = { x: e.clientX, y: e.clientY };
-
-    if (lastMousePosition.current) {
-      const distance = Math.sqrt(
-        Math.pow(currentPosition.x - lastMousePosition.current.x, 2) +
-        Math.pow(currentPosition.y - lastMousePosition.current.y, 2)
-      );
-
-      if (distance > 5) { // Threshold to avoid tiny movements
-        hasMouseMoved.current = true;
-      }
-    }
-
-    lastMousePosition.current = currentPosition;
-  }, []);
-
-  const handleKeyNavigation = useCallback(() => {
-    hasMouseMoved.current = false;
-  }, []);
 
   const shortcuts = {
     'ArrowRight': () => {
-      if (!recipes?.length) return;
-      handleKeyNavigation();
-      setFocusedIndex(prev => Math.min(prev + 1, recipes.length - 1));
+      if (!displayedRecipes?.length) return;
+      setFocusedIndex(prev => Math.min(prev + 1, displayedRecipes.length - 1));
     },
     'ArrowLeft': () => {
-      if (!recipes?.length) return;
-      handleKeyNavigation();
+      if (!displayedRecipes?.length) return;
       setFocusedIndex(prev => Math.max(prev - 1, 0));
     },
     'ArrowDown': () => {
-      if (!recipes?.length) return;
-      handleKeyNavigation();
-      setFocusedIndex(prev => Math.min(prev + currentCols, recipes.length - 1));
+      if (!displayedRecipes?.length) return;
+      setFocusedIndex(prev => Math.min(prev + currentCols, displayedRecipes.length - 1));
     },
     'ArrowUp': () => {
-      if (!recipes?.length) return;
-      handleKeyNavigation();
+      if (!displayedRecipes?.length) return;
       setFocusedIndex(prev => Math.max(prev - currentCols, 0));
     },
     'Enter': () => {
-      if (recipes?.[focusedIndex]) {
-        onOpen(recipes[focusedIndex]);
+      if (displayedRecipes?.[focusedIndex]) {
+        onOpen(displayedRecipes[focusedIndex], focusedIndex);
       }
     },
   };
 
   useKeyboardShortcuts(shortcuts);
-
-  useEffect(() => {
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [handleMouseMove]);
 
   useEffect(() => {
     if (cardRefs.current[focusedIndex]) {
@@ -107,21 +74,16 @@ export default function RecipesPage() {
         inline: 'nearest'
       });
     }
-  }, [focusedIndex]);
+  }, [focusedIndex, selectedRecipe]);
 
-  const onOpen = (recipe: Recipe) => {
+  const onOpen = (recipe: Recipe, index: number) => {
+    setFocusedIndex(index);
     setSelectedRecipe(recipe);
   };
 
   const onBook = (recipe: Recipe) => {
     // TODO: Implement booking functionality
     console.log('Booking recipe:', recipe.name);
-  };
-
-  const onHover = (index: number) => {
-    if (hasMouseMoved.current) {
-      setFocusedIndex(index);
-    }
   };
 
   // If a recipe is selected, show full-screen view.
@@ -173,16 +135,15 @@ export default function RecipesPage() {
 
       <section className="px-4 mt-6 pb-10">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {isLoading ? <div>Loading</div> : recipes.map((recipe, index) => (
+            {isLoading ? <div>Loading</div> : displayedRecipes.map((recipe, index) => (
             <div
               key={recipe.id}
               ref={(el) => cardRefs.current[index] = el}
             >
               <RecipeCard
                 recipe={recipe}
-                onOpen={onOpen}
+                onOpen={(recipe: Recipe) => onOpen(recipe, index)}
                 onBook={onBook}
-                onHover={() => onHover(index)}
                 isFocused={index === focusedIndex}
               />
             </div>

@@ -8,7 +8,6 @@ type Props = {
     recipe: Recipe;
     onOpen: (recipe: Recipe) => void;
     onBook: (recipe: Recipe) => void;
-    onHover?: () => void;
     isFocused?: boolean;
 };
 
@@ -16,7 +15,7 @@ type Props = {
  * A recipe preview card, displayed in the recipe grid view.
  * */
 export const RecipeCard = (props: Props) => {
-    const {recipe, onOpen, onBook, onHover, isFocused = false} = props;
+    const {recipe, onOpen, onBook, isFocused = false} = props;
 
     return (
         <Card
@@ -25,9 +24,9 @@ export const RecipeCard = (props: Props) => {
             }`}
             role="article"
             aria-label={recipe.name}
-            onMouseEnter={onHover}
+            onClick={() => onOpen(recipe)}
         >
-            <button className="w-full text-left" onClick={() => onOpen(recipe)} aria-label={`Open ${recipe.name}`}>
+            <button className="w-full text-left" aria-label={`Open ${recipe.name}`}>
                 <div className="aspect-[3/2] w-full overflow-hidden">
                     <img src={recipe.mediaUrl} alt={`${recipe.name} healthy recipe`}
                          className="h-full w-full object-cover" loading="lazy"/>

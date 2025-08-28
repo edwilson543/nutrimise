@@ -17,7 +17,8 @@ export const SaveRecipeButton = (props: Props) => {
 
     const onSaveRecipe = useSaveRecipe(recipe.id);
     const onUnsaveRecipe = useUnsaveRecipe(recipe.id);
-    const onToggleSaved = () => {
+    const onToggleSaved = (e?) => {
+        e?.stopPropagation()
         return recipe.isSaved ? onUnsaveRecipe.mutate() : onSaveRecipe.mutate();
     }
 
