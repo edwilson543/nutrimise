@@ -2,10 +2,20 @@ import { useMemo, useState } from "react";
 import { recipes } from "@/data/recipes";
 import { useMealPlanner } from "@/contexts/MealPlannerContext";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function formatDateKey(d: Date) {
   return d.toISOString().slice(0, 10);
@@ -19,7 +29,11 @@ function startOfWeek(d = new Date()) {
   return date;
 }
 
-const slots: ("breakfast" | "lunch" | "dinner")[] = ["breakfast", "lunch", "dinner"];
+const slots: ("breakfast" | "lunch" | "dinner")[] = [
+  "breakfast",
+  "lunch",
+  "dinner",
+];
 
 export default function PlansPage() {
   const { plans, setMeal, clearDays, saved } = useMealPlanner();
@@ -31,7 +45,10 @@ export default function PlansPage() {
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [shoppingOpen, setShoppingOpen] = useState(false);
-  const [slotPicker, setSlotPicker] = useState<{ dateKey: string; slot: (typeof slots)[number] } | null>(null);
+  const [slotPicker, setSlotPicker] = useState<{
+    dateKey: string;
+    slot: (typeof slots)[number];
+  } | null>(null);
   const [slotSearch, setSlotSearch] = useState("");
 
   const [viewMode, setViewMode] = useState<"day" | "week" | "month">("week");
@@ -63,9 +80,10 @@ export default function PlansPage() {
     });
   }, [viewMode]);
 
-
   const toggleDay = (key: string) => {
-    setSelectedDays((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]));
+    setSelectedDays((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
   };
 
   function quickSuggest(text: string) {
@@ -74,9 +92,13 @@ export default function PlansPage() {
       if (t.includes("vegan")) return r.diet === "vegan";
       if (t.includes("keto")) return r.tags.includes("keto");
       if (t.includes("vegetarian")) return r.diet === "vegetarian";
-      if (t.includes("fish") || t.includes("salmon")) return r.title.toLowerCase().includes("salmon") || r.diet === "pescatarian";
+      if (t.includes("fish") || t.includes("salmon"))
+        return (
+          r.title.toLowerCase().includes("salmon") || r.diet === "pescatarian"
+        );
       if (t.includes("breakfast")) return r.tags.includes("breakfast");
-      if (t.includes("high protein")) return r.tags.includes("high-protein") || r.macros.protein >= 25;
+      if (t.includes("high protein"))
+        return r.tags.includes("high-protein") || r.macros.protein >= 25;
       if (t.includes("quick")) return r.timeMinutes <= 20;
       return true;
     });
@@ -102,7 +124,11 @@ export default function PlansPage() {
     }
     const targetCal = parseInt(calories) || 2000;
     const targetProtein = parseInt(protein) || 100;
-    pool = pool.sort((a, b) => Math.abs(a.macros.protein - targetProtein / 3) - Math.abs(b.macros.protein - targetProtein / 3));
+    pool = pool.sort(
+      (a, b) =>
+        Math.abs(a.macros.protein - targetProtein / 3) -
+        Math.abs(b.macros.protein - targetProtein / 3),
+    );
     return pool;
   }
 
@@ -111,11 +137,15 @@ export default function PlansPage() {
       <header className="px-4 pt-4 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Meal Plans</h1>
-          <p className="text-muted-foreground mt-1">Plan your meals with a calendar view.</p>
+          <p className="text-muted-foreground mt-1">
+            Plan your meals with a calendar view.
+          </p>
         </div>
         <div className="w-40">
-          <Select value={viewMode} onValueChange={(v) => setViewMode(v as any)}>
-            <SelectTrigger aria-label="Calendar view"><SelectValue placeholder="View" /></SelectTrigger>
+          <Select value={viewMode} onValueChange={(v) => setViewMode(v)}>
+            <SelectTrigger aria-label="Calendar view">
+              <SelectValue placeholder="View" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="day">Day</SelectItem>
               <SelectItem value="week">Week</SelectItem>
@@ -128,35 +158,70 @@ export default function PlansPage() {
       <section className="px-4 mt-4">
         {selectedDays.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2 items-center">
-            <Button variant="hero" onClick={() => setSelectorOpen(true)}>Select recipes</Button>
-            <Button variant="secondary" onClick={() => setShoppingOpen(true)}>Shopping list</Button>
-            <Button variant="outline" onClick={() => { clearDays(selectedDays); setSelectedDays([]); }}>Clear days</Button>
-            <span className="text-sm text-muted-foreground">{selectedDays.length} day(s) selected</span>
+            <Button variant="hero" onClick={() => setSelectorOpen(true)}>
+              Select recipes
+            </Button>
+            <Button variant="secondary" onClick={() => setShoppingOpen(true)}>
+              Shopping list
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                clearDays(selectedDays);
+                setSelectedDays([]);
+              }}
+            >
+              Clear days
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              {selectedDays.length} day(s) selected
+            </span>
           </div>
         )}
         <div className="grid gap-4 md:grid-cols-7">
           {days.map(({ date, key }) => {
             const dayPlan = plans[key] || {};
-            const label = date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+            const label = date.toLocaleDateString(undefined, {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            });
             const selected = selectedDays.includes(key);
             return (
-              <article key={key} className={`rounded-lg border p-3 cursor-pointer transition-[transform,box-shadow] ${selected ? "ring-2 ring-primary shadow-lg" : "hover:shadow"}`} onClick={() => toggleDay(key)} aria-label={`Plan for ${label}`}>
+              <article
+                key={key}
+                className={`rounded-lg border p-3 cursor-pointer transition-[transform,box-shadow] ${selected ? "ring-2 ring-primary shadow-lg" : "hover:shadow"}`}
+                onClick={() => toggleDay(key)}
+                aria-label={`Plan for ${label}`}
+              >
                 <header className="flex items-center justify-between mb-2">
                   <h3 className="font-medium text-sm">{label}</h3>
                 </header>
                 <div className="space-y-2 text-sm">
                   {slots.map((s) => {
-                    const r = dayPlan[s] ? recipes.find((x) => x.id === dayPlan[s]) : undefined;
+                    const r = dayPlan[s]
+                      ? recipes.find((x) => x.id === dayPlan[s])
+                      : undefined;
                     return (
-                      <div key={s} className="flex items-center justify-between">
+                      <div
+                        key={s}
+                        className="flex items-center justify-between"
+                      >
                         <div className="flex-1 min-w-0">
-                          <span className="capitalize text-muted-foreground">{s}</span>
-                          <span className="truncate ml-2 font-medium">{r ? r.title : "—"}</span>
+                          <span className="capitalize text-muted-foreground">
+                            {s}
+                          </span>
+                          <span className="truncate ml-2 font-medium">
+                            {r ? r.title : "—"}
+                          </span>
                         </div>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={(e) => { e.stopPropagation(); setSlotPicker({ dateKey: key, slot: s }); }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSlotPicker({ dateKey: key, slot: s });
+                          }}
                           aria-label={`Select recipe for ${s}`}
                         >
                           {r ? "Change" : "Select"}
@@ -171,7 +236,6 @@ export default function PlansPage() {
         </div>
       </section>
 
-
       {/* Unified recipe selector */}
       <Dialog open={selectorOpen} onOpenChange={setSelectorOpen}>
         <DialogContent>
@@ -179,8 +243,18 @@ export default function PlansPage() {
             <DialogTitle>Select recipes for selected days</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            <Input placeholder="e.g. vegan high protein quick" value={prompt} onChange={(e) => setPrompt(e.target.value)} aria-label="Fill prompt" />
-            <Button variant="outline" onClick={() => setShowDetails((v) => !v)} aria-expanded={showDetails} className="w-full justify-between">
+            <Input
+              placeholder="e.g. vegan high protein quick"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              aria-label="Fill prompt"
+            />
+            <Button
+              variant="outline"
+              onClick={() => setShowDetails((v) => !v)}
+              aria-expanded={showDetails}
+              className="w-full justify-between"
+            >
               More details
               <span aria-hidden>{showDetails ? "−" : "+"}</span>
             </Button>
@@ -189,7 +263,9 @@ export default function PlansPage() {
                 <div>
                   <label className="text-sm">Diet</label>
                   <Select value={diet} onValueChange={setDiet}>
-                    <SelectTrigger><SelectValue placeholder="Diet" /></SelectTrigger>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Diet" />
+                    </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All</SelectItem>
                       <SelectItem value="vegan">Vegan</SelectItem>
@@ -202,17 +278,38 @@ export default function PlansPage() {
                 </div>
                 <div>
                   <label className="text-sm">Daily calories</label>
-                  <Input type="number" value={calories} onChange={(e) => setCalories(e.target.value)} />
+                  <Input
+                    type="number"
+                    value={calories}
+                    onChange={(e) => setCalories(e.target.value)}
+                  />
                 </div>
                 <div>
                   <label className="text-sm">Daily protein (g)</label>
-                  <Input type="number" value={protein} onChange={(e) => setProtein(e.target.value)} />
+                  <Input
+                    type="number"
+                    value={protein}
+                    onChange={(e) => setProtein(e.target.value)}
+                  />
                 </div>
               </div>
             )}
             <div className="flex gap-2">
-              <Button onClick={() => { const pool = prompt.trim() ? quickSuggest(prompt) : buildPool(); fillSelectedDaysWith(pool, 3); setSelectorOpen(false); setPrompt(""); }}>Apply</Button>
-              <Button variant="outline" onClick={() => setSelectorOpen(false)}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  const pool = prompt.trim()
+                    ? quickSuggest(prompt)
+                    : buildPool();
+                  fillSelectedDaysWith(pool, 3);
+                  setSelectorOpen(false);
+                  setPrompt("");
+                }}
+              >
+                Apply
+              </Button>
+              <Button variant="outline" onClick={() => setSelectorOpen(false)}>
+                Cancel
+              </Button>
             </div>
           </div>
         </DialogContent>
@@ -226,7 +323,9 @@ export default function PlansPage() {
           </DialogHeader>
           <div className="space-y-3">
             {selectedDays.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Select days on the calendar to build a shopping list.</p>
+              <p className="text-sm text-muted-foreground">
+                Select days on the calendar to build a shopping list.
+              </p>
             ) : (
               <ul className="list-disc pl-5 text-sm space-y-1 max-h-80 overflow-auto">
                 {(() => {
@@ -241,9 +340,13 @@ export default function PlansPage() {
                       });
                     });
                   });
-                  return Array.from(map.entries()).sort().map(([name, count]) => (
-                    <li key={name}><span className="font-medium">{count}×</span> {name}</li>
-                  ));
+                  return Array.from(map.entries())
+                    .sort()
+                    .map(([name, count]) => (
+                      <li key={name}>
+                        <span className="font-medium">{count}×</span> {name}
+                      </li>
+                    ));
                 })()}
               </ul>
             )}
@@ -252,25 +355,53 @@ export default function PlansPage() {
       </Dialog>
 
       {/* Saved recipe picker for a meal slot */}
-      <Dialog open={!!slotPicker} onOpenChange={(o) => !o && setSlotPicker(null)}>
+      <Dialog
+        open={!!slotPicker}
+        onOpenChange={(o) => !o && setSlotPicker(null)}
+      >
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Select a saved recipe</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            <Input placeholder="Search saved recipes" value={slotSearch} onChange={(e) => setSlotSearch(e.target.value)} />
+            <Input
+              placeholder="Search saved recipes"
+              value={slotSearch}
+              onChange={(e) => setSlotSearch(e.target.value)}
+            />
             <div className="max-h-80 overflow-auto divide-y">
-              {recipes.filter((r) => saved.has(r.id)).filter((r) => r.title.toLowerCase().includes(slotSearch.toLowerCase())).map((r) => (
-                <div key={r.id} className="py-2 flex items-center justify-between">
-                  <div className="min-w-0">
-                    <div className="font-medium truncate">{r.title}</div>
-                    <div className="text-xs text-muted-foreground">{r.macros.calories} kcal • {r.timeMinutes}m</div>
+              {recipes
+                .filter((r) => saved.has(r.id))
+                .filter((r) =>
+                  r.title.toLowerCase().includes(slotSearch.toLowerCase()),
+                )
+                .map((r) => (
+                  <div
+                    key={r.id}
+                    className="py-2 flex items-center justify-between"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{r.title}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {r.macros.calories} kcal • {r.timeMinutes}m
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        if (slotPicker)
+                          setMeal(slotPicker.dateKey, slotPicker.slot, r.id);
+                        setSlotPicker(null);
+                      }}
+                    >
+                      Set
+                    </Button>
                   </div>
-                  <Button size="sm" onClick={() => { if (slotPicker) setMeal(slotPicker.dateKey, slotPicker.slot, r.id); setSlotPicker(null); }}>Set</Button>
-                </div>
-              ))}
+                ))}
               {Array.from(saved).length === 0 && (
-                <p className="text-sm text-muted-foreground py-6 text-center">You have no saved recipes yet.</p>
+                <p className="text-sm text-muted-foreground py-6 text-center">
+                  You have no saved recipes yet.
+                </p>
               )}
             </div>
           </div>

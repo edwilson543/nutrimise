@@ -9,3 +9,7 @@ lint:
 .PHONY:client
 client:
 	npm run openapi-ts
+
+.PHONY:format
+format:
+	npm run format

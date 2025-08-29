@@ -7,9 +7,14 @@ import RecipesPage from "./pages/Recipes";
 import PlansPage from "./pages/Plans";
 import NutritionPage from "./pages/Nutrition";
 import NotFound from "./pages/NotFound";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MealPlannerProvider } from "@/contexts/MealPlannerContext";
+import Index from "@/pages";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +34,7 @@ const App = () => (
                   <span className="font-semibold tracking-wide">NutriMise</span>
                 </header>
                 <Routes>
-                  <Route path="/" element={<Navigate to="/recipes" replace />} />
+                  <Route path="/" element={<Index />} />
                   <Route path="/recipes" element={<RecipesPage />} />
                   <Route path="/plans" element={<PlansPage />} />
                   <Route path="/nutrition" element={<NutritionPage />} />

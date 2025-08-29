@@ -33,7 +33,8 @@ export const recipes: Recipe[] = [
   {
     id: "med-chicken-bowl",
     title: "Mediterranean Chicken Bowl",
-    description: "Grilled chicken with quinoa, crisp veggies, olives, and feta.",
+    description:
+      "Grilled chicken with quinoa, crisp veggies, olives, and feta.",
     image: mediterraneanChicken,
     diet: "omnivore",
     cuisine: "Mediterranean",
@@ -59,7 +60,8 @@ export const recipes: Recipe[] = [
   {
     id: "vegan-buddha-bowl",
     title: "Vegan Buddha Bowl",
-    description: "Roasted sweet potato, chickpeas, kale and avocado with tahini.",
+    description:
+      "Roasted sweet potato, chickpeas, kale and avocado with tahini.",
     image: veganBuddha,
     diet: "vegan",
     cuisine: "Fusion",
@@ -114,10 +116,7 @@ export const recipes: Recipe[] = [
       "Spinach, mushrooms, tomatoes",
       "Olive oil, salt, pepper",
     ],
-    steps: [
-      "Sauté vegetables.",
-      "Whisk eggs and cook, fold in vegetables.",
-    ],
+    steps: ["Sauté vegetables.", "Whisk eggs and cook, fold in vegetables."],
   },
   {
     id: "quinoa-avocado-salad",
@@ -134,9 +133,7 @@ export const recipes: Recipe[] = [
       "1 avocado",
       "Cherry tomatoes, cucumber, parsley",
     ],
-    steps: [
-      "Toss all ingredients with lemon vinaigrette.",
-    ],
+    steps: ["Toss all ingredients with lemon vinaigrette."],
   },
   {
     id: "spicy-tofu-stirfry",
@@ -153,10 +150,7 @@ export const recipes: Recipe[] = [
       "Bell peppers, snap peas",
       "Soy sauce, chili, garlic",
     ],
-    steps: [
-      "Crisp tofu, set aside.",
-      "Stir-fry veggies, add sauce and tofu.",
-    ],
+    steps: ["Crisp tofu, set aside.", "Stir-fry veggies, add sauce and tofu."],
   },
   {
     id: "pasta-primavera",
@@ -188,13 +182,7 @@ export const recipes: Recipe[] = [
     timeMinutes: 5,
     tags: ["breakfast", "quick", "snack"],
     macros: { calories: 300, protein: 18, carbs: 42, fat: 8, fiber: 5 },
-    ingredients: [
-      "Greek yogurt",
-      "Mixed berries",
-      "Granola",
-    ],
-    steps: [
-      "Layer yogurt, berries and granola in a glass.",
-    ],
+    ingredients: ["Greek yogurt", "Mixed berries", "Granola"],
+    steps: ["Layer yogurt, berries and granola in a glass."],
   },
 ];

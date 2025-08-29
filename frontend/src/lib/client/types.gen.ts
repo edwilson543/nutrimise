@@ -4,191 +4,196 @@
  * HTTPValidationError
  */
 export type HttpValidationError = {
-    /**
-     * Detail
-     */
-    detail?: Array<ValidationError>;
+  /**
+   * Detail
+   */
+  detail?: Array<ValidationError>;
 };
 
 /**
  * RecipeList
  */
 export type RecipeList = {
-    /**
-     * Recipes
-     */
-    recipes: Array<Recipe>;
+  /**
+   * Recipes
+   */
+  recipes: Array<Recipe>;
 };
 
 /**
  * ValidationError
  */
 export type ValidationError = {
-    /**
-     * Location
-     */
-    loc: Array<string | number>;
-    /**
-     * Message
-     */
-    msg: string;
-    /**
-     * Error Type
-     */
-    type: string;
+  /**
+   * Location
+   */
+  loc: Array<string | number>;
+  /**
+   * Message
+   */
+  msg: string;
+  /**
+   * Error Type
+   */
+  type: string;
 };
 
 /**
  * Version
  */
 export type Version = {
-    /**
-     * Version
-     */
-    version: string;
+  /**
+   * Version
+   */
+  version: string;
 };
 
 /**
  * _Recipe
  */
 export type Recipe = {
-    /**
-     * Id
-     */
-    id: number;
-    /**
-     * Name
-     */
-    name: string;
-    /**
-     * Description
-     */
-    description: string;
-    /**
-     * Media Url
-     */
-    media_url: string;
+  /**
+   * Id
+   */
+  id: number;
+  /**
+   * Name
+   */
+  name: string;
+  /**
+   * Description
+   */
+  description: string;
+  /**
+   * Media Url
+   */
+  media_url: string;
 };
 
 export type GetHealthGeneralHealthGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/general/health';
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/general/health";
 };
 
 export type GetHealthGeneralHealthGetResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
+  /**
+   * Successful Response
+   */
+  200: unknown;
 };
 
 export type GetVersionGeneralVersionGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/general/version';
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/general/version";
 };
 
 export type GetVersionGeneralVersionGetResponses = {
-    /**
-     * Successful Response
-     */
-    200: Version;
+  /**
+   * Successful Response
+   */
+  200: Version;
 };
 
-export type GetVersionGeneralVersionGetResponse = GetVersionGeneralVersionGetResponses[keyof GetVersionGeneralVersionGetResponses];
+export type GetVersionGeneralVersionGetResponse =
+  GetVersionGeneralVersionGetResponses[keyof GetVersionGeneralVersionGetResponses];
 
 export type ListRecipesRecipesGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/recipes/';
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/recipes/";
 };
 
 export type ListRecipesRecipesGetResponses = {
-    /**
-     * Successful Response
-     */
-    200: RecipeList;
+  /**
+   * Successful Response
+   */
+  200: RecipeList;
 };
 
-export type ListRecipesRecipesGetResponse = ListRecipesRecipesGetResponses[keyof ListRecipesRecipesGetResponses];
+export type ListRecipesRecipesGetResponse =
+  ListRecipesRecipesGetResponses[keyof ListRecipesRecipesGetResponses];
 
 export type ListSavedRecipesRecipesSavedGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/recipes/saved';
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/recipes/saved";
 };
 
 export type ListSavedRecipesRecipesSavedGetResponses = {
-    /**
-     * Response List Saved Recipes Recipes Saved Get
-     * Successful Response
-     */
-    200: Array<number>;
+  /**
+   * Response List Saved Recipes Recipes Saved Get
+   * Successful Response
+   */
+  200: Array<number>;
 };
 
-export type ListSavedRecipesRecipesSavedGetResponse = ListSavedRecipesRecipesSavedGetResponses[keyof ListSavedRecipesRecipesSavedGetResponses];
+export type ListSavedRecipesRecipesSavedGetResponse =
+  ListSavedRecipesRecipesSavedGetResponses[keyof ListSavedRecipesRecipesSavedGetResponses];
 
 export type SaveRecipeRecipesRecipeIdSavePutData = {
-    body?: never;
-    path: {
-        /**
-         * Recipe Id
-         */
-        recipe_id: number;
-    };
-    query?: never;
-    url: '/recipes/{recipe_id}/save';
+  body?: never;
+  path: {
+    /**
+     * Recipe Id
+     */
+    recipe_id: number;
+  };
+  query?: never;
+  url: "/recipes/{recipe_id}/save";
 };
 
 export type SaveRecipeRecipesRecipeIdSavePutErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
 };
 
-export type SaveRecipeRecipesRecipeIdSavePutError = SaveRecipeRecipesRecipeIdSavePutErrors[keyof SaveRecipeRecipesRecipeIdSavePutErrors];
+export type SaveRecipeRecipesRecipeIdSavePutError =
+  SaveRecipeRecipesRecipeIdSavePutErrors[keyof SaveRecipeRecipesRecipeIdSavePutErrors];
 
 export type SaveRecipeRecipesRecipeIdSavePutResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
+  /**
+   * Successful Response
+   */
+  200: unknown;
 };
 
 export type UnsaveRecipeRecipesRecipeIdUnsavePutData = {
-    body?: never;
-    path: {
-        /**
-         * Recipe Id
-         */
-        recipe_id: number;
-    };
-    query?: never;
-    url: '/recipes/{recipe_id}/unsave';
+  body?: never;
+  path: {
+    /**
+     * Recipe Id
+     */
+    recipe_id: number;
+  };
+  query?: never;
+  url: "/recipes/{recipe_id}/unsave";
 };
 
 export type UnsaveRecipeRecipesRecipeIdUnsavePutErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
 };
 
-export type UnsaveRecipeRecipesRecipeIdUnsavePutError = UnsaveRecipeRecipesRecipeIdUnsavePutErrors[keyof UnsaveRecipeRecipesRecipeIdUnsavePutErrors];
+export type UnsaveRecipeRecipesRecipeIdUnsavePutError =
+  UnsaveRecipeRecipesRecipeIdUnsavePutErrors[keyof UnsaveRecipeRecipesRecipeIdUnsavePutErrors];
 
 export type UnsaveRecipeRecipesRecipeIdUnsavePutResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
+  /**
+   * Successful Response
+   */
+  200: unknown;
 };
 
 export type ClientOptions = {
-    baseURL: 'http://127.0.0.1:8001' | (string & {});
+  baseURL: "http://127.0.0.1:8001" | (string & {});
 };

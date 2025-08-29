@@ -28,16 +28,26 @@ export function AppSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground";
+    isActive
+      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+      : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground";
 
   return (
-    <Sidebar className={state === "collapsed" ? "w-14" : "w-64"} collapsible="offcanvas">
+    <Sidebar
+      className={state === "collapsed" ? "w-14" : "w-64"}
+      collapsible="offcanvas"
+    >
       <SidebarHeader>
         <div className="flex items-center justify-between px-2 py-1">
-          <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md" style={{ backgroundImage: "var(--gradient-primary)" }} />
-            <span className="text-sm font-semibold tracking-wide">NutriMise</span>
-          </div>
+          <NavLink to={"/"} className="flex items-center gap-2">
+            <div
+              className="h-7 w-7 rounded-md"
+              style={{ backgroundImage: "var(--gradient-primary)" }}
+            />
+            <span className="text-sm font-semibold tracking-wide">
+              NutriMise
+            </span>
+          </NavLink>
           <SidebarTrigger className="self-end" />
         </div>
       </SidebarHeader>
@@ -61,7 +71,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <p className="text-xs text-muted-foreground px-2">Eat better, feel better.</p>
+        <p className="text-xs text-muted-foreground px-2">
+          Eat better, feel better.
+        </p>
       </SidebarFooter>
     </Sidebar>
   );

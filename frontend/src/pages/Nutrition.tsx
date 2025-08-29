@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useMealPlanner } from "@/contexts/MealPlannerContext";
 import { recipes } from "@/data/recipes";
 
@@ -28,11 +35,21 @@ export default function NutritionPage() {
   const { plans } = useMealPlanner();
 
   // Targets state
-  const [targets, setTargets] = useState<Macros>({ calories: 2000, protein: 120, carbs: 220, fat: 70 });
+  const [targets, setTargets] = useState<Macros>({
+    calories: 2000,
+    protein: 120,
+    carbs: 220,
+    fat: 70,
+  });
 
   // Extras state (manual tracking)
   const [extras, setExtras] = useState<ExtraMeals>({});
-  const [newExtra, setNewExtra] = useState<Macros>({ calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const [newExtra, setNewExtra] = useState<Macros>({
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  });
   const [extraDate, setExtraDate] = useState<string>(formatDateKey(new Date()));
 
   useEffect(() => {
@@ -41,7 +58,9 @@ export default function NutritionPage() {
       if (t) setTargets(t);
       const e = JSON.parse(localStorage.getItem(EXTRAS_KEY) || "{}");
       setExtras(e);
-    } catch {}
+    } catch (e) {
+      console.log(e);
+    }
   }, []);
 
   useEffect(() => {
@@ -62,9 +81,11 @@ export default function NutritionPage() {
   });
 
   const weekData = useMemo(() => {
-    return days.map(({ key }) => {
+    return days.map(({ key }: { key: string }) => {
       const dayPlan = plans[key] || {};
-      const meals = ["breakfast", "lunch", "dinner"].map((s) => recipes.find((r) => r.id === (dayPlan as any)[s]!)).filter(Boolean);
+      const meals = ["breakfast", "lunch", "dinner"]
+        .map((s) => recipes.find((r) => r.id === dayPlan[s]!))
+        .filter(Boolean);
       const totals = meals.reduce(
         (acc, r) => ({
           calories: acc.calories + (r?.macros.calories || 0),
@@ -72,7 +93,7 @@ export default function NutritionPage() {
           carbs: acc.carbs + (r?.macros.carbs || 0),
           fat: acc.fat + (r?.macros.fat || 0),
         }),
-        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+        { calories: 0, protein: 0, carbs: 0, fat: 0 },
       );
       const extraMeals = (extras[key] || []).reduce(
         (acc, m) => ({
@@ -81,22 +102,36 @@ export default function NutritionPage() {
           carbs: acc.carbs + m.carbs,
           fat: acc.fat + m.fat,
         }),
-        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+        { calories: 0, protein: 0, carbs: 0, fat: 0 },
       );
-      return { day: key.slice(5), ...Object.fromEntries(Object.entries(totals).map(([k, v]) => [k, (v as number) + (extraMeals as any)[k]])) } as any;
+      return {
+        day: key.slice(5),
+        ...Object.fromEntries(
+          Object.entries(totals).map(([k, v]) => [
+            k,
+            (v as number) + extraMeals[k],
+          ]),
+        ),
+      };
     });
   }, [plans, extras]);
 
   const preset = (type: "cut" | "maintain" | "bulk") => {
     // simple presets
-    if (type === "cut") setTargets({ calories: 1800, protein: 140, carbs: 160, fat: 60 });
-    if (type === "maintain") setTargets({ calories: 2200, protein: 130, carbs: 250, fat: 70 });
-    if (type === "bulk") setTargets({ calories: 2600, protein: 150, carbs: 300, fat: 80 });
+    if (type === "cut")
+      setTargets({ calories: 1800, protein: 140, carbs: 160, fat: 60 });
+    if (type === "maintain")
+      setTargets({ calories: 2200, protein: 130, carbs: 250, fat: 70 });
+    if (type === "bulk")
+      setTargets({ calories: 2600, protein: 150, carbs: 300, fat: 80 });
   };
 
   const addExtraMeal = () => {
     if (!extraDate) return;
-    setExtras((prev) => ({ ...prev, [extraDate]: [...(prev[extraDate] || []), newExtra] }));
+    setExtras((prev) => ({
+      ...prev,
+      [extraDate]: [...(prev[extraDate] || []), newExtra],
+    }));
     setNewExtra({ calories: 0, protein: 0, carbs: 0, fat: 0 });
   };
 
@@ -104,7 +139,9 @@ export default function NutritionPage() {
     <main>
       <header className="px-4 pt-4">
         <h1 className="text-3xl font-bold tracking-tight">Nutrition</h1>
-        <p className="text-muted-foreground mt-1">Set your macro targets and track your intake.</p>
+        <p className="text-muted-foreground mt-1">
+          Set your macro targets and track your intake.
+        </p>
       </header>
 
       <section className="px-4 mt-6">
@@ -112,25 +149,55 @@ export default function NutritionPage() {
         <div className="grid gap-4 md:grid-cols-4">
           <div>
             <label className="text-sm">Calories</label>
-            <Input type="number" value={targets.calories} onChange={(e) => setTargets({ ...targets, calories: Number(e.target.value) })} />
+            <Input
+              type="number"
+              value={targets.calories}
+              onChange={(e) =>
+                setTargets({ ...targets, calories: Number(e.target.value) })
+              }
+            />
           </div>
           <div>
             <label className="text-sm">Protein (g)</label>
-            <Input type="number" value={targets.protein} onChange={(e) => setTargets({ ...targets, protein: Number(e.target.value) })} />
+            <Input
+              type="number"
+              value={targets.protein}
+              onChange={(e) =>
+                setTargets({ ...targets, protein: Number(e.target.value) })
+              }
+            />
           </div>
           <div>
             <label className="text-sm">Carbs (g)</label>
-            <Input type="number" value={targets.carbs} onChange={(e) => setTargets({ ...targets, carbs: Number(e.target.value) })} />
+            <Input
+              type="number"
+              value={targets.carbs}
+              onChange={(e) =>
+                setTargets({ ...targets, carbs: Number(e.target.value) })
+              }
+            />
           </div>
           <div>
             <label className="text-sm">Fat (g)</label>
-            <Input type="number" value={targets.fat} onChange={(e) => setTargets({ ...targets, fat: Number(e.target.value) })} />
+            <Input
+              type="number"
+              value={targets.fat}
+              onChange={(e) =>
+                setTargets({ ...targets, fat: Number(e.target.value) })
+              }
+            />
           </div>
         </div>
         <div className="flex gap-2 mt-3">
-          <Button variant="secondary" onClick={() => preset("cut")}>Fat loss preset</Button>
-          <Button variant="secondary" onClick={() => preset("maintain")}>Maintenance preset</Button>
-          <Button variant="secondary" onClick={() => preset("bulk")}>Muscle gain preset</Button>
+          <Button variant="secondary" onClick={() => preset("cut")}>
+            Fat loss preset
+          </Button>
+          <Button variant="secondary" onClick={() => preset("maintain")}>
+            Maintenance preset
+          </Button>
+          <Button variant="secondary" onClick={() => preset("bulk")}>
+            Muscle gain preset
+          </Button>
         </div>
       </section>
 
@@ -164,23 +231,51 @@ export default function NutritionPage() {
           <div className="grid gap-3 md:grid-cols-6">
             <div className="md:col-span-2">
               <label className="text-sm">Date</label>
-              <Input type="date" value={extraDate} onChange={(e) => setExtraDate(e.target.value)} />
+              <Input
+                type="date"
+                value={extraDate}
+                onChange={(e) => setExtraDate(e.target.value)}
+              />
             </div>
             <div>
               <label className="text-sm">Calories</label>
-              <Input type="number" value={newExtra.calories} onChange={(e) => setNewExtra({ ...newExtra, calories: Number(e.target.value) })} />
+              <Input
+                type="number"
+                value={newExtra.calories}
+                onChange={(e) =>
+                  setNewExtra({ ...newExtra, calories: Number(e.target.value) })
+                }
+              />
             </div>
             <div>
               <label className="text-sm">Protein</label>
-              <Input type="number" value={newExtra.protein} onChange={(e) => setNewExtra({ ...newExtra, protein: Number(e.target.value) })} />
+              <Input
+                type="number"
+                value={newExtra.protein}
+                onChange={(e) =>
+                  setNewExtra({ ...newExtra, protein: Number(e.target.value) })
+                }
+              />
             </div>
             <div>
               <label className="text-sm">Carbs</label>
-              <Input type="number" value={newExtra.carbs} onChange={(e) => setNewExtra({ ...newExtra, carbs: Number(e.target.value) })} />
+              <Input
+                type="number"
+                value={newExtra.carbs}
+                onChange={(e) =>
+                  setNewExtra({ ...newExtra, carbs: Number(e.target.value) })
+                }
+              />
             </div>
             <div>
               <label className="text-sm">Fat</label>
-              <Input type="number" value={newExtra.fat} onChange={(e) => setNewExtra({ ...newExtra, fat: Number(e.target.value) })} />
+              <Input
+                type="number"
+                value={newExtra.fat}
+                onChange={(e) =>
+                  setNewExtra({ ...newExtra, fat: Number(e.target.value) })
+                }
+              />
             </div>
           </div>
           <div className="mt-3">
@@ -195,11 +290,12 @@ export default function NutritionPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Nutrition targets and tracking",
-          description: "Set your macro targets and track your weekly intake with NutriMise.",
+          description:
+            "Set your macro targets and track your weekly intake with NutriMise.",
           potentialAction: {
             "@type": "Action",
-            name: "Update nutrition targets"
-          }
+            name: "Update nutrition targets",
+          },
         })}
       </script>
     </main>
