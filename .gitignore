@@ -1,8 +1,8 @@
 # Specific files
 *TODO*.txt
-data/ingredients-csvs/target/
-data/images/target/
-data/snapshots/
+backend/data/ingredients-csvs/target/
+backend/data/images/target/
+backend/data/snapshots/
 
 # Certification
 cert.pem
@@ -80,7 +80,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -174,7 +173,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env*
+*.env
 env/
 .venv/
 ENV/
